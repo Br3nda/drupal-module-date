@@ -1,5 +1,5 @@
 <?php
-//$Id: date_timezones.inc,v 1.2 2006/06/27 11:15:12 karens Exp $
+//$Id: date_timezones.inc,v 1.3 2006/07/06 16:23:31 karens Exp $
 // a copy of event_timezones.inc to be used when the event module is not enabled
 
 //if (module_exist('event')) return;
@@ -109,7 +109,7 @@ function event_is_dst($region, $timestamp) {
       break;
     case 15: // Northern America (where applicable)
       // start of DST  (where applicable) (first Sunday in April 2 am local time)
-      $dststart = strtotime("1 week sunday GMT", strtotime("1 april $year GMT")) + 7200;
+      $dststart = strtotime("0 week sunday GMT", strtotime("1 april $year GMT")) + 7200;
       // end of DST (where applicable) (last Sunday in October 2 am local time)
       $dstend = strtotime("-1 week sunday GMT", strtotime("1 november $year GMT")) + 7200;
       break;
