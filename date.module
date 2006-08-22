@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.11 2006/08/22 17:43:27 karens Exp $
+// $Id: date.module,v 1.12 2006/08/22 20:51:45 karens Exp $
 /**
  * @file
  * Defines a date/time field type.
@@ -162,9 +162,11 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
     case 'view':
       
       foreach ($items as $delta => $item) {
-        $items[$delta]['view'] = date_field_view_item($field, $item, $node);
+        $items[$delta]['view'] = content_format($field, $item, 'default', $node);
       }
       return theme('field', $node, $field, $items, $teaser, $page);
+
+
       
   }
 }
