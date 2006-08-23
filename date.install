@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.3 2006/07/05 19:41:03 karens Exp $
+// $Id: date.install,v 1.4 2006/08/23 22:34:32 karens Exp $
 
 /**
  * Implementation of hook_install().
@@ -55,7 +55,7 @@ function date_update_3() {
   include_once(drupal_get_path('module', 'content') .'/content.module');
   include_once(drupal_get_path('module', 'content') .'/content_admin.inc');
 
-  $fields = content_fields();
+  $fields = _content_fields();
 
   foreach ($fields as $field) {
     switch ($field['type']) {
@@ -92,7 +92,7 @@ function date_update_4() {
   include_once(drupal_get_path('module', 'content') .'/content.module');
   include_once(drupal_get_path('module', 'content') .'/content_admin.inc');
 
-  $fields = content_fields();
+  $fields = _content_fields();
 
   foreach ($fields as $field) {
     switch ($field['type']) {
