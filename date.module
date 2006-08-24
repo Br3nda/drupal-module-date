@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.14 2006/08/24 19:46:56 karens Exp $
+// $Id: date.module,v 1.13.2.1 2006/08/24 20:00:54 karens Exp $
 /**
  * @file
  * Defines a date/time field type.
