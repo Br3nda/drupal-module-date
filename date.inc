@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.10 2006/08/28 17:21:52 karens Exp $
+//$Id: date.inc,v 1.11 2006/08/28 18:22:22 karens Exp $
 /**
  * @file
  * Date/time API functions
@@ -1630,6 +1630,7 @@ function date_date2strftime_replace() {
   if (empty($replace)) {
     if (stristr(PHP_OS, 'WIN')) {
       $type = 'windows';
+    }
     else {
       $type = 'unix';
     }
