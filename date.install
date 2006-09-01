@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.4.2.1 2006/08/24 20:00:54 karens Exp $
+// $Id: date.install,v 1.4.2.2 2006/09/01 20:39:34 karens Exp $
 
 /**
  * Implementation of hook_install().
@@ -112,7 +112,3 @@ function date_update_4() {
   db_query('DELETE FROM {cache}');
   return $ret;
 }
-
-
-
-
