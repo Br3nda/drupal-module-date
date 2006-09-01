@@ -1,5 +1,5 @@
 <?php
-// ?Id?
+// $Id: date_views.inc,v 1.4 2006/09/01 19:46:46 karens Exp $
 /**
  * Views field filters
  */
@@ -381,4 +381,4 @@ function date_range_arg_options() {
     'week'  => t('summarize by week'), 
     'hour'  => t('summarize by hour')
     );
-}
+)
