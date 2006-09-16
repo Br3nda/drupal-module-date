@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.13 2006/09/16 12:19:22 karens Exp $
+//$Id: date.inc,v 1.14 2006/09/16 16:15:47 karens Exp $
 /**
  * @file
  * Date/time API functions
@@ -341,10 +341,12 @@ function date_set_date(&$date, $value, $timezone = 'GMT', $type = 'db', $format 
  * 
  */
 function date_convert_timezone(&$date, $timezone_in = 'GMT', $timezone_out = 'GMT', $type = 'db') {
-    
+  
+  $fromtype = $type == 'db' ? 'local' : 'db';
+  
   // skip timezone conversion if no timezone conversion was desired
   // set the local and db parts of the date object to be the same and return
-  if ($timezone_in == 'none' || $timezone_out == 'none') {
+  if ($timezone_in == 'none' || $timezone_out == 'none' || empty($date->$fromtype->parts[0])) {
     
     if (($date->local->iso || $date->local->iso == 0) && !$date->db->iso) {
       
