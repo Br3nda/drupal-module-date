@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.14 2006/09/16 16:15:47 karens Exp $
+//$Id: date.inc,v 1.15 2006/09/17 19:58:14 karens Exp $
 /**
  * @file
  * Date/time API functions
@@ -997,7 +997,6 @@ function date_text_input($params) {
       '#description' => $description,
       '#weight' => $weight,
     );
-    $form['format'] = $formats['input']['text'];
   }
 
   // if the jscalendar is used for input, add some attributes to be passed to the js
