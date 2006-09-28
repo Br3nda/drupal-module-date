@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.16 2006/09/21 16:29:21 karens Exp $
+//$Id: date.inc,v 1.17 2006/09/28 16:17:22 karens Exp $
 /**
  * @file
  * Date/time API functions
@@ -1056,6 +1056,8 @@ function date_selector_make_dbdate($array, $type = DATE_ISO, $timezone_in = 'GMT
  */
 function date_jscalendar_make_dbdate($value, $type, $format, $timezone_in = 'GMT', $granularity = array('M', 'D', 'Y')) {
   
+  $value = trim($value);
+
   switch($type) {
     case (DATE_UNIX):
       $value = date_custom2unix($value, $format);
@@ -1088,6 +1090,8 @@ function date_jscalendar_make_dbdate($value, $type, $format, $timezone_in = 'GMT
  */
 function date_text_make_dbdate($value, $type, $format, $timezone_in = 'GMT', $granularity = array('M', 'D', 'Y')) {
     
+  $value = trim($value);
+
   switch ($type) {
     case (DATE_UNIX):
       $value = date_text2unix($value, $format);
