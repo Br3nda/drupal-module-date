@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.17 2006/09/28 16:17:22 karens Exp $
+//$Id: date.inc,v 1.18 2006/09/30 13:57:35 karens Exp $
 /**
  * @file
  * Date/time API functions
@@ -883,6 +883,7 @@ function date_select_input($params) {
   $form[] = array(
     '#type' => 'markup',
     '#value' => '<div class="date-clearing"> </div>'. ($description > '' ? '<div class="form-item description">'.$description.'</div>' : ''),
+    '#weight' => 11,
   );
   return $form;
 }
