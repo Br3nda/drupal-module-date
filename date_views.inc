@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.13 2006/10/05 10:49:44 karens Exp $
+// $Id: date_views.inc,v 1.14 2006/10/05 14:58:06 karens Exp $
 /**
  * Views field filters
  */
@@ -546,7 +546,6 @@ function date_views_query_alter(&$query, &$view) {
     }
     if ($arg == NULL) {
       // if no argument specified, add the current date range to the query
-      // presence of groupby value indicates that argument is missing and query is performing a summary
       $arg        = date_views_browser_period_arg($arg, $view->argument[0]['options']);
       $name       = explode(':', $view->argument[0]['type']);
       $field_name = trim($name[1]);
