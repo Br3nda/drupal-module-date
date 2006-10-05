@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.7 2006/10/05 14:47:48 karens Exp $
+// $Id: date.module,v 1.13.2.8 2006/10/05 15:38:36 karens Exp $
 /**
  * @file
  * Defines a date/time field type.
@@ -557,24 +557,24 @@ function date_field_formatter_info() {
  */
 function date_field_formatter($field, $item, $formatter, $node) {
   
-  include_once(drupal_get_path('module', 'date') .'/date.inc');
-  
-  if (!isset($item['value'])) {
+  if (empty($item['value'])) {
     return '';
   }
   
+  include_once(drupal_get_path('module', 'date') .'/date.inc');
+
   switch (strtolower($formatter)) {
     case ('long'):
-      $format = $field['output_format_custom_long'] > '' ? $field['output_format_custom_long'] : $field['output_format_date_long'];
+      $format = $field['output_format_custom_long'] > '' ? $field['output_format_custom_long'] : ($field['output_format_date_long'] ? $field['output_format_date_long'] : variable_get('date_format_long',  'l, F j, Y - H:i'));
       break;
     case ('medium'):
-      $format = $field['output_format_custom_medium'] > '' ? $field['output_format_custom_medium'] : $field['output_format_date_medium'];
+      $format = $field['output_format_custom_medium'] > '' ? $field['output_format_custom_medium'] : ($field['output_format_date_medium'] ? $field['output_format_date_medium'] : variable_get('date_format_medium',  'D, m/d/Y - H:i'));
       break;
     case ('short'):
-      $format = $field['output_format_custom_short'] > '' ? $field['output_format_custom_short'] : $field['output_format_date_short'];
+      $format = $field['output_format_custom_short'] > '' ? $field['output_format_custom_short'] : ($field['output_format_date_short'] ? $field['output_format_date_short'] : variable_get('date_format_short', 'm/d/Y - H:i'));
       break;
     default:
-      $format = $field['output_format_custom'] > '' ? $field['output_format_custom'] : $field['output_format_date'];
+      $format = $field['output_format_custom'] > '' ? $field['output_format_custom'] : ($field['output_format_date'] ? $field['output_format_date'] : variable_get('date_format_short', 'm/d/Y - H:i'));
       break;
   }
   
@@ -592,10 +592,9 @@ function date_field_formatter($field, $item, $formatter, $node) {
   
   }
   // display the date using the selected format
-  return date_show_date($date, $format, 'local', $field['output_format_zone']);
+  return date_show_date($date, $format, 'local', $field['format_zone']);
 
 }
-
 
 /**
  * $field['granularity'] will contain an array like ('H' => 'H', 'M' => 0) 
