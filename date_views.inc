@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.15 2006/10/05 18:10:36 karens Exp $
+// $Id: date_views.inc,v 1.16 2006/10/12 16:05:09 karens Exp $
 /**
  * Views field filters
  */
@@ -713,8 +713,8 @@ function date_views_browser_navigation($view, $period) {
   default:
     $year  = intval(substr($range[0], 0, 4));
     $month = intval(substr($range[0], 5, 2));
-    $prev_date = ($month > 1 ? $year : intval($year - 1)) .'-'. ($month > 1 ? intval($month - 1) : 12);
-    $next_date = ($month < 12 ? $year : intval($year + 1)) .'-'.  ($month < 12 ? intval($month + 1) : 1);
+    $prev_date = ($month > 1 ? $year : intval($year - 1)) .'-'. ($month > 1 ? sprintf('%02d', intval($month - 1)) : '12');
+    $next_date = ($month < 12 ? $year : intval($year + 1)) .'-'.  ($month < 12 ? sprintf('%02d', intval($month + 1)) : '01');
     break;
   }
   $prev = $view->url .'/'. $prev_date . date_views_browser_period($period);
