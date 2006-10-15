@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.9 2006/10/05 14:47:48 karens Exp $
+//$Id: date.inc,v 1.9.2.10 2006/10/15 16:40:06 karens Exp $
 /**
  * @file
  * Date/time API functions
@@ -1771,6 +1771,7 @@ function date_formats($format, $granularity) {
   $text_format_date = $text_format_time = array();
   $select_format_date = array();
   $weight_index = 0;
+  $desc_date = array();
 
   $format_to_jscalendar = array(
     'd' => '%d', 'j' => '%e', 'D' => '%a', 'l' => '%A', 'z' => '%j', 'w' => '%w',
@@ -1791,6 +1792,8 @@ function date_formats($format, $granularity) {
           $text_format_date[] = $c;
           $select_format_date['D'] = $weight_index++;
         }
+        if ($c == 'd') $desc_date[] = 'DD';
+        if ($c == 'j') $desc_date[] = 'D';
         break;
 
       case 'F':
@@ -1802,6 +1805,10 @@ function date_formats($format, $granularity) {
           $text_format_date[] = $c;
           $select_format_date['M'] = $weight_index++;
         }
+        if ($c == 'M') $desc_date[] = t('Jan');
+        if ($c == 'm') $desc_date[] = 'MM';
+        if ($c == 'n') $desc_date[] = 'M';
+        if ($c == 'F') $desc_date[] = t('January');
         break;
 
       case 'Y':
@@ -1811,6 +1818,8 @@ function date_formats($format, $granularity) {
           $text_format_date[] = $c;
           $select_format_date['Y'] = $weight_index++;
         }
+        if ($c == 'Y') $desc_date[] = 'YYYY';
+        if ($c == 'y') $desc_date[] = 'YY';
         break;
 
       default:
@@ -1832,6 +1841,8 @@ function date_formats($format, $granularity) {
             $jscal_format_time[] = $format_to_jscalendar[$c];
             $text_format_time[] = $c;
           }
+          if ($c == 'g' || $c == 'h') $desc_time[] = 'H';
+          if ($c == 'G' || $c == 'H') $desc_time[] = 'HH';
           break;
 
         case 'i':
@@ -1839,6 +1850,7 @@ function date_formats($format, $granularity) {
             $jscal_format_time[] = $format_to_jscalendar[$c];
             $text_format_time[] = $c;
           }
+          $desc_time[] = 'MM';
           break;
 
         case 's':
@@ -1846,6 +1858,7 @@ function date_formats($format, $granularity) {
             $jscal_format_time[] = $format_to_jscalendar[$c];
             $text_format_time[] = $c;
           }
+          $desc_time[] = 'SS';
           break;
 
         case 'a':
@@ -1855,6 +1868,8 @@ function date_formats($format, $granularity) {
             $text_format_ampm = $c;
             $am_pm = true;
           }
+          if ($c == 'a') $desc_time[] = 'am';
+          if ($c == 'A') $desc_time[] = 'AM';
           break;
 
         default:
@@ -1879,6 +1894,9 @@ function date_formats($format, $granularity) {
 
   $formats['input']['select'] = $select_format_date;
   $formats['input']['am_pm'] = $am_pm;
+
+  $formats['input']['desc']  = implode($date_separator, $desc_date);
+  $formats['input']['desc'] .= date_has_time($granularity) ? $format_separator . implode($time_separator, $desc_time) : '';
   
   return $formats;
 }
@@ -1991,7 +2009,7 @@ function date_sql($result_type, $field, $date_type = 'int', $offset = '', $offse
        break;
      }
   }
-  else {
+  elseif ($field != 'NOW()') {
      // get rid of the 'T' in ISO dates to match native date field
      $field = " REPLACE($field,'T',' ')";
   }
