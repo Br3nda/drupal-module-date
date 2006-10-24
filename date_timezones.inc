@@ -1,8 +1,8 @@
 <?php
-//$Id: date_timezones.inc,v 1.3 2006/07/06 16:23:31 karens Exp $
+//$Id: date_timezones.inc,v 1.4 2006/10/24 12:20:31 karens Exp $
 // a copy of event_timezones.inc to be used when the event module is not enabled
 
-//if (module_exist('event')) return;
+//if (module_exists('event')) return;
 /**
  * Check if time is in Daylight Savings Time
  * 
