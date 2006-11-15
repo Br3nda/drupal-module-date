@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.6.2.10 2006/10/15 16:40:06 karens Exp $
+// $Id: date_views.inc,v 1.6.2.11 2006/11/15 15:39:44 karens Exp $
 /**
  * Views field filters
  */
@@ -571,7 +571,7 @@ function date_views_style_plugins() {
  */
 function date_views_pre_view($view, $items) {
   $date_views_browser_views = date_views_browser_get_views();
-  if (in_array($view->name, array_keys($date_views_browser_views))) {
+  if ($view->build_type == 'page' && in_array($view->name, array_keys($date_views_browser_views))) {
     // make sure the navigation link gets added to empty pages
     if (sizeof($items) == 0 && $view->build_type == 'page') {
       $period = $date_views_browser_views[$view->name]->options;
@@ -586,7 +586,7 @@ function date_views_pre_view($view, $items) {
  */
 function date_views_query_alter(&$query, &$view) {
   $date_views_browser_views = date_views_browser_get_views();
-  if (in_array($view->name, array_keys($date_views_browser_views))) {
+  if ($view->build_type == 'page' && in_array($view->name, array_keys($date_views_browser_views))) {
     $path = explode('/', $view->url);
     $pos = sizeof($path);
     if ($view->build_type == 'block' || arg($pos) == '') {
