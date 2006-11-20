@@ -1,8 +1,9 @@
 <?php
-// $Id: date_views.inc,v 1.6.2.12 2006/11/15 16:23:25 karens Exp $
+// $Id: date_views.inc,v 1.6.2.13 2006/11/20 11:20:17 karens Exp $
 /**
  * Views field filters
  */
+ 
 function date_views_help() {
   return t('<h2>Date Views</h2>
         <h3>Date Range Argument</h3>
@@ -95,7 +96,7 @@ function date_views_filters($field) {
       'handler' => $handler,
       'type' => 'DATE',
       'extra' => array('field' => $field),
-      'help' => t('This filter allows events to be filtered by their date. Enter dates in the format: '. $format .'. Enter \'now\' to use the current time. You may enter a delta (in seconds) to the option that will be added to the time; this is most useful when combined with now. If you have the jscalendar module from jstools installed, you can use a popup date picker here.'),
+      'help' => t('This filter allows events to be filtered by their date. Enter dates in the format: %format. Enter \'now\' to use the current time. You may enter a delta (in seconds) to the option that will be added to the time; this is most useful when combined with now. If you have the jscalendar module from jstools installed, you can use a popup date picker here.', array('%format' => $format)),
       ),
     'year' => array(
       'name' => t('Year'),
@@ -694,7 +695,7 @@ function date_views_browser_period_start_stamp($arg = NULL, $period = 'month') {
   // get the range of dates
   $range = date_views_date_range($arg);
   $stamp = date_iso2unix($range[0]);
-
+  
   // if a date range has already been determined, return the beginning of that range
   if ($arg) return $stamp;
   
@@ -702,8 +703,12 @@ function date_views_browser_period_start_stamp($arg = NULL, $period = 'month') {
   switch ($period) {
   case ('week'):
     $dow = date_gmdate('w', $stamp);
-    if ($dow >= 6) $adj = (86400 * 7);
+    if ($dow >= 6) $adj = (604800);
     $start = intval($stamp - intval($dow * 86400) + $adj);
+    // if site preference is to start week on other than a Sunday, go back a week and move up to correct day
+    if (variable_get('date_first_day', 0)) {
+      $start += (-604800) + (variable_get('date_first_day', 0) * 86400);
+    }
     break;
   case ('year'):
     $year = date_gmdate('Y', $stamp);
