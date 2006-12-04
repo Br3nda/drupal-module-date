@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.13 2006/11/13 13:47:32 karens Exp $
+// $Id: date.module,v 1.13.2.14 2006/12/04 18:06:48 karens Exp $
 /**
  * @file
  * Defines a date/time field type.
@@ -175,7 +175,7 @@ function date_field_settings($op, $field) {
 
     case 'validate':
       date_set_site_timezone($field['field_timezone']);
-      if ($field['granularity']['Y'] != 'Y') {
+      if (!in_array('Y', $field['granularity'])) {
         form_set_error($field['field_name'], t('Input granularity must include a year.'));
       }
       break;
