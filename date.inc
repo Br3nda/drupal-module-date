@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.13 2006/11/19 12:55:17 karens Exp $
+//$Id: date.inc,v 1.9.2.14 2006/12/15 15:05:05 karens Exp $
 /**
  * @file
  * Date/time API functions
@@ -1024,7 +1024,7 @@ function date_selector_make_dbdate($array, $type = DATE_ISO, $timezone_in = 'GMT
     
     if (date_set_date($date, date_array2unix($array), $timezone_in, 'local', $type)) {
       
-      return date_show_value($date, 'db', $type);
+      return $date;
 
     }
   } elseif ($type == DATE_ISO) {
