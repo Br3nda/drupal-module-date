@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.6.2.13 2006/11/20 11:20:17 karens Exp $
+// $Id: date_views.inc,v 1.6.2.14 2006/12/23 22:03:59 karens Exp $
 /**
  * Views field filters
  */
@@ -602,11 +602,12 @@ function date_views_query_alter(&$query, &$view) {
       $name       = explode(':', $view->argument[0]['type']);
       $field_name = trim($name[1]);
       $field      = content_fields($field_name);
+      $field_type = $field['type'] == 'datestamp' ? 'int' : 'iso';
       $db_info    = content_database_info($field);
       $value      = $db_info['columns']['value']['column'];
       $table      = 'node_data_'. $field['field_name']; // uses views alias table name
       $offset     = date_views_offset($field['tz_handling']);
-      if ($range      = date_views_date_range($arg)) {
+      if ($range  = date_views_date_range($arg)) {
         $query->ensure_table($table);
         $query->add_field('nid', 'node');
         $query->add_field($value, $table);
