@@ -1,0 +1,205 @@
+# LANGUAGE translation of Drupal (c:\drupal\modules\date\date.inc)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from file: date.inc,v 1.9.2.12 2006/11/04 00:47:11 karens
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2006-12-27 10:31+0100\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: c:\drupal\modules\date\date.inc:332
+msgid "Unable to set date. "
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:565
+msgid "zone name"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:632
+msgid "Site's time zone"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:633
+msgid "Date's time zone"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:635
+msgid "No time zone conversion"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:692;909
+msgid "Date"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:713
+msgid "h"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:717
+msgid "H"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:760
+msgid "day"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:780
+msgid "month"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:800
+msgid "year"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:824
+msgid "hour"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:835
+msgid "minute"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:846
+msgid "second"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:851
+msgid "am"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:851
+msgid "pm"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:858
+msgid "am/pm"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:868;964;969
+msgid "timezone"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:958
+msgid "date"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1131
+msgid "year must be a number between %min and %max."
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1137
+msgid "day must be a number between 1 and 31."
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1144
+msgid "Date cannot be constructed using values %s."
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1164;1170;1189;1195
+msgid "The text '%s' is not a valid date."
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1480;1836
+msgid "January"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1480
+msgid "February"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1480
+msgid "March"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1480
+msgid "April"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1481;1490
+msgid "May"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1481
+msgid "June"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1481
+msgid "July"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1481
+msgid "August"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1482
+msgid "September"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1482
+msgid "October"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1482
+msgid "November"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1482
+msgid "December"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1489;1833
+msgid "Jan"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1489
+msgid "Feb"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1489
+msgid "Mar"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1489
+msgid "Apr"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1490
+msgid "Jun"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1490
+msgid "Jul"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1490
+msgid "Aug"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1491
+msgid "Sep"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1491
+msgid "Oct"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1491
+msgid "Nov"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1491
+msgid "Dec"
+msgstr ""
+
+#: c:\drupal\modules\date\date.inc:1734
+msgid "default"
+msgstr ""
+

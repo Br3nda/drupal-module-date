@@ -1,0 +1,1929 @@
+# LANGUAGE translation of Drupal (c:\drupal\modules\date\date_timezones.inc)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from file: date_timezones.inc,v 1.3 2006/07/06 16:23:31 karens
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2006-12-27 10:31+0100\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: c:\drupal\modules\date\date_timezones.inc:155
+msgid "None"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:156;553
+msgid "Egypt"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:157
+msgid "Namibia"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:158
+msgid "Asia - Former USSR"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:159
+msgid "Iraq, Syria"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:160;649
+msgid "Israel"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:161
+msgid "Lebanon, Kirgizstan"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:162
+msgid "Palestine"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:163;648
+msgid "Iran"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:164
+msgid "South Australia"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:165
+msgid "Australia, Tasmania"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:166
+msgid "New Zealand"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:167
+msgid "Tonga"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:168
+msgid "EU and other European countries"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:169
+msgid "Russian Federation"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:170
+msgid "North America"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:171;551
+msgid "Cuba"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:172
+msgid "Brazil"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:173
+msgid "Chile"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:174
+msgid "Falklands"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:175
+msgid "Paraguay"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:258
+msgid "Africa/Addis_Ababa"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:259
+msgid "Africa/Algiers"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:260
+msgid "Africa/Asmera"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:261
+msgid "Africa/Bangui"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:262
+msgid "Africa/Blantyre"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:263
+msgid "Africa/Brazzaville"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:264
+msgid "Africa/Bujumbura"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:265
+msgid "Africa/Cairo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:266
+msgid "Africa/Ceuta"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:267
+msgid "Africa/Dar_es_Salaam"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:268
+msgid "Africa/Djibouti"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:269
+msgid "Africa/Douala"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:270
+msgid "Africa/Gaborone"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:271
+msgid "Africa/Harare"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:272
+msgid "Africa/Johannesburg"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:273
+msgid "Africa/Kampala"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:274
+msgid "Africa/Khartoum"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:275
+msgid "Africa/Kigali"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:276
+msgid "Africa/Kinshasa"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:277
+msgid "Africa/Lagos"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:278
+msgid "Africa/Libreville"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:279
+msgid "Africa/Luanda"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:280
+msgid "Africa/Lubumbashi"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:281
+msgid "Africa/Lusaka"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:282
+msgid "Africa/Malabo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:283
+msgid "Africa/Maputo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:284
+msgid "Africa/Maseru"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:285
+msgid "Africa/Mbabane"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:286
+msgid "Africa/Mogadishu"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:287
+msgid "Africa/Nairobi"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:288
+msgid "Africa/Ndjamena"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:289
+msgid "Africa/Niamey"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:290
+msgid "Africa/Porto-Novo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:291
+msgid "Africa/Tripoli"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:292
+msgid "Africa/Tunis"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:293
+msgid "Africa/Windhoek"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:294
+msgid "America/Adak"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:295
+msgid "America/Anchorage"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:296
+msgid "America/Anguilla"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:297
+msgid "America/Antigua"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:298
+msgid "America/Araguaina"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:299
+msgid "America/Aruba"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:300
+msgid "America/Asuncion"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:301
+msgid "America/Atka"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:302
+msgid "America/Barbados"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:303
+msgid "America/Belem"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:304
+msgid "America/Belize"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:305
+msgid "America/Boa_Vista"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:306
+msgid "America/Bogota"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:307
+msgid "America/Boise"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:308
+msgid "America/Buenos_Aires"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:309
+msgid "America/Cambridge_Bay"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:310
+msgid "America/Cancun"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:311
+msgid "America/Caracas"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:312
+msgid "America/Catamarca"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:313
+msgid "America/Cayenne"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:314
+msgid "America/Cayman"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:315
+msgid "America/Chicago"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:316
+msgid "America/Chihuahua"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:317
+msgid "America/Cordoba"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:318
+msgid "America/Costa_Rica"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:319
+msgid "America/Cuiaba"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:320
+msgid "America/Curacao"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:321
+msgid "America/Dawson"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:322
+msgid "America/Dawson_Creek"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:323
+msgid "America/Denver"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:324
+msgid "America/Detroit"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:325
+msgid "America/Dominica"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:326
+msgid "America/Edmonton"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:327
+msgid "America/Eirunepe"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:328
+msgid "America/El_Salvador"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:329
+msgid "America/Ensenada"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:330
+msgid "America/Fort_Wayne"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:331
+msgid "America/Fortaleza"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:332
+msgid "America/Glace_Bay"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:333
+msgid "America/Godthab"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:334
+msgid "America/Goose_Bay"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:335
+msgid "America/Grand_Turk"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:336
+msgid "America/Grenada"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:337
+msgid "America/Guadeloupe"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:338
+msgid "America/Guatemala"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:339
+msgid "America/Guayaquil"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:340
+msgid "America/Guyana"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:341
+msgid "America/Halifax"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:342
+msgid "America/Havana"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:343
+msgid "America/Hermosillo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:344
+msgid "America/Indiana/Indianapolis"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:345
+msgid "America/Indiana/Knox"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:346
+msgid "America/Indiana/Marengo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:347
+msgid "America/Indiana/Vevay"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:348
+msgid "America/Indianapolis"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:349
+msgid "America/Inuvik"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:350
+msgid "America/Iqaluit"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:351
+msgid "America/Jamaica"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:352
+msgid "America/Jujuy"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:353
+msgid "America/Juneau"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:354
+msgid "America/Kentucky/Louisville"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:355
+msgid "America/Kentucky/Monticello"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:356
+msgid "America/Knox_IN"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:357
+msgid "America/La_Paz"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:358
+msgid "America/Lima"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:359
+msgid "America/Los_Angeles"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:360
+msgid "America/Louisville"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:361
+msgid "America/Maceio"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:362
+msgid "America/Managua"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:363
+msgid "America/Manaus"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:364
+msgid "America/Martinique"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:365
+msgid "America/Mazatlan"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:366
+msgid "America/Mendoza"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:367
+msgid "America/Menominee"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:368
+msgid "America/Merida"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:369
+msgid "America/Mexico_City"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:370
+msgid "America/Miquelon"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:371
+msgid "America/Monterrey"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:372
+msgid "America/Montevideo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:373
+msgid "America/Montreal"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:374
+msgid "America/Montserrat"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:375
+msgid "America/Nassau"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:376
+msgid "America/New_York"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:377
+msgid "America/Nipigon"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:378
+msgid "America/Nome"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:379
+msgid "America/Noronha"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:380
+msgid "America/Panama"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:381
+msgid "America/Pangnirtung"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:382
+msgid "America/Paramaribo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:383
+msgid "America/Phoenix"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:384
+msgid "America/Port-au-Prince"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:385
+msgid "America/Port_of_Spain"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:386
+msgid "America/Porto_Acre"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:387
+msgid "America/Porto_Velho"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:388
+msgid "America/Puerto_Rico"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:389
+msgid "America/Rainy_River"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:390
+msgid "America/Rankin_Inlet"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:391
+msgid "America/Recife"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:392
+msgid "America/Regina"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:393
+msgid "America/Rio_Branco"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:394
+msgid "America/Rosario"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:395
+msgid "America/Santiago"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:396
+msgid "America/Santo_Domingo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:397
+msgid "America/Sao_Paulo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:398
+msgid "America/Scoresbysund"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:399
+msgid "America/Shiprock"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:400
+msgid "America/St_Johns"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:401
+msgid "America/St_Kitts"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:402
+msgid "America/St_Lucia"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:403
+msgid "America/St_Thomas"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:404
+msgid "America/St_Vincent"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:405
+msgid "America/Swift_Current"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:406
+msgid "America/Tegucigalpa"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:407
+msgid "America/Thule"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:408
+msgid "America/Thunder_Bay"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:409
+msgid "America/Tijuana"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:410
+msgid "America/Tortola"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:411
+msgid "America/Vancouver"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:412
+msgid "America/Virgin"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:413
+msgid "America/Whitehorse"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:414
+msgid "America/Winnipeg"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:415
+msgid "America/Yakutat"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:416
+msgid "America/Yellowknife"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:417
+msgid "Antarctica/Casey"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:418
+msgid "Antarctica/Davis"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:419
+msgid "Antarctica/DumontDUrville"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:420
+msgid "Antarctica/Mawson"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:421
+msgid "Antarctica/McMurdo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:422
+msgid "Antarctica/Palmer"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:423
+msgid "Antarctica/South_Pole"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:424
+msgid "Antarctica/Syowa"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:425
+msgid "Antarctica/Vostok"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:426
+msgid "Arctic/Longyearbyen"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:427
+msgid "Asia/Aden"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:428
+msgid "Asia/Almaty"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:429
+msgid "Asia/Amman"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:430
+msgid "Asia/Anadyr"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:431
+msgid "Asia/Aqtau"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:432
+msgid "Asia/Aqtobe"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:433
+msgid "Asia/Ashgabat"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:434
+msgid "Asia/Ashkhabad"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:435
+msgid "Asia/Baghdad"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:436
+msgid "Asia/Bahrain"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:437
+msgid "Asia/Baku"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:438
+msgid "Asia/Bangkok"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:439
+msgid "Asia/Beirut"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:440
+msgid "Asia/Bishkek"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:441
+msgid "Asia/Brunei"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:442
+msgid "Asia/Calcutta"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:443
+msgid "Asia/Chungking"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:444
+msgid "Asia/Colombo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:445
+msgid "Asia/Dacca"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:446
+msgid "Asia/Damascus"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:447
+msgid "Asia/Dhaka"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:448
+msgid "Asia/Dili"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:449
+msgid "Asia/Dubai"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:450
+msgid "Asia/Dushanbe"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:451
+msgid "Asia/Gaza"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:452
+msgid "Asia/Harbin"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:453
+msgid "Asia/Hong_Kong"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:454
+msgid "Asia/Hovd"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:455
+msgid "Asia/Irkutsk"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:456
+msgid "Asia/Istanbul"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:457
+msgid "Asia/Jakarta"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:458
+msgid "Asia/Jayapura"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:459
+msgid "Asia/Jerusalem"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:460
+msgid "Asia/Kabul"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:461
+msgid "Asia/Kamchatka"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:462
+msgid "Asia/Karachi"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:463
+msgid "Asia/Kashgar"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:464
+msgid "Asia/Katmandu"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:465
+msgid "Asia/Krasnoyarsk"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:466
+msgid "Asia/Kuala_Lumpur"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:467
+msgid "Asia/Kuching"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:468
+msgid "Asia/Kuwait"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:469
+msgid "Asia/Macao"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:470
+msgid "Asia/Magadan"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:471
+msgid "Asia/Manila"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:472
+msgid "Asia/Muscat"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:473
+msgid "Asia/Nicosia"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:474
+msgid "Asia/Novosibirsk"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:475
+msgid "Asia/Omsk"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:476
+msgid "Asia/Phnom_Penh"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:477
+msgid "Asia/Pyongyang"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:478
+msgid "Asia/Qatar"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:479
+msgid "Asia/Rangoon"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:480
+msgid "Asia/Riyadh"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:481
+msgid "Asia/Riyadh87"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:482
+msgid "Asia/Riyadh88"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:483
+msgid "Asia/Riyadh89"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:484
+msgid "Asia/Saigon"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:485
+msgid "Asia/Samarkand"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:486
+msgid "Asia/Seoul"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:487
+msgid "Asia/Shanghai"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:488
+msgid "Asia/Singapore"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:489
+msgid "Asia/Taipei"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:490
+msgid "Asia/Tashkent"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:491
+msgid "Asia/Tbilisi"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:492
+msgid "Asia/Tehran"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:493
+msgid "Asia/Tel_Aviv"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:494
+msgid "Asia/Thimbu"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:495
+msgid "Asia/Thimphu"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:496
+msgid "Asia/Tokyo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:497
+msgid "Asia/Ujung_Pandang"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:498
+msgid "Asia/Ulaanbaatar"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:499
+msgid "Asia/Ulan_Bator"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:500
+msgid "Asia/Urumqi"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:501
+msgid "Asia/Vientiane"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:502
+msgid "Asia/Vladivostok"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:503
+msgid "Asia/Yakutsk"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:504
+msgid "Asia/Yekaterinburg"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:505
+msgid "Asia/Yerevan"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:506
+msgid "Atlantic/Azores"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:507
+msgid "Atlantic/Bermuda"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:508
+msgid "Atlantic/Canary"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:509
+msgid "Atlantic/Cape_Verde"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:510
+msgid "Atlantic/Faeroe"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:511
+msgid "Atlantic/Jan_Mayen"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:512
+msgid "Atlantic/Madeira"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:513
+msgid "Atlantic/South_Georgia"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:514
+msgid "Atlantic/Stanley"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:515
+msgid "Australia/ACT"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:516
+msgid "Australia/Adelaide"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:517
+msgid "Australia/Brisbane"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:518
+msgid "Australia/Broken_Hill"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:519
+msgid "Australia/Canberra"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:520
+msgid "Australia/Darwin"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:521
+msgid "Australia/Hobart"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:522
+msgid "Australia/LHI"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:523
+msgid "Australia/Lindeman"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:524
+msgid "Australia/Lord_Howe"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:525
+msgid "Australia/Melbourne"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:526
+msgid "Australia/NSW"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:527
+msgid "Australia/North"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:528
+msgid "Australia/Perth"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:529
+msgid "Australia/Queensland"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:530
+msgid "Australia/South"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:531
+msgid "Australia/Sydney"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:532
+msgid "Australia/Tasmania"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:533
+msgid "Australia/Victoria"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:534
+msgid "Australia/West"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:535
+msgid "Australia/Yancowinna"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:536
+msgid "Brazil/Acre"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:537
+msgid "Brazil/DeNoronha"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:538
+msgid "Brazil/East"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:539
+msgid "Brazil/West"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:540
+msgid "Canada/Atlantic"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:541
+msgid "Canada/Central"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:542
+msgid "Canada/East-Saskatchewan"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:543
+msgid "Canada/Eastern"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:544
+msgid "Canada/Mountain"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:545
+msgid "Canada/Newfoundland"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:546
+msgid "Canada/Pacific"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:547
+msgid "Canada/Saskatchewan"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:548
+msgid "Canada/Yukon"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:549
+msgid "Chile/Continental"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:550
+msgid "Chile/EasterIsland"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:552
+msgid "EST"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:554
+msgid "Eire"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:555
+msgid "Etc/GMT-1"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:556
+msgid "Etc/GMT-10"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:557
+msgid "Etc/GMT-11"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:558
+msgid "Etc/GMT-12"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:559
+msgid "Etc/GMT-2"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:560
+msgid "Etc/GMT-3"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:561
+msgid "Etc/GMT-4"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:562
+msgid "Etc/GMT-5"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:563
+msgid "Etc/GMT-6"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:564
+msgid "Etc/GMT-7"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:565
+msgid "Etc/GMT-8"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:566
+msgid "Etc/GMT-9"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:567
+msgid "Etc/GMT"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:568
+msgid "Etc/GMT+1"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:569
+msgid "Etc/GMT+10"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:570
+msgid "Etc/GMT+11"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:571
+msgid "Etc/GMT+12"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:572
+msgid "Etc/GMT+13"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:573
+msgid "Etc/GMT+14"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:574
+msgid "Etc/GMT+2"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:575
+msgid "Etc/GMT+3"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:576
+msgid "Etc/GMT+4"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:577
+msgid "Etc/GMT+5"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:578
+msgid "Etc/GMT+6"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:579
+msgid "Etc/GMT+7"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:580
+msgid "Etc/GMT+8"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:581
+msgid "Etc/GMT+9"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:582
+msgid "Europe/Amsterdam"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:583
+msgid "Europe/Andorra"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:584
+msgid "Europe/Athens"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:585
+msgid "Europe/Belfast"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:586
+msgid "Europe/Belgrade"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:587
+msgid "Europe/Berlin"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:588
+msgid "Europe/Bratislava"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:589
+msgid "Europe/Brussels"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:590
+msgid "Europe/Bucharest"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:591
+msgid "Europe/Budapest"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:592
+msgid "Europe/Chisinau"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:593
+msgid "Europe/Copenhagen"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:594
+msgid "Europe/Dublin"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:595
+msgid "Europe/Gibraltar"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:596
+msgid "Europe/Helsinki"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:597
+msgid "Europe/Istanbul"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:598
+msgid "Europe/Kaliningrad"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:599
+msgid "Europe/Kiev"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:600
+msgid "Europe/Lisbon"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:601
+msgid "Europe/Ljubljana"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:602
+msgid "Europe/London"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:603
+msgid "Europe/Luxembourg"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:604
+msgid "Europe/Madrid"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:605
+msgid "Europe/Malta"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:606
+msgid "Europe/Minsk"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:607
+msgid "Europe/Monaco"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:608
+msgid "Europe/Moscow"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:609
+msgid "Europe/Nicosia"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:610
+msgid "Europe/Oslo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:611
+msgid "Europe/Paris"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:612
+msgid "Europe/Prague"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:613
+msgid "Europe/Riga"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:614
+msgid "Europe/Rome"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:615
+msgid "Europe/Samara"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:616
+msgid "Europe/San_Marino"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:617
+msgid "Europe/Sarajevo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:618
+msgid "Europe/Simferopol"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:619
+msgid "Europe/Skopje"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:620
+msgid "Europe/Sofia"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:621
+msgid "Europe/Stockholm"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:622
+msgid "Europe/Tallinn"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:623
+msgid "Europe/Tirane"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:624
+msgid "Europe/Tiraspol"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:625
+msgid "Europe/Uzhgorod"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:626
+msgid "Europe/Vaduz"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:627
+msgid "Europe/Vatican"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:628
+msgid "Europe/Vienna"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:629
+msgid "Europe/Vilnius"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:630
+msgid "Europe/Warsaw"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:631
+msgid "Europe/Zagreb"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:632
+msgid "Europe/Zaporozhye"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:633
+msgid "Europe/Zurich"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:634
+msgid "GB"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:635
+msgid "GB-Eire"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:636
+msgid "Hongkong"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:637
+msgid "Indian/Antananarivo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:638
+msgid "Indian/Chagos"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:639
+msgid "Indian/Christmas"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:640
+msgid "Indian/Cocos"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:641
+msgid "Indian/Comoro"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:642
+msgid "Indian/Kerguelen"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:643
+msgid "Indian/Mahe"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:644
+msgid "Indian/Maldives"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:645
+msgid "Indian/Mauritius"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:646
+msgid "Indian/Mayotte"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:647
+msgid "Indian/Reunion"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:650
+msgid "Jamaica"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:651
+msgid "Japan"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:652
+msgid "Kwajalein"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:653
+msgid "Libya"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:654
+msgid "Mexico/BajaNorte"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:655
+msgid "Mexico/BajaSur"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:656
+msgid "Mexico/General"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:657
+msgid "Mideast/Riyadh87"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:658
+msgid "Mideast/Riyadh88"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:659
+msgid "Mideast/Riyadh89"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:660
+msgid "NZ"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:661
+msgid "Navajo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:662
+msgid "Pacific/Apia"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:663
+msgid "Pacific/Auckland"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:664
+msgid "Pacific/Chatham"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:665
+msgid "Pacific/Easter"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:666
+msgid "Pacific/Efate"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:667
+msgid "Pacific/Enderbury"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:668
+msgid "Pacific/Fakaofo"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:669
+msgid "Pacific/Fiji"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:670
+msgid "Pacific/Funafuti"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:671
+msgid "Pacific/Galapagos"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:672
+msgid "Pacific/Gambier"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:673
+msgid "Pacific/Guadalcanal"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:674
+msgid "Pacific/Guam"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:675
+msgid "Pacific/Honolulu"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:676
+msgid "Pacific/Johnston"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:677
+msgid "Pacific/Kiritimati"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:678
+msgid "Pacific/Kosrae"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:679
+msgid "Pacific/Kwajalein"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:680
+msgid "Pacific/Majuro"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:681
+msgid "Pacific/Marquesas"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:682
+msgid "Pacific/Midway"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:683
+msgid "Pacific/Nauru"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:684
+msgid "Pacific/Niue"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:685
+msgid "Pacific/Norfolk"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:686
+msgid "Pacific/Noumea"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:687
+msgid "Pacific/Pago_Pago"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:688
+msgid "Pacific/Palau"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:689
+msgid "Pacific/Pitcairn"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:690
+msgid "Pacific/Ponape"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:691
+msgid "Pacific/Port_Moresby"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:692
+msgid "Pacific/Rarotonga"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:693
+msgid "Pacific/Saipan"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:694
+msgid "Pacific/Samoa"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:695
+msgid "Pacific/Tahiti"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:696
+msgid "Pacific/Tarawa"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:697
+msgid "Pacific/Tongatapu"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:698
+msgid "Pacific/Truk"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:699
+msgid "Pacific/Wake"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:700
+msgid "Pacific/Wallis"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:701
+msgid "Pacific/Yap"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:702
+msgid "Poland"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:703
+msgid "Portugal"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:704
+msgid "Singapore"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:705
+msgid "Turkey"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:706
+msgid "US/Alaska"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:707
+msgid "US/Aleutian"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:708
+msgid "US/Arizona"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:709
+msgid "US/Central"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:710
+msgid "US/East-Indiana"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:711
+msgid "US/Eastern"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:712
+msgid "US/Hawaii"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:713
+msgid "US/Indiana-Starke"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:714
+msgid "US/Michigan"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:715
+msgid "US/Mountain"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:716
+msgid "US/Pacific"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:717
+msgid "US/Samoa"
+msgstr ""
+
+#: c:\drupal\modules\date\date_timezones.inc:718
+msgid "Pacific/French Polynesia-Marquesas Islands"
+msgstr ""
+

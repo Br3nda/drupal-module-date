@@ -1,0 +1,245 @@
+# LANGUAGE translation of Drupal (c:\drupal\modules\date\date.module)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from file: date.module,v 1.13.2.13 2006/11/13 13:47:32 karens
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2006-12-27 10:31+0100\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: c:\drupal\modules\date\date.module:18
+msgid "<strong>CCK:</strong> Defines a date/time field type for the content module and a date API. <em>Note: Requires content.module.</em>"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:21
+msgid "<h2>Date Module</h2>\r\n          <p>The date module defines a highly configurable date/time field type for the content module and a date API that can be used by other applications. \r\n          Dates can use GMT, the site's timezone or a date-specific timezone and are converted to GMT and stored as either a Date (ISO 8601 YYYY-MM-DDTHH:MM:SS) or a Datestamp (a unix timestamp). When displayed, they are converted back to the desired timezone value and displayed using the desired display format. \r\n          Display formats include numerous combinations of date parts, sequences, and separators, to accomodate international date formatting needs.\r\n          </p>\r\n          <h3>Date Field Types</h3>\r\n          <p>You have a choice of creating an ISO date or a unix timestamp. If you are porting information from another application you may want to create a field using a type that matches the source data. Some advantages and disadvantages of each include:</p>\r\n          <dl>\r\n          <dt>Unix Timestamp</dt>\r\n          <dd>Stores the date as an integer.</dd>\r\n          <dd>Takes up less room in the database because it's smaller.</dd>\r\n          <dd>Often easier to use for date calculations because you can increase or decrease it just by adding or subtracting seconds.</dd>\r\n          <dd>It is the format used by php date functions.</dd>\r\n          <dd>It must be filled with a complete date -- year, month, day, hour, minute, second, so you sometimes have to arbitrarily set some of these values even if they are not applicable.</dd>\r\n          <dt>ISO Date</dt>\r\n          <dd>Stores the date in an ISO format (YYYY-MM-DDTHH:MM:SS).</dd>\r\n          <dd>The data is in a human-readable form.</dd>\r\n          <dd>You can use it for incomplete dates, i.e. only a year or only a year and a month, and pad the other values with zeros, so it does not appear to be any more precise than it really is.</dd>\r\n          <dd>It is a format that is internationally-recognized, and it is used as-is on many web sites and in many applications.</dd>\r\n          </dl>\r\n          <h3>Date Widgets</h3>\r\n          <p>There are several widgets to choose from to control how users can enter data for this field.</p>\r\n          <dl>\r\n          <dt>Text Field</dt><dd>The Text Field date widget uses the strtotime function to construct a date and will accept input allowed by the php <a href=\"http://www.php.net/manual/en/function.strtotime.php\">strtotime function</a>. This allows the user to type a date in in many natural formats, like <strong>March 31, 1980</strong> or <strong>3/10/1980</strong> or in numeric formats like <strong>YYYY-MM-DD</strong>. \r\n          The strtotime function will assume date shortcuts are in American format (MM/DD/YY), and it will not work for dates prior to 1970. \r\n          </dd>\r\n          <dt>Select List</dt><dd>The Select List date widget presents users with a drop-down list or textfield for each part of the date (year, month, day, hour, etc.). The whole selector is collapsed onto a single line using css (except for the timezone selector, if date-specific timezones are collected). The selector is highly configurable and will even handle years prior to 1900.</dd>\r\n          <dt>Javascript Pop-up Calendar</dt><dd>The Javascript Pop-up Calendar is offered as an input alternative if the <a href=\"http://drupal.org/node/57285\">jscalendar</a> module is installed. This widget can handle dates as early as 1900.\r\n          </dl>"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:86
+msgid "Input options"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:89
+msgid "Year"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:90
+msgid "Month"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:91
+msgid "Day"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:92
+msgid "Hour"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:93
+msgid "Minute"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:94
+msgid "Second"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:99
+msgid "Granularity"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:103
+msgid "Set the date elements to be collected on input (at least a year is required)."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:107
+msgid "Advanced input options"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:113
+msgid "Input format"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:116
+msgid "The specified format will be adapted to the chosen <b>granularity</b>. The 'default' value uses the 'short date format' defined in %settings"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:120
+msgid "Custom input format"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:122
+msgid "The custom format, if provided, will override the input format selected above. See more about custom date formats below."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:126
+msgid "Display Options"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:127
+msgid "Choose the way the date should be displayed."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:135
+msgid "Advanced display options"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:138
+msgid "Define alternate formatting for the date display. Options other than the default are made available to views and themes. Possible formats are default, long, medium, and short."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:147
+msgid "Timezone options"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:151
+msgid "Time zone handling"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:154
+msgid "Select the timezone handling method to be used for this date field"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:158
+msgid "Advanced timezone options"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:167
+msgid "Site timezone"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:170
+msgid "Select the timezone to be used as the site's timezone for all date fields in every content type in which they appear. List includes GMT and all timezones with the same GMT offset as the site timezone setting."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:172
+msgid "<div class=\"form-item\"><div class=\"description\">* The custom format, if provided, will override the selected date display. Define a php date format like 'm-d-Y H:i' (see <a href=\"http://php.net/date\">http://php.net/date</a>). Do not add time zone formatting to the custom format, it will not work correctly. Use the zone display option instead.</div></div>"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:179
+msgid "Input granularity must include a year."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:222;548
+msgid "Long"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:227;552
+msgid "Medium"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:232;556
+msgid "Short"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:237;544
+msgid "Default"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:247
+msgid "Date display"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:254
+msgid "Zone display"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:260
+msgid "*Custom date format"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:290
+msgid "Select List"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:294
+msgid "Text Field with strtotime validation"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:300
+msgid "Text Field with javascript pop-up calendar"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:321
+msgid "Advanced select options"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:327
+msgid "Days"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:329;336;343
+msgid "text field"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:329;336;343
+msgid "select list"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:330
+msgid "Type of form to use for day selection."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:334
+msgid "Months"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:337
+msgid "Type of form to use for month selection."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:341
+msgid "Years"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:344
+msgid "Type of form to use for year selection."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:348
+msgid "Years back"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:352
+msgid "Number of years to go back when using a selection list."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:356
+msgid "Years forward"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:360
+msgid "Number of years to go forward when using a selection list."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:364
+msgid "Time increment"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:367
+msgid "Increment the minute and second fields by this amount."
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:560
+msgid "ISO"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:564
+msgid "Feed"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:568
+msgid "iCal"
+msgstr ""
+
+#: c:\drupal\modules\date\date.module:0
+msgid "date"
+msgstr ""
+

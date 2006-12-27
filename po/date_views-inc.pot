@@ -1,0 +1,125 @@
+# LANGUAGE translation of Drupal (c:\drupal\modules\date\date_views.inc)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from file: date_views.inc,v 1.6.2.12 2006/11/15 16:23:25 karens
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2006-12-27 10:31+0100\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: c:\drupal\modules\date\date_views.inc:7
+msgid "<h2>Date Views</h2>\r\n        <h3>Date Range Argument</h3>\r\n        <p>\r\n        A flexible date range argument is provided in views. \r\n        The date range argument is based on the ISO 8601 week, duration, and time interval standards. \r\n        The argument expects a value like 2006-01-01T12:30:00--2006-01-15, or 2006-W24, or @P1W.\r\n        Separate from and to dates with a separator, a double hyphen (--). \r\n        The from and to dates in argument are ISO dates, but parts can be omitted,  \r\n        and will be assumed to be the first possible (for the from date)\r\n        or the last possible (for the to date) value in that time period. \r\n        The 'to' portion of the argument can be eliminated if it is the same as the 'from' portion. \r\n        Use @ instead of a date to substitute in the current date and time. \r\n        </p>\r\n        <p>Examples of views date range arguments:</p>\r\n        <table>\r\n        <tr><th>Argument</th><th>Resulting Query Range</th></tr>\r\n        <tr><td>2006-W24</td><td>24th ISO week in 2006</td></tr>\r\n        <tr><td>2006</td><td>the whole year of 2006</td></tr>\r\n        <tr><td>2006-03</td><td>the whole month of Mar 2006</td></tr>\r\n        <tr><td>2006-02--2007-03-15</td><td>Feb 1 2006 to Mar 15 2006</td></tr>\r\n        <tr><td>2006-08-31T14:00:00P2H</td><td>the 14th to 16th hours of Aug 8 2006</td></tr>\r\n        <tr><td>@--2006-12-31</td><td>NOW to 2006-12-31T23:59:59</td></tr>\r\n        <tr><td>@P3H</td><td>NOW to three hours from now</td></tr>\r\n        <tr><td>@P1Y90D</td><td>NOW to 1 year and 90 days from now</td></tr>\r\n        <tr><td>2006-03-05P1W</td><td>the 1 week period starting Mar 5 2006</td></tr>\r\n        <tr><td>2006-01P3M</td><td>the 3 month period starting Jan 2006</td></tr>\r\n        </table>\r\n        <h3>Date Browser</h3>\r\n        <p>A Date Browser plugin is available to add back/next navigation links to a view that uses the \r\n        date range argument. Also adds \"week of XXX\", \"month of XXX\" headings to views and blocks  \r\n        and defaults blocks and views w/out arguments to current period to start paging.\r\n        </p>\r\n        <p>To use the Date Browser:</p>\r\n        <ul>\r\n        <li>Create a view, and enable the Date: date range argument for the date field you want\r\n        to page on. Set the argument option to year, month, day, week, or hour, depending \r\n        on the increment you want the browser to use as a period.</li>\r\n        <li>Do not add any other arguments to the view. Filters are fine, though.</li>\r\n        <li>In the page section of the view, select the option to display the view as Date: Date Browser. \r\n        (instead of teaser or table). Make sure display as a page is checked, and provide a url.</li>\r\n        <li>Be sure to put something in \"empty text\" for the page. This is what will be displayed\r\n        if you navigate to a period that has no results.</li>\r\n        <li>Go to the view url. When no date is selected, the view will automatically display the\r\n        current period (year, month, day, week, or hour), with back/next links to page through\r\n        data by the selected period.</li>\r\n        <li>You can also choose to use the Date Browser for block views. That will default the block\r\n        view to display the current period, and provide a link to the full view.</li>\r\n        <li>The page, navigation, label, and block displays are themed, and can be customized by overriding\r\n        the provided themes.</li>"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:76
+msgid "now"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:81
+msgid "is equal to"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:82
+msgid "is not equal to"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:83
+msgid "greater than"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:84
+msgid "greater than or equal to"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:85
+msgid "less than"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:86
+msgid "less than or equal to"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:91
+msgid "Date"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:101
+msgid "Year"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:107
+msgid "Filter by year. Enter 'now' to use the current year.  You may enter a delta (in seconds) to the option that will be added to the time; this is most useful when combined with now. "
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:110
+msgid "Month"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:118
+msgid "Filter by month. Enter 'now' to use the current month.  You may enter a delta (in seconds) to the option that will be added to the time; this is most useful when combined with now. "
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:121
+msgid "Day"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:129
+msgid "Filter by day. Enter 'now' to use the current day.  You may enter a delta (in seconds) to the option that will be added to the time; this is most useful when combined with now. "
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:224;233
+msgid "Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See %link for other examples."
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:224;233
+msgid "help"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:535
+msgid "summarize by year"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:536
+msgid "summarize by month"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:537
+msgid "summarize by day"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:538
+msgid "summarize by week"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:539
+msgid "summarize by hour"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:561
+msgid "Date: Date Browser"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:796
+msgid "%period of %date"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:805
+msgid "‹ prev %period  "
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:807
+msgid "  next %period  ›"
+msgstr ""
+
+#: c:\drupal\modules\date\date_views.inc:0
+msgid "date_views"
+msgstr ""
+
