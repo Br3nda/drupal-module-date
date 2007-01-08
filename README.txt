@@ -13,9 +13,9 @@ That object is then passed to all other functions that need it.
 
 * optional incusion of adodb date library extends the valid date range from year 100 to year 3000, 
 without the library it is the usual 1970 to 2038. To keep overhead to a minimum, the library is only 
-included when used. If you don't want/need adodb time handling, just remove the file and native 
-php date handling will be used instead. Download this file from 
-http://php.weblogs.com/adodb_date_time_library
+included when used. If you don't want/need adodb time handling, just omit the file and native 
+php date handling will be used instead. To use adodb time handling, download this file from 
+http://phplens.com/phpeverywhere/adodb_date_library
 
 * timezone handling options include using gmt, the site timezone, a date-specific timezone 
 (selected when the date is edited), or no timezone handling. The last option will store and 
@@ -33,8 +33,6 @@ Files:
 * date.css - mostly for the date selector drop-downs
 * date.install - the date.module install file
 * date_timezones.inc - a copy of event_timezones.inc, used only if event is not enabled
-* adodb-time-inc.php - this library will be used if the file is in the same folder as the date.inc file, 
-  remove it if you do not want to use the adodb date library and the api will use native php date functions.
 * date.inc - the date api, used for date calcs by date.module, but could be also used by any other module
 * date_views.inc - integration for the date field with the views module
 
