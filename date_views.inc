@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.23 2006/12/23 21:59:03 karens Exp $
+// $Id: date_views.inc,v 1.24 2007/01/09 02:07:35 karens Exp $
 /**
  * Views field filters
  */
@@ -630,7 +630,7 @@ function date_views_browser_get_views($refresh = FALSE) {
     if (!$argument_list) {
       return array();
     }
-    $result = db_query("SELECT arg.*, view.name FROM {view_argument} arg JOIN {view_view} view ON arg.vid=view.vid WHERE arg.type IN ($argument_list) AND view.page_type='date_views_browser'");
+    $result = db_query("SELECT arg.*, view.name FROM {view_argument} arg INNER JOIN {view_view} view ON arg.vid=view.vid WHERE arg.type IN ($argument_list) AND view.page_type='date_views_browser'");
     while ($view = db_fetch_object($result)) {
       $date_views_browser_views[$view->name] = $view;
     }
