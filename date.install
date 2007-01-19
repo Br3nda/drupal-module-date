@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.4.2.3 2006/10/31 14:00:00 karens Exp $
+// $Id: date.install,v 1.4.2.4 2007/01/19 11:21:21 karens Exp $
 
 /**
  * Implementation of hook_install().
@@ -145,20 +145,20 @@ function date_update_5() {
       case 'date':
         if (!$field['required'] && ($columns_v4['value']['default'] == "'0001-01-01T00:00:00'" || $columns_v4['value']['not null'])) {
           if ($field['tz_handling'] != 'date') {
-            $ret[] = update_sql("UPDATE {$table} SET $id = NULL WHERE $id <= '0001-01-01T23:59:59'");
+            $ret[] = update_sql("UPDATE {". $table ."} SET $id = NULL WHERE $id <= '0001-01-01T23:59:59'");
           }
           else {
-            $ret[] = update_sql("UPDATE {$table} SET $id = NULL, $tz_id = NULL, $offset = NULL WHERE $id <= '0001-01-01T23:59:59'");
+            $ret[] = update_sql("UPDATE {". $table ."} SET $id = NULL, $tz_id = NULL, $offset = NULL WHERE $id <= '0001-01-01T23:59:59'");
           }
         }
         break;
       case 'datestamp':
         if (!$field['required'] && ($columns_v4['value']['default'] == 0 || $columns_v4['value']['not null'])) {
           if ($field['tz_handling'] != 'date') {
-            $ret[] = update_sql("UPDATE {$table} SET $id = NULL WHERE $id > -86399 AND $id <= 86399");
+            $ret[] = update_sql("UPDATE {". $table ."} SET $id = NULL WHERE $id > -86399 AND $id <= 86399");
           }
           else {
-            $ret[] = update_sql("UPDATE {$table} SET $id = NULL, $tz_id = NULL, $offset = NULL WHERE $id > -86399 AND $id <= 86399");
+            $ret[] = update_sql("UPDATE {". $table ."} SET $id = NULL, $tz_id = NULL, $offset = NULL WHERE $id > -86399 AND $id <= 86399");
           }
         }
         break;
