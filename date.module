@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.15 2007/01/19 11:40:20 karens Exp $
+// $Id: date.module,v 1.13.2.16 2007/01/19 11:51:55 karens Exp $
 /**
  * @file
  * Defines a date/time field type.
@@ -407,8 +407,8 @@ function date_widget($op, &$node, $field, &$items) {
           'delta'        => $delta,
           'granularity'  => $granularity,
           'format'       => $field['type'],
-          'timezone_out' => ($items[$delta]['value'] && $params['required'] ? $timezone : ''),
-          'timezone_in'  => ($items[$delta]['value'] && $params['required'] ? 'GMT' : ''),
+          'timezone_out' => ($items[$delta]['value'] && $field['required'] ? $timezone : ''),
+          'timezone_in'  => ($items[$delta]['value'] && $field['required'] ? 'GMT' : ''),
           'description'  => $field['widget']['description'],
           'select_day'    => $field['widget']['select_day'],
           'select_month'  => $field['widget']['select_month'],
