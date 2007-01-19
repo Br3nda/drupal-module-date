@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.18 2007/01/19 12:51:26 karens Exp $
+// $Id: date.module,v 1.13.2.19 2007/01/19 18:29:44 karens Exp $
 /**
  * @file
  * Defines a date/time field type.
@@ -10,7 +10,7 @@
  */
 function date_init() {
   // ensure we are not serving a cached page
-  if (function_exist('drupal_set_content')) {
+  if (function_exists('drupal_set_content')) {
     // we don't do this in hook_menu to ensure the files are already included when
     // views_menu is executed
     if (module_exist('views')) {
