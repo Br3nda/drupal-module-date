@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.5 2007/01/19 12:51:10 karens Exp $
+// $Id: date.module,v 1.32.2.6 2007/01/19 23:21:10 karens Exp $
 /**
  * @file
  * Defines a date/time field type.
@@ -94,7 +94,7 @@ function date_field_settings($op, $field) {
         include_once(drupal_get_path('module', 'event') .'/event_timezones.inc');
       }
       $form = array();
-      $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : 'gmt';
+      $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : 'site';
       $form['input'] = array(
         '#type' => 'fieldset',
         '#title' => t('Input options'),
@@ -128,7 +128,7 @@ function date_field_settings($op, $field) {
         '#title' => t('Input format'),
         '#default_value' => $field['input_format'] ? $field['input_format'] : 'site_format',
         '#options' => date_input_options(),
-        '#description' => t('The specified format will be adapted to the chosen <b>granularity</b>. The \'default\' value uses the \'short date format\' defined in %settings', array('%settings' => l("admin/settings", "admin/settings"))),
+        '#description' => t('The specified format will be adapted to the chosen <b>granularity</b>. The \'default\' value uses the \'short date format\' defined in !settings', array('!settings' => l("admin/settings", "admin/settings"))),
       );
       $form['input']['advanced']['input_format_custom'] = array(
         '#type' => 'textfield',

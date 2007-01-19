@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.22.2.2 2007/01/09 02:07:19 karens Exp $
+// $Id: date_views.inc,v 1.22.2.3 2007/01/19 23:21:10 karens Exp $
 /**
  * Views field filters
  */
@@ -707,7 +707,7 @@ function date_views_browser_period_start_stamp($arg = NULL, $period = 'month') {
     $start = intval($stamp - intval($dow * 86400) + $adj);
     // if site preference is to start week on other than a Sunday, go back a week and move up to correct day
     if (variable_get('date_first_day', 0)) {
-      $start += (-604800) + (variable_get('date_first_day', 0) * 86400);
+      $start += intval(variable_get('date_first_day', 0) * 86400);
     }
     break;
   case ('year'):
