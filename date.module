@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.19 2007/01/19 18:29:44 karens Exp $
+// $Id: date.module,v 1.13.2.20 2007/01/19 23:22:43 karens Exp $
 /**
  * @file
  * Defines a date/time field type.
@@ -94,7 +94,7 @@ function date_field_settings($op, $field) {
         include_once(drupal_get_path('module', 'event') .'/event_timezones.inc');
       }
       $form = array();
-      $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : 'gmt';
+      $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : 'site';
       $form['input'] = array(
         '#type' => 'fieldset',
         '#title' => t('Input options'),
