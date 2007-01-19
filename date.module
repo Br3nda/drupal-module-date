@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.14 2006/12/04 18:06:48 karens Exp $
+// $Id: date.module,v 1.13.2.15 2007/01/19 11:40:20 karens Exp $
 /**
  * @file
  * Defines a date/time field type.
@@ -469,7 +469,7 @@ function date_widget($op, &$node, $field, &$items) {
       // Don't save empty fields.
       if ($field['multiple']) {
         foreach ($items as $delta => $item) {
-          if (!$item['value'] && ($delta > 0 || !$field['required'])) {
+          if ((!$item['value'] && !$item['value']['year']) && ($delta > 0 || !$field['required'])) {
             unset($items[$delta]);
           }
         }
