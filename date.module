@@ -1,12 +1,26 @@
 <?php
-// $Id: date.module,v 1.13.2.17 2007/01/19 12:08:01 karens Exp $
+// $Id: date.module,v 1.13.2.18 2007/01/19 12:51:26 karens Exp $
 /**
  * @file
  * Defines a date/time field type.
  */
-// moved views functions into their own file for better readability
-if (module_exist('views')) {
-  include_once(drupal_get_path('module', 'date') .'/date_views.inc');
+
+/**
+ * Implementation of hook_init().
+ */
+function date_init() {
+  // ensure we are not serving a cached page
+  if (function_exist('drupal_set_content')) {
+    // we don't do this in hook_menu to ensure the files are already included when
+    // views_menu is executed
+    if (module_exist('views')) {
+      include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+    }
+    // according to http://drupal.org/node/60526, this should not go in hook_menu
+    if (module_exist('pathauto')) {
+      include_once('./'. drupal_get_path('module', 'date') .'/date_pathauto.inc');
+    }
+  }
 }
 
 /**
