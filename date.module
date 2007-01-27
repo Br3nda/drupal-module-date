@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.41 2007/01/27 13:24:36 karens Exp $
+// $Id: date.module,v 1.42 2007/01/27 15:55:20 karens Exp $
 /**
  * @file
  * Defines a date/time field type.
@@ -832,9 +832,9 @@ function theme_date_form_combination($form) {
  */
 function theme_date_display_combination($field, $date1, $date2 = NULL) {
   if ($date1 == $date2 || empty($date2)) {
-    return $date1;
+    return '<span class="date-display-single">'. $date1 .'</span>';
   }
   else {
-    return $date1 .' - '. $date2;
+    return '<span class="date-display-start">'. $date1 .'</span><span class="date-display-separator"> - </span><span class="date-display-end">'. $date2 .'</span>';
   }
 }
