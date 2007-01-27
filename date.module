@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.21 2007/01/27 13:11:15 karens Exp $
+// $Id: date.module,v 1.13.2.22 2007/01/27 17:38:00 karens Exp $
 
 /**
  * @file
@@ -329,6 +329,9 @@ function date_widget_settings($op, $widget) {
   include_once(drupal_get_path('module', 'date') .'/date.inc');
 
   switch ($op) {
+    case 'callbacks':
+      return array('default_value' => TRUE);
+
     case 'form':
         $form = array();
         if ($widget['type'] == 'date_select') {
@@ -394,11 +397,14 @@ function date_widget_settings($op, $widget) {
 /**
  * Implementation of hook_widget().
  */
-function date_widget($op, &$node, $field, &$items) {
+function date_widget($op, &$node, $field, &$items, $delta = NULL) {
 
   include_once(drupal_get_path('module', 'date') .'/date.inc');
 
   switch ($op) {
+    case 'default value':
+      return date_default_value($node, $field, $items, $delta);
+
     case 'form':
       $form = array();
 
@@ -549,6 +555,22 @@ function date_widget($op, &$node, $field, &$items) {
       return;
 
   }
+}
+
+/**
+ *  Set the date default values.
+ *
+ * @todo expand on this in the future
+ */
+function date_default_value($node, $field, $items, $delta) {
+  include_once(drupal_get_path('module', 'date') .'/date.inc');
+  if ($field['required']) {
+    $default_date = $field['type'] == 'datestamp' ? time() : date_unix2iso(time());
+  }
+  else {
+    $default_date = NULL;
+  }
+  return array(0 => array('value' => $default_date, 'value2' => $default_date));
 }
 
 /**
