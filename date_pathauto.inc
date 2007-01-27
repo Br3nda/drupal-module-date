@@ -1,5 +1,5 @@
 <?php
-// $Id: date_pathauto.inc,v 1.1.4.2 2007/01/19 12:51:26 karens Exp $
+// $Id: date_pathauto.inc,v 1.1.4.3 2007/01/27 13:11:15 karens Exp $
 
 /**
  * @file
@@ -109,9 +109,9 @@ function date_pathauto_node($op, $node = NULL) {
 
       return $results;
 	  break;
-	
+
 	default:
 	  break;
-	
+
   }
 }

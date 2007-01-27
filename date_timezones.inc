@@ -1,11 +1,11 @@
 <?php
-//$Id: date_timezones.inc,v 1.3 2006/07/06 16:23:31 karens Exp $
+//$Id: date_timezones.inc,v 1.3.2.1 2007/01/27 13:11:15 karens Exp $
 // a copy of event_timezones.inc to be used when the event module is not enabled
 
 //if (module_exist('event')) return;
 /**
  * Check if time is in Daylight Savings Time
- * 
+ *
  * @param
  *   $region a drupal dst region code, corresponding to those from event_get_dst_regions()
  * @param
@@ -17,7 +17,7 @@ function event_is_dst($region, $timestamp) {
 
   $year = date('Y', $timestamp);
   $dst = event_get_dst_regions();
-  
+
   // Information on Daylight Saving time was obtained from http://webexhibits.org/daylightsaving/g.html
   switch ($region) {
     case 0:
@@ -144,7 +144,7 @@ function event_is_dst($region, $timestamp) {
       $dstend = strtotime("1 week sunday GMT", strtotime("1 april $year GMT"));
       break;
   }
-  
+
   return ($dststart <= $timestamp && $timestamp <= $dstend);
 }
 
@@ -195,7 +195,7 @@ function event_zonelist() {
 function event_get_offset($zid, $timestamp) {
   $zones = event_get_timezones();
   $zone = $zones[$zid];
-  
+
   if($zone['dst_region']) {
     // zone is a region which obeys dst, return correct offset
     return (event_is_dst($zone['dst_region'], $timestamp) ? $zone['offset_dst'] : $zone['offset']);
