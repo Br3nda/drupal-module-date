@@ -1,4 +1,4 @@
-; $Id: date.info,v 1.2.2.1 2007/01/19 23:21:10 karens Exp $
+; $Id: date.info,v 1.2.2.2 2007/01/27 13:26:55 karens Exp $
 name = Date
 description = Defines a date/time field type and a date api.
 version = "$Name:  $"

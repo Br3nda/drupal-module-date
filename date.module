@@ -1,5 +1,6 @@
 <?php
-// $Id: date.module,v 1.32.2.6 2007/01/19 23:21:10 karens Exp $
+// $Id: date.module,v 1.32.2.7 2007/01/27 13:26:55 karens Exp $
+
 /**
  * @file
  * Defines a date/time field type.
@@ -33,8 +34,8 @@ function date_help($section) {
       break;
     case 'admin/help#date':
         $output = t('<h2>Date Module</h2>
-          <p>The date module defines a highly configurable date/time field type for the content module and a date API that can be used by other applications. 
-          Dates can use GMT, the site\'s timezone or a date-specific timezone and are converted to GMT and stored as either a Date (ISO 8601 YYYY-MM-DDTHH:MM:SS) or a Datestamp (a unix timestamp). When displayed, they are converted back to the desired timezone value and displayed using the desired display format. 
+          <p>The date module defines a highly configurable date/time field type for the content module and a date API that can be used by other applications.
+          Dates can use GMT, the site\'s timezone or a date-specific timezone and are converted to GMT and stored as either a Date (ISO 8601 YYYY-MM-DDTHH:MM:SS) or a Datestamp (a unix timestamp). When displayed, they are converted back to the desired timezone value and displayed using the desired display format.
           Display formats include numerous combinations of date parts, sequences, and separators, to accomodate international date formatting needs.
           </p>
           <h3>Date Field Types</h3>
@@ -55,8 +56,8 @@ function date_help($section) {
           <h3>Date Widgets</h3>
           <p>There are several widgets to choose from to control how users can enter data for this field.</p>
           <dl>
-          <dt>Text Field</dt><dd>The Text Field date widget uses the strtotime function to construct a date and will accept input allowed by the php <a href="http://www.php.net/manual/en/function.strtotime.php">strtotime function</a>. This allows the user to type a date in in many natural formats, like <strong>March 31, 1980</strong> or <strong>3/10/1980</strong> or in numeric formats like <strong>YYYY-MM-DD</strong>. 
-          The strtotime function will assume date shortcuts are in American format (MM/DD/YY), and it will not work for dates prior to 1970. 
+          <dt>Text Field</dt><dd>The Text Field date widget uses the strtotime function to construct a date and will accept input allowed by the php <a href="http://www.php.net/manual/en/function.strtotime.php">strtotime function</a>. This allows the user to type a date in in many natural formats, like <strong>March 31, 1980</strong> or <strong>3/10/1980</strong> or in numeric formats like <strong>YYYY-MM-DD</strong>.
+          The strtotime function will assume date shortcuts are in American format (MM/DD/YY), and it will not work for dates prior to 1970.
           </dd>
           <dt>Select List</dt><dd>The Select List date widget presents users with a drop-down list or textfield for each part of the date (year, month, day, hour, etc.). The whole selector is collapsed onto a single line using css (except for the timezone selector, if date-specific timezones are collected). The selector is highly configurable and will even handle years prior to 1900.</dd>
           <dt>Javascript Pop-up Calendar</dt><dd>The Javascript Pop-up Calendar is offered as an input alternative if the <a href="http://drupal.org/node/57285">jscalendar</a> module is installed. This widget can handle dates as early as 1900.
@@ -141,7 +142,7 @@ function date_field_settings($op, $field) {
         '#title' => t('Display Options'),
         '#description' => t('Choose the way the date should be displayed.'),
         );
-      
+
       $default_formatter = date_formatter_setup_form($field, 0);
       $form['output'][] = $default_formatter;
 
@@ -156,7 +157,7 @@ function date_field_settings($op, $field) {
       for ($i = 1; $i <= 3; $i++) {
         $form['output']['advanced'][$i] = date_formatter_setup_form($field, $i);
       }
-      
+
       $form['timezone'] = array(
         '#type' => 'fieldset',
         '#title' => t('Timezone options'),
@@ -181,11 +182,11 @@ function date_field_settings($op, $field) {
         '#type' => 'select',
         '#title' => t('Site timezone'),
         '#default_value' => date_get_site_timezone(),
-        '#options' => drupal_map_assoc(date_timezone_options(variable_get('date_default_timezone', 0))),  
+        '#options' => drupal_map_assoc(date_timezone_options(variable_get('date_default_timezone', 0))),
         '#description' => t('Select the timezone to be used as the site\'s timezone for all date fields in every content type in which they appear. List includes GMT and all timezones with the same GMT offset as the site timezone setting.'),
       );
       $form['#suffix'] = t('<div class="form-item"><div class="description">* The custom format, if provided, will override the selected date display. Define a php date format like \'m-d-Y H:i\' (see <a href="http://php.net/date">http://php.net/date</a>). Do not add time zone formatting to the custom format, it will not work correctly. Use the zone display option instead.</div></div>');
-  
+
       return $form;
 
 
@@ -224,7 +225,7 @@ function date_field_settings($op, $field) {
       return date_columns($field);
 
     case 'filters':
-      return date_views_filters($field);  
+      return date_views_filters($field);
   }
 }
 
@@ -284,12 +285,12 @@ function date_formatter_setup_form($field, $delta) {
  */
 
 function date_field($op, &$node, $field, &$items, $teaser, $page) {
-  
+
   include_once(drupal_get_path('module', 'date') .'/date.inc');
-  
+
   switch ($op) {
     case 'view':
-      
+
       foreach ($items as $delta => $item) {
         $items[$delta]['view'] = content_format($field, $item, 'default', $node);
       }
@@ -325,7 +326,7 @@ function date_widget_info() {
  * Implementation of hook_widget_settings().
  */
 function date_widget_settings($op, $widget) {
-  
+
   include_once(drupal_get_path('module', 'date') .'/date.inc');
 
   switch ($op) {
@@ -395,25 +396,25 @@ function date_widget_settings($op, $widget) {
  * Implementation of hook_widget().
  */
 function date_widget($op, &$node, $field, &$items) {
-  
+
   include_once(drupal_get_path('module', 'date') .'/date.inc');
 
   switch ($op) {
     case 'form':
       $form = array();
-      
+
       $form[$field['field_name']] = array('#tree' => TRUE);
 
       $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : 'site';
-      
+
       $function = 'date_widget_' . $field['widget']['type'];
       $max = $field['multiple'] ? 2 + sizeof($items) : 0;
-      
+
       foreach (range(0, $max) as $delta) {
-        
+
         $granularity = date_granularity_array($field);
         if ($tz_handling == 'date') array_push($granularity, 'T');
-        
+
         $timezone = date_get_timezone($tz_handling, $items[$delta]['timezone']);
 
         $params = array(
@@ -436,9 +437,9 @@ function date_widget($op, &$node, $field, &$items) {
         $params['formats'] = date_get_formats($field);
 
         switch ($field['widget']['type']) {
-         
+
           case ('date_select'):
-          
+
             if ($delta > 0) $params['opt_fields'] = array('year', 'month', 'day');
             if ($delta > 0 || (!$params['required'] && $params['value'] == '')) $params['blank_default'] = 1;
             $params['increment'] = $field['widget']['increment'];
@@ -457,13 +458,13 @@ function date_widget($op, &$node, $field, &$items) {
 
         }
       }
-      
+
       return $form;
 
     case 'process form values':
       /**
        *  Rebuild $items with converted dates and timezones
-       * 
+       *
        *  input text field dates will hold an array like:
        *  [0] => Array (
        *    [value] => 2006-04-06T02:00:00
@@ -483,7 +484,7 @@ function date_widget($op, &$node, $field, &$items) {
       $formats = date_get_formats($field);
       $add = array();
 
-      
+
       // Don't save empty fields.
       if ($field['multiple']) {
         foreach ($items as $delta => $item) {
@@ -492,11 +493,11 @@ function date_widget($op, &$node, $field, &$items) {
           }
         }
       }
-      
+
       foreach ($items as $delta => $item) {
 
         if ($items[$delta]) {
-        
+
           $timezone = date_get_timezone($field['tz_handling'], $item['timezone']);
 
           switch ($field['widget']['type']) {
@@ -519,7 +520,7 @@ function date_widget($op, &$node, $field, &$items) {
           }
         }
       }
-        
+
       if ($add) $items = $add;
       return;
 
@@ -527,7 +528,7 @@ function date_widget($op, &$node, $field, &$items) {
       $formats = date_get_formats($field);
 
       foreach ($items as $delta => $item) {
-        
+
         // if multiple dates are allowed, need to adjust validation criteria on extra fields
         // must allow for way to omit unused date fields, so dates with an empty 'year' field will not be validated or saved
         $params['required'] = ($field['required'] && $delta == 0) ? 1 : 0;
@@ -593,11 +594,11 @@ function date_field_formatter_info() {
  * Implementation of hook_field_formatter().
  */
 function date_field_formatter($field, $item, $formatter, $node) {
-  
+
   if (empty($item['value'])) {
     return '';
   }
-  
+
   include_once(drupal_get_path('module', 'date') .'/date.inc');
 
   $format_db_type = 'local';
@@ -635,7 +636,7 @@ function date_field_formatter($field, $item, $formatter, $node) {
       $format_zone = $field['output_format_zone'];
       break;
   }
-  
+
   if ($field['tz_handling'] == 'none') {
 
     // if no timezone handling was elected, create a date object with the database value
@@ -656,9 +657,9 @@ function date_field_formatter($field, $item, $formatter, $node) {
 }
 
 /**
- * $field['granularity'] will contain an array like ('H' => 'H', 'M' => 0) 
+ * $field['granularity'] will contain an array like ('H' => 'H', 'M' => 0)
  * where the values turned on return their own names and the values turned off return a zero
- * need to reconfigure this into a simple array of the turned on values 
+ * need to reconfigure this into a simple array of the turned on values
  */
 function date_granularity_array($field) {
   if (!is_array($field) || !is_array($field['granularity'])) {
@@ -689,7 +690,7 @@ function date_set_formats($field) {
     $format = ($field['input_format'] == 'site-wide') ? variable_get('date_format_short', 'm/d/Y - H:i') : $field['input_format'];
   }
   $granularity = date_granularity_array($field);
-  
+
   $formats = date_formats($format, $granularity);
   cache_set('date_formats:'. $field['field_name'] .':'.$field['type_name'], 'cache', serialize($formats), CACHE_PERMANENT);
   return $formats;
