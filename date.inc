@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.33 2007/01/27 15:55:20 karens Exp $
+//$Id: date.inc,v 1.34 2007/01/28 13:36:56 karens Exp $
 
 /**
  * @file
@@ -1783,6 +1783,7 @@ function date_formats($format, $granularity) {
   $select_format_date = array();
   $weight_index = 0;
   $desc_date = array();
+  $desc_time = array();
 
   $format_to_jscalendar = array(
     'd' => '%d', 'j' => '%e', 'D' => '%a', 'l' => '%A', 'z' => '%j', 'w' => '%w',
