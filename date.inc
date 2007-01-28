@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.16 2007/01/27 13:11:15 karens Exp $
+//$Id: date.inc,v 1.9.2.17 2007/01/28 13:40:18 karens Exp $
 
 /**
  * @file
@@ -576,7 +576,7 @@ function date_append_zone_options() {
 function date_timezone_options($limit = '') {
 
   include_once(DATE_TIMEZONES);
-
+  $zonelist = array();
   if (!$limit) {
     $zonelist = drupal_map_assoc(event_zonelist());
 
@@ -710,11 +710,11 @@ function date_select_input($params) {
   $years_forward = $params['years_forward'];
 
   if ($formats['input']['am_pm']) {
-    $hours_format = t('h');
+    $hours_format = 'g';
     for ($i = 0; $i <= 12; $i++) $hours_array[$i] = $i < 10 ? "0$i" : $i;
   }
   else {
-    $hours_format = t('H');
+    $hours_format = 'G';
     for ($i = 0; $i <= 23; $i++) $hours_array[$i] = $i < 10 ? "0$i" : $i;
   }
 
@@ -734,14 +734,15 @@ function date_select_input($params) {
     default:
       $now = date_unix2iso(date_gmadj_zone(time()));
   }
+
   if (!$blank_default && $params['value'] == '') {
     date_set_date($date, $now, $timezone_out, 'local', $format);
   }
 
   if (!$blank_default || $params['value'] > '') {
     $year    = date_show_date($date, 'Y');
-    $mon     = date_show_date($date, 'm');
-    $mday    = date_show_date($date, 'd');
+    $mon     = date_show_date($date, 'n');
+    $mday    = date_show_date($date, 'j');
     $hours   = date_show_date($date, $hours_format);
     $minutes = (string)date_show_date($date, 'i');
     $seconds = (string)date_show_date($date, 's');
@@ -749,9 +750,9 @@ function date_select_input($params) {
   }
 
   // create the form values
-  $form['#type']   = 'fieldset';
   $form['#title']  = $label;
   $form['#weight'] = intval($weight);
+  $form['#theme']  = 'date_form_select';
   $form['#attributes'] = array('class' => 'container-inline-date');
 
   if (in_array('D',$granularity)) {
@@ -859,24 +860,9 @@ function date_select_input($params) {
       '#weight' => 8,
     );
   }
-  if (in_array('T',$granularity)) {
-    $form['timezone'] = array(
-      '#type' => 'select',
-      '#default_value' => $timezone_out ? $timezone_out : (!$blank_default ? 'GMT' : ''),
-      '#options' => $required ? date_timezone_options() : array('' => '') + date_timezone_options(),
-      '#required' => ($required && !in_array('timezone', $opt_fields)) ? $required : 0,
-      '#title' => t('timezone'),
-      '#weight' => 10,
-    );
-  } else {
-    $form['timezone'] = array(
-      '#type' => 'hidden',
-      '#value' => $timezone_out,
-    );
-  }
   $form[] = array(
-    '#type' => 'markup',
-    '#value' =>  ($description > '' ? '<br class="clear" /><div class="form-item"><div class="description">'.$description.'</div></div>' : ''),
+    '#theme' => 'date_form_select_description',
+    '#value' =>  $description,
     '#weight' => 11,
   );
   return $form;
@@ -918,7 +904,8 @@ function date_text_input($params) {
   $timezone_out  = isset($params['timezone_out']) ? $params['timezone_out'] : (!$blank_default || $params['value'] ? date_get_site_timezone() : '');
   $description   = $params['description'];
   $jscalendar    = $params['jscalendar'] ? 1 : 0;
-
+  $opt_fields    = is_array($params['opt_fields']) ? $params['opt_fields'] : array();
+  $field_name    = $params['field_name'] ? $params['field_name'] : 'value';
 
   // create a new date object and convert it to the right timezone
 
@@ -945,62 +932,68 @@ function date_text_input($params) {
   // get the local iso version of the database value
   $value = date_iso2custom(date_show_value($date, 'local'), $formats['input']['text']);
 
-  // if date-specific timezone handling was selected, provide a way for the user to enter the timezone
-  if (in_array('T', $granularity)) {
-    $form['#type'] = 'fieldset';
-    $form['#title'] = $label;
-    $form['#weight'] = $weight;
-    $form['#attributes'] = array('class' => 'container-inline-date');
-
-    $form['value'] = array(
-      '#type' => 'textfield',
-      '#title' => t('date'),
-      '#default_value' => $value,
-      '#required' => ($delta == 0) ? $required : 0,
-    );
-    if (in_array('T',$granularity)) {
-      $form['timezone'] = array(
-        '#title' => t('timezone'),
-        '#type' => 'select',
-        '#default_value' => $timezone_out ? $timezone_out : (!$blank_default ? 'GMT' : ''),
-        '#options' => $required ? date_timezone_options() : array('' => '') + date_timezone_options(),
-        '#required' => ($required && !in_array('timezone', $opt_fields)) ? $required : 0,
-        '#title' => t('timezone'),
-      );
-    } else {
-      $form['timezone'] = array(
-        '#type' => 'hidden',
-        '#value' => $timezone_out,
-      );
-    }
-
-    $form[] = array(
-      '#type' => 'markup',
-      '#value' => '<br class="clear" /><div class="form-item"><div class="description">'.$description.'</div></div>',
-    );
-
-  } else {
-
-    // date-specific timezone not requested, just get date
-    $form['value'] = array(
-      '#type' => 'textfield',
-      '#title' => $label,
-      '#default_value' => $value,
-      '#required' => ($delta == 0) ? $required : 0,
-      '#description' => $description,
-      '#weight' => $weight,
-    );
-  }
+  // date-specific timezone not requested, just get date
+  $form[$field_name] = array(
+    '#type' => 'textfield',
+    '#title' => $label,
+    '#default_value' => $value,
+    '#required' => ($delta == 0) ? $required : 0,
+    '#description' => $description,
+    '#weight' => $weight,
+  );
 
   // if the jscalendar is used for input, add some attributes to be passed to the js
   // also need to adjust the date format slightly to accomodate the js capability
 
-  if ($jscalendar && module_exist('jscalendar')) {
-    $form['value']['#attributes'] = array('class' => 'jscalendar');
-    $form['value']['#jscalendar_ifFormat'] = $formats['input']['jscal'];
-    $form['value']['#jscalendar_showsTime'] = date_has_time($granularity) ? 'true' : 'false';
-    $form['value']['#jscalendar_timeFormat'] = $formats['input']['am_pm'] ? '12' : '24';
+  if ($jscalendar && module_exists('jscalendar')) {
+    $form[$field_name]['#attributes'] = array('class' => 'jscalendar');
+    $form[$field_name]['#jscalendar_ifFormat'] = $formats['input']['jscal'];
+    $form[$field_name]['#jscalendar_showsTime'] = date_has_time($granularity) ? 'true' : 'false';
+    $form[$field_name]['#jscalendar_timeFormat'] = $formats['input']['am_pm'] ? '12' : '24';
+    $form['#theme'] = 'date_form_jscalendar';
   }
+  else {
+    $form['#theme'] = 'date_form_text';
+  }
+  return $form;
+}
+
+/**
+ *  Timezone input form
+ *
+ *  $params = an array of values, including
+ *    timezone_in  = the timezone of the date/time value to be processed, default is GMT
+ *    timezone_out = the timezone to be used when displaying the date, default is date site timezone, if set, or GMT
+ *       valid timezones are standard timezone ids like US/Central, America/New_York, GMT
+ *    granularity = an array of date parts to be selected, like array('Y','M','D'), default is M, D, Y
+ *       Y => year, M => month, D => day, H => hours, N => minutes, S => seconds, T => timezone
+ *    required = 1 if the field must contain a valid date, default is 1
+ *    blank_default = 1 to show an empty date field with blank values, 0 to fill with current date, default is 0
+ */
+function date_timezone_input($params) {
+  // set the variables
+  $required      = isset($params['required']) ? $params['required'] : 1;
+  $blank_default = isset($params['blank_default']) ? $params['blank_default'] : 0;
+  $timezone_in   = isset($params['timezone_in']) ? $params['timezone_in'] : (!$blank_default || $params['value'] ? 'GMT' : '');
+  $timezone_out  = isset($params['timezone_out']) ? $params['timezone_out'] : (!$blank_default || $params['value'] ? date_get_site_timezone() : '');
+  $opt_fields    = is_array($params['opt_fields']) ? $params['opt_fields'] : array();
+  $granularity   = is_array($params['granularity']) ? $params['granularity'] : array('M', 'D', 'Y');
+  if (in_array('T',$granularity)) {
+    $form['timezone'] = array(
+      '#title' => t('timezone'),
+      '#type' => 'select',
+      '#default_value' => $timezone_out ? $timezone_out : (!$blank_default ? 'GMT' : ''),
+      '#options' => $required ? date_timezone_options() : array('' => '') + date_timezone_options(),
+      '#required' => ($required && !in_array('timezone', $opt_fields)) ? $required : 0,
+      '#title' => t('timezone'),
+      );
+  } else {
+    $form['timezone'] = array(
+      '#type' => 'hidden',
+      '#value' => $timezone_out,
+    );
+  }
+  $form['#theme'] = 'date_form_timezone';
   return $form;
 }
 
@@ -1116,7 +1109,6 @@ function date_text_make_dbdate($value, $type, $format, $timezone_in = 'GMT', $gr
  *    opt_fields = an array of fields that need not be filled out, default is empty array
  */
 function date_selector_validate($value, $fieldname, $params = array()) {
-
   $type       = $params['type'] > '' ? $params['type'] : DATE_ISO;
   $required   = isset($params['required']) ? $params['required'] : 1;
   $opt_fields = is_array($params['opt_fields']) ? $params['opt_fields'] : array();
@@ -1792,6 +1784,7 @@ function date_formats($format, $granularity) {
   $select_format_date = array();
   $weight_index = 0;
   $desc_date = array();
+  $desc_time = array();
 
   $format_to_jscalendar = array(
     'd' => '%d', 'j' => '%e', 'D' => '%a', 'l' => '%A', 'z' => '%j', 'w' => '%w',
@@ -2127,4 +2120,64 @@ function date_sql_pad($str, $size = 2, $pad = '0', $side = 'l') {
   default:
     return "LPAD($str, $size, '$pad')";
   }
+}
+
+/**
+ *  Themes for date input form elements
+ */
+
+/**
+ *  Date selector form
+ *
+ *  $form contains the whole date selector form.
+ *  Make any changes needed, render it, and return the result.
+ *
+ */
+function theme_date_form_select($form) {
+  $form['#type']   = 'fieldset';
+  return form_render($form);
+}
+
+/**
+ *  Date selector description
+ *
+ *  $form contains the description added to the date selector.
+ *  Make any changes needed, render it, and return the result.
+ */
+function theme_date_form_select_description($form) {
+  $description = form_render($form);
+  if ($description) {
+    return '<br class="clear" /><div class="form-item"><div class="description">'.$description.'</div></div>';
+  }
+  return '';
+}
+
+/**
+ *  Text input form
+ *
+ *  $form contains a text input form.
+ *  Make any changes needed, render it, and return the result.
+ */
+function theme_date_form_text($form) {
+  return form_render($form);
+}
+
+/**
+ *  jsCalendar input form
+ *
+ *  $form contains a jscalendar input form.
+ *  Make any changes needed, render it, and return the result.
+ */
+function theme_date_form_jscalendar($form) {
+  return form_render($form);
+}
+
+/**
+ *  Timezone input form
+ *
+ *  $form contains a timzone input form.
+ *  Make any changes needed, render it, and return the result.
+ */
+function theme_date_form_timezone($form) {
+  return form_render($form);
 }
