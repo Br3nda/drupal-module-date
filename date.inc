@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.17 2007/01/28 13:40:18 karens Exp $
+//$Id: date.inc,v 1.9.2.18 2007/01/30 16:26:51 karens Exp $
 
 /**
  * @file
@@ -945,7 +945,7 @@ function date_text_input($params) {
   // if the jscalendar is used for input, add some attributes to be passed to the js
   // also need to adjust the date format slightly to accomodate the js capability
 
-  if ($jscalendar && module_exists('jscalendar')) {
+  if ($jscalendar && module_exist('jscalendar')) {
     $form[$field_name]['#attributes'] = array('class' => 'jscalendar');
     $form[$field_name]['#jscalendar_ifFormat'] = $formats['input']['jscal'];
     $form[$field_name]['#jscalendar_showsTime'] = date_has_time($granularity) ? 'true' : 'false';
