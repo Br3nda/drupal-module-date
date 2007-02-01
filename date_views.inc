@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.6.2.17 2007/01/27 13:11:15 karens Exp $
+// $Id: date_views.inc,v 1.6.2.18 2007/02/01 01:26:49 karens Exp $
 
 /**
  * Views field filters
@@ -150,7 +150,7 @@ function date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_ty
   $formats = date_get_formats($field);
   $db_info = content_database_info($field);
   $value   = $db_info['columns']['value']['column'];
-  $table   = 'node_data_'. $field['field_name']; // uses views alias table name
+  $table   = $db_info['table'];
   $offset  = intval(date_views_offset($field) + intval($filter['options']));
 
   switch ($filterinfo['type']) {
@@ -289,7 +289,7 @@ function date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $f
   $db_info    = content_database_info($field);
   $value      = $db_info['columns']['value']['column'];
   $timezone   = $db_info['columns']['timezone']['column'];
-  $table      = 'node_data_'. $field['field_name']; // uses views alias table name
+  $table      = $db_info['table'];
 
   $offset = date_views_offset($field['tz_handling']);
 
@@ -588,7 +588,7 @@ function date_views_pre_view($view, $items) {
  */
 function date_views_query_alter(&$query, &$view) {
   $date_views_browser_views = date_views_browser_get_views();
-  if ($view->build_type == 'page' && in_array($view->name, array_keys($date_views_browser_views))) {
+  if (in_array($view->name, array_keys($date_views_browser_views))) {
     $path = explode('/', $view->url);
     $pos = sizeof($path);
     if ($view->build_type == 'block' || arg($pos) == '') {
@@ -606,7 +606,7 @@ function date_views_query_alter(&$query, &$view) {
       $field_type = $field['type'] == 'datestamp' ? 'int' : 'iso';
       $db_info    = content_database_info($field);
       $value      = $db_info['columns']['value']['column'];
-      $table      = 'node_data_'. $field['field_name']; // uses views alias table name
+      $table      = $db_info['table'];
       $offset     = date_views_offset($field['tz_handling']);
       if ($range  = date_views_date_range($arg)) {
         $query->ensure_table($table);
@@ -814,7 +814,6 @@ function theme_date_views_browser_navigation($label, $period, $prev, $next, $vie
     $output .= l(t('  next %period  ›', array('%period' => $period)), $next, array('class' => 'page-next'));
     $output .= '</div></div>';
     return $output;
-  return $output;
 }
 /**
  * Display a summary version of a view.
