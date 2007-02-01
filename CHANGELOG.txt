@@ -1,3 +1,13 @@
+Version 1.2
+===========
+
+#89097  reverse sign on option delta, fix view tablename aliases
+#114265 handle empty 'to' date values by filling with 'from' date
+        Fix block view of date browser, use new CCK views table alias.
+#80592  alter default value handling to match changes in CCK, display blank value 
+        as default for to date if not required, make sure blank value is stored as NULL
+
+
 Version 1.1
 ===========
 
