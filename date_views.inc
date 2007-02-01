@@ -1,10 +1,9 @@
 <?php
-// $Id: date_views.inc,v 1.6.2.18 2007/02/01 01:26:49 karens Exp $
+// $Id: date_views.inc,v 1.6.2.19 2007/02/01 18:39:18 karens Exp $
 
 /**
  * Views field filters
  */
-
 function date_views_help() {
   return t('<h2>Date Views</h2>
         <h3>Date Range Argument</h3>
@@ -150,8 +149,8 @@ function date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_ty
   $formats = date_get_formats($field);
   $db_info = content_database_info($field);
   $value   = $db_info['columns']['value']['column'];
-  $table   = $db_info['table'];
-  $offset  = intval(date_views_offset($field) + intval($filter['options']));
+  $table   = 'node_data_'. $field['field_name'];
+  $offset  = intval(date_views_offset($field) - intval($filter['options']));
 
   switch ($filterinfo['type']) {
     case ('DATE'):
@@ -162,7 +161,7 @@ function date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_ty
       break;
   }
   $query->ensure_table($table);
-  $query->add_where(date_sql($filterinfo['type'], $table .'.'. $value, $field_type, $offset) . $filter['operator'] . $date);
+  $query->add_where(date_sql($filterinfo['type'], $table .".". $value, $field_type, $offset) . $filter['operator'] . $date);
 
 }
 
@@ -289,7 +288,7 @@ function date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $f
   $db_info    = content_database_info($field);
   $value      = $db_info['columns']['value']['column'];
   $timezone   = $db_info['columns']['timezone']['column'];
-  $table      = $db_info['table'];
+  $table      = 'node_data_'. $field['field_name'];
 
   $offset = date_views_offset($field['tz_handling']);
 
@@ -606,7 +605,7 @@ function date_views_query_alter(&$query, &$view) {
       $field_type = $field['type'] == 'datestamp' ? 'int' : 'iso';
       $db_info    = content_database_info($field);
       $value      = $db_info['columns']['value']['column'];
-      $table      = $db_info['table'];
+      $table      = 'node_data_'. $field['field_name'];
       $offset     = date_views_offset($field['tz_handling']);
       if ($range  = date_views_date_range($arg)) {
         $query->ensure_table($table);
@@ -705,7 +704,7 @@ function date_views_browser_period_start_stamp($arg = NULL, $period = 'month') {
   switch ($period) {
   case ('week'):
     $dow = date_gmdate('w', $stamp);
-    if ($dow >= 6) $adj = (604800);
+    if ($dow >= 6) $adj = (86400 * 7);
     $start = intval($stamp - intval($dow * 86400) + $adj);
     // if site preference is to start week on other than a Sunday, go back a week and move up to correct day
     if (variable_get('date_first_day', 0)) {
@@ -814,6 +813,7 @@ function theme_date_views_browser_navigation($label, $period, $prev, $next, $vie
     $output .= l(t('  next %period  ›', array('%period' => $period)), $next, array('class' => 'page-next'));
     $output .= '</div></div>';
     return $output;
+  return $output;
 }
 /**
  * Display a summary version of a view.
