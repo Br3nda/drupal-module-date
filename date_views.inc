@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.22.2.5 2007/02/01 01:27:32 karens Exp $
+// $Id: date_views.inc,v 1.22.2.6 2007/02/01 18:38:55 karens Exp $
 
 /**
  * Views field filters
@@ -149,8 +149,8 @@ function date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_ty
   $formats = date_get_formats($field);
   $db_info = content_database_info($field);
   $value   = $db_info['columns']['value']['column'];
-  $table   = $db_info['table'];
-  $offset  = intval(date_views_offset($field) + intval($filter['options']));
+  $table   = 'node_data_'. $field['field_name'];
+  $offset  = intval(date_views_offset($field) - intval($filter['options']));
 
   switch ($filterinfo['type']) {
     case ('DATE'):
@@ -161,7 +161,7 @@ function date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_ty
       break;
   }
   $query->ensure_table($table);
-  $query->add_where(date_sql($filterinfo['type'], $table .'.'. $value, $field_type, $offset) . $filter['operator'] . $date);
+  $query->add_where(date_sql($filterinfo['type'], $table .".". $value, $field_type, $offset) . $filter['operator'] . $date);
 
 }
 
@@ -288,7 +288,7 @@ function date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $f
   $db_info    = content_database_info($field);
   $value      = $db_info['columns']['value']['column'];
   $timezone   = $db_info['columns']['timezone']['column'];
-  $table      = $db_info['table'];
+  $table      = 'node_data_'. $field['field_name'];
 
   $offset = date_views_offset($field['tz_handling']);
 
@@ -605,7 +605,7 @@ function date_views_query_alter(&$query, &$view) {
       $field_type = $field['type'] == 'datestamp' ? 'int' : 'iso';
       $db_info    = content_database_info($field);
       $value      = $db_info['columns']['value']['column'];
-      $table      = $db_info['table'];
+      $table      = 'node_data_'. $field['field_name'];
       $offset     = date_views_offset($field['tz_handling']);
       if ($range  = date_views_date_range($arg)) {
         $query->ensure_table($table);
