@@ -1,32 +1,37 @@
 Version 1.2
 ===========
 
-#89097  reverse sign on option delta, fix view tablename aliases
-#114265 handle empty 'to' date values by filling with 'from' date
-        Fix block view of date browser, use new CCK views table alias.
-#80592  alter default value handling to match changes in CCK, display blank value 
-        as default for to date if not required, make sure blank value is stored as NULL
+- 113959, 114654 empty calendar not created for non-existant days
+- Fix for back/next url
+- 113714 correct invalid foreach argument by altering method of calling views handler for non-date fields
+- 112182, 111701, 108071 - extra fields not showing up in calendar teaser
+- 99223 fix current date
+- 113125 - current view needs a link in the links listed aboved the calendar
+- Fix display of time in calendar, fix content type name in legend
+- 109336 default to current month instead of year
+- Cleanup handling of 'to' date for non-CCK date, fix links at top of calendar
+- 108957 add include path, patch by retodd, incorporate from/to cck date option from latest version of date module.
+- Incorporate from/to date capability added to cvs version of date module.
+- 108957 add include path
+- 89097  reverse sign on option delta, fix view tablename aliases
+- 114265 handle empty 'to' date values by filling with 'from' date. Fix block view of date browser, use new CCK views table alias.
+- 80592  alter default value handling to match changes in CCK, display blank value as default for to date if not required, make sure blank value is stored as NULL
+
 
 Version 1.1
 ===========
 
 Database update required.
 
-#113444 custom input format wasn't getting saved, small adjustments to display
-        and handling of from/to dates
-#84119  prepare for new default value handling by date module. No changes yet,
-        just getting functions and callbacks in place.
-#80592  adding from/to date capability, add theming for multiple and from/to
-        dates, pull all date form and display elements out into theme functions,
-        simplify database handling by making all columns accept null values,
-        move validation from the widget to the field. This is step one in the
-        process of adding handling for repeat dates. Requires database update.
-#105392 fix week in date browser; fix version in info file;
-        make 'site' the timezone default
-#102786 add pathauto integration, patch by oliver soell
-#107667 force multiselect size in Opera; set default select to select instead
-        of text
-#106477 get timezone from field not param, patch by dkruglyak
-#94106  keep multiple values from multiplying.
-#91540  fix granularity validation
+- 113444 custom input format wasn't getting saved, small adjustments to display and handling of from/to dates
+- 84119  prepare for new default value handling by date module. No changes yet, just getting functions and callbacks in place.
+
+- 80592  adding from/to date capability, add theming for multiple and from/to dates, pull all date form and display elements out into theme functions, simplify database handling by making all columns accept null values, move validation from the widget to the field. This is step one in the process of adding handling for repeat dates. Requires database update.
+
+- 105392 fix week in date browser; fix version in info file; make 'site' the timezone default
+- 102786 add pathauto integration
+- 107667 force multiselect size in Opera; set default select to select instead of text
+- 106477 get timezone from field not param, patch by dkruglyak
+- 94106  keep multiple values from multiplying.
+- 91540  fix granularity validation
 
