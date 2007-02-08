@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.27.2.5 2007/01/28 13:37:59 karens Exp $
+//$Id: date.inc,v 1.27.2.6 2007/02/08 16:39:54 karens Exp $
 
 /**
  * @file
@@ -192,6 +192,10 @@ function date_gmstrftime($format, $timestamp = FALSE) {
  *  needed for ability to accomodate timezones other than server zone
  */
 function date_adj_zone($timestamp) {
+  // No timezone adjustment for very old dates.
+  if ($timestamp < 86400) {
+    return $timestamp;
+  }
   date_load_library();
   switch (DATE_LIBRARY) {
     case ('ADODB'):
@@ -201,6 +205,10 @@ function date_adj_zone($timestamp) {
   }
 }
 function date_gmadj_zone($timestamp) {
+  // No timezone adjustment for very old dates.
+  if ($timestamp < 86400) {
+    return $timestamp;
+  }
   date_load_library();
   switch (DATE_LIBRARY) {
     case ('ADODB'):
