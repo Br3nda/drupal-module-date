@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.12 2007/02/01 18:01:29 karens Exp $
+// $Id: date.module,v 1.32.2.13 2007/02/08 15:29:26 karens Exp $
 
 /**
  * @file
@@ -469,7 +469,6 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
         if ($tz_handling == 'date') array_push($granularity, 'T');
 
         $timezone = date_get_timezone($tz_handling, $items[$delta]['timezone']);
-
         $params = array(
           'label'        => $field['widget']['label'],
           'value'        => $items[$delta]['value'],
@@ -477,8 +476,8 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
           'delta'        => $delta,
           'granularity'  => $granularity,
           'format'       => $field['type'],
-          'timezone_out' => ($items[$delta]['value'] && $field['required'] ? $timezone : ''),
-          'timezone_in'  => ($items[$delta]['value'] && $field['required'] ? 'GMT' : ''),
+          'timezone_out' => ($items[$delta]['value'] ? $timezone : ''),
+          'timezone_in'  => ($items[$delta]['value'] ? 'GMT' : ''),
           'description'  => $field['widget']['description'],
           'select_day'    => $field['widget']['select_day'],
           'select_month'  => $field['widget']['select_month'],
@@ -617,7 +616,7 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
         }
       }
       if ($add) $items = $add;
-      return;
+      return $items;
   }
 }
 
