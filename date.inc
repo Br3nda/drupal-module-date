@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.19 2007/02/08 16:39:35 karens Exp $
+//$Id: date.inc,v 1.9.2.20 2007/02/08 22:33:30 karens Exp $
 
 /**
  * @file
@@ -1903,7 +1903,7 @@ function date_formats($format, $granularity) {
   }
 
   // we store the current site-wide value, in order to be able to detect its changes
-  if ($format == 'site-wide') {
+  if ($format == 'site-wide' || $format == variable_get('date_format_short', 'm/d/Y - H:i')) {
     $formats['input']['site-wide'] = $format;
   }
 
