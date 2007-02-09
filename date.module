@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.14 2007/02/08 23:38:33 karens Exp $
+// $Id: date.module,v 1.32.2.15 2007/02/09 16:51:04 karens Exp $
 
 /**
  * @file
@@ -588,7 +588,9 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
       foreach ($items as $delta => $item) {
         if ($items[$delta]) {
           foreach ($process as $processed) {
-            if ($processed == 'value2' && empty($item['value2']) && empty($item['value2']['year'])) {
+            echo $processed;
+
+            if ($processed == 'value2' && empty($item['value2']) || ($item['value2'] && empty($item['value2']['year']))) {
                // Handle empty 'to' date values.
                $add[$delta]['value2'] = $add[$delta]['value'];
             }
@@ -617,7 +619,7 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
         }
       }
       if ($add) $items = $add;
-      return $items;
+       return $items;
   }
 }
 
