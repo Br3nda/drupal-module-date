@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.16 2007/02/14 17:45:42 karens Exp $
+// $Id: date.module,v 1.32.2.17 2007/02/14 21:09:47 karens Exp $
 
 /**
  * @file
@@ -205,7 +205,10 @@ function date_field_settings($op, $field) {
     case 'validate':
       date_set_site_timezone($field['field_timezone']);
       if (!in_array('Y', $field['granularity'])) {
-        form_set_error($field['field_name'], t('Input granularity must include a year.'));
+        form_set_error('granularity', t('Input granularity must include a year.'));
+      }
+      if ($field['tz_handling'] != 'none' && !in_array('H', array_filter($field['granularity']))) {
+        form_set_error('tz_handling', t('Dates without hours granularity must not use any timezone handling.'));
       }
       break;
 
@@ -735,9 +738,10 @@ function date_field_formatter($field, $item, $formatter, $node) {
   }
   $dates = array();
   foreach ($process as $processed) {
-    if ($field['tz_handling'] == 'none') {
+    if ($field['tz_handling'] == 'none' || !in_array('H', date_granularity_array($field))) {
       // if no timezone handling was elected, create a date object with the database value
       $date = date_make_date(trim($item[$processed]), 'none', 'local', $field['type']);
+
     } else {
       // create a date object with a gmt timezone from the database value
       $date = date_make_date(trim($item[$processed]), 'GMT', 'db', $field['type']);
@@ -748,7 +752,6 @@ function date_field_formatter($field, $item, $formatter, $node) {
     $dates[] = date_show_date($date, $format, $format_db_type, $format_zone) . $append;
     $db_info = content_database_info($field);
   }
-
   return theme('date_display_combination', $field, $dates[0], $dates[1]);
 }
 
