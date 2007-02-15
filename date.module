@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.30 2007/02/15 01:53:40 karens Exp $
+// $Id: date.module,v 1.13.2.31 2007/02/15 14:39:01 karens Exp $
 
 /**
  * @file
@@ -565,9 +565,10 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
         // Add other info to the form that the themes will need.
         $form[$field['field_name']][$delta]['#title'] = $field['widget']['label'];
         $form[$field['field_name']][$delta]['#delta'] = $delta;
-      }
-      $form += date_timezone_input($params);
 
+        $form[$field['field_name']][$delta]['timezone'] = date_timezone_input($params);
+
+      }
       return $form;
 
     case 'process form values':
