@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.38 2007/02/15 22:23:35 karens Exp $
+//$Id: date.inc,v 1.39 2007/02/19 15:12:09 karens Exp $
 
 /**
  * @file
@@ -2068,6 +2068,17 @@ function date_date2strftime_replace() {
  */
 function date_sql($result_type, $field, $date_type = 'int', $offset = '', $offset_op = '+') {
   global $db_type;
+
+  // Make sure later MYSQL versions make no timezone conversions.
+  if (in_array($GLOBALS['db_type'], array('mysql', 'mysqli'))) {
+    static $already_set = false;
+    if (!$already_set) {
+      if ($GLOBALS['db_type'] == 'mysqli' || version_compare(mysql_get_server_info(), '4.1.3', '>=')) {
+        db_query("SET @@session.time_zone = '+00:00'");
+      }
+      $already_set = true;
+    }
+  }
 
   if ($date_type == 'NOW') {
     // set up an initial value for now
