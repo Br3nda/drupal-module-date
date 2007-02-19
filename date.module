@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.19 2007/02/15 14:37:16 karens Exp $
+// $Id: date.module,v 1.32.2.20 2007/02/19 15:37:03 karens Exp $
 
 /**
  * @file
@@ -344,7 +344,7 @@ function date_is_required($field, $column, $delta, $value1, $value2) {
   if ($column == 'value2' && ($field['todate'] == 'required' && ($value1 || $delta == 0))) {
     return TRUE;
   }
-  elseif ($column == 'value' && ($field['required'] || $delta == 0)) {
+  elseif ($column == 'value' && ($field['required'] && $delta == 0)) {
     return TRUE;
   }
   return FALSE;
