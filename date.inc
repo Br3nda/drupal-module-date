@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.27.2.11 2007/02/19 17:33:42 karens Exp $
+//$Id: date.inc,v 1.27.2.12 2007/02/19 18:22:12 karens Exp $
 
 /**
  * @file
@@ -806,8 +806,8 @@ function date_select_input($params) {
     $mon     = date_show_date($date, 'n');
     $mday    = date_show_date($date, 'j');
     $hours   = date_show_date($date, $hours_format);
-    $minutes = (string)date_show_date($date, 'i');
-    $seconds = (string)date_show_date($date, 's');
+    $minutes = intval(date_show_date($date, 'i'));
+    $seconds = intval(date_show_date($date, 's'));
     $ampm    = strtolower(date_show_date($date, 'a'));
   }
 
