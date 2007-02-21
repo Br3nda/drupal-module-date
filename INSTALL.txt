@@ -24,3 +24,5 @@ Installation instructions:
    edit each one and save your changes. There may be new options available that need to be set.
    
 
+Documentation is available at http://drupal.org/node/92460.
+
