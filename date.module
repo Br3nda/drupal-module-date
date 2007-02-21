@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.33 2007/02/20 17:28:45 karens Exp $
+// $Id: date.module,v 1.13.2.34 2007/02/21 14:08:33 karens Exp $
 
 /**
  * @file
@@ -35,11 +35,11 @@ function date_init() {
 function date_help($section) {
   switch ($section) {
     case 'admin/modules#description':
-      return t('<strong>CCK:</strong> Defines a date/time field type for the content module and a date API. <em>Note: Requires content.module.</em>');
+      return t('<strong>CCK:</strong> Defines a date/time field type for the content module. <em>Note: Requires content.module and date_api.module.</em>');
       break;
     case 'admin/help#date':
         $output = t('<h2>Date Module</h2>
-          <p>The date module defines a highly configurable date/time field type for the content module and a date API that can be used by other applications.
+          <p>The date module defines a highly configurable date/time field type for the content module.
           Dates can use GMT, the site\'s timezone or a date-specific timezone and are converted to GMT and stored as either a Date (ISO 8601 YYYY-MM-DDTHH:MM:SS) or a Datestamp (a unix timestamp). When displayed, they are converted back to the desired timezone value and displayed using the desired display format.
           Display formats include numerous combinations of date parts, sequences, and separators, to accomodate international date formatting needs.
           </p>
@@ -90,15 +90,12 @@ function date_field_info() {
  */
 function date_field_settings($op, $field) {
 
-  include_once(drupal_get_path('module', 'date') .'/date.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date.inc');
 
   switch ($op) {
   case 'form':
-      if (!module_exist('event')) {
-        include_once(drupal_get_path('module', 'date') .'/date_timezones.inc');
-      } else {
-        include_once(drupal_get_path('module', 'event') .'/event_timezones.inc');
-      }
+      include_once(DATE_TIMEZONES .'/date_timezones.inc');
+
       $form = array();
       $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : 'site';
       $form['input'] = array(
@@ -307,7 +304,7 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
   else {
     $process = array('value');
   }
-  include_once(drupal_get_path('module', 'date') .'/date.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date.inc');
   switch ($op) {
     case 'validate':
       $formats = date_get_formats($field);
@@ -380,7 +377,7 @@ function date_widget_info() {
  */
 function date_widget_settings($op, $widget) {
 
-  include_once(drupal_get_path('module', 'date') .'/date.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date.inc');
 
   switch ($op) {
     case 'callbacks':
@@ -453,7 +450,7 @@ function date_widget_settings($op, $widget) {
  */
 function date_widget($op, &$node, $field, &$items, $delta = NULL) {
 
-  include_once(drupal_get_path('module', 'date') .'/date.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date.inc');
 
   if ($field['todate']) {
     $process = array('value', 'value2');
@@ -659,7 +656,7 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
  * @todo expand on this in the future
  */
 function date_default_value($node, $field, $items, $delta) {
-  include_once(drupal_get_path('module', 'date') .'/date.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date.inc');
   if ($field['required']) {
     $default_date = $field['type'] == 'datestamp' ? time() : date_unix2iso(time());
   }
@@ -717,7 +714,7 @@ function date_field_formatter_info() {
  * Implementation of hook_field_formatter().
  */
 function date_field_formatter($field, $item, $formatter, $node) {
-  theme_add_style(drupal_get_path('module', 'date') .'/date.css');
+  theme_add_style(drupal_get_path('module', 'date_api') .'/date.css');
   if (empty($item['value'])) {
     return '';
   }
@@ -728,7 +725,7 @@ function date_field_formatter($field, $item, $formatter, $node) {
     $process = array('value');
   }
 
-  include_once(drupal_get_path('module', 'date') .'/date.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date.inc');
 
   $format_db_type = 'local';
 

@@ -1,0 +1,21 @@
+<?php
+// $Id: date_api.module,v 1.1.2.2 2007/02/21 14:08:33 karens Exp $
+
+/**
+ * @file
+ * A module that will make the date API available to other modules with no dependencies on CCK.
+ * To use it, install the module, then add the following code wherever date api functions are needed:
+ *
+ * include_once(drupal_get_path('date_api') .'/date.inc');
+ */
+
+/**
+ * Implementation of hook_help().
+ */
+function date_help($section) {
+  switch ($section) {
+    case 'admin/modules#description':
+      return t('Makes the date api available to other modules.');
+      break;
+  }
+}
