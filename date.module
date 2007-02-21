@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.24 2007/02/21 18:41:48 karens Exp $
+// $Id: date.module,v 1.32.2.25 2007/02/21 22:41:46 karens Exp $
 
 /**
  * @file
@@ -58,8 +58,8 @@ function date_field_settings($op, $field) {
   include_once(drupal_get_path('module', 'date_api') .'/date.inc');
 
   switch ($op) {
-  case 'form':
-      include_once(DATE_TIMEZONES .'/date_timezones.inc');
+    case 'form':
+      include_once(DATE_TIMEZONES);
 
       $form = array();
       $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : 'site';
