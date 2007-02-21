@@ -1,5 +1,5 @@
 <?php
-// $Id: date_pathauto.inc,v 1.2 2007/02/08 23:05:02 karens Exp $
+// $Id: date_pathauto.inc,v 1.3 2007/02/21 17:15:18 karens Exp $
 
 /**
  * @file
@@ -13,7 +13,7 @@
  * as a component of paths.
  */
 function date_pathauto_node($op, $node = NULL) {
-  include_once(drupal_get_path('module', 'date') .'/date.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date.inc');
   switch ($op) {
     case 'placeholders':
       $placeholders = array();
