@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.30 2007/02/21 22:59:48 karens Exp $
+//$Id: date.inc,v 1.9.2.31 2007/02/21 23:02:40 karens Exp $
 
 /**
  * @file
@@ -2135,9 +2135,6 @@ function date_sql($result_type, $field, $date_type = 'int', $offset = '', $offse
         break;
      }
   }
-  // Convert integer field value to native date format.
-  // Since FROM_UNIXTIME() and TIMESTAMP() are timezone adjusted,
-  // remove server adj, correct offset will get added back in later step.
   // Convert integer field value to native date format.
   // Since FROM_UNIXTIME() and TIMESTAMP() are timezone adjusted,
   // remove server adj, correct offset will get added back in later step.
