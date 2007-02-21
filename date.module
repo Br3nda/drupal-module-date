@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.57 2007/02/21 18:41:17 karens Exp $
+// $Id: date.module,v 1.58 2007/02/21 22:44:04 karens Exp $
 
 /**
  * @file
@@ -59,7 +59,7 @@ function date_field_settings($op, $field) {
 
   switch ($op) {
   case 'form':
-      include_once(DATE_TIMEZONES .'/date_timezones.inc');
+      include_once(DATE_TIMEZONES);
 
       $form = array();
       $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : 'site';
