@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.34 2007/02/21 14:08:33 karens Exp $
+// $Id: date.module,v 1.13.2.35 2007/02/21 14:39:35 karens Exp $
 
 /**
  * @file
@@ -611,6 +611,8 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
         }
       }
 
+      $timezone = date_get_timezone($field['tz_handling'], $items['timezone']);
+      unset($items['timezone']);
       foreach ($items as $delta => $item) {
         if ($item) {
           foreach ($process as $processed) {
@@ -619,7 +621,6 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
                $add[$delta]['value2'] = $add[$delta]['value'];
             }
             else {
-              $timezone = date_get_timezone($field['tz_handling'], $items['timezone']);
               switch ($field['widget']['type']) {
                 case ('date_select'):
                   $date = date_selector_make_dbdate($item[$processed], $field['type'], $timezone, date_granularity_array($field));
