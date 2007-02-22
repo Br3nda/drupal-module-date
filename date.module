@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.37 2007/02/21 22:45:01 karens Exp $
+// $Id: date.module,v 1.13.2.38 2007/02/22 11:29:09 karens Exp $
 
 /**
  * @file
@@ -34,6 +34,9 @@ function date_init() {
  */
 function date_help($section) {
   switch ($section) {
+    case 'admin/modules#description':
+      return t('<strong>CCK:</strong> Defines a date/time field type for the content module. <em>Note: Requires content.module and date_api.module.</em>');
+      break;
     case 'admin/help#date':
       return t('<p>Complete documentation for the Date and Date API modules is available at %link.</p>', array('%link' => l('http://drupal.org/node/92460', 'http://drupal.org/node/92460')));
       break;
