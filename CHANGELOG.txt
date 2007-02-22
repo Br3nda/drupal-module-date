@@ -1,3 +1,28 @@
+Version 1.3
+===========
+
+- 121259 split date api out so it can be used by other modules with no dependency on CCK
+- 113489 add filters and arguments for 'to' dates as well as 'from' dates.
+- Get rid of embedded help text and point to d.o handbook page instead to make it easier to keep it current.
+- Add handling for date-specific timezone offset
+- 120154 refactor date sql wrapper to take into account server timezone adjustments for functions like NOW() and TIMESTAMP()
+- More timezone cleanup, make sure zone is not removed twice when using adodb
+- More fixes for validation combinations of from/to dates; Clean up handling of timezone element - give it a weight, only need one form element no matter how many date fields; Clean up handling of non-required to date and other empty or error values, make sure they don't get stored in date object or displayed;
+- 119674 minutes and seconds need integer values
+- 114088 use private adodb get_date function to eliminate timezone adjustment
+- 119820 fix error in date_is_required function
+- 120154 make sure FROM_UNIXTIME and NOW are not adjusted for server timezone
+- 93525 fix translation of displayed month and day names
+- 116244 fix incorrect placement of timezone in form
+- Adding better validation to set errors for invalid dates, adding helper function to determine when from and to dates are required
+- 114088, 84492 fixes to make sure dates without time and old dates do not ever get timezone conversions applied.
+- 119055 remove debugging code
+- 115809 fix handling of optional, non-empty to date
+- 102786 update pathauto for both date field types
+- 115846 site-wide format wasn't getting saved
+- 114088 no timezone adjustment on very old dates
+- 115127 fix missing timezone value
+
 Version 1.2
 ===========
 
