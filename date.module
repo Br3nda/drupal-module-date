@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.38 2007/02/22 11:29:09 karens Exp $
+// $Id: date.module,v 1.13.2.39 2007/02/22 16:44:31 karens Exp $
 
 /**
  * @file
@@ -765,7 +765,7 @@ function date_granularity_array($field) {
 }
 
 function date_get_formats($field) {
-  if ($cached = cache_get('date_formats:'. $field['field_name'] .':'.$field['type_name'], 'cache')) {
+  if ($cached = cache_get('date_formats:'. $field['field_name'] .':'.$field['type_name'])) {
     $formats = unserialize($cached->data);
 
     // are we up-to-date with current site-wide format ?
@@ -788,7 +788,8 @@ function date_set_formats($field) {
   $granularity = date_granularity_array($field);
 
   $formats = date_formats($format, $granularity);
-  cache_set('date_formats:'. $field['field_name'] .':'.$field['type_name'], 'cache', serialize($formats), CACHE_PERMANENT);
+
+  cache_set('date_formats:'. $field['field_name'] .':'.$field['type_name'], serialize($formats));
   return $formats;
 }
 
