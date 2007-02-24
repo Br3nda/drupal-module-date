@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.47 2007/02/21 23:01:39 karens Exp $
+//$Id: date.inc,v 1.48 2007/02/24 14:51:17 karens Exp $
 
 /**
  * @file
@@ -2125,12 +2125,12 @@ function date_sql($result_type, $field, $date_type = 'int', $offset = '', $offse
       case ('mysql'):
       case ('mysqli'):
         if (date_server_zone_adj()) {
-          $field = "(NOW() - INTERVAL (". date_server_zone_adj() ." SECOND)";
+          $field = "(NOW() - INTERVAL ". date_server_zone_adj() ." SECOND)";
         }
         break;
       case ('postgres'):
         if (date_server_zone_adj()) {
-          $field = "(NOW() - INTERVAL (". date_server_zone_adj() ." SECONDS)";
+          $field = "(NOW() - INTERVAL ". date_server_zone_adj() ." SECONDS)";
         }
         break;
      }
@@ -2160,16 +2160,15 @@ function date_sql($result_type, $field, $date_type = 'int', $offset = '', $offse
   elseif ($date_type == 'iso' && $field) {
     $field = " REPLACE($field,'T',' ')";
   }
-
   // Now apply requested offset to the adjusted query field.
   if ($offset) {
     switch ($db_type) {
     case ('mysql'):
     case ('mysqli'):
-      $field = "$field $offset_op INTERVAL $offset SECOND";
+      $field = "($field $offset_op INTERVAL ($offset) SECOND)";
       break;
     case ('postgres'):
-      $field = "$field $offset_op INTERVAL $offset SECONDS";
+      $field = "($field $offset_op INTERVAL ($offset) SECONDS)";
       break;
     }
   }
