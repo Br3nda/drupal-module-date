@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.25 2007/02/21 22:41:46 karens Exp $
+// $Id: date.module,v 1.32.2.26 2007/02/26 17:27:39 karens Exp $
 
 /**
  * @file
@@ -25,6 +25,13 @@ function date_init() {
     // according to http://drupal.org/node/60526, this should not go in hook_menu
     if (module_exists('pathauto')) {
       include_once('./'. drupal_get_path('module', 'date') .'/date_pathauto.inc');
+    }
+    // TODO this can be removed later. Added to ease transition to new schema that requires Date API.
+    // Needed because non-existant functions will cause fatal error that prevents ability to get back
+    // to module installation page.
+    if (!module_exists('date_api')) {
+      module_disable(array('date'));
+      drupal_set_message(t('Date API module is not installed. Date module was disabled.'));
     }
   }
 }
