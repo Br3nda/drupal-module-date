@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.39 2007/02/22 16:44:31 karens Exp $
+// $Id: date.module,v 1.13.2.40 2007/02/26 17:04:41 karens Exp $
 
 /**
  * @file
@@ -25,6 +25,18 @@ function date_init() {
     // according to http://drupal.org/node/60526, this should not go in hook_menu
     if (module_exist('pathauto')) {
       include_once('./'. drupal_get_path('module', 'date') .'/date_pathauto.inc');
+    }
+    // TODO this can be removed later. Added to ease transition to new schema that requires Date API.
+    // Needed because non-existant functions will cause fatal error that prevents ability to get back
+    // to module installation page.
+    if (!module_exist('date_api')) {
+      db_query("UPDATE {system} SET status = 0, throttle = 0 WHERE type = 'module' AND name = '%s'", 'date');
+      // Refresh the module list to exclude the disabled modules.
+      module_list(TRUE, FALSE);
+      // Force to regenerate the stored list of hook implementations.
+      module_implements('', FALSE, TRUE);
+      cache_clear_all('*', 'cache_menu', TRUE);
+      drupal_set_message(t('Date API module is not installed. Date module was disabled.'));
     }
   }
 }
@@ -740,7 +752,7 @@ function date_field_formatter($field, $item, $formatter, $node) {
       // create a date object with a gmt timezone from the database value
       $date = date_make_date(trim($item[$processed]), 'GMT', 'db', $field['type']);
       // For no timezone handling, set local value to the same as the db value.
-      if (date_no_conversion($date) || $field['tz_handling'] == 'none' || !in_array('H', date_granularity_array($field)) || $field['tz_handling'] == 'date' && empty($item['timezone'])) {
+      if (date_no_conversion($date) || $field['tz_handling'] == 'none' || $field['tz_handling'] == 'date' && empty($item['timezone'])) {
         date_convert_timezone($date, 'GMT', 'none', 'GMT', 'local');
       } else {
         date_convert_timezone($date, 'GMT', date_get_timezone($field['tz_handling'], $item['timezone']), 'local');
@@ -749,6 +761,7 @@ function date_field_formatter($field, $item, $formatter, $node) {
       $dates[] = date_show_date($date, $format, $format_db_type, $format_zone) . $append;
     }
   }
+
   return theme('date_display_combination', $field, $dates[0], $dates[1]);
 }
 
