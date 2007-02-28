@@ -1,5 +1,5 @@
 <?php
-//$Id: date_timezones.inc,v 1.4.2.2 2007/02/24 12:14:55 karens Exp $
+//$Id: date_timezones.inc,v 1.4.2.3 2007/02/28 21:13:41 karens Exp $
 // a copy of event_timezones.inc to be used when the event module is not enabled
 
 //if (module_exists('event')) return;
@@ -262,7 +262,8 @@ function event_timezone_map($offset) {
 function event_get_timezones() {
   static $zones;
   if(!is_array($zones)) {
-     $zones = array(1 => array('timezone' => t('Africa/Addis_Ababa'), 'offset' => '+10800', 'offset_dst' => '+10800', 'dst_region' => '0'),
+     $zones = array(487 => array('timezone' => t('GMT'), 'offset' => '+0', 'offset_dst' => '+0', 'dst_region' => '0'),
+                    1 => array('timezone' => t('Africa/Addis_Ababa'), 'offset' => '+10800', 'offset_dst' => '+10800', 'dst_region' => '0'),
                     2 => array('timezone' => t('Africa/Algiers'), 'offset' => '+3600', 'offset_dst' => '+3600', 'dst_region' => '0'),
                     3 => array('timezone' => t('Africa/Asmera'), 'offset' => '+10800', 'offset_dst' => '+10800', 'dst_region' => '0'),
                     4 => array('timezone' => t('Africa/Bangui'), 'offset' => '+3600', 'offset_dst' => '+3600', 'dst_region' => '0'),
