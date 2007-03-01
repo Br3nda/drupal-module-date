@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_ical.inc,v 1.2 2007/03/01 14:27:36 karens Exp $ */
+/* $Id: date_ical.inc,v 1.3 2007/03/01 19:01:58 karens Exp $ */
 
 /**
  * Turn an array of events into a valid iCalendar file
@@ -109,13 +109,15 @@ function date_ical_import($filename) {
       $nextline = ereg_replace("[\r\n]", "", $nextline);
     }
     $line = trim($line);
+    $vcal .= $line ."\n";
     switch ($line) {
     case 'BEGIN:VEVENT':
       unset($start_unixtime, $start_date, $start_time,
 	    $end_unixtime, $end_date, $end_time,
 	    $allday_start, $allday_end, $the_duration,
 	    $uid, $summary, $description, $url, $location,
-	    $start_tz, $end_tz, $start_raw, $end_raw, $start_offset, $end_offset );
+	    $start_tz, $end_tz, $start_raw, $end_raw, $start_offset, $end_offset, $vcal );
+	    $vcal = $line ."\n";
       break;
     case 'END:VEVENT':
       if (empty($uid)) {
@@ -142,6 +144,7 @@ function date_ical_import($filename) {
 			   'end_raw' => $end_raw,
 			   'end_timezone' => $end_tz,
 			   'end_offset' => $end_offset,
+               'vcal' => $vcal,
 			   );
       break;
     default:
