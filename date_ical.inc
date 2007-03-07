@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_ical.inc,v 1.7 2007/03/04 11:51:57 karens Exp $ */
+/* $Id: date_ical.inc,v 1.8 2007/03/07 18:08:04 karens Exp $ */
 
 /**
  * Turn an array of events into a valid iCalendar file
@@ -24,10 +24,12 @@
  */
 function date_ical_export($events, $calname = NULL) {
   $output .= "BEGIN:VCALENDAR\nVERSION:2.0\n";
+  $output .= "METHOD:PUBLISH\n";
   $output .= 'X-WR-CALNAME:'. date_ical_escape_text($calname ? $calname : variable_get('site_name', '')) ."\n";
   $output .= "PRODID:-//strange bird labs//Drupal iCal API//EN\n";
   foreach ($events as $uid => $event) {
     $output .= "BEGIN:VEVENT\n";
+    $output .= "DTSTAMP;VALUE=DATE:".gmdate("Ymd\THis\Z", time())."\n";
     if ($event['allday_start'] && $event['allday_end']) {
       $output .= "DTSTART;VALUE=DATE:" . $event['allday_start'] . "\n";
       $output .= "DTEND;VALUE=DATE:" . $event['allday_end'] . "\n";
