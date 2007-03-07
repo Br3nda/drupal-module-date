@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.33 2007/03/07 18:10:57 karens Exp $
+//$Id: date.inc,v 1.9.2.34 2007/03/07 22:56:15 karens Exp $
 
 /**
  * @file
@@ -2148,7 +2148,7 @@ function date_sql($result_type, $field, $date_type = 'int', $offset = '', $offse
         }
                 break;
       case ('pgsql'):
-        $field = "$field::ABSTIME::INT4";
+        $field = "$field::ABSTIME";
         if (date_server_zone_adj()) {
           $field = "($field - 'INTERVAL ". date_server_zone_adj() ." SECONDS')";
         }
