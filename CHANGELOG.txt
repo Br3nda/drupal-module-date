@@ -1,7 +1,28 @@
+
+- 126551 themeing improvements: 1) A 'timestamp' formatter which will return the timestamp value of a date. You can use that instead of a formatter that returns a formatted value if you want to do your own formatting of the results. 2) A 'Days ago' formatter that applies format_interval() to the date. It uses a theme_date_format_interval() to allow you to tailor the results depending on whether it is a future or past date and incorporate both the To date and From date into the results. 3) All formatters now run through a theme to give you more places to jump in and make changes to the display. The theme has the complete date object to work with. 4) A date_field_object() function that will bring back a complete date object for a given field. The function description contains details about what exactly is in that object, but it includes both from and to dates as timestamps, ISO dates and arrays of date parts.
+
+- 123886 make sure cached data isn't empty
+- 125803 get help text to display in selector widget
+- 123365 fix Views filter to properly handle both from and to dates
+- 121544 use 'From date' and 'To date' instead of 'From' and 'To' for better translations.
+- 121259 split date api out so it can be used by other modules with no dependency on CCK
+- 117791 add validation to submitted filter values to avoid creating invalid SQL
+- Improve ISO week range function and add function to find last day of month
+- 125483 more corrections to week calculation
+- 125338 fix postgresql handling, lots of help from havran
+- 124320 fix fatal errors in identifying include paths
+- 123179 send date and node objects to theme to add more flexibility to ways that it can be displayed.
+- 121259 fix to make transition to separate Date API easier since  non-existant functions will cause fatal error that prevents ability to get back to module installation page.
+
+Version 1.4
+===========
+
+- fix typo in function name
+
+
 Version 1.3
 ===========
 
-- 121259 split date api out so it can be used by other modules with no dependency on CCK
 - 113489 add filters and arguments for 'to' dates as well as 'from' dates.
 - Get rid of embedded help text and point to d.o handbook page instead to make it easier to keep it current.
 - Add handling for date-specific timezone offset
