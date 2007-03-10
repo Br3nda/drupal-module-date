@@ -1,3 +1,8 @@
+Date Module
+===========
+
+Version 1.5
+===========
 
 - 126551 themeing improvements: 1) A 'timestamp' formatter which will return the timestamp value of a date. You can use that instead of a formatter that returns a formatted value if you want to do your own formatting of the results. 2) A 'Days ago' formatter that applies format_interval() to the date. It uses a theme_date_format_interval() to allow you to tailor the results depending on whether it is a future or past date and incorporate both the To date and From date into the results. 3) All formatters now run through a theme to give you more places to jump in and make changes to the display. The theme has the complete date object to work with. 4) A date_field_object() function that will bring back a complete date object for a given field. The function description contains details about what exactly is in that object, but it includes both from and to dates as timestamps, ISO dates and arrays of date parts.
 
@@ -12,6 +17,12 @@
 - 124320 fix fatal errors in identifying include paths
 - 123179 send date and node objects to theme to add more flexibility to ways that it can be displayed.
 - 121259 fix to make transition to separate Date API easier since  non-existant functions will cause fatal error that prevents ability to get back to module installation page.
+
+Version 1.4
+===========
+
+- fix typo in function name
+
 
 Version 1.3
 ===========
