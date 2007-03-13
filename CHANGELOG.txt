@@ -1,6 +1,7 @@
 Date Module
 ===========
 
+- 126363 add space before UTC so strtotime will work right
 - fix calculation of server timezone adj
 
 Version 1.4

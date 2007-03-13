@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.39 2007/03/13 12:03:02 karens Exp $
+//$Id: date.inc,v 1.9.2.40 2007/03/13 12:08:16 karens Exp $
 
 /**
  * @file
@@ -1629,7 +1629,7 @@ function date_text2iso($text, $format) {
   }
 
   // if custom parsing failed, try strtotime conversion
-  $iso = date_gmdate(DATE_STRING_ISO, strtotime($text .'UTC'));
+  $iso = date_gmdate(DATE_STRING_ISO, strtotime($text .' UTC'));
 
   if (date_part_is_valid(date_iso_year($iso), 'year')) {
 
