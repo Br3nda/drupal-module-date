@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.27.2.28 2007/03/13 15:19:42 karens Exp $
+//$Id: date.inc,v 1.27.2.29 2007/03/14 19:49:06 karens Exp $
 
 /**
  * @file
@@ -221,6 +221,26 @@ function date_gmadj_zone($timestamp) {
       return intval($timestamp + adodb_date('Z', $timestamp));
   default:
       return intval($timestamp + date('Z', $timestamp));
+  }
+}
+
+/**
+ * Implementation of time() adjusted for the current site and user.
+ *
+ * @param $offset - optional method to force time to a specific offset
+ * @return integer timestamp
+ */
+function date_time($offset = NULL) {
+  global $user;
+
+  if ($offset) {
+  	return (time() - date("Z")) + offset;
+  }
+  elseif (variable_get('configurable_timezones', 1) && $user->uid && strlen($user->timezone)) {
+    return (time() - date("Z")) + $user->timezone;
+  }
+  else {
+    return (time() - date("Z")) + variable_get('date_default_timezone', 0);
   }
 }
 
@@ -1563,7 +1583,7 @@ function date_iso_week_range($year, $week) {
  * @return last day of the specified month and year
  */
 function date_last_day_of_month($month, $year) {
-  return date_gmdate('t', date_mktime(array('year' => intval($year), 'mon' => intval($month), 'mday' => 1)));
+  return date_gmdate('t', date_gmmktime(array('year' => intval($year), 'mon' => intval($month), 'mday' => 1)));
 }
 
 /**
