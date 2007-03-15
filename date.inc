@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.59 2007/03/15 14:10:25 karens Exp $
+//$Id: date.inc,v 1.60 2007/03/15 15:02:52 karens Exp $
 
 /**
  * @file
@@ -221,26 +221,6 @@ function date_gmadj_zone($timestamp) {
       return intval($timestamp + adodb_date('Z', $timestamp));
   default:
       return intval($timestamp + date('Z', $timestamp));
-  }
-}
-
-/**
- * Implementation of time() adjusted for the current site and user.
- *
- * @param $offset - optional method to force time to a specific offset
- * @return integer timestamp
- */
-function date_time($offset = NULL) {
-  global $user;
-
-  if ($offset) {
-  	return (time() - date("Z")) + offset;
-  }
-  elseif (variable_get('configurable_timezones', 1) && $user->uid && strlen($user->timezone)) {
-    return (time() - date("Z")) + $user->timezone;
-  }
-  else {
-    return (time() - date("Z")) + variable_get('date_default_timezone', 0);
   }
 }
 
