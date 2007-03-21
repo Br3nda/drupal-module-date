@@ -4,7 +4,7 @@ Date Module
 - 126363 add space before UTC so strtotime will work right
 - fix calculation of server timezone adj
 
-Version 1.4
+Version 1.5
 ===========
 
 NOTE Date API has been split out into a separate module to make the API available with no dependency on CCK and the Calendar module now requires the Date API. For best update results, uninstall the Calendar module before adding the updated Calendar and Date files to the site, then immediately go to the modules page and enable both the Calendar and Date API modules.
@@ -23,7 +23,12 @@ NOTE Date API has been split out into a separate module to make the API availabl
 - 123179 send date and node objects to theme to add more flexibility to ways that it can be displayed.
 - 121259 fix to make transition to separate Date API easier since  non-existant functions will cause fatal error that prevents ability to get back to module installation page.
 
-Version 1.3
+Version 1.4
+ ===========
+
+ - fix typo in function name
+
+ Version 1.3
 ===========
 
 - 121259 split date api out so it can be used by other modules with no dependency on CCK
