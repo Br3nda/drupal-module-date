@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.47 2007/04/06 21:48:10 karens Exp $
+// $Id: date.module,v 1.13.2.48 2007/04/07 17:19:33 karens Exp $
 
 /**
  * @file
@@ -324,41 +324,41 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
 */
 function date_set_granularity($item, $field) {
   if (!$nongranularity = array_diff(array('Y', 'M', 'D', 'H', 'N', 'S'), date_granularity_array($field))) {
- 		 return $item;
- 	}
+   return $item;
+  }
   else {
-  	 if ($field['type'] == DATE_ISO) {
- 	 	  $date = date_iso2array($item);
- 	  }
- 	  else {
- 		   $date = date_unix2array($item);
- 	  }
- 	  foreach ($nongranularity as $level) {
- 		   switch ($level) {
- 			    case 'S':
- 				     $date['seconds'] = 0;
- 				     break;
- 			    case 'N':
- 				     $date['minutes'] = 0;
- 				     break;
- 			    case 'H':
- 				     $date['hours'] = 0;
- 				     break;
- 			    case 'M':
- 				     $date['mon'] = $field['type'] == DATE_UNIX ? 1 : 0;
- 				     break;
- 			    case 'D':
- 				     $date['mday'] = $field['type'] == DATE_UNIX ? 1 : 0;
- 				     break;
-  		  }
- 	  }
+   if ($field['type'] == DATE_ISO) {
+    $date = date_iso2array($item);
+   }
+   else {
+    $date = date_unix2array($item);
+   }
+   foreach ($nongranularity as $level) {
+     switch ($level) {
+       case 'S':
+         $date['seconds'] = 0;
+         break;
+       case 'N':
+         $date['minutes'] = 0;
+         break;
+       case 'H':
+         $date['hours'] = 0;
+         break;
+       case 'M':
+         $date['mon'] = $field['type'] == DATE_UNIX ? 1 : 0;
+         break;
+       case 'D':
+         $date['mday'] = $field['type'] == DATE_UNIX ? 1 : 0;
+         break;
+      }
+    }
     if ($field['type'] == DATE_ISO) {
- 	 	  return date_array2iso($date);
- 	  }
- 	  else {
- 		   return date_array2unix($date);
- 	  }
- 	}
+      return date_array2iso($date);
+    }
+    else {
+      return date_array2unix($date);
+    }
+  }
 }
 
 /**
@@ -1002,14 +1002,17 @@ function theme_date_formatter($dates, $field, $formatter, $node) {
       break;
     case('long'):
       $format = $field['output_format_custom_long'] > '' ? $field['output_format_custom_long'] : ($field['output_format_date_long'] ? $field['output_format_date_long'] : variable_get('date_format_long',  'l, F j, Y - H:i'));
+      $format = date_strip_granularity($format, date_granularity_array($field));
       $format_zone = $field['output_format_zone_long'];
       break;
     case('medium'):
       $format = $field['output_format_custom_medium'] > '' ? $field['output_format_custom_medium'] : ($field['output_format_date_medium'] ? $field['output_format_date_medium'] : variable_get('date_format_medium',  'D, m/d/Y - H:i'));
+      $format = date_strip_granularity($format, date_granularity_array($field));
       $format_zone = $field['output_format_zone_medium'];
       break;
     case('short'):
       $format = $field['output_format_custom_short'] > '' ? $field['output_format_custom_short'] : ($field['output_format_date_short'] ? $field['output_format_date_short'] : variable_get('date_format_short', 'm/d/Y - H:i'));
+      $format = date_strip_granularity($format, date_granularity_array($field));
       $format_zone = $field['output_format_zone_short'];
       break;
     case('iso'):
@@ -1030,6 +1033,7 @@ function theme_date_formatter($dates, $field, $formatter, $node) {
       break;
     default:
       $format = $field['output_format_custom'] > '' ? $field['output_format_custom'] : ($field['output_format_date'] ? $field['output_format_date'] : variable_get('date_format_short', 'm/d/Y - H:i'));
+      $format = date_strip_granularity($format, date_granularity_array($field));
       $format_zone = $field['output_format_zone'];
       break;
   }
