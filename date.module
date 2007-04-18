@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.51 2007/04/18 17:31:09 karens Exp $
+// $Id: date.module,v 1.13.2.52 2007/04/18 18:34:08 karens Exp $
 
 /**
  * @file
@@ -330,9 +330,9 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
       foreach ($items as $delta => $item) {
         foreach ($process as $processed) {
           if (!form_get_errors()) {
-            $items[$delta][$processed] =  date_unset_granularity($item[$processed], date_granularity_array($field), $field['type']);
+            $replace = date_unset_granularity($item[$processed], date_granularity_array($field), $field['type']);
+            $items[$delta][$processed] = $replace !== 'ERROR' && $replace != $items[$delta][$processed] ? $replace : $items[$delta][$processed];
           }
-
         }
       }
       return $items;
