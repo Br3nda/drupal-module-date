@@ -1,6 +1,13 @@
 Date Module
 ===========
 
+- 137624 make sure years back and forward store values when set to 0
+- 128355 make sure empty to date values are filled in with from date values
+- Move css to hook_menu()
+- 130611 make sure no html is returned in default theme when dates are empty
+- 134587 fix method of stipping undesired granularity out of dates which was generating critical errors
+- 133731 make sure items not in granularity array get stripped out of both stored dates and date format strings.
+- 123376 fix validation logic when both to and from dates are required
 - 126363 add space before UTC so strtotime will work right
 - fix calculation of server timezone adj
 
