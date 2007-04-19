@@ -1,6 +1,7 @@
 Date Module
 ===========
 
+- 130689 move drupal_get_installed_schema_version inside install() and update() functions
 - 137515 fix logic for figuring out when timezone conversion is needed
 - 137624 make sure years back and forward store values when set to 0
 - 128355 make sure empty to date values are filled in with from date values
