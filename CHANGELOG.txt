@@ -1,6 +1,7 @@
 Date Module
 ===========
 
+- 137515 fix logic for figuring out when timezone conversion is needed
 - 137624 make sure years back and forward store values when set to 0
 - 128355 make sure empty to date values are filled in with from date values
 - Move css to hook_menu()
