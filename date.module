@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.54 2007/04/19 20:35:39 karens Exp $
+// $Id: date.module,v 1.13.2.55 2007/04/28 19:24:13 karens Exp $
 
 /**
  * @file
@@ -217,9 +217,9 @@ function date_field_settings($op, $field) {
           $name = 'default';
         }
         $append = ($i > 0 ? '_'. $name : '');
-        $options[] = date_strip_granularity('output_format_date'. $append, date_granularity_array($field));
-        $options[] = date_strip_granularity('output_format_zone'. $append, date_granularity_array($field));
-        $options[] = date_strip_granularity('output_format_custom'. $append, date_granularity_array($field));
+        $options[] = 'output_format_date'. $append;
+        $options[] = 'output_format_zone'. $append;
+        $options[] = 'output_format_custom'. $append;
       }
       return $options;
 
