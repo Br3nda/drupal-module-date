@@ -1,6 +1,0 @@
-; $Id: date_copy.info,v 1.1 2007/03/16 17:57:11 karens Exp $
-name = Date Copy
-description = Import and export date data.
-version = "$Name:  $"
-dependencies = content date
-package = CCK
