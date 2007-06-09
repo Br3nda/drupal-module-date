@@ -317,7 +317,9 @@ function date_copy_import_ical_form_validate($form_id, $form_values) {
   if ($step == 2) {
     return;
   }
-  $imported_values = ical_import($source_file);
+  include_once(drupal_get_path('module', 'date_api') .'/date.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date_ical.inc');
+  $imported_values = date_ical_import($source_file);
   if (empty($imported_values)) {
     form_set_error('source_file', t('This is an invalid file.'));
   }
@@ -328,7 +330,9 @@ function date_copy_import_ical_form_submit($form_id, $form_values) {
   if ($step != 2) {
     return;
   }
-  $imported_values = ical_import($source_file);
+  include_once(drupal_get_path('module', 'date_api') .'/date.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date_ical.inc');
+  $imported_values = date_ical_import($source_file);
 
   // workaround to disable drupal messages when nodes are created or deleted
   $messages = drupal_get_messages();
@@ -338,7 +342,7 @@ function date_copy_import_ical_form_submit($form_id, $form_values) {
   include_once(drupal_get_path('module', 'date_api') .'/date.inc');
   include_once(drupal_get_path('module', 'date_api') .'/date_ical.inc');
 
-  $imported_values = ical_import($source_file);
+  $imported_values = date_ical_import($source_file);
 
   $node_types = node_get_types('names');
   $field = content_fields($date_field, $target_type);
@@ -347,8 +351,18 @@ function date_copy_import_ical_form_submit($form_id, $form_values) {
   foreach ($imported_values as $key => $value) {
     if (!empty($value['summary']) && !empty($value['start'])) {
       if (empty($value['end'])) $value['end'] = $value['start'];
-      $start = $field['type'] == 'date' ? date_set_granularity(date_unix2iso($value['start']), $field) : date_set_granularity($value['start'], $field);
-   	  $end = $field['type'] == 'date' ? date_set_granularity(date_unix2iso($value['end']), $field) : date_set_granularity($value['end'], $field);
+      if ($field['type'] == 'date') {
+        $start = date_unset_granularity(date_unix2iso($value['start'], date_granularity_array($field), $field['type']));
+      }
+      else {
+        $start = date_unset_granularity($value['start'], date_granularity_array($field), $field['type']);
+      }
+   	  if ($field['type'] == 'date') {
+   	    $end = date_unset_granularity(date_unix2iso($value['end']), date_granularity_array($field), $field['type']);
+   	  }
+   	  else {
+   	    $end = date_unset_granularity($value['end'], date_granularity_array($field), $field['type']);
+   	  }
    	  $target_node = new StdClass();
       $target_node->nid = 0;
       $target_node->type = $target_type;
