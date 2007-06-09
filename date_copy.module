@@ -352,7 +352,7 @@ function date_copy_import_ical_form_submit($form_id, $form_values) {
     if (!empty($value['summary']) && !empty($value['start'])) {
       if (empty($value['end'])) $value['end'] = $value['start'];
       if ($field['type'] == 'date') {
-        $start = date_unset_granularity(date_unix2iso($value['start'], date_granularity_array($field), $field['type']));
+        $start = date_unset_granularity(date_unix2iso($value['start']), date_granularity_array($field), $field['type']);
       }
       else {
         $start = date_unset_granularity($value['start'], date_granularity_array($field), $field['type']);
