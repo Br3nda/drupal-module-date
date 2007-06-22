@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_ical.inc,v 1.1.2.8 2007/03/13 15:19:42 karens Exp $ */
+/* $Id: date_ical.inc,v 1.1.2.9 2007/06/22 10:10:24 karens Exp $ */
 
 /**
  * Turn an array of events into a valid iCalendar file
@@ -310,7 +310,7 @@ function date_ical_import($filename) {
 function _date_ical_tz($tz) {
   include_once(drupal_get_path('module', 'date_api') .'/date.inc');
   include_once(DATE_TIMEZONES);
-  foreach (event_get_timezones() as $delta => $zone) {
+  foreach (date_get_timezones() as $delta => $zone) {
     if ($tz == $zone['timezone']);
     return (object) $zone;
   }

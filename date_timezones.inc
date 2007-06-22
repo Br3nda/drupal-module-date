@@ -1,5 +1,5 @@
 <?php
-//$Id: date_timezones.inc,v 1.4.2.3 2007/02/28 21:13:41 karens Exp $
+//$Id: date_timezones.inc,v 1.4.2.4 2007/06/22 10:10:24 karens Exp $
 // a copy of event_timezones.inc to be used when the event module is not enabled
 
 //if (module_exists('event')) return;
@@ -7,16 +7,16 @@
  * Check if time is in Daylight Savings Time
  *
  * @param
- *   $region a drupal dst region code, corresponding to those from event_get_dst_regions()
+ *   $region a drupal dst region code, corresponding to those from date_get_dst_regions()
  * @param
  *   $timestamp a GMT timestamp
  * @return
  *   0 or 1
  */
-function event_is_dst($region, $timestamp) {
+function date_is_dst($region, $timestamp) {
 
   $year = date('Y', $timestamp);
-  $dst = event_get_dst_regions();
+  $dst = date_get_dst_regions();
 
   // Information on Daylight Saving time was obtained from http://webexhibits.org/daylightsaving/g.html
   switch ($region) {
@@ -155,7 +155,7 @@ function event_is_dst($region, $timestamp) {
   return ($dststart <= $timestamp && $timestamp <= $dstend);
 }
 
-function event_get_dst_regions() {
+function date_get_dst_regions() {
   static $regions;
 
   if(!is_array($regions)) {
@@ -185,11 +185,11 @@ function event_get_dst_regions() {
   return $regions;
 }
 
-function event_zonelist() {
+function date_zonelist() {
   static $zones;
 
   if(!is_array($zones)) {
-    $tz_array = event_get_timezones();
+    $tz_array = date_get_timezones();
     $zones = array();
     foreach ($tz_array as $key => $zone) {
       $zones[$key] = $zone['timezone'];
@@ -199,13 +199,13 @@ function event_zonelist() {
   return $zones;
 }
 
-function event_get_offset($zid, $timestamp) {
-  $zones = event_get_timezones();
+function date_get_offset($zid, $timestamp) {
+  $zones = date_get_timezones();
   $zone = $zones[$zid];
 
   if($zone['dst_region']) {
     // zone is a region which obeys dst, return correct offset
-    return (event_is_dst($zone['dst_region'], $timestamp) ? $zone['offset_dst'] : $zone['offset']);
+    return (date_is_dst($zone['dst_region'], $timestamp) ? $zone['offset_dst'] : $zone['offset']);
   }
   else {
     // no dst offset for this region
@@ -213,7 +213,7 @@ function event_get_offset($zid, $timestamp) {
   }
 }
 
-function event_timezone_map($offset) {
+function date_timezone_map($offset) {
   static $map;
 
   if(!is_array($map)) {
@@ -259,7 +259,7 @@ function event_timezone_map($offset) {
   return $map[$offset];
 }
 
-function event_get_timezones() {
+function date_get_timezones() {
   static $zones;
   if(!is_array($zones)) {
      $zones = array(487 => array('timezone' => t('GMT'), 'offset' => '+0', 'offset_dst' => '+0', 'dst_region' => '0'),
