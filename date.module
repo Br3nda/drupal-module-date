@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.41 2007/04/28 19:23:58 karens Exp $
+// $Id: date.module,v 1.32.2.42 2007/06/22 10:17:16 karens Exp $
 
 /**
  * @file
@@ -966,7 +966,7 @@ function theme_date_form_combination($form) {
  *
  */
 function theme_date_formatter($dates, $field, $formatter, $node) {
-
+  include_once(drupal_get_path('module', 'date_api') .'/date.inc');
   // Most formats will be applied to the local value of the date,
   // but use this value to identify those that should format the db part instead.
   $format_db_type = 'local';
