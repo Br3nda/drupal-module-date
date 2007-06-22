@@ -1,12 +1,12 @@
 <?php
-//$Id: date.inc,v 1.9.2.45 2007/04/19 21:06:10 karens Exp $
+//$Id: date.inc,v 1.9.2.46 2007/06/22 10:11:55 karens Exp $
 
 /**
  * @file
  * Date/time API functions
  *
  * this api uses timezones rather than offsets to avoid dst problems
- * the event_timezone.inc api is used to compute the correct offset for a timezone, taking into account dst
+ * the date_timezone.inc api is used to compute the correct offset for a timezone, taking into account dst
  *
  * Usage examples:
  *  create a new date object:
@@ -33,18 +33,10 @@ define('DATE_STRING_ISO', "Y-m-d\TH:i:s");
 define('DATE_API_PATH', drupal_get_path('module', 'date_api'));
 
 /**
- *  identify the file to be used for timezone information
- *
- *  use the event_timezones.inc file for timezone conversion
- *  if event is not enabled, use a copy of that file, stored as date_timezones.inc
+ *  use the date_timezones.inc file for timezone conversion
  *  this large file will be included only when needed to reduce overhead
  */
-if (!module_exist('event')) {
-  define('DATE_TIMEZONES', DATE_API_PATH .'/date_timezones.inc');
-}
-else {
-  define('DATE_TIMEZONES', drupal_get_path('module', 'event') .'/event_timezones.inc');
-}
+define('DATE_TIMEZONES', DATE_API_PATH .'/date_timezones.inc');
 
 /**
  *  Set up optional adodb date library to handle dates outside the normal php range
@@ -454,7 +446,7 @@ function date_offset($date_parts, $timezone = 'GMT') {
   // no adjustment needed for gmt dates
   if ($timezone == 'GMT') return 0;
   // find the timezone info for the input timezone
-  $timezones = array_flip(event_zonelist());
+  $timezones = array_flip(date_zonelist());
   $zid       = $timezones[$timezone];
   // create a timestamp for the date to be evaluated
   if ($date_parts['year'] < 1970) {
@@ -465,7 +457,7 @@ function date_offset($date_parts, $timezone = 'GMT') {
   else {
     $timestamp = $date_parts[0];
   }
-  return event_get_offset($zid, $timestamp);
+  return date_get_offset($zid, $timestamp);
 }
 
 /**
@@ -608,10 +600,10 @@ function date_timezone_options($limit = '') {
   include_once(DATE_TIMEZONES);
   $zonelist = array();
   if (!$limit) {
-    $zonelist = drupal_map_assoc(event_zonelist());
+    $zonelist = drupal_map_assoc(date_zonelist());
   }
   else {
-    $zones = event_get_timezones();
+    $zones = date_get_timezones();
     foreach ($zones as $zone) {
       if ($zone['offset'] == $limit || $zone['offset_dst'] == $limit) {
         $zonelist[$zone['timezone']] = $zone['timezone'];
@@ -629,7 +621,7 @@ function date_timezone_options($limit = '') {
  */
 function date_set_site_timezone($val) {
   include_once(DATE_TIMEZONES);
-  $timezones = event_zonelist();
+  $timezones = date_zonelist();
   if (!in_array($val, $timezones)) $val = 'GMT';
   variable_set('date_default_timezone_name', $val);
 }
