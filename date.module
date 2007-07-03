@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.56 2007/06/22 10:17:29 karens Exp $
+// $Id: date.module,v 1.13.2.57 2007/07/03 12:13:26 karens Exp $
 
 /**
  * @file
@@ -12,33 +12,19 @@
  */
 
 /**
- * Implementation of hook_init().
+ * Include views files without any need for hook_init().
+ *   Went ahead and included this unconditionally to avoid need for hook_init().
  */
-function date_init() {
-  // ensure we are not serving a cached page
-  if (function_exists('drupal_set_content')) {
-    // we don't do this in hook_menu to ensure the files are already included when
-    // views_menu is executed
-    if (module_exist('views')) {
-      include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
-    }
-    // according to http://drupal.org/node/60526, this should not go in hook_menu
-    if (module_exist('pathauto')) {
-      include_once('./'. drupal_get_path('module', 'date') .'/date_pathauto.inc');
-    }
-    // TODO this can be removed later. Added to ease transition to new schema that requires Date API.
-    // Needed because non-existant functions will cause fatal error that prevents ability to get back
-    // to module installation page.
-    if (!module_exist('date_api')) {
-      db_query("UPDATE {system} SET status = 0, throttle = 0 WHERE type = 'module' AND name = '%s'", 'date');
-      // Refresh the module list to exclude the disabled modules.
-      module_list(TRUE, FALSE);
-      // Force to regenerate the stored list of hook implementations.
-      module_implements('', FALSE, TRUE);
-      cache_clear_all('*', 'cache_menu', TRUE);
-      drupal_set_message(t('Date API module is not installed. Date module was disabled.'));
-    }
-  }
+if (module_exist('views')) {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+}
+
+/**
+ * Include pathauto files without any need to put them in hook_init().
+ */
+function date_pathauto_node($op, $node = NULL) {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_pathauto.inc');
+  return _date_pathauto_node($op, $node);
 }
 
 /**
@@ -46,7 +32,7 @@ function date_init() {
  */
 function date_menu($may_cache) {
   // Include css unconditionally exactly once.
-  if ($may_cache) {
+  if (!$may_cache) {
     theme_add_style(drupal_get_path('module', 'date') .'/date.css');
   }
 }

@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.46 2007/06/22 10:11:55 karens Exp $
+//$Id: date.inc,v 1.9.2.47 2007/07/03 12:13:26 karens Exp $
 
 /**
  * @file
@@ -25,12 +25,6 @@
  *  display the date object and all its parts:
  *    print_r($date);
  */
-
-// add here to define additional date types
-define('DATE_ISO',  'date');
-define('DATE_UNIX', 'datestamp');
-define('DATE_STRING_ISO', "Y-m-d\TH:i:s");
-define('DATE_API_PATH', drupal_get_path('module', 'date_api'));
 
 /**
  *  use the date_timezones.inc file for timezone conversion

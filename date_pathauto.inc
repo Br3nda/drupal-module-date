@@ -1,5 +1,5 @@
 <?php
-// $Id: date_pathauto.inc,v 1.1.4.8 2007/04/07 17:11:28 karens Exp $
+// $Id: date_pathauto.inc,v 1.1.4.9 2007/07/03 12:13:26 karens Exp $
 
 /**
  * @file
@@ -12,7 +12,7 @@
  * Allows users to use the textual representation of the parts of a date field
  * as a component of paths.
  */
-function date_pathauto_node($op, $node = NULL) {
+function _date_pathauto_node($op, $node = NULL) {
   include_once(drupal_get_path('module', 'date_api') .'/date.inc');
   switch ($op) {
     case 'placeholders':
