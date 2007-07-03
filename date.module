@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.42 2007/06/22 10:17:16 karens Exp $
+// $Id: date.module,v 1.32.2.43 2007/07/03 11:06:07 karens Exp $
 
 /**
  * @file
@@ -12,28 +12,19 @@
  */
 
 /**
- * Implementation of hook_init().
+ * Include views files without any need for hook_init().
+ *   Went ahead and included this unconditionally to avoid need for hook_init().
  */
-function date_init() {
-  // ensure we are not serving a cached page
-  if (function_exists('drupal_set_content')) {
-    // we don't do this in hook_menu to ensure the files are already included when
-    // views_menu is executed
-    if (module_exists('views')) {
-      include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
-    }
-    // according to http://drupal.org/node/60526, this should not go in hook_menu
-    if (module_exists('pathauto')) {
-      include_once('./'. drupal_get_path('module', 'date') .'/date_pathauto.inc');
-    }
-    // TODO this can be removed later. Added to ease transition to new schema that requires Date API.
-    // Needed because non-existant functions will cause fatal error that prevents ability to get back
-    // to module installation page.
-    if (!module_exists('date_api')) {
-      module_disable(array('date'));
-      drupal_set_message(t('Date API module is not installed. Date module was disabled.'));
-    }
-  }
+if (module_exists('views')) {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+}
+
+/**
+ * Include pathauto files without any need to put them in hook_init().
+ */
+function date_pathauto_node($op, $node = NULL) {
+  date_load('date_pathauto.inc');
+  return _date_pathauto_node($op, $node);
 }
 
 /**
@@ -41,8 +32,8 @@ function date_init() {
  */
 function date_menu($may_cache) {
   // Include css unconditionally exactly once.
-  if ($may_cache) {
-    drupal_add_css(drupal_get_path('module', 'date_api') .'/date.css');
+  if (!$may_cache) {
+    drupal_add_css(drupal_get_path('module', 'date') .'/date.css');
   }
 }
 

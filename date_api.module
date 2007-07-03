@@ -1,10 +1,24 @@
 <?php
-// $Id: date_api.module,v 1.1.4.3 2007/06/22 10:20:14 karens Exp $
+// $Id: date_api.module,v 1.1.4.4 2007/07/03 11:06:07 karens Exp $
 
 /**
  * @file
  * A module that will make the date API available to other modules with no dependencies on CCK.
  * To use it, install the module, then add the following code wherever date api functions are needed:
  *
- * include_once(drupal_get_path('module', 'date_api') .'/date.inc');
+ * date_load('date.inc');
  */
+define('DATE_API_PATH', drupal_get_path('module', 'date_api'));
+define('DATE_ISO',  'date');
+define('DATE_UNIX', 'datestamp');
+define('DATE_DATETIME', 'datetime');
+define('DATE_STRING_ISO', "Y-m-d\TH:i:s");
+define('DATE_API_PATH', drupal_get_path('module', 'date_api'));
+
+
+/**
+ * Helper to include large files only when needed.
+ */
+function date_load($file) {
+  include_once(DATE_API_PATH .'/'. $file);
+}
