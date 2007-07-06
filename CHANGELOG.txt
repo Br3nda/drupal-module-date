@@ -1,6 +1,24 @@
 Date Module
 ===========
 
+Version 1.7
+===========
+
+- 56397 remove extraneous ';'.
+- Get rid of hook_init(), add helper function date_load(), move date.inc constants to date_api.module.
+- 153245 fix typo in Date API documentation.
+- 151304 include date.inc in theme so it works outside the module.
+- 152207 make timezones.inc independent of the event module, needed because not all versions of event module now use it.
+- Fix a typo in the new date_unset_granularity() function.
+- fix some invalid functions and missing includes for ical date imports in Date Copy.
+- 142509 remove deprecated date_set_granularity() function in date_copy and replace it with newer function.
+- 138980 fix permissions, use less memory by resetting node cache, and add warning message to turn off email notifications.
+- 139454 date display options were not getting saved.
+
+
+Version 1.6
+===========
+
 - 130689 move drupal_get_installed_schema_version inside install() and update() functions
 - 137515 fix logic for figuring out when timezone conversion is needed
 - 137624 make sure years back and forward store values when set to 0
