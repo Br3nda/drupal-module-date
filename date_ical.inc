@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_ical.inc,v 1.1.2.10 2007/07/03 16:27:37 karens Exp $ */
+/* $Id: date_ical.inc,v 1.1.2.11 2007/07/07 16:46:44 karens Exp $ */
 
 /**
  * Turn an array of events into a valid iCalendar file
@@ -104,19 +104,46 @@ function date_ical_escape_text($text) {
  */
 function date_ical_import($filename) {
   $items = array();
-  $ifile = @fopen($filename, "r");
-  if ($ifile == FALSE) exit('Invalid input file');
-  $nextline = fgets($ifile, 1024);
-  if (trim($nextline) != 'BEGIN:VCALENDAR') exit('Invalid calendar file:' . $filename);
-  while (!feof($ifile)) {
-  	$line = $nextline;
-    $nextline = fgets($ifile, 1024);
-    $nextline = ereg_replace("[\r\n]", "", $nextline);
-    while (substr($nextline, 0, 1) == " ") {
-      $line = $line . substr($nextline, 1);
-      $nextline = fgets($ifile, 1024);
-      $nextline = ereg_replace("[\r\n]", "", $nextline);
+
+  // Fetch the iCal data. If file is a URL, use drupal_http_request. fopen
+  // isn't always configured to allow network connections.
+  if (substr($filename, 0, 4) == 'http') {
+    // Fetch the ical data from the specified network location
+    $icaldatafetch = drupal_http_request($filename);
+    // Check the return result
+    if ($icaldatafetch->error) {
+      drupal_set_message('Request Error: ' . $icaldatafetch->error, 'error');
+      return array();
     }
+    // Break the return result into one array entry per lines
+    $icaldatafolded = explode("\n", $icaldatafetch->data);
+  }
+  else {
+    $icaldatafolded = @file($filename, FILE_IGNORE_NEW_LINES);
+    if ($icaldatafolded === FALSE) {
+      drupal_set_message('Failed to open file: ' . $filename, 'error');
+      return array();
+    }
+  }
+
+  // Verify this is iCal data
+  if (trim($icaldatafolded[0]) != 'BEGIN:VCALENDAR') {
+    drupal_set_message('Invalid calendar file:' . $filename, 'error');
+    return array();
+  }
+
+  // "unfold" wrapped lines
+  $icaldata = array();
+  foreach ($icaldatafolded as $line) {
+    if (substr($line, 0, 1) == ' ') {
+      $line = array_pop($icaldata) . substr($line, 1);
+    }
+    $icaldata[] = $line;
+  }
+  $icaldatafolded = NULL;
+
+  // Parse the iCal information
+  foreach ($icaldata as $line) {
     $line = trim($line);
     $vcal .= $line ."\n";
     switch ($line) {
