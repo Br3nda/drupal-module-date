@@ -1,0 +1,5 @@
+; $Id: date.info,v 1.6 2007/08/01 16:57:24 karens Exp $
+name = Date
+description = Defines a date/time field type.
+dependencies = content date_api
+package = CCK

@@ -1,0 +1,5 @@
+; $Id: date_repeat.info,v 1.1 2007/08/01 16:57:24 karens Exp $
+name = Date Repeat API
+description = An API to calculate repeating events using iCal rules.
+dependencies = date_api
+package = Date

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.1 2007/07/28 21:51:29 karens Exp $
+// $Id: date_php4.inc,v 1.2 2007/08/01 16:57:24 karens Exp $
 
 /**
  * @file
@@ -338,7 +338,7 @@ if (!function_exists('date_modify')) {
       $time = date_gmdate('H:i', $date->value);
       $days = date_week_days_untranslated();
       $dows = array_flip($days);
-      preg_match('/([+|-])([0-9]{1,4}).([day|week|month|year|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday]{1,10})/', $change, $results);
+      preg_match('/([+|-])([0-9]{1,4}).([day(s)?|week(s)?|month(s)?|year(s)?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday]{1,10})/', $change, $results);
       $direction = $results[1];
       $count = $results[2];
       $item = $results[3];
