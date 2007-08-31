@@ -1,5 +1,5 @@
 <?php
-// $Id: date_pathauto.inc,v 1.8 2007/08/01 16:57:24 karens Exp $
+// $Id: date_pathauto.inc,v 1.1 2007/08/31 13:37:36 karens Exp $
 
 /*
  * Implementation of hook_pathauto_node().
