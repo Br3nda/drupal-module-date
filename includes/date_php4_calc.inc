@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_calc.inc,v 1.1 2007/07/28 21:51:30 karens Exp $
+// $Id: date_php4_calc.inc,v 1.2 2007/09/02 20:18:28 karens Exp $
 /**
  * Calculates and manipulates dates with no reliance on 32-bit system
  * timestamps, to work on dates before 1970 and after 2038.
@@ -176,7 +176,10 @@ function date_calc_is_valid($day, $month, $year) {
     return false;
   }
   if (!checkdate($month, $day, $year)) {
-    return false;
+    // Checkdate won't work on very old dates in PHP 4, need more testing.
+    if (!date_gmmktime(0, 0, 0, $month, $day, $year)) {
+      return false;
+    }
   }
   return true;
 }
