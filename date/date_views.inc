@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.1 2007/08/31 13:37:36 karens Exp $
+// $Id: date_views.inc,v 1.2 2007/09/07 18:58:03 karens Exp $
 
 /**
  * Views field filters
@@ -186,7 +186,7 @@ function date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_ty
  * Provide a form gadget for dates.
  */
 function date_views_handler_filter_date_value_form($field) {
-
+  include_once(drupal_get_path('module', 'date') .'/date_elements.inc');
   $format = strtr($field['widget']['input_format'], date_jscalendar_replacements());
 
   $form = array(

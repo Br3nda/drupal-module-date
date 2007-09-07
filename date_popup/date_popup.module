@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.3 2007/09/02 20:18:28 karens Exp $
+// $Id: date_popup.module,v 1.4 2007/09/07 18:58:04 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -55,8 +55,9 @@ function date_popup_elements() {
       '#date_format' => DATE_FORMAT_DATETIME,
       '#date_type' => DATE_UNIX,
       '#date_empty' => 'now',
-      '#date_timezone_db' => 'UTC',
+      '#date_timezone_handling' => variable_get('configurable_timezones', 1) ? 'user' : 'site',
       '#date_timezone_local' => variable_get('date_default_timezone_name', NULL),
+      '#date_timezone_db' => 'UTC',
       '#date_year_range' => '-3:+3',
       '#date_granularity' => array('M', 'D', 'Y', 'H', 'N'),
       '#date_increment' => 1,

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.4 2007/08/03 10:51:04 karens Exp $
+// $Id: date_php4.inc,v 1.5 2007/09/07 18:58:04 karens Exp $
 
 /**
  * @file
@@ -166,6 +166,12 @@ if (!function_exists('date_format')) {
             break;
           case 'O':
             $date_string .= sprintf('%s%02d%02d', (date_offset_get($date) < 0 ? '-' : '+'), abs(date_offset_get($date) / 3600), abs(date_offset_get($date) % 3600) / 60);
+            break;
+          case 'P':
+            $date_string .= sprintf('%s%02d:%02d', (date_offset_get($date) < 0 ? '-' : '+'), abs(date_offset_get($date) / 3600), abs(date_offset_get($date) % 3600) / 60);
+            break;
+          case 'e':
+            $date .= $date->timezone;
             break;
           case 'Z':
             $date .= date_offset_get($date);

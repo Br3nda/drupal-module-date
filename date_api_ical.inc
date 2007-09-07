@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.4 2007/08/03 10:51:03 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.5 2007/09/07 18:58:04 karens Exp $ */
 /**
  * @file
  * Parse iCal imports and create iCal exports.
@@ -450,8 +450,6 @@ function date_ical_parse_text($field, $data) {
  *    a timezone-adjusted date object
  */
 function date_ical_date($ical_date, $to_tz = FALSE) {
-  global $user;
-
   // If the ical date has no timezone, must assume it is stateless
   // so treat it as a local date.
   if (empty($ical_date['tz'])) {
