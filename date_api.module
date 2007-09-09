@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.1.4.4 2007/07/03 11:06:07 karens Exp $
+// $Id: date_api.module,v 1.1.4.5 2007/09/09 18:43:35 karens Exp $
 
 /**
  * @file
@@ -8,6 +8,7 @@
  *
  * date_load('date.inc');
  */
+
 define('DATE_API_PATH', drupal_get_path('module', 'date_api'));
 define('DATE_ISO',  'date');
 define('DATE_UNIX', 'datestamp');
@@ -15,6 +16,47 @@ define('DATE_DATETIME', 'datetime');
 define('DATE_STRING_ISO', "Y-m-d\TH:i:s");
 define('DATE_API_PATH', drupal_get_path('module', 'date_api'));
 
+/**
+ *  use the date_timezones.inc file for timezone conversion
+ *  this large file will be included only when needed to reduce overhead
+ */
+define('DATE_TIMEZONES', DATE_API_PATH .'/date_timezones.inc');
+
+/**
+ *  Set up optional adodb date library to handle dates outside the normal php range
+ *  Could be extended later for other date libraries
+ *
+ *  adodb date library instructions:
+ *    get the file adodb-time.inc.php from http://phplens.com/phpeverywhere/adodb_date_library
+ *    put it in the same folder with date.module
+ *
+ *  external library will be used if available, otherwise api will use standard php date handling functions
+ */
+if (file_exists(DATE_API_PATH .'/adodb-time.inc.php')) {
+
+  define('DATE_LIBRARY',  'ADODB');
+  define('DATE_MAX_YEAR', 3000);
+  define('DATE_MIN_YEAR', 100);
+  // if there is another program loading adodb-time.inc.php in another directory after this file has run
+  // there will be php errors stating that the functions have already been declared
+  // to fix this, alter the path to the file below to point to the path used by the program that uses the file last
+  //
+  // the standard path to this file
+  //     DATE_API_PATH .'/adodb-time.inc.php';
+  // an example alternate path if the gallery2 program is installed (gallery2 uses adodb, too)
+  //     strtolower($_SERVER["DOCUMENT_ROOT"]) .'/gallery2/lib/adodb/adodb-time.inc.php';
+  define('DATE_LIBRARY_FILE', DATE_API_PATH .'/adodb-time.inc.php');
+}
+else {
+  define('DATE_LIBRARY',    '');
+  if (strstr(PHP_OS, 'WIN') && PHP_VERSION < 5.1) {
+    define('DATE_MIN_YEAR', 1970);
+  }
+  else {
+    define('DATE_MIN_YEAR', 1901);
+  }
+  define('DATE_MAX_YEAR', 2038);
+}
 
 /**
  * Helper to include large files only when needed.

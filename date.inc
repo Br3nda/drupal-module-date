@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.27.2.34 2007/07/03 11:06:07 karens Exp $
+//$Id: date.inc,v 1.27.2.35 2007/09/09 18:43:35 karens Exp $
 
 /**
  * @file
@@ -25,49 +25,6 @@
  *  display the date object and all its parts:
  *    print_r($date);
  */
-
-/**
- *  use the date_timezones.inc file for timezone conversion
- *  this large file will be included only when needed to reduce overhead
- */
-define('DATE_TIMEZONES', DATE_API_PATH .'/date_timezones.inc');
-
-/**
- *  Set up optional adodb date library to handle dates outside the normal php range
- *  Could be extended later for other date libraries
- *
- *  adodb date library instructions:
- *    get the file adodb-time.inc.php from http://phplens.com/phpeverywhere/adodb_date_library
- *    put it in the same folder with date.module
- *
- *  external library will be used if available, otherwise api will use standard php date handling functions
- */
-if (file_exists(DATE_API_PATH .'/adodb-time.inc.php')) {
-
-  define('DATE_LIBRARY',  'ADODB');
-  define('DATE_MAX_YEAR', 3000);
-  define('DATE_MIN_YEAR', 100);
-  // if there is another program loading adodb-time.inc.php in another directory after this file has run
-  // there will be php errors stating that the functions have already been declared
-  // to fix this, alter the path to the file below to point to the path used by the program that uses the file last
-  //
-  // the standard path to this file
-  //     DATE_API_PATH .'/adodb-time.inc.php';
-  // an example alternate path if the gallery2 program is installed (gallery2 uses adodb, too)
-  //     strtolower($_SERVER["DOCUMENT_ROOT"]) .'/gallery2/lib/adodb/adodb-time.inc.php';
-  define('DATE_LIBRARY_FILE', DATE_API_PATH .'/adodb-time.inc.php');
-}
-else {
-  define('DATE_LIBRARY',    '');
-  if (strstr(PHP_OS, 'WIN') && PHP_VERSION < 5.1) {
-    define('DATE_MIN_YEAR', 1970);
-  }
-  else {
-    define('DATE_MIN_YEAR', 1901);
-  }
-  define('DATE_MAX_YEAR', 2038);
-}
-
 /**
  *  Date wrapper functions
  *
@@ -498,7 +455,7 @@ function date_show_date($date, $format_string, $type = 'local', $zone_display = 
  * Similar to core format_date function but will work on old, pre-1970 dates
  * if adodb library is available.
  */
-function date_format_date($format, $timestamp) {
+function date_format_date($format, $timestamp, $offset = NULL, $timezone_name = NULL) {
   $max = strlen($format);
   $date = '';
   for ($i = 0; $i < $max; $i++) {
@@ -506,14 +463,33 @@ function date_format_date($format, $timestamp) {
     if (strpos('AaDFlM', $c) !== FALSE) {
       $date .= t(date_gmdate($c, $timestamp));
     }
-    else if (strpos('BdgGhHiIjLmnsStTUwWYyz', $c) !== FALSE) {
+    elseif (strpos('BdgGhHiIjLmnsStTUwWYyz', $c) !== FALSE) {
       $date .= date_gmdate($c, $timestamp);
     }
-    else if ($c == 'r') {
+    elseif ($c == 'r') {
       $date .= date_format_date($timestamp, 'D, d M Y H:i:s');
     }
-    else if ($c == '\\') {
+    elseif ($c == '\\') {
       $date .= $format[++$i];
+    }
+    elseif ($c == 'O') {
+      if (isset($offset)) {
+        $hours   = intval($offset / 3600);
+        $minutes = intval(($offset / 60) - ($hours * 60));
+        $date .= ' '. sprintf('%+05d', $hours * 100);
+      }
+    }
+    elseif ($c == 'P') {
+      if (isset($offset)) {
+        $hours   = intval($offset / 3600);
+        $minutes = intval(($offset / 60) - ($hours * 60));
+        $date .= ' '. sprintf('%+03d', $hours) .':'. sprintf('%02d', $minutes);
+      }
+    }
+    elseif ($c == 'e') {
+      if (isset($timezone_name)) {
+        $date .= ' '. $timezone_name;
+      }
     }
     else {
       $date .= $c;
@@ -521,7 +497,6 @@ function date_format_date($format, $timestamp) {
   }
   return $date;
 }
-
 
 /**
  *  Create a valid timestamp that can be used for date formatting
@@ -693,7 +668,6 @@ function date_get_timezone($handling, $timezone = '') {
  */
 function date_select_input($params) {
   drupal_add_css(DATE_API_PATH .'/date.css');
-
   // set the variables
   $label         = $params['label'] ? $params['label'] : t('Date');
   $delta         = isset($params['delta']) ? $params['delta'] : 0;
@@ -708,11 +682,12 @@ function date_select_input($params) {
   $timezone_in   = isset($params['timezone_in']) ? $params['timezone_in'] : (!$blank_default || $params['value'] ? 'GMT' : '');
   $timezone_out  = isset($params['timezone_out']) ? $params['timezone_out'] : (!$blank_default || $params['value'] ? date_get_site_timezone() : '');
   $description   = $params['description'];
-  $select_month  = $params['select_month'];
-  $select_day    = $params['select_day'];
-  $select_year   = $params['select_year'];
-  $years_back    = $params['years_back'];
-  $years_forward = $params['years_forward'];
+  $select_month  = !in_array('mon', $params['text_parts']);
+  $select_day    = !in_array('mday', $params['text_parts']);
+  $select_year   = !in_array('year', $params['text_parts']);
+  $year_range    = explode(':', $params['year_range']);
+  $years_back    = abs($year_range[0]);
+  $years_forward = abs($year_range[1]);
 
   if ($formats['input']['am_pm']) {
     $hours_format = 'g';
@@ -2244,4 +2219,129 @@ function theme_date_form_jscalendar($form) {
  */
 function theme_date_form_timezone($form) {
   return drupal_render($form);
+}
+
+/**
+ * An array of short date formats.
+ *
+ * @return array an array of short date format strings.
+ */
+function date_short_formats() {
+  return array(
+    'Y-m-d H:i',    'm/d/Y - H:i',  'd/m/Y - H:i', 'Y/m/d - H:i',
+    'd.m.Y - H:i',  'm/d/Y - g:ia', 'd/m/Y - g:ia', 'Y/m/d - g:ia',
+    'M j Y - H:i',  'j M Y - H:i',  'Y M j - H:i',
+    'M j Y - g:ia', 'j M Y - g:ia', 'Y M j - g:ia');
+}
+
+/**
+ * An array of medium date formats.
+ *
+ * @return array an array of medium date format strings.
+ */
+function date_medium_formats() {
+  return array(
+    'D, Y-m-d H:i',    'D, m/d/Y - H:i',  'D, d/m/Y - H:i',
+    'D, Y/m/d - H:i',  'F j, Y - H:i',    'j F, Y - H:i',
+    'Y, F j - H:i',    'D, m/d/Y - g:ia', 'D, d/m/Y - g:ia',
+    'D, Y/m/d - g:ia', 'F j, Y - g:ia',   'j F Y - g:ia',
+    'Y, F j - g:ia',   'j. F Y - G:i');
+}
+
+/**
+ * An array of long date formats.
+ *
+ * @return array an array of long date format strings.
+ */
+function date_long_formats() {
+  return array(
+    'l, F j, Y - H:i',  'l, j F, Y - H:i', 'l, Y,  F j - H:i',
+    'l, F j, Y - g:ia', 'l, j F Y - g:ia', 'l, Y,  F j - g:ia',
+    'l, j. F Y - G:i');
+}
+
+/**
+ * Array of granularity options and their lables
+ *
+ * @return array
+ */
+function date_granularity_names() {
+  return array('Y' => t('Year'), 'M' => t('Month'), 'D' => t('Day'),
+    'H' => t('Hour'), 'N' => t('Minute'), 'S' => t('Second'),
+    );
+}
+
+/**
+ * Array of granularity keys and the names of the related array parts.
+ *
+ * @return array
+ */
+function date_granularity_parts() {
+  return array('Y' => 'year', 'M' => 'mon', 'D' => 'mday',
+  'H' => 'hours', 'N' => 'minutes', 'S' => 'seconds');
+}
+
+/**
+ * Rewrite a format string so it only inludes elements from a
+ * specified granularity array.
+ *
+ * Example, turn 'F j, Y - H:i' into 'F j, Y'
+ *
+ * @param $format
+ *   a format string
+ * @param $granularity
+ *   an array of allowed date parts, all others will be removed
+ *   array('Y', 'M', 'D', 'H', 'N', 'S');
+ * @return
+ *   a format string with all other elements removed
+ */
+function date_limit_format($format, $granularity) {
+  $regex = array();
+  // Get rid of dash separating date and time if either is missing.
+  if (!date_has_time($granularity)
+    || sizeof(array_intersect($granularity, array('Y', 'M', 'D')) == 0)) {
+    $regex[] = '( -)';
+  }
+  if (!date_has_time($granularity)) {
+      $regex[] = '(a|A)';
+  }
+  // Create regular expressions to remove selected values from string.
+  foreach (date_nongranularity($granularity) as $element) {
+    switch ($element) {
+      case 'Y':
+        $regex[] = '([\-/\.]?[Yy][\-/\.,]?)';
+        break;
+      case 'D':
+        $regex[] = '([\-/\.]?[lDdj][\-/\.,]?)';
+        break;
+      case 'M':
+        $regex[] = '([\-/\.]?[FMmn][\-/\.,]?)';
+        break;
+      case 'H':
+        $regex[] = '([HhGg][:]?)';
+        break;
+      case 'N':
+        $regex[] = '([:]?[i])';
+        break;
+      case 'S':
+        $regex[] = '([:]?[s])';
+        break;
+    }
+  }
+  // Remove selected values from string.
+  // Don't leave any trailing punctuation behind.
+  $format = trim(preg_replace($regex, array(), $format));
+  return preg_replace('([\-/\.,]$)', '', $format);
+}
+
+/**
+ * An difference array of granularity elements that are NOT in the
+ * granularity array. Used by functions that strip unwanted
+ * granularity elements out of formats and values.
+ *
+ * @param $granularity
+ *   an array like ('Y', 'M', 'D', 'H', 'N', 'S');
+ */
+function date_nongranularity($granularity) {
+  return array_diff(array('Y', 'M', 'D', 'H', 'N', 'S'), $granularity);
 }

@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.13.2.5 2007/04/19 21:32:05 karens Exp $
+// $Id: date.install,v 1.13.2.6 2007/09/09 18:43:35 karens Exp $
 /**
  * Implementation of hook_install().
  */
@@ -335,5 +335,107 @@ function date_update_7() {
   }
   drupal_set_message(t('All date module fields were updated to allow empty (NULL) values. Existing date fields with default values were reset to NULL.'));
   db_query('DELETE FROM {cache}');
+  return $ret;
+}
+
+/**
+ * Prepare for Version 5.2 updates, make changes to field and widget settings.
+ */
+function date_update_5100() {
+  $ret = array();
+  include_once(drupal_get_path('module', 'content') .'/content.module');
+  include_once(drupal_get_path('module', 'views') .'/views.module');
+
+  // Make sure date module loads after date_api.
+  //$ret[] = update_sql("UPDATE {system} SET weight = 1 WHERE name = 'date'");
+
+  $fields = content_fields();
+  foreach ($fields as $field) {
+    if (strstr($field['type'], 'date')) {
+
+      $field_settings = unserialize(db_result(db_query("SELECT global_settings from {node_field} where field_name = '%s'", $field['field_name'])));
+      $widget_settings = unserialize(db_result(db_query("SELECT widget_settings from {node_field_instance} where field_name = '%s'", $field['field_name'])));
+
+      // Move input format from field settings to widget settings, where it should have been all along.
+      $input_format = $field_settings['input_format'];
+      $input_format_custom = $field_settings['input_format_custom'];
+      $widget_settings['input_format'] = $input_format;
+      $widget_settings['input_format_custom'] = $input_format_custom;
+
+      // New PHP 5 date handling will handle timezone formats correctly, so
+      // add timezone formats to format string and drop old setting for tracking zones.
+      $replace = array(
+        '0000' => 'O',
+        '00:00' => 'P',
+        'name' => 'e',
+        '' => '',
+        );
+      if (!empty($field_settings['output_format_zone'])) {
+        $field_settings['output_format_date'] .= ' '. $replace[$field_settings['output_format_zone']];
+        if (!empty($field_settings['output_format_custom'])) {
+          $field_settings['output_format_custom'] .= ' '. $replace[$field_settings['output_format_zone']];
+        }
+      }
+      if (!empty($field_settings['output_format_zone_short'])) {
+        $field_settings['output_format_date_short'] .= ' '. $replace[$field_settings['output_format_zone_short']];
+        if (!empty($field_settings['output_format_custom_short'])) {
+          $field_settings['output_format_custom_short'] .= ' '. $replace[$field_settings['output_format_zone_short']];
+        }
+      }
+      if (!empty($field_settings['output_format_zone_medium'])) {
+        $field_settings['output_format_date_medium'] .= ' '. $replace[$field_settings['output_format_zone_medium']];
+        if (!empty($field_settings['output_format_custom_medium'])) {
+          $field_settings['output_format_custom_medium'] .= ' '. $replace[$field_settings['output_format_zone_medium']];
+        }
+      }
+      if (!empty($field_settings['output_format_zone_long'])) {
+        $field_settings['output_format_date_long'] .= ' '. $replace[$field_settings['output_format_zone_long']];
+        if (!empty($field_settings['output_format_custom_long'])) {
+          $field_settings['output_format_custom_long'] .= ' '. $replace[$field_settings['output_format_zone_long']];
+        }
+      }
+
+      // Add new timezone_db setting.
+      // For now this is fixed at 'UTC', but it provides a method to store a different timezone in the future.
+      $field_settings['timezone_db'] = 'UTC';
+
+      // Change select_year, select_month, select_day to array of text_parts and add to widget settings.
+      $text_parts = array();
+      if (isset($widget_settings['select_year']) && empty($widget_settings['select_year'])) {
+        $text_parts[] = 'year';
+      }
+      if (isset($widget_settings['select_month']) && empty($widget_settings['select_month'])) {
+        $text_parts[] = 'mon';
+      }
+      if (isset($widget_settings['select_day']) && empty($widget_settings['select_day'])) {
+        $text_parts[] = 'mday';
+      }
+      $widget_settings['text_parts'] = $text_parts;
+
+      // Combine years_back and years_forward into single year_range
+      $widget_settings['year_range'] = '-'. intval(isset($widget_settings['years_back']) ? $widget_settings['years_back'] : 3) .':+'. intval(isset($widget_settings['years_forward']) ? $widget_settings['years_forward'] : 3);
+
+      // Clean up settings by removing all that are not valid.
+      $fields = array('granularity', 'field_timezone', 'timezone_db', 'tz_handling', 'todate',
+        'output_format_date', 'output_format_date_short', 'output_format_date_medium', 'output_format_date_long',
+        'output_format_custom', 'output_format_custom_short', 'output_format_custom_medium', 'output_format_custom_long');
+      foreach (array_keys($field_settings) as $setting) {
+        if (!in_array($setting, $fields)) {
+          unset($field_settings[$setting]);
+        }
+      }
+      $widgets = array('default_value', 'default_value_custom', 'default_value2', 'default_value_custom2',
+        'input_format', 'input_format_custom', 'increment', 'text_parts', 'year_range');
+      foreach (array_keys($widget_settings) as $setting) {
+        if (!in_array($setting, $widgets)) {
+          unset($widget_settings[$setting]);
+        }
+      }
+      // Save the new settings.
+      db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name='%s'", serialize($field_settings), $field['field_name']);
+      db_query("UPDATE {node_field_instance} SET widget_settings = '%s' WHERE field_name='%s'", serialize($widget_settings), $field['field_name']);
+    }
+  }
+  content_clear_type_cache();
   return $ret;
 }
