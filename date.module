@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.44 2007/09/09 18:43:35 karens Exp $
+// $Id: date.module,v 1.32.2.45 2007/09/10 02:09:48 karens Exp $
 
 /**
  * @file
@@ -532,11 +532,11 @@ function date_granularity_array($field) {
 }
 
 function date_get_formats($field) {
-  if ($cached = cache_get('date_formats:'. $field['field_name'] .':'. $field['type_name'], 'cache') && $cached->data) {
+  if ($cached = cache_get('date_formats:'. $field['field_name'] .':'. $field['widget']['type'], 'cache') && $cached->data) {
     $formats = unserialize($cached->data);
 
     // are we up-to-date with current site-wide format ?
-    if ($field['input_format'] != 'site-wide' || $formats['input']['site-wide'] == variable_get('date_format_short', 'm/d/Y - H:i')) {
+    if ($field['widget']['input_format'] != 'site-wide' || $formats['input']['site-wide'] == variable_get('date_format_short', 'm/d/Y - H:i')) {
       return $formats;
     }
   }
@@ -546,16 +546,16 @@ function date_get_formats($field) {
 }
 
 function date_set_formats($field) {
-  if (!empty($field['input_format_custom'])) {
-    $format = $field['input_format_custom'];
+  if (!empty($field['widget']['input_format_custom'])) {
+    $format = $field['widget']['input_format_custom'];
   }
   else {
-    $format = ($field['input_format'] == 'site-wide') ? variable_get('date_format_short', 'm/d/Y - H:i') : $field['input_format'];
+    $format = ($field['widget']['input_format'] == 'site-wide') ? variable_get('date_format_short', 'm/d/Y - H:i') : $field['widget']['input_format'];
   }
   $granularity = date_granularity_array($field);
 
   $formats = date_formats($format, $granularity);
-  cache_set('date_formats:'. $field['field_name'] .':'. $field['type_name'], 'cache', serialize($formats), CACHE_PERMANENT);
+  cache_set('date_formats:'. $field['field_name'] .':'. $field['widget']['type'], 'cache', serialize($formats), CACHE_PERMANENT);
   return $formats;
 }
 
