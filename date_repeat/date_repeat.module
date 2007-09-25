@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.2 2007/09/10 11:22:04 karens Exp $
+// $Id: date_repeat.module,v 1.3 2007/09/25 14:16:05 karens Exp $
 /**
  * Helper functions to handle various date formats
  */
@@ -201,8 +201,8 @@ function theme_date_repeat_form($repeat) {
     '#description' => t('Determines the number of repeat nodes that will be created for the repeat sequence')
   );
 
-  $form['date_repeat'][] = theme_date_repeat_form_advanced($repeat, $advanced_collapsed);
-  $form['date_repeat'][] = theme_date_repeat_form_exception($repeat, $exception_collapsed);
+  $form['date_repeat'][] = theme('date_repeat_form_advanced', $repeat, $advanced_collapsed);
+  $form['date_repeat'][] = theme('date_repeat_form_exception', $repeat, $exception_collapsed);
 
   return $form;
 }
