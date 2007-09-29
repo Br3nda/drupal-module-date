@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.18 2007/09/25 14:31:31 karens Exp $
+// $Id: date_api.module,v 1.19 2007/09/29 16:35:56 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1087,7 +1087,7 @@ function date_api_elements() {
  * Done if variable date_store_timezones() has been set.
  */
 function date_api_form_alter($form_id, &$form) {
-  if (variable_get('date_store_timezones', FALSE) {
+  if (variable_get('date_store_timezones', FALSE)) {
     if ($form_id == 'system_date_time_settings') {
       date_form_site($form);
     }
