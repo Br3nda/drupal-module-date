@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.6 2007/09/25 14:16:04 karens Exp $
+//$Id: date_api_elements.inc,v 1.7 2007/10/01 00:03:36 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -258,9 +258,9 @@ function  date_select_validate($element) {
     $element['#value']['hour'] += 12;
   }
   if ($element['#required'] || !empty($element['#value']['year'])) {
-    if ($element['#value']['year'] < DATE_MIN_YEAR || $element['#value']['year'] > DATE_MAX_YEAR) {
+    if ($element['#value']['year'] < variable_get('date_min_year', 1) || $element['#value']['year'] > variable_get('date_max_year', 4000)) {
       form_set_error($fieldname, t('year must be a number between %min and %max.', array(
-        '%min' => DATE_MIN_YEAR, '%max' => DATE_MAX_YEAR)));
+        '%min' => variable_get('date_min_year', 1), '%max' => variable_get('date_max_year', 4000))));
     }
   }
   if ($element['#required'] || !empty($element['#value']['month'])) {
