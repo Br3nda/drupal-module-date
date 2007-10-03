@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.7 2007/10/01 00:03:36 karens Exp $
+//$Id: date_api_elements.inc,v 1.8 2007/10/03 20:47:30 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -99,6 +99,7 @@ function _date_api_elements() {
  */
 function date_text_process($element) {
   $date =  date_default_date($element);
+  echo 'DATE IS '.date_format($date, 'm/d/Y H:i');
   $element['#date'] = $date;
 
   $element['#tree'] = TRUE;
@@ -131,6 +132,7 @@ function date_text_process($element) {
  */
 function date_select_process($element) {
   $date =  date_default_date($element);
+  echo 'DATE IS '.date_format($date, 'm/d/Y H:i');
   $element['#tree'] = TRUE;
   $element['#date'] = $date;
 
@@ -338,14 +340,16 @@ function date_default_date($element) {
       $value = $element['#date_empty_code'];
     }
     else {
-      $value == 'now';
+      $value = 'now';
     }
   }
   else {
     $value = $element['#value'];
   }
   if (!empty($value)) {
-    $value = date_convert($value, $element['#date_type'], DATE_DATETIME);
+    if ($value != 'now') {
+      $value = date_convert($value, $element['#date_type'], DATE_DATETIME);
+    }
     $date = date_create($value, timezone_open(date_element_timezone($element)));
   }
   if ($date === DATE_ERROR) {
