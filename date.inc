@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.27.2.35 2007/09/09 18:43:35 karens Exp $
+//$Id: date.inc,v 1.27.2.36 2007/10/04 21:01:49 karens Exp $
 
 /**
  * @file
@@ -369,11 +369,10 @@ function date_convert_timezone(&$date, $timezone_in = 'GMT', $timezone_out = 'GM
     // attempt conversion only when there is available data to use
     if ((!$date->local->iso && !$date->local->iso == 0) || !$date->local->timezone) return;
     // see if an offset applies, and adjust date accordingly
-    if ($offset   = date_offset(date_gmgetdate($date->local->timestamp), $date->local->timezone)) {
+    if ($offset = date_offset(date_gmgetdate($date->local->timestamp), $date->local->timezone)) {
       $out_date = $date->local->timestamp - $offset;
       date_set_date($date, $out_date, $timezone_out, $type, DATE_UNIX);
-      $date->offset = -$offset;
-    // no offset, just set other part of date object to same value
+      $date->local->offset = $offset;
     }
     else {
       date_set_date($date, $date->local->iso, $timezone_out, $type, DATE_ISO);
