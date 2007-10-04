@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.4.2.8 2007/04/19 21:32:46 karens Exp $
+// $Id: date.install,v 1.4.2.9 2007/10/04 21:44:06 karens Exp $
 
 /**
  * Implementation of hook_install().
@@ -337,4 +337,36 @@ function date_update_7() {
   drupal_set_message(t('All date module fields were updated to allow empty (NULL) values. Existing date fields with default values were reset to NULL.'));
   db_query('DELETE FROM {cache}');
   return $ret;
+}
+
+/**
+ * Date offsets were not getting saved. Need to repair the database.
+ */
+function date_update_4000() {
+  include_once(drupal_get_path('module', 'content') .'/content.module');
+  include_once(drupal_get_path('module', 'content') .'/content_admin.inc');
+  include_once(drupal_get_path('module', 'date') .'/date.module');
+  include_once(drupal_get_path('module', 'date') .'/date_api.module');
+  include_once(drupal_get_path('module', 'date') .'/date.inc');
+  include_once(drupal_get_path('module', 'date') .'/date_timezones.inc');
+  $fields = content_fields();
+  foreach ($fields as $field) {
+    if (($field['type'] == 'date' || $field['type'] == 'datestamp') && $field['tz_handling'] == 'date') {
+      $db_info = content_database_info($field);
+      $table = $db_info['table'];
+      $results = db_query("SELECT nid, vid, ". $field['field_name'] ."_value AS value, ". $field['field_name'] ."_timezone AS timezone FROM {". $table ."} ");
+      while ($row = db_fetch_array($results)) {
+        if ($field['type'] == 'date') {
+          $value = date_iso2array($row['value']);
+          $timezone = $row['timezone'];
+        }
+        else {
+          $value = date_unix2array($row['value']);
+          $timezone = $row['timezone'];
+        }
+        $offset = date_offset($value, $timezone);
+        db_query("UPDATE {". $table ."} SET ". $field['field_name'] ."_offset = ". $offset ." WHERE nid=". $row['nid'] ." AND vid = ". $row['vid']);
+       }
+    }
+  }
 }
