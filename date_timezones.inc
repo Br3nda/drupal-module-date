@@ -1,5 +1,5 @@
 <?php
-//$Id: date_timezones.inc,v 1.4.2.4 2007/06/22 10:10:24 karens Exp $
+//$Id: date_timezones.inc,v 1.4.2.5 2007/10/11 19:29:30 karens Exp $
 // a copy of event_timezones.inc to be used when the event module is not enabled
 
 //if (module_exists('event')) return;
@@ -151,8 +151,14 @@ function date_is_dst($region, $timestamp) {
       $dstend = strtotime("1 week sunday GMT", strtotime("1 april $year GMT"));
       break;
   }
-
-  return ($dststart <= $timestamp && $timestamp <= $dstend);
+  // Have to use reverse logic in southern hemisphere.
+  $southern = array(9, 10, 11, 12, 17, 18, 19, 20);
+  if (in_array($region, $southern)) {
+    return !($timestamp >= $dstart && $dstend <= $timestamp);
+  }
+  else {
+    return ($dststart <= $timestamp && $timestamp <= $dstend);
+  }
 }
 
 function date_get_dst_regions() {
