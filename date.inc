@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.27.2.36 2007/10/04 21:01:49 karens Exp $
+//$Id: date.inc,v 1.27.2.37 2007/10/11 10:35:54 karens Exp $
 
 /**
  * @file
@@ -437,10 +437,10 @@ function date_show_date($date, $format_string, $type = 'local', $zone_display = 
     $append = date_append_zone($date, $zone_display);
   }
   if ($type == 'db' || (!$date->local->timestamp && $date->local->timestamp != 0)) {
-    return date_format_date($format_string, date_fuzzy_stamp($date->db)) . $append;
+    return date_format_date($format_string, date_fuzzy_stamp($date->db), $date->local->offset, $date->local->timezone) . $append;
   }
   elseif ($date->local->timestamp || $date->local->timestamp == 0) {
-    return date_format_date($format_string, date_fuzzy_stamp($date->local)) . $append;
+    return date_format_date($format_string, date_fuzzy_stamp($date->local), $date->local->offset, $date->local->timezone) . $append;
   }
 }
 
@@ -533,7 +533,7 @@ function date_fuzzy_stamp($datetype) {
  */
 function date_append_zone($date, $type = '') {
   if (!$type) return;
-  $offset  = intval($date->local->timestamp - $date->db->timestamp);
+  $offset  = intval($date->local->offset);
   $hours   = intval($offset / 3600);
   $minutes = intval(($offset / 60) - ($hours * 60));
   switch (trim($type)) {
