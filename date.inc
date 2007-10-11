@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.27.2.37 2007/10/11 10:35:54 karens Exp $
+//$Id: date.inc,v 1.27.2.38 2007/10/11 18:59:12 karens Exp $
 
 /**
  * @file
@@ -56,7 +56,7 @@ function date_getdate($timestamp) {
  *  Check for empty timestamps to make sure empty values don't display as 1/1/1970.
  */
 function date_gmgetdate($timestamp) {
-  if (!$timestamp) return '';
+  if ($timestamp === FALSE) return '';
   date_load_library();
   switch (DATE_LIBRARY) {
     case('ADODB'):
@@ -72,7 +72,7 @@ function date_gmgetdate($timestamp) {
   }
 }
 function date_date($format, $timestamp = FALSE) {
-  if (!$timestamp) return '';
+  if ($timestamp === FALSE) return '';
   date_load_library();
   switch (DATE_LIBRARY) {
   case('ADODB'):
@@ -82,7 +82,7 @@ function date_date($format, $timestamp = FALSE) {
   }
 }
 function date_gmdate($format, $timestamp = FALSE) {
-  if (!$timestamp) return '';
+  if ($timestamp === FALSE) return '';
   date_load_library();
   switch (DATE_LIBRARY) {
     case('ADODB'):
@@ -340,7 +340,7 @@ function date_convert_timezone(&$date, $timezone_in = 'GMT', $timezone_out = 'GM
   $fromtype = $type == 'db' ? 'local' : 'db';
   // skip timezone conversion if no timezone conversion was desired
   // set the local and db parts of the date object to be the same and return
-  if ($timezone_in == 'none' || $timezone_out == 'none' || empty($date->$fromtype->parts[0])) {
+  if ($timezone_in == 'none' || $timezone_out == 'none' || !isset($date->$fromtype->parts[0])) {
     if (($date->local->iso || $date->local->iso == 0) && !$date->db->iso) {
       date_set_date($date, $date->local->iso, $timezone_out, 'db', DATE_ISO);
     }
@@ -430,12 +430,8 @@ function date_show_value($date, $type = 'db', $format = DATE_ISO) {
  *  @param $date - the date object
  *  @param $format_string - the format string to be used for the display
  *  @param $type - 'local' or 'db', the date value to be displayed
- *  @param $zone_display - '', '0000', '00:00', 'name' - type of timezone display to append
  */
-function date_show_date($date, $format_string, $type = 'local', $zone_display = '') {
-  if ($zone_display) {
-    $append = date_append_zone($date, $zone_display);
-  }
+function date_show_date($date, $format_string, $type = 'local') {
   if ($type == 'db' || (!$date->local->timestamp && $date->local->timestamp != 0)) {
     return date_format_date($format_string, date_fuzzy_stamp($date->db), $date->local->offset, $date->local->timezone) . $append;
   }
@@ -456,21 +452,29 @@ function date_show_date($date, $format_string, $type = 'local', $zone_display = 
  */
 function date_format_date($format, $timestamp, $offset = NULL, $timezone_name = NULL) {
   $max = strlen($format);
+  if (isset($timezone_name) && !isset($offset)) {
+    $offset = date_offset(date_gmgetdate($timestamp), $timezone_name);
+  }
   $date = '';
   for ($i = 0; $i < $max; $i++) {
     $c = $format[$i];
     if (strpos('AaDFlM', $c) !== FALSE) {
       $date .= t(date_gmdate($c, $timestamp));
     }
-    elseif (strpos('BdgGhHiIjLmnsStTUwWYyz', $c) !== FALSE) {
+    elseif (strpos('BdgGhHiIjLmnsStUwWYyz', $c) !== FALSE) {
       $date .= date_gmdate($c, $timestamp);
     }
     elseif ($c == 'r') {
-      $date .= date_format_date($timestamp, 'D, d M Y H:i:s');
+      $date .= date_format_date($timestamp, 'D, d M Y H:i:s O', $offset, $timezone_name);
     }
     elseif ($c == '\\') {
       $date .= $format[++$i];
     }
+    // PHP's default handling of timezones will give you the server timezone,
+    // which may not be right. The 'T' option to show a timezone abbreviation
+    // for a specific timezone that may not be the server timezone can't be
+    // replicated in PHP4, but there will be a solution for that
+    // in the 5.2 version of the Date API.
     elseif ($c == 'O') {
       if (isset($offset)) {
         $hours   = intval($offset / 3600);
@@ -485,7 +489,7 @@ function date_format_date($format, $timestamp, $offset = NULL, $timezone_name = 
         $date .= ' '. sprintf('%+03d', $hours) .':'. sprintf('%02d', $minutes);
       }
     }
-    elseif ($c == 'e') {
+    elseif ($c == 'e' || $c == 'T') {
       if (isset($timezone_name)) {
         $date .= ' '. $timezone_name;
       }
