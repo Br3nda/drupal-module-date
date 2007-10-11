@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.45 2007/09/10 02:09:48 karens Exp $
+// $Id: date.module,v 1.32.2.46 2007/10/11 10:48:48 karens Exp $
 
 /**
  * @file
@@ -432,11 +432,10 @@ function date_field_formatter($field, $item, $formatter, $node) {
  * @param object $date - a date object
  * @param string $format - the date format string
  * @param string $format_db_type - the part of the date object to format, can be 'local' or 'db'
- * @param string $format_zone - a format string for the timezone, can be '', '0000', '00:00', or 'name'
  * @param string $append - a string to append to the end of the formatted date
  * @return the formatted date value
  */
-function date_format_item(&$date, $format, $format_db_type = 'local', $format_zone = '', $append = '') {
+function date_format_item(&$date, $format, $format_db_type = 'local', $append = '') {
   include_once(drupal_get_path('module', 'date_api') .'/date.inc');
   return date_show_date($date, $format, $format_db_type, $format_zone) . $append;
 }
@@ -652,30 +651,24 @@ function theme_date_formatter($dates, $field, $formatter, $node) {
     case('long'):
       $format = $field['output_format_custom_long'] > '' ? $field['output_format_custom_long'] : ($field['output_format_date_long'] ? $field['output_format_date_long'] : variable_get('date_format_long',  'l, F j, Y - H:i'));
       $format = date_strip_granularity($format, date_granularity_array($field));
-      $format_zone = $field['output_format_zone_long'];
       break;
     case('medium'):
       $format = $field['output_format_custom_medium'] > '' ? $field['output_format_custom_medium'] : ($field['output_format_date_medium'] ? $field['output_format_date_medium'] : variable_get('date_format_medium',  'D, m/d/Y - H:i'));
       $format = date_strip_granularity($format, date_granularity_array($field));
-      $format_zone = $field['output_format_zone_medium'];
       break;
     case('short'):
       $format = $field['output_format_custom_short'] > '' ? $field['output_format_custom_short'] : ($field['output_format_date_short'] ? $field['output_format_date_short'] : variable_get('date_format_short', 'm/d/Y - H:i'));
       $format = date_strip_granularity($format, date_granularity_array($field));
-      $format_zone = $field['output_format_zone_short'];
       break;
     case('iso'):
-      $format = DATE_STRING_ISO;
-      $format_zone = '00:00';
+      $format = DATE_STRING_ISO .'P';
       break;
     case('feed'):
-      $format = 'D, j M Y H:i:s';
-      $format_zone = '0000';
+      $format = 'D, j M Y H:i:s O';
       break;
     case('ical'):
       // for ical, send the db value with Z appended to indicate it is the gmt value
       $format = 'Ymd\THis';
-      $format_zone = '';
       $append = 'Z';
       $format_db_type = 'db';
       $field['tz_handling'] == 'none';
@@ -683,7 +676,6 @@ function theme_date_formatter($dates, $field, $formatter, $node) {
     default:
       $format = $field['output_format_custom'] > '' ? $field['output_format_custom'] : ($field['output_format_date'] ? $field['output_format_date'] : variable_get('date_format_short', 'm/d/Y - H:i'));
       $format = date_strip_granularity($format, date_granularity_array($field));
-      $format_zone = $field['output_format_zone'];
       break;
   }
  // Iterate through the From and To dates to format them, using the format selected above.
@@ -704,7 +696,7 @@ function theme_date_formatter($dates, $field, $formatter, $node) {
           $dates[$processed]['formatted'] = $date->local->timestamp;
           break;
         default:
-          $dates[$processed]['formatted'] = date_format_item($date, $format, $format_db_type, $format_zone, $append);
+          $dates[$processed]['formatted'] = date_format_item($date, $format, $format_db_type, $append);
       }
     }
   }
