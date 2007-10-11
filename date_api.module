@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.1.4.5 2007/09/09 18:43:35 karens Exp $
+// $Id: date_api.module,v 1.1.4.6 2007/10/11 19:31:14 karens Exp $
 
 /**
  * @file
@@ -63,4 +63,13 @@ else {
  */
 function date_load($file) {
   include_once(DATE_API_PATH .'/'. $file);
+}
+
+/**
+ * Implementation of hook_simpletest().
+ */
+function date_api_simpletest() {
+  $dir = drupal_get_path('module', 'date_api') .'/tests';
+  $tests = file_scan_directory($dir, '\.test$');
+  return array_keys($tests);
 }
