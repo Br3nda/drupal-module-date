@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.46 2007/10/11 10:48:48 karens Exp $
+// $Id: date.module,v 1.32.2.47 2007/10/12 13:03:44 karens Exp $
 
 /**
  * @file
@@ -760,18 +760,31 @@ function theme_date_display_combination($field, $dates, $node = NULL) {
  *    $dates['value2']['object']->db->timestamp - the timestamp of the To date database (GMT) alue
  */
 function theme_date_format_interval($field, $dates, $node = NULL) {
-  // Time to compare dates to
   global $user;
-  if (variable_get('configurable_timezones', 1) && $user->uid && strlen($user->timezone)) {
-    $now = (time() - date("Z")) + $user->timezone;
-  }
-  else {
-    $now = (time() - date("Z")) + variable_get('date_default_timezone', 0);
+  switch ($field['tz_handling']) {
+    case 'date':
+      $adj = $dates['value']['object']->local->offset;
+      break;
+    case 'user':
+      if (variable_get('configurable_timezones', 1) && $user->uid && strlen($user->timezone)) {
+        $adj = $user->timezone;
+      }
+      else {
+        $adj = variable_get('date_default_timezone', 0);
+      }
+      break;
+    case 'none':
+      $adj = 0;
+      break;
+    default:
+      $adj = variable_get('date_default_timezone', 0);
   }
 
-  // Pull local timestamps out of date objects.
-  $timestamp1 = $dates['value']['object']->local->timestamp;
-  $timestamp2 = $dates['value2']['object']->local->timestamp ? $dates['value2']['object']->local->timestamp : $timestamp1;
+  $now = date_time() + $adj;
+
+  // Pull timestamps out of date objects.
+  $timestamp1 = $dates['value']['object']->db->timestamp + $adj;
+  $timestamp2 = ($dates['value2']['object']->db->timestamp ? $dates['value2']['object']->db->timestamp : $timestamp1) + $adj;
 
   // 1) The date is entirely in the future
   if ($now < $timestamp1) {
