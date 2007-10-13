@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.12 2007/10/01 00:03:36 karens Exp $
+// $Id: date.module,v 1.13 2007/10/13 14:08:12 karens Exp $
 
 /**
  * @file
@@ -380,6 +380,33 @@ function date_field_info() {
 function date_field_settings($op, $field) {
   include_once(drupal_get_path('module', 'date') .'/date_admin.inc');
   return _date_field_settings($op, $field);
+}
+
+/**
+ * Implementation of hook_form_alter().
+ * Make sure date information gets updated.
+ */
+function date_form_alter($form_id, &$form) {
+  if ($form_id == 'views_edit_view') {
+    $form['#submit'] = array_merge($form['#submit'], array('date_clear_all' => array()));
+  }
+}
+
+/**
+ * Empty or reset cached values.
+ *
+ * @param $remove
+ *   whether or not to completely remove the caches.
+ */
+function date_clear_all($remove = FALSE) {
+  if ($remove) {
+    cache_clear_all('date_browser_views', 'cache');
+  }
+  else {
+    if (module_exists('views')) {
+      date_views_browser_get_views(TRUE);
+    }
+  }
 }
 
 /**
