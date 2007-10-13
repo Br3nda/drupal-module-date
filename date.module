@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.48 2007/10/13 13:57:48 karens Exp $
+// $Id: date.module,v 1.32.2.49 2007/10/13 15:15:22 karens Exp $
 
 /**
  * @file
@@ -214,7 +214,7 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
           'timezone_out' => ($items[$delta]['value'] ? $timezone : ''),
           'timezone_in'  => ($items[$delta]['value'] ? 'GMT' : ''),
           'description'  => $field['widget']['description'],
-          'text_parts'  => $field['widget']['text_parts'],
+          'text_parts'  => (array) $field['widget']['text_parts'],
           'year_range'   => $field['widget']['year_range'],
           );
         $params['required'] = ($field['required'] && $delta == 0) ? 1 : 0;
