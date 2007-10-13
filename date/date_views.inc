@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.4 2007/10/13 14:08:12 karens Exp $
+// $Id: date_views.inc,v 1.5 2007/10/13 14:16:38 karens Exp $
 
 /**
  * Views field filters
@@ -19,7 +19,7 @@ function date_views_filters($field) {
   $format = $field['widget']['input_format'];
 
   // use this to default to current time
-  $current = array('' => '<all>', 'now' => t('now'));
+  $current = array('' => t('<all>'), 'now' => t('now'));
   $months  = ($current + drupal_map_assoc(range(1, 12), 'map_month'));
   $days    = ($current + drupal_map_assoc(range(1, 31)));
 
