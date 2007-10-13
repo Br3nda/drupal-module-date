@@ -1,14 +1,16 @@
 <?php
-// $Id: date.install,v 1.4.2.10 2007/10/13 13:58:04 karens Exp $
+// $Id: date.install,v 1.4.2.11 2007/10/13 14:08:26 karens Exp $
 
 /**
  * Implementation of hook_install().
  * Reset the date caches.
  */
 function date_install() {
+  $ret = array();
   variable_set('date_version', drupal_get_installed_schema_version('date'));
   include_once(drupal_get_path('module', 'date') .'/date.module');
   date_clear_all();
+  return $ret;
 }
 
 /**
@@ -16,10 +18,12 @@ function date_install() {
  *
  */
 function date_uninstall() {
+  $ret = array();
   include_once(drupal_get_path('module', 'date') .'/date.module');
   variable_del('date_version');
   // Empty the date caches.
   date_clear_all(TRUE);
+  return $ret;
 }
 
 function date_update_1() {
