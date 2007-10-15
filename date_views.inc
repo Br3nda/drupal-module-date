@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.22.2.19 2007/10/13 14:16:12 karens Exp $
+// $Id: date_views.inc,v 1.22.2.20 2007/10/15 11:05:36 karens Exp $
 
 /**
  * Views field filters
@@ -608,9 +608,31 @@ function date_views_style_plugins() {
     'summary_theme' => 'date_views_browser_summary_view',
     'needs_fields' => true,
     'needs_table_header' => true,
+    'even_empty' => true,
+    'validate' => 'date_browser_validate',
   );
   return $items;
 }
+
+/**
+ * Validate a view.
+ */
+function date_browser_validate($type, $view, $form) {
+  // list (and table) modes require there to be at least 1 field active.
+  if (is_array($view['field'])) {
+    $fields = array_filter(array_keys($view['field']), 'is_numeric');
+  }
+  if (!$fields) {
+    form_error($form["$type-info"][$type . '_type'], t('The Date Browser requires at least one field.'));
+  }
+  // Make sure all arguments are set to 'Display all values'.
+  foreach ($view['argument'] as $delta => $argument) {
+    if (is_numeric($delta) && $argument['argdefault'] != 2) {
+      form_error($form['argument'][$delta]['argdefault'], t('Date Browser arguments must be set to \'Display All Values\'.'));
+    }
+  }
+}
+
 /**
  * Implementation of hook_views_pre_view()
  */
