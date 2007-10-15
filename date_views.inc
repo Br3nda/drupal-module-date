@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.6.2.32 2007/10/15 11:07:38 karens Exp $
+// $Id: date_views.inc,v 1.6.2.33 2007/10/15 11:21:48 karens Exp $
 
 /**
  * Views field filters
@@ -629,20 +629,6 @@ function date_browser_validate($type, $view, $form) {
   foreach ($view['argument'] as $delta => $argument) {
     if (is_numeric($delta) && $argument['argdefault'] != 2) {
       form_error($form['argument'][$delta]['argdefault'], t('Date Browser arguments must be set to \'Display All Values\'.'));
-    }
-  }
-}
-
-/**
- * Implementation of hook_views_pre_view()
- */
-function date_views_pre_view($view, $items) {
-  $date_views_browser_views = date_views_browser_get_views();
-  if ($view->build_type == 'page' && in_array($view->name, array_keys($date_views_browser_views))) {
-    // make sure the navigation link gets added to empty pages
-    if (sizeof($items) == 0 && $view->build_type == 'page') {
-      $period = $date_views_browser_views[$view->name]->options;
-      return date_views_browser_navigation($view, $period);
     }
   }
 }
