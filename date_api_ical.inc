@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.6 2007/09/25 14:16:05 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.7 2007/10/15 19:07:10 karens Exp $ */
 /**
  * @file
  * Parse iCal imports and create iCal exports.
@@ -189,12 +189,15 @@ function date_ical_import($filename) {
   // "unfold" wrapped lines
   $icaldata = array();
   foreach ($icaldatafolded as $line) {
-    if (substr($line, 0, 1) == ' ') {
-      $line = array_pop($icaldata) . substr($line, 1);
+    $out = array();
+    // See if this looks like the beginning of a new property or value.
+    // If not, it is a continuation of the previous line.
+    ereg ("([A-Z]+)[:|;](.*)", $line, $out);
+    if (empty($out)) {
+      $line = array_pop($icaldata) . ($line);
     }
     $icaldata[] = $line;
   }
-  $icaldatafolded = NULL;
 
   // Parse the iCal information
   $is_subgroup = FALSE;
