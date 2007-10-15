@@ -318,7 +318,7 @@ function date_copy_import_ical_form_validate($form_id, $form_values) {
     return;
   }
   include_once(drupal_get_path('module', 'date_api') .'/date.inc');
-  include_once(drupal_get_path('module', 'date_api') .'/date_ical.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
   $imported_values = date_ical_import($source_file);
   if (empty($imported_values)) {
     form_set_error('source_file', t('This is an invalid file.'));
@@ -331,37 +331,26 @@ function date_copy_import_ical_form_submit($form_id, $form_values) {
     return;
   }
   include_once(drupal_get_path('module', 'date_api') .'/date.inc');
-  include_once(drupal_get_path('module', 'date_api') .'/date_ical.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
   $imported_values = date_ical_import($source_file);
 
   // workaround to disable drupal messages when nodes are created or deleted
   $messages = drupal_get_messages();
-
-  include_once(drupal_get_path('module', 'date_api') .'/date.inc');
-  include_once(drupal_get_path('module', 'date_api') .'/date_ical.inc');
-
-  $imported_values = date_ical_import($source_file);
 
   $node_types = node_get_types('names');
   $field = content_fields($date_field, $target_type);
   $account = user_load(array('name' => $name));
   $rows = array();
   foreach ($imported_values as $key => $value) {
-    if (!empty($value['summary']) && !empty($value['start'])) {
-      if (empty($value['end'])) $value['end'] = $value['start'];
-      if ($field['type'] == 'date') {
-        $start = date_unset_granularity(date_unix2iso($value['start']), date_granularity_array($field), $field['type']);
-      }
-      else {
-        $start = date_unset_granularity($value['start'], date_granularity_array($field), $field['type']);
-      }
-   	  if ($field['type'] == 'date') {
-   	    $end = date_unset_granularity(date_unix2iso($value['end']), date_granularity_array($field), $field['type']);
-   	  }
-   	  else {
-   	    $end = date_unset_granularity($value['end'], date_granularity_array($field), $field['type']);
-   	  }
-   	  $target_node = new StdClass();
+    if (is_numeric($key) && !empty($value['SUMMARY']) && !empty($value['DTSTART'])) {
+      if (empty($value['DTEND'])) $value['DTEND'] = $value['DTSTART'];
+      $date = date_ical_date($value['DTSTART'], 'UTC');
+      $start = $field['type'] == 'date' ? $date->local->iso : $date->local->timestamp;
+      $start_timezone = $date->local->timezone;
+      $start_offset = $date->local->offset;
+      $date = date_ical_date($value['DTEND'], 'UTC');
+      $end = $field['type'] == 'date' ? $date->local->iso : $date->local->timestamp;
+      $target_node = new StdClass();
       $target_node->nid = 0;
       $target_node->type = $target_type;
       $target_node->name = $name;
@@ -374,28 +363,42 @@ function date_copy_import_ical_form_submit($form_id, $form_values) {
         $target_node->og_public = $og_public;
         $target_node->og_groups = $og_groups;
       }
-      $target_node->title = stripslashes($value['summary']);
+      $target_node->title = stripslashes($value['SUMMARY']);
       $target_node->$date_field = array(0 => array('value' => $start, 'value2' => $end));
+      if ($field['tz_handling'] == 'date') {
+        $target_node->$date_field[0]['timezone'] = $start_timezone;
+        $target_node->$date_field[0]['offset'] = $start_offset;
+      }
       if ($description_field == 'body') {
-        $target_node->body = stripslashes($value['description']);
+        $target_node->body = stripslashes($value['DESCRIPTION']);
       }
       elseif (!empty($description_field)) {
-    	  $target_node->$description_field = array(0 => array('value' => stripslashes($value['description'])));
+    	  $target_node->$description_field = array(0 => array('value' => stripslashes($value['DESCRIPTION'])));
       }
       if (!empty($uid_field)) {
-    	  $target_node->$uid_field = array(0 => array('value' => stripslashes($value['uid'])));
+    	  $target_node->$uid_field = array(0 => array('value' => stripslashes($value['UID'])));
       }
       if (!empty($location_field)) {
-    	  $target_node->$location_field = array(0 => array('value' => stripslashes($value['location'])));
+    	  $target_node->$location_field = array(0 => array('value' => stripslashes($value['LOCATION'])));
       }
       if (!empty($url_field)) {
-        $target_node->$url_field = array(0 => array('url' => stripslashes($value['url']), 'title' => stripslashes($value['summary'])));
+        $target_node->$url_field = array(0 => array('url' => stripslashes($value['URL']), 'title' => stripslashes($value['SUMMARY'])));
       }
       $target_node->taxonomy = $taxonomy;
       node_save($target_node);
-      watchdog('date_copy', t('!type: created %title.', array('!type' => t($target_type), '%title' => $target_node->title)), WATCHDOG_NOTICE, l(t('view'), 'node/'. $target_node->nid));
+      watchdog('date_copy', t('!type: created %title.', array(
+        '!type' => t($target_type),
+        '%title' => $target_node->title)),
+        WATCHDOG_NOTICE,
+        l(t('view'), 'node/'. $target_node->nid));
       $new_field = $target_node->$date_field;
-      $rows[] = array(l($target_node->title, 'node/'. $target_node->nid), $target_node->nid, $new_field[0]['value'], $new_field[0]['value2']);
+      $rows[] = array(
+        l($target_node->title,
+        'node/'. $target_node->nid),
+        $target_node->nid,
+        $new_field[0]['value'],
+        $new_field[0]['value2'],
+        );
     }
   }
 

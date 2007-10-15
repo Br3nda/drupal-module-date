@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.1.4.6 2007/10/11 19:31:14 karens Exp $
+// $Id: date_api.module,v 1.1.4.7 2007/10/15 19:09:43 karens Exp $
 
 /**
  * @file
@@ -15,6 +15,14 @@ define('DATE_UNIX', 'datestamp');
 define('DATE_DATETIME', 'datetime');
 define('DATE_STRING_ISO', "Y-m-d\TH:i:s");
 define('DATE_API_PATH', drupal_get_path('module', 'date_api'));
+
+define('DATE_FORMAT_ISO', "Y-m-d\TH:i:s");
+define('DATE_FORMAT_DATETIME', "Y-m-d H:i:s");
+define('DATE_FORMAT_ICAL', "YmdTHis");
+
+define('DATE_REGEX_ISO', '/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):?(\d{2})?/');
+define('DATE_REGEX_DATETIME', '/(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):?(\d{2})?/');
+define('DATE_REGEX_LOOSE', '/(\d{4})-?(\d{2})-?(\d{2})([T\s]?(\d{2}):?(\d{2}):?(\d{2})(\.\d+)?(Z|[\+\-]\d{2}:?\d{2})?)?/');
 
 /**
  *  use the date_timezones.inc file for timezone conversion
@@ -63,6 +71,20 @@ else {
  */
 function date_load($file) {
   include_once(DATE_API_PATH .'/'. $file);
+}
+
+/**
+ * Helper function to left pad date parts with zeros.
+ * Provided because this is needed so often with dates.
+ *
+ * @param int $value
+ *   the value to pad
+ * @param int $size
+ *   total size expected, usually 2 or 4
+ * @return string the padded value
+ */
+function date_pad($value, $size = 2) {
+  return sprintf("%0". $size ."d", $value);
 }
 
 /**
