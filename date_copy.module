@@ -343,11 +343,13 @@ function date_copy_import_ical_form_submit($form_id, $form_values) {
   $rows = array();
   foreach ($imported_values as $key => $value) {
     if (is_numeric($key) && !empty($value['SUMMARY']) && !empty($value['DTSTART'])) {
-      if (empty($value['DTEND'])) $value['DTEND'] = $value['DTSTART'];
       $date = date_ical_date($value['DTSTART'], 'UTC');
       $start = $field['type'] == 'date' ? $date->local->iso : $date->local->timestamp;
       $start_timezone = $date->local->timezone;
       $start_offset = $date->local->offset;
+      if (empty($value['DTEND'])) {
+        $value['DTEND'] = $value['DTSTART'];
+      }
       $date = date_ical_date($value['DTEND'], 'UTC');
       $end = $field['type'] == 'date' ? $date->local->iso : $date->local->timestamp;
       $target_node = new StdClass();

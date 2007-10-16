@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.6.2.3 2007/10/16 11:53:27 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.6.2.4 2007/10/16 11:56:42 karens Exp $ */
 /**
  * @file
  * Parse iCal imports and create iCal exports.
@@ -359,7 +359,7 @@ function date_ical_import($filename) {
 function date_ical_parse_date($field, $data) {
   $tz = '';
   $data = trim($data);
-  $items = array();
+  $items = array('DATA' => $data);
   if (substr($data, -1) == 'Z') {
     $tz = 'UTC';
   }
@@ -387,7 +387,7 @@ function date_ical_parse_date($field, $data) {
  *   PROPERTIES include FREQ, INTERVAL, COUNT, BYDAY, BYMONTH, BYYEAR, UNTIL
  */
 function date_ical_parse_rule($field, $data) {
-  $items = array();
+  $items =array('DATA' => $data);
   $rule = explode(';', $data);
   foreach ($rule as $key => $value) {
     $param = explode('=', $value);
@@ -409,7 +409,7 @@ function date_ical_parse_rule($field, $data) {
  *   an array of date value arrays.
  */
 function date_ical_parse_exceptions($field, $data) {
-  $items = array();
+  $items = array('DATA' => $data);
   $ex_dates = explode(',', $data);
   foreach ($ex_dates as $ex_date) {
     $items[] = date_ical_parse_date('', $ex_date);
@@ -429,7 +429,7 @@ function date_ical_parse_exceptions($field, $data) {
  *  @return the duration in seconds.
  */
 function date_ical_parse_duration($field, $data, $subgroup) {
-  $items = array();
+  $items = array('DATA' => $data);
   ereg ('^P(\d{1,4}[Y])?(\d{1,2}[M])?(\d{1,2}[W])?(\d{1,2}[D])?([T]{0,1})?(\d{1,2}[H])?(\d{1,2}[M])?(\d{1,2}[S])?', $data, $duration);
 	$items['year'] = str_replace('Y', '', $duration[1]);
 	$items['month'] = str_replace('M', '', $duration[2]);
