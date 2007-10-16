@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.6.2.4 2007/10/16 11:56:42 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.6.2.5 2007/10/16 12:14:00 karens Exp $ */
 /**
  * @file
  * Parse iCal imports and create iCal exports.
@@ -273,7 +273,7 @@ function date_ical_import($filename) {
 	          // Can't be sure whether DTSTART is before or after DURATION in
 	          // the VEVENT, so check for duration at both points.
 	          if ($property == 'DTSTART' && array_key_exists('DURATION', $subgroup)) {
-	            $subgroup['DURATION'] = date_ical_parse_duration($field, $data, $subgroup);
+	            $subgroup['DURATION'] = date_ical_parse_duration('DURATION', $subgroup['DURATION']['DATA'], $subgroup);
 	            $subgroup['DTEND'] = $subgroup['DURATION']['DTEND'];
 	          }
             break;
