@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.6.2.2 2007/10/15 19:05:54 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.6.2.3 2007/10/16 11:53:27 karens Exp $ */
 /**
  * @file
  * Parse iCal imports and create iCal exports.
@@ -270,6 +270,12 @@ function date_ical_import($filename) {
 	          else {
 	            $subgroup[$property] = date_ical_parse_date($field, $data);
 	          }
+	          // Can't be sure whether DTSTART is before or after DURATION in
+	          // the VEVENT, so check for duration at both points.
+	          if ($property == 'DTSTART' && array_key_exists('DURATION', $subgroup)) {
+	            $subgroup['DURATION'] = date_ical_parse_duration($field, $data, $subgroup);
+	            $subgroup['DTEND'] = $subgroup['DURATION']['DTEND'];
+	          }
             break;
 
           case 'EXDATE':
@@ -277,7 +283,12 @@ function date_ical_import($filename) {
             break;
 
           case 'DURATION':
-            $subgroup[$property] = date_ical_parse_duration($field, $data);
+            // Can't be sure whether DTSTART is before or after DURATION in
+	          // the VEVENT, so check for duration at both points.
+	          if (!array_key_exists('DURATION', $subgroup)) {
+	            $subgroup[$property] = date_ical_parse_duration($field, $data, $subgroup);
+	            $subgroup['DTEND'] = $subgroup['DURATION']['DTEND'];
+	          }
 	          break;
 
           case 'RRULE':
@@ -409,9 +420,15 @@ function date_ical_parse_exceptions($field, $data) {
 /**
  * Parse the duration of the event.
  *
+ * Example:
+ *  DURATION:PT1H30M
+ *  DURATION:P1Y2M
+ *
+ *  @param $subgroup
+ *   array of other values in the vevent so we can check for DTSTART
  *  @return the duration in seconds.
  */
-function date_ical_parse_duration($field, $data) {
+function date_ical_parse_duration($field, $data, $subgroup) {
   $items = array();
   ereg ('^P(\d{1,4}[Y])?(\d{1,2}[M])?(\d{1,2}[W])?(\d{1,2}[D])?([T]{0,1})?(\d{1,2}[H])?(\d{1,2}[M])?(\d{1,2}[S])?', $data, $duration);
 	$items['year'] = str_replace('Y', '', $duration[1]);
@@ -421,14 +438,22 @@ function date_ical_parse_duration($field, $data) {
 	$items['hour'] = str_replace('H', '', $duration[6]);
 	$items['minute'] = str_replace('M', '', $duration[7]);
 	$items['second'] = str_replace('S', '', $duration[8]);
-	$date = date_time();
-	$date2 = $date;
+	$start_date = array_key_exists('DTSTART', $subgroup) ? $subgroup['DTSTART']['datetime'] : date_unix2iso(date_time());
+  $timezone = array_key_exists('DTSTART', $subgroup) ? $subgroup['DTSTART']['tz'] : variable_get('date_default_timezone_name', 'UTC');
+  $date = date_make_date(str_replace(' ', 'T', $start_date), $timezone, 'local');
+	$stamp1 = $date->local->timestamp;
+	$stamp2 = $stamp1;
 	foreach ($items as $item => $count) {
 	  if ($count > 0) {
-	    $date2 = strtotime('+'. $count .' '. $item, $date2);
+	    $stamp2 = strtotime('+'. $count .' '. $item, $stamp2);
 	  }
 	}
-	$items['DURATION'] = ($date2 - $date);
+	$items['DTEND'] = array(
+	  'datetime' => date_format_date($stamp2, 'custom', 'Y-m-d H:i:s'),
+	  'all_day' => 0,
+	  'tz' => $timezone,
+	  );
+	$items['DURATION'] = ($stamp2 - $stamp1);
   return $items;
 }
 
