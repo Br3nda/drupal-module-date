@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.49 2007/10/17 10:41:42 karens Exp $
+//$Id: date.inc,v 1.9.2.50 2007/10/17 11:19:21 karens Exp $
 
 /**
  * @file
@@ -1238,14 +1238,16 @@ function date_unix2iso($unix) {
 function date_iso2unix($iso) {
   if (!date_preg($iso)) return 'ERROR';
   if (!date_is_valid($iso, DATE_ISO)) return 'ERROR';
-  // a unix date requires a year, month, and day
+  // A unix date requires a year, month, and day.
+  // Make sure not to set '0' for month or day since that will revert to
+  // the previous month or day.
   if (date_iso_year($iso) && date_iso_mon($iso) && date_iso_day($iso)) {
     $array = array(
       'hours' => date_iso_hours($iso),
       'minutes' => date_iso_minutes($iso),
       'seconds' => date_iso_seconds($iso),
-      'mon' => date_iso_mon($iso),
-      'mday' => date_iso_day($iso),
+      'mon' => max(1, date_iso_mon($iso)),
+      'mday' => max(1, date_iso_day($iso)),
       'year' => date_iso_year($iso)
       );
     // using gmmktime instead of mktime so no server timezone adjustment is made
