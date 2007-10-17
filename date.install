@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.13.2.10 2007/10/13 14:09:13 karens Exp $
+// $Id: date.install,v 1.13.2.11 2007/10/17 13:16:20 karens Exp $
 /**
  * Implementation of hook_install().
  */
@@ -172,6 +172,11 @@ function date_update_5() {
   include_once(drupal_get_path('module', 'content') .'/content.module');
   include_once(drupal_get_path('module', 'content') .'/content_admin.inc');
   include_once(drupal_get_path('module', 'date') .'/date.module');
+  include_once(drupal_get_path('module', 'date') .'/date_timezones.inc');
+  // Make sure Date API module is installed before proceeding.
+  if (!module_exists('date_api')) {
+    drupal_install_modules(array('date_api'));
+  }
 
   content_clear_type_cache();
   $fields = content_fields();
