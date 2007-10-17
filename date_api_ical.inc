@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.6.2.5 2007/10/16 12:14:00 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.6.2.6 2007/10/17 18:28:33 karens Exp $ */
 /**
  * @file
  * Parse iCal imports and create iCal exports.
@@ -158,6 +158,7 @@ function date_ical_escape_text($text) {
  */
 function date_ical_import($filename) {
   $items = array();
+  include_once('./'. drupal_get_path('module', 'date_api') .'/date.inc');
 
   // Fetch the iCal data. If file is a URL, use drupal_http_request. fopen
   // isn't always configured to allow network connections.
