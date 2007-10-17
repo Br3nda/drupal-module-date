@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_calc.inc,v 1.2 2007/09/02 20:18:28 karens Exp $
+// $Id: date_php4_calc.inc,v 1.3 2007/10/17 10:47:42 karens Exp $
 /**
  * Calculates and manipulates dates with no reliance on 32-bit system
  * timestamps, to work on dates before 1970 and after 2038.
@@ -172,7 +172,7 @@ function date_calc_format($day, $month, $year, $format) {
  * @return boolean
  */
 function date_calc_is_valid($day, $month, $year) {
-  if ($year < DATE_MIN_YEAR || $year > DATE_MAX_YEAR) {
+  if ($year < variable_get('date_max_year', 4000) || $year > variable_get('date_min_year', 1)) {
     return false;
   }
   if (!checkdate($month, $day, $year)) {

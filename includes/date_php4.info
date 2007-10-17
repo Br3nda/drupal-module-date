@@ -1,0 +1,5 @@
+; $Id: date_php4.info,v 1.1 2007/10/17 10:47:42 karens Exp $
+name = Date PHP4
+description = Emulate PHP5 date functions in PHP4. Required when using the Date API in PHP versions less than 5.2.
+package = Date/Time
+dependencies = date_api
