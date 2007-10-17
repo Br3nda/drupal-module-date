@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.49 2007/10/13 15:15:22 karens Exp $
+// $Id: date.module,v 1.32.2.50 2007/10/17 10:59:09 karens Exp $
 
 /**
  * @file
@@ -115,17 +115,17 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
           $error_field = $field['field_name'] .']['. $delta .']['. $processed;
           $error_field .= $field['widget']['type'] == 'date_select' ? '][year' : '';
           if ($processed == 'value' && $field['todate'] && !date_is_valid($item['value'], $field['type']) && (date_is_valid($item['value2'], $field['type']))) {
-            form_set_error($error_field, t("A 'From date' date is required for %field %delta", array('%delta' => $field['multiple'] ? intval($delta + 1) : '', '%field' => $field['widget']['label'])));
+            form_set_error($error_field, t("A 'From date' date is required for %field %delta", array('%delta' => $field['multiple'] ? intval($delta + 1) : '', '%field' => t($field['widget']['label']))));
           }
           if ($processed == 'value2' && $field['todate'] == 'required' && ($field['required'] && date_is_valid($item['value'], $field['type']) && !date_is_valid($item['value2'], $field['type']))) {
-            form_set_error($error_field, t("A 'To date' is required for %field %delta", array('%delta' => $field['multiple'] ? intval($delta + 1) : '', '%field' => $field['widget']['label'])));
+            form_set_error($error_field, t("A 'To date' is required for %field %delta", array('%delta' => $field['multiple'] ? intval($delta + 1) : '', '%field' => t($field['widget']['label']))));
           }
 
           if ($item[$processed] || date_is_required($field, $processed, $delta, $item['value'], $item['value2'])) {
             $date = date_make_date($item[$processed], $field['timezone'], 'db', $field['type']);
             if (!$date->db->parts['year']) {
               form_set_error($error_field, t('%name %delta %column is not a valid date.', array(
-                '%name' => $field['widget']['label'],
+                '%name' => t($field['widget']['label']),
                 '%delta' => $field['multiple'] ? $delta : '',
                 '%column' => ($processed == 'value2' ? t('To date') : (sizeof($process) == 2 ? t('From date') : '')))
                 ));
@@ -192,7 +192,7 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
 
       // Multiple value and from/to fields need a field title at the top of the form.
       if ($field['multiple'] || $field['fromto']) {
-        $form[$field['field_name']]['#title'] = $field['widget']['label'];
+        $form[$field['field_name']]['#title'] = t($field['widget']['label']);
       }
 
       $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : 'site';
@@ -205,7 +205,7 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
 
         $timezone = date_get_timezone($tz_handling, $items[$delta]['timezone']);
         $params = array(
-          'label'        => $field['widget']['label'],
+          'label'        => t($field['widget']['label']),
           'value'        => $items[$delta]['value'],
           'weight'       => $field['widget']['weight'],
           'delta'        => $delta,
@@ -213,7 +213,7 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
           'format'       => $field['type'],
           'timezone_out' => ($items[$delta]['value'] ? $timezone : ''),
           'timezone_in'  => ($items[$delta]['value'] ? 'GMT' : ''),
-          'description'  => $field['widget']['description'],
+          'description'  => t($field['widget']['description']),
           'text_parts'  => (array) $field['widget']['text_parts'],
           'year_range'   => $field['widget']['year_range'],
           );
@@ -277,10 +277,10 @@ function date_widget($op, &$node, $field, &$items, $delta = NULL) {
           $form[$field['field_name']][$delta]['#theme'] = 'date_form_combination';
         }
         // Add other info to the form that the themes will need.
-        $form[$field['field_name']][$delta]['#title'] = $field['widget']['label'];
+        $form[$field['field_name']][$delta]['#title'] = t($field['widget']['label']);
         $form[$field['field_name']][$delta]['#delta'] = $delta;
 
-        $params['label'] = $field['widget']['label'];
+        $params['label'] = t($field['widget']['label']);
         $params['weight'] = $field['widget']['weight'] + .2;
         $form[$field['field_name']] += date_timezone_input($params);
       }
