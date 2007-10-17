@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.48 2007/10/04 21:44:06 karens Exp $
+//$Id: date.inc,v 1.9.2.49 2007/10/17 10:41:42 karens Exp $
 
 /**
  * @file
@@ -139,10 +139,10 @@ function date_mktime($array) {
   date_load_library();
   switch (DATE_LIBRARY) {
   case('ADODB'):
-    $timestamp = @adodb_mktime($array['hours'], $array['minutes'], $array['seconds'], $array['mon'], $array['mday'], $array['year']);
+    $timestamp = @adodb_mktime(intval($array['hours']), intval($array['minutes']), intval($array['seconds']), max(intval($array['mon']), 1), max(intval($array['mday']), 1), intval($array['year']) > 0 ? intval($array['year']) : date('Y'));
     return $timestamp;
   default:
-    $timestamp = @mktime($array['hours'], $array['minutes'], $array['seconds'], $array['mon'], $array['mday'], $array['year']);
+    $timestamp = @mktime(intval($array['hours']), intval($array['minutes']), intval($array['seconds']), max(intval($array['mon']), 1), max(intval($array['mday']), 1), intval($array['year']) > 0 ? intval($array['year']) : date('Y'));
     return $timestamp;
   }
 }
@@ -150,10 +150,10 @@ function date_gmmktime($array) {
   date_load_library();
   switch (DATE_LIBRARY) {
     case('ADODB'):
-    $timestamp = @adodb_gmmktime($array['hours'], $array['minutes'], $array['seconds'], $array['mon'], $array['mday'], $array['year']);
+    $timestamp = @adodb_gmmktime(intval($array['hours']), intval($array['minutes']), intval($array['seconds']), max(intval($array['mon']), 1), max(intval($array['mday']), 1), intval($array['year']) > 0 ? intval($array['year']) : date('Y'));
     return $timestamp;
   default:
-    $timestamp = @gmmktime($array['hours'], $array['minutes'], $array['seconds'], $array['mon'], $array['mday'], $array['year']);
+    $timestamp = @gmmktime(intval($array['hours']), intval($array['minutes']), intval($array['seconds']), max(intval($array['mon']), 1), max(intval($array['mday']), 1), intval($array['year']) > 0 ? intval($array['year']) : date('Y'));
     return $timestamp;
   }
 }
