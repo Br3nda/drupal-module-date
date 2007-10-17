@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.1.4.7 2007/10/15 19:09:43 karens Exp $
+// $Id: date_api.module,v 1.1.4.8 2007/10/17 18:20:41 karens Exp $
 
 /**
  * @file
@@ -85,6 +85,23 @@ function date_load($file) {
  */
 function date_pad($value, $size = 2) {
   return sprintf("%0". $size ."d", $value);
+}
+
+/**
+ * We do this in lots of places, so make it a function.
+ *
+ * @return a timezone name
+ *   Identify the default timezone for a user, if available, otherwise the site.
+ *   May return a blank value if no timezone info has been set up.
+ */
+function date_default_timezone_name($check_user = TRUE) {
+  global $user;
+  if ($check_user && variable_get('configurable_timezones', 1) && !empty($user->timezone_name)) {
+    return $user->timezone_name;
+  }
+  else {
+    return variable_get('date_default_timezone_name', '');
+  }
 }
 
 /**
