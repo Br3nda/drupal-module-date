@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.22.2.21 2007/10/15 11:23:27 karens Exp $
+// $Id: date_views.inc,v 1.22.2.22 2007/10/17 12:07:37 karens Exp $
 
 /**
  * Views field filters
@@ -238,7 +238,7 @@ function date_views_arguments() {
     switch ($field['type']) {
     case 'date':
       $argument = array();
-      $argument['name'] = $field_types[$field['type']]['label'] .($field['todate'] ? t(': From ') : ': '). $field['widget']['label'] .' ('. $field['field_name'] .')';
+      $argument['name'] = $field_types[$field['type']]['label'] .($field['todate'] ? t(': From ') : ': '). t($field['widget']['label']) .' ('. $field['field_name'] .')';
       $argument['handler'] = 'date_views_argument_range_handler';
       $argument['help'] = t("Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples.", array('!link' => l(t('help'), 'admin/help/date')));
       $argument['option'] = 'date_range_arg_options';
@@ -246,7 +246,7 @@ function date_views_arguments() {
 
       if ($field['todate']) {
         $argument = array();
-        $argument['name'] = $field_types[$field['type']]['label'] .t(': To '). $field['widget']['label'] .' ('. $field['field_name'] .')';
+        $argument['name'] = $field_types[$field['type']]['label'] .t(': To '). t($field['widget']['label']) .' ('. $field['field_name'] .')';
         $argument['handler'] = 'date_views_argument_range_handler';
         $argument['help'] = t("Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples.", array('!link' => l(t('help'), 'admin/help/date')));
         $argument['option'] = 'date_range_arg_options';
@@ -256,7 +256,7 @@ function date_views_arguments() {
 
     case 'datestamp':
       $argument = array();
-      $argument['name'] = $field_types[$field['type']]['label'] .($field['todate'] ? t(': From ') : ': '). $field['widget']['label'] .' ('. $field['field_name'] .')';
+      $argument['name'] = $field_types[$field['type']]['label'] .($field['todate'] ? t(': From ') : ': '). t($field['widget']['label']) .' ('. $field['field_name'] .')';
       $argument['handler'] = 'date_views_timestamp_argument_range_handler';
       $argument['help'] = t("Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples.", array('!link' => l(t('help'), 'admin/help/date')));
       $argument['option'] = 'date_range_arg_options';
@@ -264,7 +264,7 @@ function date_views_arguments() {
 
       if ($field['todate']) {
         $argument = array();
-        $argument['name'] = $field_types[$field['type']]['label'] .t(': To '). $field['widget']['label'] .' ('. $field['field_name'] .')';
+        $argument['name'] = $field_types[$field['type']]['label'] .t(': To '). t($field['widget']['label']) .' ('. $field['field_name'] .')';
         $argument['handler'] = 'date_views_timestamp_argument_range_handler';
         $argument['help'] = t("Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples.", array('!link' => l(t('help'), 'admin/help/date')));
         $argument['option'] = 'date_range_arg_options';
@@ -315,7 +315,6 @@ function date_views_timestamp_argument_range_handler($op, &$query, $argtype, $ar
 }
 function date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $field_type = 'iso') {
   static $format;
-
   include_once(drupal_get_path('module', 'date_api') .'/date.inc');
 
   $name = explode(':', is_array($argtype) ? $argtype['type'] : $argtype);
@@ -391,13 +390,13 @@ function date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $f
     case 'link':
       // links are created from date range groupings
       $time = $query->$value > '' ? ($field_type == 'iso' ? date_iso2unix($query->$value) : $query->$value) : '';
-      return l(date_date($format, $time), $arg .'/'. $query->range);
+      return l(date_format_date($format, $time), $arg .'/'. $query->range);
 
     case 'sort':
       break;
 
     case 'filter':
-      $range = date_views_date_range($arg);
+      $range = date_views_date_range($arg, $field);
       $query->ensure_table($table);
       $query->add_field($value, $table);
       $query->add_where(date_sql('DATE', $table .'.'. $value, $field_type, $offset) .">='". str_replace('T', ' ', $range[0]) ."'");
@@ -410,7 +409,7 @@ function date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $f
   }
 }
 
-function date_views_date_range($arg) {
+function date_views_date_range($arg, $field) {
   if (stristr($arg, 'P')) {
     // for a date plus value, get the min and max values
     $range = date_plus_period($arg);
@@ -429,6 +428,8 @@ function date_views_date_range($arg) {
     $min_date = date_range_value($range[0], 'min');
     $max_date = date_range_value(($range[1] ? $range[1] : $range[0]), 'max');
   }
+  $min_date = date_unset_granularity($min_date, date_granularity_array($field), $field['type']);
+  $max_date = date_unset_granularity($max_date, date_granularity_array($field), $field['type']);
   return array($min_date, $max_date);
 }
 /**
