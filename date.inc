@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.9.2.50 2007/10/17 11:19:21 karens Exp $
+//$Id: date.inc,v 1.9.2.51 2007/10/17 11:56:30 karens Exp $
 
 /**
  * @file
@@ -1197,7 +1197,7 @@ function date_iso2array($iso) {
   if (!date_preg($iso)) return 'ERROR';
   if (!date_is_valid($iso, DATE_ISO)) return 'ERROR';
   // a unix date requires a year, month, and day
-  if (date_iso_year($iso) && date_iso_mon($iso) && date_iso_day($iso)) {
+  if (date_iso_year($iso)) {
     $unix = date_iso2unix($iso);
     if ($unix === 'ERROR') {
       return 'ERROR';
