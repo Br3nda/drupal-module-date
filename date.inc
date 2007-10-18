@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.27.2.41 2007/10/17 11:56:18 karens Exp $
+//$Id: date.inc,v 1.27.2.42 2007/10/18 11:28:02 karens Exp $
 
 /**
  * @file
@@ -236,6 +236,11 @@ function date_set_date(&$date, $value, $timezone = 'GMT', $type = 'db', $format 
     $date = date_make_date();
     return TRUE;
   }
+  // Turn date-only ISO date into complete ISO date,
+  // i.e. 2007-10-01 becomes 2007-10-01T00:00:00.
+  if ($format == DATE_ISO && strlen($value) < 19) {
+    $value = substr($value .'T00:00:00', 0, 19);
+  }
   // store the starting value of the date object in case there are errors
   $old_date = $date;
   $error = array();
@@ -280,7 +285,7 @@ function date_set_date(&$date, $value, $timezone = 'GMT', $type = 'db', $format 
     $error[] = $format;
   }
   if (!$error && $type == 'local' && (!$date->db->iso || $reset)) {
-    if (!date_no_conversion($date)) {
+    if (!date_no_conversion($date) && !empty($timezone)) {
       $date->local->timezone = $timezone;
       // if the local value was submitted, go ahead and compute the db part of the date
       date_convert_timezone($date, $date->local->timezone, 'GMT', 'db');
@@ -288,10 +293,9 @@ function date_set_date(&$date, $value, $timezone = 'GMT', $type = 'db', $format 
     else {
       $date->db = $date->local;
     }
-
   }
   elseif (!$error && $type == 'db' && $date->local->iso && (!$date->local->iso || $reset)) {
-    if (!date_no_conversion($date)) {
+    if (!date_no_conversion($date) && !empty($timezone)) {
       // compute local value if the db value was submitted
       // and the local value has not been created and there is a local timezone
       date_convert_timezone($date, 'GMT', $date->local->timezone, 'local');
