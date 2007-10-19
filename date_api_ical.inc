@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.6.2.7 2007/10/18 11:26:23 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.6.2.8 2007/10/19 19:32:35 karens Exp $ */
 /**
  * @file
  * Parse iCal imports and create iCal exports.
@@ -11,16 +11,18 @@
  *
  * @param $events
  *   An array of events where each event is an array with:
- *    'start'         => UTC start date in YYYYMMDDTHHMMSS format,
- *                         omit time for all day event.
- *    'end'           => UTC end date in YYYYMMDDTHHMMSS format,
- *                         optional, omit for all day event.
- *    'summary'       => Title of event (Text)
- *    'description'   => Description of event (Text)
- *    'location'      => Location of event (Text)
- *    'uid'           => ID of the event for use by calendaring program.
- *                         Recommend the url of the node
- *    'url'           => URL of event information
+ *    'start'       => local start date as unix timestamp,
+ *                       omit time for all day event.
+ *    'end'         => local end date as unix timestamp,
+ *                       optional, omit for all day event.
+ *    'timezone'    => name of the timezone for the event,
+ *                       blank for stateless events.
+ *    'summary'     => Title of event (Text)
+ *    'description' => Description of event (Text)
+ *    'location'    => Location of event (Text)
+ *    'uid'         => ID of the event for use by calendaring program.
+ *                       Recommend the url of the node
+ *    'url'         => URL of event information
  *
  * @param $calname
  *   Name of the calendar.  Will use site name if none is specified.
@@ -41,12 +43,23 @@ function date_ical_export($events, $calname = NULL) {
     if (!empty($event['start'])  && ereg ('^(\d{4})(\d{2})(\d{2})$', $event['start'])) {
       $output .= "BEGIN:VEVENT\n";
       $output .= "DTSTAMP;VALUE=DATE-TIME:". gmdate("Ymd\THis\Z", time()) ."\n";
-      if ($event['start'] && $event['end']) {
-        $output .= "DTSTART;VALUE=DATE-TIME:". gmdate("Ymd\THis\Z", $event['start']) ."\n";
-        $output .= "DTEND;VALUE=DATE-TIME:". gmdate("Ymd\THis\Z", $event['end']) ."\n";
+      $tz_append = '';
+      if ($event['timezone'] == 'GMT' || $event['timezone'] == 'UTC') {
+        $tz_append = 'Z';
+      }
+      if (empty($event['timezone']) || $tz_append) {
+        $output .= "DTSTART;VALUE=DATE-TIME:". gmdate("Ymd\THis", $event['start']) .$tz_append ."\n";
       }
       else {
-        $output .= "DTSTART;VALUE=DATE-TIME:". gmdate("Ymd\THis\Z", $event['start']) ."\n";
+        $output .= "DTSTART;TZID=". $event['timezone'] .":". gmdate("Ymd\THis", $event['start']) ."\n";
+      }
+      if ($event['start'] && $event['end']) {
+        if (empty($event['timezone']) || $tz_append) {
+          $output .= "DTEND;VALUE=DATE-TIME:". gmdate("Ymd\THis", $event['end']) .$tz_append ."\n";
+        }
+        else {
+          $output .= "DTEND;TZID=". $event['timezone'] .":". gmdate("Ymd\THis", $event['end']) ."\n";
+        }
       }
       $output .= "UID:". ($event['uid'] ? $event['uid'] : $uid) ."\n";
       if ($event['url']) {
@@ -195,7 +208,7 @@ function date_ical_import($filename) {
     // If not, it is a continuation of the previous line.
     ereg ("([A-Z]+)[:|;](.*)", $line, $out);
     if (empty($out)) {
-      $line = array_pop($icaldata) . ($line);
+      $line = array_pop($icaldata) ."\n". $line;
     }
     $icaldata[] = $line;
   }
@@ -463,6 +476,7 @@ function date_ical_parse_text($field, $data) {
   if (strstr($field, 'QUOTED-PRINTABLE')) {
     $data = quoted_printable_decode($data);
   }
+  $data = str_replace('\n', "\n", $data);
   $data = stripslashes($data);
   return $data;
 }
