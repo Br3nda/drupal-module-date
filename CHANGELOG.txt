@@ -1,6 +1,7 @@
 Date Module
 ===========
 
+- Move cached views info to cache_views so it gets cleared when views_invalidate_cache() is called.
 - 143347 use http_request and better error handling message in ical import.
 
 Version 1.6

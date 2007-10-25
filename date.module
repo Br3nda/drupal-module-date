@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.50 2007/10/17 10:59:09 karens Exp $
+// $Id: date.module,v 1.32.2.51 2007/10/25 17:11:13 karens Exp $
 
 /**
  * @file
@@ -84,14 +84,21 @@ function date_form_alter($form_id, &$form) {
  *   whether or not to completely remove the caches.
  */
 function date_clear_all($remove = FALSE) {
+  // This gets called from the .install file, so make sure
+  // relevant files are always included.
+  include_once('./'. drupal_get_path('module', 'content') .'/content.module');
+  include_once('./'. drupal_get_path('module', 'content') .'/content_admin.inc');
+  include_once('./'. drupal_get_path('module', 'views') .'/views.module');
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
   if ($remove) {
-    cache_clear_all('date_browser_views', 'cache');
+    cache_clear_all('date_browser_views', 'cache_views');
   }
   else {
     if (module_exists('views')) {
       date_views_browser_get_views(TRUE);
     }
   }
+  content_clear_type_cache();
 }
 
 /**
