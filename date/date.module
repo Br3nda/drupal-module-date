@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.14 2007/10/17 10:59:37 karens Exp $
+// $Id: date.module,v 1.15 2007/10/25 22:23:50 karens Exp $
 
 /**
  * @file
@@ -400,7 +400,7 @@ function date_form_alter($form_id, &$form) {
  */
 function date_clear_all($remove = FALSE) {
   if ($remove) {
-    cache_clear_all('date_browser_views', 'cache');
+    cache_clear_all('date_browser_views', 'cache_views');
   }
   else {
     if (module_exists('views')) {
