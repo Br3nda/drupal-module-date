@@ -2,6 +2,38 @@ Date Module
 ===========
 
 - Move cached views info to cache_views so it gets cleared when views_invalidate_cache() is called.
+- Lots of fixes for the update processes. Get rid of older updates that are re-done in later updates and create a data_integrity and db_integrity update.
+- Fix ical export to match changes in ical parser.
+- Cleanup of ical export code.
+- Expand date-only ISO date to full ISO date automatically. Needed for better handling of ical feeds.
+- Fix DURATION handling in ical parser.
+- Cleanup calendar ical import.
+- 170371 make sure date api is available during updates.
+- 163712 fix some subtle problems in link titles and query parameters when working with partial ISO dates, like only year and month.
+- 175914 make sure month and day don't get set to zero when creating timestamps to format dates, since zero values will revert to the previous day.
+- 183845 make sure lable and description are translated
+- 160052 make sure no errors are thrown when gmmktime is called and 'all' is one of the arguments.
+- Expand the description for date_copy import of event nodes.
+- Make sure option to not delete old nodes in date copy is working right.
+- Improved ical parser to extract ical data and import it into date fields.
+- Found a better way to unfold ical data. The previous method would break if there were any QUOTED-PRINTABLE values in the ical file.
+- Add reworked ical file as developed for 5.2 version of date module. This file can parse many additional parts of the ical file and won't mistakenly perform timezone conversions on imported data.
+- 163584 fix to make sure taxonomy values get imported with ical import.
+- Adding 'even empty' means we don't need views_pre_view() to add in navigation on empty pages.
+- 148120 add validation to make sure 'Display all values' is selected for the Date Browser argument.
+- Make sure text-parts is an array.
+- 160370 add translation to 'all'.
+- 178408 make sure $ret uses update_sql.
+- Cache date_views array so we don't have to re-create it on every page.
+- 181374 change the way time-ago is computed to allow properly for timezone adjustment.
+- Add simpletests to use PHP5 date handling to check that Date API is working right.
+- Fix a problem with timezone handling in southern timezones.
+- Fix miscellaneous items that can lead to timezone conversion errors.
+- 167000 fix timezone display, a few more changes for the new way timezone display works.
+- 156171 Timezone offsets were not getting saved. Fix that and repair the database.
+- Make sure Views is enabled before including the file.
+- Preparing for Version 5.2. The only database changes in 5.2 are changes to settings, so adding the enough changes to current version so it is possible to try 5.2 out and return to this version with no loss of data. In 5.2 settings changes will add several ways to control default values and other improvements which are just placekeepers to prevent data loss in this version.
+- 143894 changed ical VALUE=DATE to VALUE=DATE-TIME which apparently Google Calendar likes better.
 - 143347 use http_request and better error handling message in ical import.
 
 Version 1.6
