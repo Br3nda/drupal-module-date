@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.13.2.15 2007/10/25 23:50:58 karens Exp $
+// $Id: date.install,v 1.13.2.16 2007/10/26 01:31:05 karens Exp $
 /**
  * Implementation of hook_install().
  */
@@ -319,8 +319,9 @@ function date_update_5102() {
 }
 
 /**
- * Data integrity update, supercedes most previous data integrity updates.
- * Still some problems in some cases, needs another rewrite.
+ * Data integrity update, moved to Version 2 because it can make
+ * lots of db changes and we want people to be prepared for a
+ * significant change.
  */
 function date_update_5103() {
   $ret = array();
@@ -376,9 +377,9 @@ function date_db_integrity($name) {
  *
  * @param name - name of the update
  */
-function date_data_integrity($name) {
+function date_data_integrity($name, $force_recalc = FALSE) {
   // Use this to turn extra debugging on or off.
-  $debug = FALSE;
+  $debug = TRUE;
   // The number of nodes to process in each pass.
   $limit = 5;
   $ret = array();
@@ -415,6 +416,11 @@ function date_data_integrity($name) {
     }
   }
   $update = $_SESSION[$update_name]['tables'];
+  if ($debug) {
+    $_SESSION[$update_name]['nids'] = array();
+    $_SESSION[$update_name]['nids_ok'] = array();
+    $_SESSION[$update_name]['dates'] = array();
+  }
   // Fetch the next $limit nodes
   $i = 0;
   foreach ($update as $table => $fields) {
@@ -427,13 +433,24 @@ function date_data_integrity($name) {
       foreach ($fields as $field_name => $field) {
         foreach ((array) $node->$field['field_name'] as $delta => $item) {
           $add = array();
+          // Check for non-required fields that still have the old default values and make them NULL.
+          if ($field['type'] == 'date' && !$field['required'] && (substr($item['value'], 0, 10) == '0000-00-00' || substr($item['value'], 0, 10) == '0001-00-00')) {
+            $item['value'] = NULL;
+            $needs_fix = TRUE;
+          }
+          if ($field['type'] == 'datestamp' && !$field['required'] && empty($item['value'])) {
+            $item['value'] = NULL;
+            $needs_fix = TRUE;
+          }
           $add[$delta]['value'] = $item['value'];
+          // Check for missing todates.
           if ($field['todate']) {
-            if (empty($item['value2'])) $needs_fix = TRUE;
+            if ((empty($item['value2']) && !empty($item['value'])) || $force_recalc) $needs_fix = TRUE;
             $add[$delta]['value2']   = !empty($item['value2']) ? $item['value2'] : $item['value'];
           }
+          // Check for missing timezone and offset information.
           if ($field['tz_handling'] == 'date') {
-            if (empty($item['offset']) || empty($item['timezone'])) {
+            if (empty($item['offset']) || empty($item['timezone']) || $force_recalc) {
               $needs_fix = TRUE;
               $timezone = date_get_timezone($field['tz_handling'], $item['timezone']);
               $date = date_make_date($item['value'], 'GMT', 'db', ($field['type'] == 'date' ? DATE_ISO : DATE_UNIX));
@@ -446,8 +463,10 @@ function date_data_integrity($name) {
         $node->$field['field_name'] = $add;
         // Debugging information.
         if ($debug) {
-          $_SESSION[$update_name]['dates'][$i] = $node->nid .' > Value: '. $add[$delta]['value'] .
-            ' > Value2: '. $add[$delta]['value2'];
+          $_SESSION[$update_name]['dates'][$i] = $node->nid .' > Value: '. (!empty($add[$delta]['value']) ? $add[$delta]['value'] : 'set to NULL');
+          if (!empty($add[$delta]['value2'])) {
+            $_SESSION[$update_name]['dates'][$i] .= ' > Value2: '. (!empty($add[$delta]['value2']) ? $add[$delta]['value2'] : 'set to NULL');
+          }
           if ($field['tz_handling'] == 'date' && isset($date)) {
             $_SESSION[$update_name]['dates'][$i] .= ' > Computed timezone: '.$date->local->timezone.
             ' > Computed offset: '.$date->local->offset;
@@ -457,7 +476,7 @@ function date_data_integrity($name) {
       }
       // More debugging information.
       if ($debug) {
-        if ($needs_update) {
+        if ($needs_fix) {
           $_SESSION[$update_name]['nids'][] = $node->nid;
         }
         else {
@@ -503,7 +522,7 @@ function date_data_integrity($name) {
     }
     else {
       // Done. Clean up and indicate we're finished.
-      drupal_set_message(t('All nodes with date fields have been updated.'));
+      drupal_set_message(t('All nodes with date fields have been checked.'));
       $message = 'Date data integrity check. Total nodes checked: '. $_SESSION[$update_name]['counted'];
       if ($debug) {
         $message .= '<br>Updated nodes: '. implode(', ', $_SESSION[$update_name]['nids']) .
