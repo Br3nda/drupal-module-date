@@ -1,6 +1,9 @@
 Date Module
 ===========
 
+Version 1.7
+===========
+
 - Move cached views info to cache_views so it gets cleared when views_invalidate_cache() is called.
 - Lots of fixes for the update processes. Get rid of older updates that are re-done in later updates and create a data_integrity and db_integrity update.
 - Fix ical export to match changes in ical parser.
