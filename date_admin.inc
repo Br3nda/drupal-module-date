@@ -1,12 +1,12 @@
 <?php
-//$Id: date_admin.inc,v 1.1.2.2 2007/10/13 15:22:09 karens Exp $
+//$Id: date_admin.inc,v 1.1.2.3 2007/10/26 20:12:58 karens Exp $
 /**
  * @file
  * Date administration code.
  * Moved to separate file since there is a lot of code here that is not needed often.
  */
-include_once(DATE_TIMEZONES);
-include_once(drupal_get_path('module', 'date_api') .'/date.inc');
+include_once('./'. drupal_get_path('module', 'date_api') .'/date_timezones.inc');
+include_once('./'. drupal_get_path('module', 'date_api') .'/date.inc');
 
 /**
  * Implementation of hook_widget_info().

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.1.4.8 2007/10/17 18:20:41 karens Exp $
+// $Id: date_api.module,v 1.1.4.9 2007/10/26 20:12:58 karens Exp $
 
 /**
  * @file
@@ -9,12 +9,10 @@
  * date_load('date.inc');
  */
 
-define('DATE_API_PATH', drupal_get_path('module', 'date_api'));
 define('DATE_ISO',  'date');
 define('DATE_UNIX', 'datestamp');
 define('DATE_DATETIME', 'datetime');
 define('DATE_STRING_ISO', "Y-m-d\TH:i:s");
-define('DATE_API_PATH', drupal_get_path('module', 'date_api'));
 
 define('DATE_FORMAT_ISO', "Y-m-d\TH:i:s");
 define('DATE_FORMAT_DATETIME', "Y-m-d H:i:s");
@@ -23,12 +21,6 @@ define('DATE_FORMAT_ICAL', "YmdTHis");
 define('DATE_REGEX_ISO', '/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):?(\d{2})?/');
 define('DATE_REGEX_DATETIME', '/(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):?(\d{2})?/');
 define('DATE_REGEX_LOOSE', '/(\d{4})-?(\d{2})-?(\d{2})([T\s]?(\d{2}):?(\d{2}):?(\d{2})(\.\d+)?(Z|[\+\-]\d{2}:?\d{2})?)?/');
-
-/**
- *  use the date_timezones.inc file for timezone conversion
- *  this large file will be included only when needed to reduce overhead
- */
-define('DATE_TIMEZONES', DATE_API_PATH .'/date_timezones.inc');
 
 /**
  *  Set up optional adodb date library to handle dates outside the normal php range
@@ -40,7 +32,7 @@ define('DATE_TIMEZONES', DATE_API_PATH .'/date_timezones.inc');
  *
  *  external library will be used if available, otherwise api will use standard php date handling functions
  */
-if (file_exists(DATE_API_PATH .'/adodb-time.inc.php')) {
+if (file_exists('./'. drupal_get_path('module', 'date_api') .'/adodb-time.inc.php')) {
 
   define('DATE_LIBRARY',  'ADODB');
   define('DATE_MAX_YEAR', 3000);
@@ -50,10 +42,10 @@ if (file_exists(DATE_API_PATH .'/adodb-time.inc.php')) {
   // to fix this, alter the path to the file below to point to the path used by the program that uses the file last
   //
   // the standard path to this file
-  //     DATE_API_PATH .'/adodb-time.inc.php';
+  //     './'. drupal_get_path('module', 'date_api') .'/adodb-time.inc.php';
   // an example alternate path if the gallery2 program is installed (gallery2 uses adodb, too)
   //     strtolower($_SERVER["DOCUMENT_ROOT"]) .'/gallery2/lib/adodb/adodb-time.inc.php';
-  define('DATE_LIBRARY_FILE', DATE_API_PATH .'/adodb-time.inc.php');
+  define('DATE_LIBRARY_FILE', './'. drupal_get_path('module', 'date_api') .'/adodb-time.inc.php');
 }
 else {
   define('DATE_LIBRARY',    '');
@@ -70,7 +62,7 @@ else {
  * Helper to include large files only when needed.
  */
 function date_load($file) {
-  include_once(DATE_API_PATH .'/'. $file);
+  include_once('./'. drupal_get_path('module', 'date_api') .'/'. $file);
 }
 
 /**

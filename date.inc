@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.27.2.42 2007/10/18 11:28:02 karens Exp $
+//$Id: date.inc,v 1.27.2.43 2007/10/26 20:12:58 karens Exp $
 
 /**
  * @file
@@ -394,7 +394,7 @@ function date_convert_timezone(&$date, $timezone_in = 'GMT', $timezone_out = 'GM
  *  @return $offset - the offset of $timezone from GMT on the $date_parts date
  */
 function date_offset($date_parts, $timezone = 'GMT') {
-  include_once(DATE_TIMEZONES);
+  include_once('./'. drupal_get_path('module', 'date_api') .'/date_timezones.inc');
   // no adjustment needed for gmt dates
   if ($timezone == 'GMT') return 0;
   // find the timezone info for the input timezone
@@ -570,7 +570,7 @@ function date_append_zone_options() {
  *  @param  $limit - an optional offset value, to limit the results to timezones that match that offset
  */
 function date_timezone_options($limit = '') {
-  include_once(DATE_TIMEZONES);
+  include_once('./'. drupal_get_path('module', 'date_api') .'/date_timezones.inc');
   $zonelist = array();
   if (!$limit) {
     $zonelist = drupal_map_assoc(date_zonelist());
@@ -593,7 +593,7 @@ function date_timezone_options($limit = '') {
  *  Needed because current system variable tracks offset rather than timezone
  */
 function date_set_site_timezone($val) {
-  include_once(DATE_TIMEZONES);
+  include_once('./'. drupal_get_path('module', 'date_api') .'/date_timezones.inc');
   $timezones = date_zonelist();
   if (!in_array($val, $timezones)) $val = 'GMT';
   variable_set('date_default_timezone_name', $val);
@@ -674,7 +674,7 @@ function date_get_timezone($handling, $timezone = '') {
  *    description = text to be used as a description for the fieldset
  */
 function date_select_input($params) {
-  drupal_add_css(DATE_API_PATH .'/date.css');
+  drupal_add_css('./'. drupal_get_path('module', 'date_api') .'/date.css');
   // set the variables
   $label         = $params['label'] ? $params['label'] : t('Date');
   $delta         = isset($params['delta']) ? $params['delta'] : 0;

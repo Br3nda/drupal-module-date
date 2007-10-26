@@ -519,7 +519,7 @@ function date_copy_import_event_form_submit($form_id, $form_values) {
 function date_copy_convert_events( $source_type, $target_type, $date_field, $description_field, $limit, $start = 0, $delete_old, $start_nid) {
 
   include_once(drupal_get_path('module', 'date_api') .'/date.inc');
-  include_once(DATE_TIMEZONES);
+  include_once('./'. drupal_get_path('module', 'date_api') .'/date_timezones.inc');
 
   // Get info about the field we are importing into
   $field   = content_fields($date_field);
