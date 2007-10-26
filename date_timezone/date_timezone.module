@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.2 2007/10/03 19:58:24 karens Exp $
+// $Id: date_timezone.module,v 1.3 2007/10/26 21:56:55 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -40,7 +40,7 @@ function date_timezone_form_alter($form_id, &$form) {
  * Display a list of timezone names instead of offsets
  * and hide the offset value.
  */
-function date_timezone_site_Form(&$form) {
+function date_timezone_site_form(&$form) {
   $timezone = variable_get('date_default_timezone_name', NULL);
   $form['date_default_timezone'] = array(
     '#type' => 'select',

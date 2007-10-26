@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.15 2007/10/25 22:23:50 karens Exp $
+// $Id: date.module,v 1.16 2007/10/26 21:56:55 karens Exp $
 
 /**
  * @file
@@ -104,6 +104,9 @@ function date_widget($op, &$node, $field, &$items) {
           '#weight' => $delta,
           '#default_value' => isset($items[$delta]) ? $items[$delta] : '',
         );
+      }
+      if (!empty($field['widget']['repeat_type'])) {
+        $element[$field['field_name']]['repeat'] = date_repeat_form($repeat);
       }
       return $element;
   }
