@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_calc.inc,v 1.3 2007/10/17 10:47:42 karens Exp $
+// $Id: date_php4_calc.inc,v 1.1 2007/10/31 19:06:42 karens Exp $
 /**
  * Calculates and manipulates dates with no reliance on 32-bit system
  * timestamps, to work on dates before 1970 and after 2038.

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_lib.inc,v 1.2 2007/09/25 14:16:05 karens Exp $
+// $Id: date_php4_lib.inc,v 1.1 2007/10/31 19:06:42 karens Exp $
 
 /**
  * Date Library, extended date functions.

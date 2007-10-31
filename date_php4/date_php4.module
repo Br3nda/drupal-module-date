@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.module,v 1.1 2007/10/17 10:47:42 karens Exp $
+// $Id: date_php4.module,v 1.1 2007/10/31 19:06:42 karens Exp $
 /**
  * @file
  * Include PHP 4 date handling files on systems where native date and
