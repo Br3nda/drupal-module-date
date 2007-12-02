@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.22.2.23 2007/12/02 16:37:38 karens Exp $
+// $Id: date_views.inc,v 1.22.2.24 2007/12/02 17:20:46 karens Exp $
 
 /**
  * Views field filters
@@ -409,7 +409,7 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
   }
 }
 
-function date_views_date_range($arg, $field) {
+function date_views_date_range($arg, $field = NULL) {
   if (stristr($arg, 'P')) {
     // for a date plus value, get the min and max values
     $range = date_plus_period($arg);
@@ -428,8 +428,10 @@ function date_views_date_range($arg, $field) {
     $min_date = date_range_value($range[0], 'min');
     $max_date = date_range_value(($range[1] ? $range[1] : $range[0]), 'max');
   }
-  $min_date = date_unset_granularity($min_date, date_granularity_array($field), $field['type']);
-  $max_date = date_unset_granularity($max_date, date_granularity_array($field), $field['type']);
+  if (isset($field)) {
+    $min_date = date_unset_granularity($min_date, date_granularity_array($field), $field['type']);
+    $max_date = date_unset_granularity($max_date, date_granularity_array($field), $field['type']);
+  }
   return array($min_date, $max_date);
 }
 /**
@@ -660,7 +662,7 @@ function _date_views_query_alter(&$query, &$view) {
       $value      = $db_info['columns']['value']['column'];
       $table      = 'node_data_'. $field['field_name'];
       $offset     = date_views_offset($field);
-      if ($range  = date_views_date_range($arg)) {
+      if ($range  = date_views_date_range($arg, $field)) {
         $query->ensure_table($table);
         $query->add_field('nid', 'node');
         $query->add_field($value, $table);
