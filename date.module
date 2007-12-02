@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.52 2007/12/02 16:37:38 karens Exp $
+// $Id: date.module,v 1.32.2.53 2007/12/02 17:08:17 karens Exp $
 
 /**
  * @file
@@ -128,13 +128,13 @@ function date_clear_all($remove = FALSE) {
   // relevant files are always included.
   include_once('./'. drupal_get_path('module', 'content') .'/content.module');
   include_once('./'. drupal_get_path('module', 'content') .'/content_admin.inc');
-  include_once('./'. drupal_get_path('module', 'views') .'/views.module');
-  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
-  if ($remove) {
-    cache_clear_all('date_browser_views', 'cache_views');
-  }
-  else {
-    if (module_exists('views')) {
+  if (module_exists('views')) {
+    include_once('./'. drupal_get_path('module', 'views') .'/views.module');
+    include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+    if ($remove) {
+      cache_clear_all('date_browser_views', 'cache_views');
+    }
+    else {
       date_views_browser_get_views(TRUE);
     }
   }
