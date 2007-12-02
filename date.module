@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.51 2007/10/25 17:11:13 karens Exp $
+// $Id: date.module,v 1.32.2.52 2007/12/02 16:37:38 karens Exp $
 
 /**
  * @file
@@ -16,6 +16,46 @@
  */
 if (module_exists('views')) {
   include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+}
+
+/**
+ * Wrapper functions for views hooks.
+ */
+function date_views_filters($field) {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+  return _date_views_filters($field);
+}
+function date_views_timestamp_filter_handler($op, $filter, $filterinfo, &$query) {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+  return _date_views_timestamp_filter_handler($op, $filter, $filterinfo, &$query);
+}
+function date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = 'iso') {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+  return _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type);
+}
+function date_views_handler_filter_date_value_form($field) {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+  return _date_views_handler_filter_date_value_form($field);
+}
+function date_views_arguments() {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+  return _date_views_arguments();
+}
+function date_views_timestamp_argument_range_handler($op, &$query, $argtype, $arg = '') {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+  return _date_views_timestamp_argument_range_handler($op, &$query, $argtype, $arg);
+}
+function date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $field_type = 'iso') {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+  return _date_views_argument_range_handler($op, &$query, $argtype, $arg, $field_type);
+}
+function date_views_style_plugins() {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+  return _date_views_style_plugins();
+}
+function date_views_query_alter(&$query, &$view) {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+  return _date_views_query_alter(&$query, &$view);
 }
 
 /**
