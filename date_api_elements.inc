@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.10 2007/10/27 12:45:19 karens Exp $
+//$Id: date_api_elements.inc,v 1.11 2007/12/02 17:38:53 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -467,6 +467,7 @@ function date_convert_from_custom($date, $format, $to_type = DATE_DATETIME) {
       case 'j':
         $final_date['day'] = intval($value);
         break;
+      case 'n':
       case 'm':
         $final_date['month'] = intval($value);
         break;
