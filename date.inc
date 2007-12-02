@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.27.2.43 2007/10/26 20:12:58 karens Exp $
+//$Id: date.inc,v 1.27.2.44 2007/12/02 17:36:21 karens Exp $
 
 /**
  * @file
@@ -1369,6 +1369,7 @@ function date_custom2iso($date, $format) {
       case 'j':
         $final_date['mday'] = str_pad($value, 2, "0", STR_PAD_LEFT);
         break;
+      case 'n':
       case 'm':
         $final_date['mon'] = str_pad($value, 2, "0", STR_PAD_LEFT);
         break;
