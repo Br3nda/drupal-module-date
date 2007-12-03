@@ -1,5 +1,5 @@
-; $Id: date.info,v 1.1 2007/08/31 13:37:36 karens Exp $
+; $Id: date.info,v 1.2 2007/12/03 16:27:17 karens Exp $
 name = Date
 description = Defines CCK date/time fields and widgets.
-dependencies = content date_api
+dependencies = content date_api date_timezone
 package = Date/Time

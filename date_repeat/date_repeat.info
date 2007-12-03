@@ -1,5 +1,5 @@
-; $Id: date_repeat.info,v 1.1 2007/08/31 13:37:36 karens Exp $
+; $Id: date_repeat.info,v 1.2 2007/12/03 16:27:17 karens Exp $
 name = Date Repeat API
-description = An API to calculate repeating events using iCal rules.
+description = A Date Repeat API to calculate repeating dates and times from iCal rules.
 dependencies = date_api
 package = Date/Time

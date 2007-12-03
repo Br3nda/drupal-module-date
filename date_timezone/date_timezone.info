@@ -1,4 +1,5 @@
-; $Id: date_timezone.info,v 1.1 2007/10/01 00:03:36 karens Exp $
+; $Id: date_timezone.info,v 1.2 2007/12/03 16:27:18 karens Exp $
 name = Date Timezone
 description = Overrides site and user timezone handling to set timezone names instead of offsets.
 package = Date/Time
+dependencies = date_api
