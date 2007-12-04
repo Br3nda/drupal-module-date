@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.12 2007/12/02 17:42:54 karens Exp $
+// $Id: date_views.inc,v 1.13 2007/12/04 12:12:17 karens Exp $
 
 /**
  * Views field filters
@@ -608,7 +608,7 @@ function date_views_browser_get_views($reset = FALSE) {
     }
     else {
       $date_views_browser_views = array();
-      $arguments = date_views_arguments();
+      $arguments = _date_views_arguments();
       $argument_list = "'". implode("','", array_keys($arguments)) ."'";
       if (!$argument_list) {
         return array();
