@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.4 2007/11/02 10:05:33 karens Exp $
+// $Id: date_timezone.module,v 1.5 2007/12/05 17:56:06 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -219,7 +219,7 @@ function date_timezone_get_timezone($string, $offset) {
   // 'Daylight Time' or 'Summer Time', so see if either phrase is
   // in the string anywhere. If the string values are in languages other
   // than English, this won't work.
-  if (preg_match('([ daylight time| summer time])', strtolower($string)) ) {
+  if (preg_match('(daylight time|summer time)', strtolower($string), $matches) ) {
     if ($tz = timezone_name_from_abbr(NULL, $offset, 1)) {
       // We found a match, print it and exit
       return $tz;
