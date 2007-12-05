@@ -1,12 +1,12 @@
 <?php
-// $Id: date_api.install,v 1.3 2007/10/13 14:08:12 karens Exp $
+// $Id: date_api.install,v 1.4 2007/12/05 18:00:54 karens Exp $
 
 /**
  * Implementation of hook_install().
  */
 function date_api_install() {
  $ret = array();
- $ret = update_sql("ALTER TABLE {users} ADD timezone_name varchar(50) NOT NULL default ''");
+ $ret = db_query("ALTER TABLE {users} ADD timezone_name varchar(50) NOT NULL default ''");
  return $ret;
 }
 
@@ -15,7 +15,7 @@ function date_api_install() {
  */
 function date_api_uninstall() {
   $ret = array();
-  $ret[] = update_sql("ALTER TABLE {users} DROP timezone_name");
+  $ret[] = db_query("ALTER TABLE {users} DROP timezone_name");
 
   cache_delete('date_timezone_identifiers_list', 'cache');
   $variables = array(
