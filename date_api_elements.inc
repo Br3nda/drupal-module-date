@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.14 2007/12/14 16:19:11 karens Exp $
+//$Id: date_api_elements.inc,v 1.15 2007/12/14 18:02:12 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -248,7 +248,6 @@ function date_parts_element($element, $date, $format) {
  */
 function date_select_validate($element) {
   $error_field = implode('][', $element['#parents']);
-
   if ($element['#value']['ampm'] == 'pm' && $element['#value']['hour'] < 12) {
     $element['#value']['hour'] += 12;
   }
