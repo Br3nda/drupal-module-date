@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.31 2007/12/14 19:12:44 karens Exp $
+// $Id: date_api.module,v 1.32 2007/12/14 21:17:38 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -45,14 +45,6 @@ function date_type_format($type) {
     case DATE_DATETIME:
       return DATE_FORMAT_DATETIME;
   }
-}
-
-/**
- * Helper to include optional files. Use to include files that are not
- * automatically included, like date_api_ical.inc.
- */
-function date_api_load($file) {
-  include_once('./'. drupal_get_path('module', 'date_api')  .'/'. $file);
 }
 
 /**
