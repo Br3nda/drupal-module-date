@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.12 2007/12/13 21:36:47 karens Exp $
+//$Id: date_admin.inc,v 1.13 2007/12/14 00:57:09 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -280,7 +280,7 @@ function date_columns($field) {
     $db_columns['offset'] = array('type' => 'integer', 'length' => 10, 'not null' => FALSE, 'sortable' => TRUE);
     if ($field['todate']) $db_columns['offset2'] = array('type' => 'integer', 'length' => 10, 'not null' => FALSE, 'sortable' => TRUE);
   }
-  if ($field['multiple']) {
+  if ($field['multiple'] == 2) {
     $db_columns['repeating'] = array('type' => 'varchar', 'length' => 255, 'not null' => FALSE, 'sortable' => TRUE);
   }
   return $db_columns;
