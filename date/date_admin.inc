@@ -1,36 +1,10 @@
 <?php
-//$Id: date_admin.inc,v 1.13 2007/12/14 00:57:09 karens Exp $
+//$Id: date_admin.inc,v 1.14 2007/12/14 12:10:57 karens Exp $
 /**
  * @file
  * Date administration code.
  * Moved to separate file since there is a lot of code here that is not needed often.
  */
-
-/**
- * Implementation of hook_widget_info().
- */
-function _date_widget_info() {
-  $info = array(
-    'date_select' => array('label' => t('Select List'),
-      'field types' => array('date', 'datestamp'),
-    ),
-    'date_text' => array('label' => t('Text Field with strtotime validation'),
-      'field types' => array('date', 'datestamp'),
-    ),
-  );
-  if (module_exists('jscalendar')) {
-    $info['date_js'] = array('label' => t('Text Field with javascript pop-up calendar'),
-       'field types' => array('date', 'datestamp'),
-     );
-  }
-  if (module_exists('date_popup')) {
-    $info['date_popup'] = array('label' => t('Text Field with jquery pop-up calendar'),
-       'field types' => array('date', 'datestamp'),
-     );
-  }
-  return $info;
-}
-
 /**
  * Implementation of hook_widget_settings().
  */
@@ -195,16 +169,6 @@ function theme_date_text_parts_theme($element) {
     $header = array(t('Input Type'), t('Select list'), t('Text field'));
     return theme('table', $header, $rows);
   }
-}
-
-/**
- * Implementation of hook_field_info().
- */
-function _date_field_info() {
-  return array(
-    'date' => array('label' => 'Date'),
-    'datestamp' => array('label' => 'Datestamp'),
-  );
 }
 
 /**
