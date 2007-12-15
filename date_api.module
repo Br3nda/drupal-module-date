@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.33 2007/12/15 12:58:54 karens Exp $
+// $Id: date_api.module,v 1.34 2007/12/15 14:21:15 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -921,7 +921,7 @@ function date_array($obj) {
     'year' => date_format($obj, 'Y'),
     'yday' => date_format($obj, 'z'),
     'weekday' => $days[$dow],
-    'month' => date_format($obj, 'F'),
+    'month_name' => date_format($obj, 'F'),
     0 => date_format($obj, 'U'));
 }
 
