@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.install,v 1.1 2007/08/31 13:37:36 karens Exp $
+// $Id: date_repeat.install,v 1.2 2007/12/15 13:39:31 karens Exp $
 
 /**
  * Implementation of hook_install().
@@ -7,4 +7,31 @@
 function date_repeat_install() {
   // Make sure this module loads after date_api.
   db_query("UPDATE {system} SET weight = 1 WHERE name = 'date_repeat'");
+}
+
+/**
+ * On uninstall, delete the rrule column from the database.
+ */
+function date_repeat_uninstall() {
+  include_once(drupal_get_path('module', 'content') .'/content.module');
+  $types = content_types();
+  foreach ($types as $type_name => $type) {
+    foreach ($type['fields'] as $field_name => $field) {
+      if ($field['multiple'] == 99) {
+        $db_info = content_database_info($field);
+        $table = $db_info['table'];
+        $column = $db_info['columns']['rrule']['column'];
+        db_query("ALTER TABLE {". $table ."} DROP $column");
+        db_query("UPDATE {node_field} set multiple = 1 WHERE field_name = '". $field['field_name'] ."'");
+      }
+    }
+  }
+}
+
+function date_repeat_enable() {
+
+}
+
+function date_repeat_disable() {
+
 }
