@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.13 2007/12/14 18:02:12 karens Exp $
+//$Id: date_elements.inc,v 1.14 2007/12/15 12:58:54 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -145,7 +145,7 @@ function _date_widget($op, &$node, $field, &$items) {
       }
 
       if (module_exists('date_repeat')) {
-        $repeat_rule = $items[0]['repeating'];
+        $repeat_rule = $items[0]['rrule'];
       }
 
       // Iterate through the available items, adding as many new ones as needed,
@@ -181,7 +181,7 @@ function _date_widget($op, &$node, $field, &$items) {
         }
       }
       if (module_exists('date_repeat') && $field['multiple'] > 1) {
-        $element[$field['field_name']][0]['repeating'] = array(
+        $element[$field['field_name']][0]['rrule'] = array(
           '#type' => 'date_repeat_rule',
           '#weight' => ($field['widget']['weight'] + .1),
           '#default_value' => $repeat_rule,
