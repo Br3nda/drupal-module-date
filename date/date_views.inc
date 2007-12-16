@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.16 2007/12/16 14:59:19 karens Exp $
+// $Id: date_views.inc,v 1.17 2007/12/16 15:26:18 karens Exp $
 
 /**
  * Views field filters
@@ -592,11 +592,20 @@ function date_browser_validate($type, $view, $form) {
   if (!$fields) {
     form_error($form["$type-info"][$type . '_type'], t('The Date Browser requires at least one field.'));
   }
-  // Make sure all arguments are set to 'Display all values'.
+  // Make sure all arguments are set to 'Display all values'
+  // and that a date argument has been provided.
+  $found = FALSE;
+  $options = array_keys(date_range_arg_options());
   foreach ($view['argument'] as $delta => $argument) {
-    if (is_numeric($delta) && $argument['argdefault'] != 2) {
-      form_error($form['argument'][$delta]['argdefault'], t('Date Browser arguments must be set to \'Display All Values\'.'));
+    if (in_array($argument['options'], $options)) {
+      $found = TRUE;
+      if (is_numeric($delta) && $argument['argdefault'] != 2) {
+        form_error($form['argument'][$delta]['argdefault'], t('Date Browser arguments must be set to \'Display All Values\'.'));
+      }
     }
+  }
+  if (!$found) {
+    form_error($form['argument'], t('A date argument must be added to a Date Browser view.'));
   }
 }
 
