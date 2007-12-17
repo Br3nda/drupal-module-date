@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.34 2007/12/15 14:21:15 karens Exp $
+// $Id: date_api.module,v 1.35 2007/12/17 16:39:28 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -32,7 +32,7 @@ define('DATE_FORMAT_ICAL', "YmdTHis");
 
 define('DATE_REGEX_ISO', '/(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):?(\d{2})?/');
 define('DATE_REGEX_DATETIME', '/(\d{4})-(\d{2})-(\d{2})\s(\d{2}):(\d{2}):?(\d{2})?/');
-define('DATE_REGEX_LOOSE', '/(\d{4})-?(\d{2})-?(\d{2})([T\s]?(\d{2}):?(\d{2}):?(\d{2})(\.\d+)?(Z|[\+\-]\d{2}:?\d{2})?)?/');
+define('DATE_REGEX_LOOSE', '/(\d{4})-?(\d{2})-?(\d{2})([T\s]?(\d{2}):?(\d{2}):?(\d{2})?(\.\d+)?(Z|[\+\-]\d{2}:?\d{2})?)?/');
 
 /**
  * Helper function for getting the format string for a date type.

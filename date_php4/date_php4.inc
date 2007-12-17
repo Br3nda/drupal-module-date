@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.5 2007/12/17 15:56:47 karens Exp $
+// $Id: date_php4.inc,v 1.6 2007/12/17 16:39:29 karens Exp $
 
 /**
  * @file
@@ -524,7 +524,7 @@ if (!function_exists('timezone_abbreviations_list')) {
  * PHP 4 emulation  because it creates endless loops.
  */
 function date_datetime2timestamp($datetime) {
-  preg_match (DATE_REGEX_LOOSE, $datetime, $regs);
+  preg_match(DATE_REGEX_LOOSE, $datetime, $regs);
   return date_gmmktime($regs[5], $regs[6], $regs[7], $regs[2], $regs[3], $regs[1]);
 }
 
