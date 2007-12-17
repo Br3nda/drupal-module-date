@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.7 2007/12/17 17:46:25 karens Exp $
+// $Id: date_php4.inc,v 1.8 2007/12/17 19:33:48 karens Exp $
 
 /**
  * @file
@@ -219,6 +219,31 @@ if (!function_exists('date_date_set')) {
     $new_date = substr_replace($date->value, date_pad($year, 4), 0, 4);
     $new_date = substr_replace($new_date, date_pad($month), 5, 2);
     $new_date = substr_replace($new_date, date_pad($day), 9, 2);
+    $date = date_create($new_date, $date->timezone);
+    return $date;
+  }
+}
+
+/**
+ *  PHP 4 equivalent for date_date_set().
+ *
+ *  @param $date
+ *    a date object returned by date_create().
+ *  @param $year
+ *    a new year.
+ *  @param $month
+ *    a new month.
+ *  @param $day
+ *    a new day.
+ *  @return $date
+ *    the date objected updated for the new timezone.
+ *
+ */
+if (!function_exists('date_time_set')) {
+  function date_time_set(&$date, $hour, $minute, $second) {
+    $new_date = substr_replace($date->value, date_pad($hour), 11, 2);
+    $new_date = substr_replace($new_date, date_pad($minute), 14, 2);
+    $new_date = substr_replace($new_date, date_pad($second), 16, 2);
     $date = date_create($new_date, $date->timezone);
     return $date;
   }
