@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.16 2007/12/17 19:33:48 karens Exp $
+//$Id: date_api_elements.inc,v 1.17 2007/12/18 11:49:16 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -235,7 +235,7 @@ function date_parts_element($element, $date, $format) {
   if (strtolower($hours_format) == 'g' && date_has_time($granularity)) {
     $sub_element['ampm'] = array(
       '#type' => 'radios',
-      '#default_value' => is_object($date) ? (date_format($date, 'G') > 12 ? 'pm' : 'am') : 'am',
+      '#default_value' => is_object($date) ? (date_format($date, 'G') > 12 ? 'pm' : 'am') : '',
       '#options' => drupal_map_assoc(date_ampm(TRUE)),
       '#weight' => 8,
       '#attributes' => array('class' => 'date-ampm'),
