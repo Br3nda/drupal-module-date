@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.22.2.25 2007/12/04 12:11:10 karens Exp $
+// $Id: date_views.inc,v 1.22.2.26 2007/12/26 21:11:19 karens Exp $
 
 /**
  * Views field filters
@@ -232,8 +232,8 @@ function _date_views_arguments() {
 
   $field_types = _content_field_types();
   $arguments = array();
-
-  foreach (content_fields() as $field) {
+  $fields = content_fields();
+  foreach ($fields as $field) {
     $db_info = content_database_info($field);
     switch ($field['type']) {
     case 'date':
