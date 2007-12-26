@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.18 2007/12/18 12:29:42 karens Exp $
+// $Id: date_views.inc,v 1.19 2007/12/26 21:18:45 karens Exp $
 
 /**
  * Views field filters
@@ -222,7 +222,8 @@ function date_views_offset($field) {
 function _date_views_arguments() {
   $field_types = _content_field_types();
   $arguments = array();
-  foreach (content_fields() as $field) {
+  $fields = content_fields();
+  foreach ($fields as $field) {
     if ($field['type'] == DATE_ISO || $field['type'] == DATE_UNIX) {
       $db_info = content_database_info($field);
       $argument = array();
