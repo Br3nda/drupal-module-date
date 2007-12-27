@@ -1,6 +1,7 @@
 Date Module
 ===========
 
+- Simplify and clean up argument code to match changes in D5 version.
 - 143347 use http_request and better error handling message in ical import.
 
 Version 1.7
