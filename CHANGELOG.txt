@@ -1,6 +1,17 @@
 Date Module
 ===========
 
+Version 1.8
+===========
+
+- 189093 fix elusive bug that caused some CCK Views arguments to disappear in certain configurations.
+- Fix call by reference errors.
+- 197563 fix re-named function in date_views.
+- 189093 rework way includes are handled to try to ensure the right functions are available at the right time.
+- 192349 support both 'n' and 'm' formats for month input formats.
+- 188340 add field info to date_views_date_range.
+- 189591 add more checks for whether Views is enabled before calling Views functions.
+
 Version 1.7
 ===========
 

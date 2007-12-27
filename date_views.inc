@@ -1,8 +1,8 @@
 <?php
-// $Id: date_views.inc,v 1.22.2.26 2007/12/26 21:11:19 karens Exp $
+// $Id: date_views.inc,v 1.22.2.27 2007/12/27 13:50:53 karens Exp $
 
 /**
- * Views field filters
+ * Views filters for Date fields.
  */
 function _date_views_filters($field) {
 
@@ -221,59 +221,22 @@ function date_views_offset($field) {
 }
 
 /**
- * Implementation of hook_views_arguments().
+ * Views arguments for Date fields.
  */
-function _date_views_arguments() {
-
-  // must create an argument with the name content: $field['field_name'] to override
-  // the one created automatically for all fields by content.module (which will NOT work correctly)
-  // sending both to the same handler ultimately, using a wrapper function to identify
-  // whether the date is an iso or timestamp date
-
+function _date_views_arguments($field) {
   $field_types = _content_field_types();
   $arguments = array();
-  $fields = content_fields();
-  foreach ($fields as $field) {
-    $db_info = content_database_info($field);
-    switch ($field['type']) {
-    case 'date':
-      $argument = array();
-      $argument['name'] = $field_types[$field['type']]['label'] .($field['todate'] ? t(': From ') : ': '). t($field['widget']['label']) .' ('. $field['field_name'] .')';
-      $argument['handler'] = 'date_views_argument_range_handler';
-      $argument['help'] = t("Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples.", array('!link' => l(t('help'), 'admin/help/date')));
-      $argument['option'] = 'date_range_arg_options';
-      $arguments['content: '. $field['field_name']] = $argument;
+  $argument = array();
+  $argument['name'] = $field_types[$field['type']]['label'] .($field['todate'] ? t(': From ') : ': '). t($field['widget']['label']) .' ('. $field['field_name'] .')';
+  $argument['handler'] = $field['type'] == 'date' ? 'date_views_argument_range_handler' : 'date_views_timestamp_argument_range_handler';
+  $argument['help'] = t("Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples.", array('!link' => l(t('help'), 'admin/help/date')));
+  $argument['option'] = 'date_range_arg_options';
+  $arguments['content: '. $field['field_name']] = $argument;
 
-      if ($field['todate']) {
-        $argument = array();
-        $argument['name'] = $field_types[$field['type']]['label'] .t(': To '). t($field['widget']['label']) .' ('. $field['field_name'] .')';
-        $argument['handler'] = 'date_views_argument_range_handler';
-        $argument['help'] = t("Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples.", array('!link' => l(t('help'), 'admin/help/date')));
-        $argument['option'] = 'date_range_arg_options';
-        $arguments['content: to|'. $field['field_name']] = $argument;
-      }
-      break;
-
-    case 'datestamp':
-      $argument = array();
-      $argument['name'] = $field_types[$field['type']]['label'] .($field['todate'] ? t(': From ') : ': '). t($field['widget']['label']) .' ('. $field['field_name'] .')';
-      $argument['handler'] = 'date_views_timestamp_argument_range_handler';
-      $argument['help'] = t("Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples.", array('!link' => l(t('help'), 'admin/help/date')));
-      $argument['option'] = 'date_range_arg_options';
-      $arguments['content: '. $field['field_name']] = $argument;
-
-      if ($field['todate']) {
-        $argument = array();
-        $argument['name'] = $field_types[$field['type']]['label'] .t(': To '). t($field['widget']['label']) .' ('. $field['field_name'] .')';
-        $argument['handler'] = 'date_views_timestamp_argument_range_handler';
-        $argument['help'] = t("Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples.", array('!link' => l(t('help'), 'admin/help/date')));
-        $argument['option'] = 'date_range_arg_options';
-        $arguments['content: to|'. $field['field_name']] = $argument;
-      }
-      break;
-    }
+  if ($field['todate']) {
+    $argument['name'] = $field_types[$field['type']]['label'] .t(': To '). t($field['widget']['label']) .' ('. $field['field_name'] .')';
+    $arguments['content: to|'. $field['field_name']] = $argument;
   }
-
   return $arguments;
 }
 
@@ -681,7 +644,7 @@ function date_views_browser_get_views($reset = FALSE) {
   static $date_views_browser_views;
   if (empty($date_views_browser_views) || $reset) {
     $cid = 'date_browser_views';
-    if (!$reset && $cached = cache_get($cid, 'cache')) {
+    if (!$reset && $cached = cache_get($cid, 'cache_views')) {
       $date_views_browser_views = unserialize($cached->data);
     }
     else {
@@ -695,7 +658,7 @@ function date_views_browser_get_views($reset = FALSE) {
       while ($view = db_fetch_object($result)) {
         $date_views_browser_views[$view->name] = $view;
       }
-      cache_set($cid, 'cache', serialize($date_views_browser_views));
+      cache_set($cid, 'cache_views', serialize($date_views_browser_views));
     }
   }
   return $date_views_browser_views;
