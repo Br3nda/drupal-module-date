@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.13.2.60 2007/10/17 10:59:22 karens Exp $
+// $Id: date.module,v 1.13.2.61 2007/12/27 14:25:06 karens Exp $
 
 /**
  * @file
@@ -213,7 +213,10 @@ function date_field_settings($op, $field) {
       return date_columns($field);
 
     case 'filters':
-      return date_views_filters($field);
+      return _date_views_filters($field);
+
+    case 'arguments':
+      return _date_views_arguments($field);
   }
 }
 
