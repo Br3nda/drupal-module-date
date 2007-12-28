@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.22.2.27 2007/12/27 13:50:53 karens Exp $
+// $Id: date_views.inc,v 1.22.2.28 2007/12/28 02:06:41 karens Exp $
 
 /**
  * Views filters for Date fields.
@@ -649,7 +649,13 @@ function date_views_browser_get_views($reset = FALSE) {
     }
     else {
       $date_views_browser_views = array();
-      $arguments = _date_views_arguments();
+      $arguments = array();
+      $fields = content_fields();
+      foreach ($fields as $field) {
+        if ($field['type'] == DATE_UNIX || $field['type'] == DATE_ISO) {
+          $arguments = array_merge($arguments, _date_views_arguments($field));
+        }
+      }
       $argument_list = "'". implode("','", array_keys($arguments)) ."'";
       if (!$argument_list) {
         return array();
