@@ -1,11 +1,13 @@
 <?php
-// $Id: date_repeat.test,v 1.1 2007/10/31 18:49:18 karens Exp $
+// $Id: date_repeat.test,v 1.2 2007/12/31 11:07:40 karens Exp $
 /**
  * Test PHP 4 Timezone Conversion
  */
 class DateRepeat extends DrupalTestCase {
   function get_info() {
-    return array('name' => t('Date repeat processes'), 'desc' => t('Test Date Repeat processes to create arrays of dates from iCal rules.') , 'group' => 'Date tests');
+    if (module_exists('date_repeat')) {
+      return array('name' => t('Date repeat processes'), 'desc' => t('Test Date Repeat processes to create arrays of dates from iCal rules.') , 'group' => 'Date tests');
+    }
   }
 
   function testDateRepeat() {
