@@ -1,5 +1,5 @@
 <?php
-// $Id: date_pathauto.inc,v 1.2 2007/09/25 14:16:04 karens Exp $
+// $Id: date_pathauto.inc,v 1.3 2008/01/02 17:01:57 karens Exp $
 
 /*
  * Implementation of hook_pathauto_node().
@@ -65,7 +65,7 @@ function date_pathauto_node($op, $node = NULL) {
           $fieldname = $field['field_name'];
           $datefield = $node->$fieldname;
           $datevalue = $datefield[0]['value'];
-          $date = date_create($datevalue, timezone_open('UTC'));
+          $date = date_make_date($datevalue, 'UTC', $field['type']);
 
           // from date.module
           if ($field['tz_handling'] == 'none') {
