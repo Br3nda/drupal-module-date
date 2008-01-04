@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.24 2008/01/04 13:11:32 karens Exp $
+//$Id: date_api_elements.inc,v 1.25 2008/01/04 14:00:24 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -582,12 +582,22 @@ function theme_date_textfield_element($element) {
   return '<div class="date-'. $part .'">'. theme('textfield', $element, $element['#children']) .'</div>';
 }
 
+/**
+ * Functions to separate date parts in form.
+ *
+ * Separators float up to the title level for elements with titles,
+ * so won't work if this element has titles above the element date parts.
+ */
 function theme_date_part_hour_prefix($element) {
-  return '<span class="form-item date-spacer">&nbsp;-&nbsp;</span>';
+  if ($element['#date_label_position'] != 'above') {
+    return '<span class="form-item date-spacer">&nbsp;-&nbsp;</span>';
+  }
 }
 
 function theme_date_part_minsec_prefix($element) {
-  return '<span class="form-item date-spacer">:</span>';
+  if ($element['#date_label_position'] != 'above') {
+    return '<span class="form-item date-spacer">:</span>';
+  }
 }
 
 /**
