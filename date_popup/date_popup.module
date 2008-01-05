@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.24 2008/01/04 13:11:32 karens Exp $
+// $Id: date_popup.module,v 1.25 2008/01/05 14:37:20 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -202,7 +202,6 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
   else {
     $yearRange = $element['#date_year_range'];
   }
-
   $settings =  "\n". //"prevText:'&lt;". t('Prev') ."', \n".
     "nextText:'". t('Next') ."&gt;', \n".
     "currentText:'". t('Today') ."', \n".
