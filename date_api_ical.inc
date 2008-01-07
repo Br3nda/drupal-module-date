@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.17 2008/01/07 19:42:23 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.18 2008/01/07 21:41:18 karens Exp $ */
 /**
  * @file
  * Parse iCal imports and create iCal exports.
@@ -418,6 +418,7 @@ function date_ical_parse_rrule($field, $data) {
  *   an array of date value arrays.
  */
 function date_ical_parse_exceptions($field, $data) {
+  $data = str_replace('EXDATE:', '', $data);
   $items = array('DATA' => $data);
   $ex_dates = explode(',', $data);
   foreach ($ex_dates as $ex_date) {
