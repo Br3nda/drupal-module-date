@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.21 2008/01/09 19:43:03 karens Exp $
+// $Id: date_repeat.module,v 1.22 2008/01/10 17:10:18 karens Exp $
 /**
  * @file
  *
@@ -172,13 +172,18 @@ function date_repeat_rrule_description($rrule, $start_date) {
     }
     $description[] = t('!days', array('!days' => implode(t(' and '), $results)));
   }
+  if ($rrule['BYMONTHDAY']) {
+    $description[] = t('day @number', array('@number' => implode(', ', $rrule['BYMONTHDAY']))) .' ';
+  }
   if ($rrule['BYMONTH']) {
-    $results = array();
-    $months = date_month_names();
-    foreach ($rrule['BYMONTH'] as $month) {
-      $results[] = t('of !month ', array('!month' => $months[$month]));
+    if (sizeof($rrule['BYMONTH']) < 12) {
+      $results = array();
+      $months = date_month_names();
+      foreach ($rrule['BYMONTH'] as $month) {
+        $results[] = $months[$month];
+      }
+      $description[] = implode(', ', $results);
     }
-    $description[] = implode(t(' and '), $results);
   }
   if ($rrule['INTERVAL'] < 1) {
     $rrule['INTERVAL'] = 1;
