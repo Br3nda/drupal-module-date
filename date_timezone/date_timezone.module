@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.7 2008/01/02 17:01:58 karens Exp $
+// $Id: date_timezone.module,v 1.8 2008/01/12 16:40:54 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -101,8 +101,6 @@ function date_timezone_menu($may_cache) {
   global $user;
   $items = array();
   if (!$may_cache) {
-    drupal_add_css(drupal_get_path('module', 'date_api')  .'/date.css');
-
     if (!function_exists('throttle_status') || !throttle_status()) { //Don't do anything if the throttle is active.
       // See if the user needs to have their timezone name set.
       if (variable_get('configurable_timezones', 1) && $user->uid > 0 && empty($user->timezone_name)) {
