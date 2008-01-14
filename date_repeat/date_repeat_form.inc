@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.3 2008/01/14 22:54:35 karens Exp $
+// $Id: date_repeat_form.inc,v 1.4 2008/01/14 23:31:07 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -191,25 +191,6 @@ function _date_repeat_rrule_process($element) {
     '#description' => t('<p>Dates will match any selection within the same box [January OR June]. When more than one box has criteria selected, all of them are combined to create repeats [[January OR June] AND [Day 1 OR Day 15]]. Positive numbers count from the beginning of the period. Negative numbers count from the end of the period, i.e. -1 is the last, -2 is the next to last, etc.</p><ul><li>If you select \'Every Year\' above, and \'March\' from \'Month\' and \'1\' and \'15\' from \'Day of Month\' in the Advanced options you will be selecting the 1st and 15th days of March of every year.</li><li>If you select \'Every other Month\' above, and \'Second Tuesday\' in the Advanced options you will be selecting the second Tuesday of every other month.</li><li>If you select \'Every Year\' above, and \'Second Tuesday\' in the Advanced options you will be selecting the second Tuesday of every year.</li><li>If you select \'Every Month\' above, and \'January\' and \'June\' and \'First Saturday\' in the Advanced options, you will be selecting the first Saturday in January or June.</li><li>If you select \'Every Month\' above, and \'-1\' from \'Day of Month\' in the Advanced options you will be selecting the last day of every month.</li></ul>' ),
     );
   return $element;
-}
-
-/**
- * Parse an iCal rule into a parsed RRULE array and an EXDATE array.
- */
-function date_repeat_split_rrule($rrule) {
-  $parts = explode("\n", $rrule);
-  foreach ($parts as $part) {
-    if (strstr($part, 'RRULE')) {
-      $RRULE = str_replace('RRULE:', '', $part);
-      $rrule = (array) date_ical_parse_rrule('RRULE:', $RRULE);
-    }
-    elseif (strstr($part, 'EXDATE')) {
-      $EXDATE = str_replace('EXDATE:', '', $part);
-      $exceptions = (array) date_ical_parse_exceptions('EXDATE:', $EXDATE);
-      unset($exceptions['DATA']);
-    }
-  }
-  return array($rrule, $exceptions);
 }
 
 /**
