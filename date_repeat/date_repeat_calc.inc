@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.3 2008/01/14 22:54:35 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.4 2008/01/15 00:51:22 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -245,7 +245,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
       // jump to the next week. The date_repeat_add_dates() function will
       // keep dates outside the range from getting added.
       if (date_repeat_dow2day(date_format($current_day, 'w')) != $week_start_day) {
-        date_modify($current_day, '-1'. $week_start_day);
+        date_modify($current_day, '-1 '. $week_start_day);
       }
       while (!$finished) {
         $period_finished = FALSE;
