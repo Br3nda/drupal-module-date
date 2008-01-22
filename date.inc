@@ -1,5 +1,5 @@
 <?php
-//$Id: date.inc,v 1.27.2.44 2007/12/02 17:36:21 karens Exp $
+//$Id: date.inc,v 1.27.2.45 2008/01/22 21:25:34 karens Exp $
 
 /**
  * @file
@@ -1297,17 +1297,17 @@ function date_iso2custom($iso, $format) {
 function date_custom2iso($date, $format) {
   $array = array(
     "d" => "\\d{1,2}", // we allow 1 to be tolerant - maybe we shouldn't ?
-    "D" => "\\w{3}",
+    "D" => "\\S{3,4}", //Using S instead of w to pick up chars like German umlaute
     "j" => "\\d{1,2}",
-    "l" => "\\w*",
+    "l" => "\\S*", //Using S instead of w to pick up chars like German umlaute
     "N" => "\\d",
     "S" => "\\w{2}",
     "w" => "\\d",
     "z" => "\\d{1,3}",
     "W" => "\\d{1,2}",
-    "F" => "\\w*",
+    "F" => "\\S*", //Using S instead of w to pick up chars like German umlaute
     "m" => "\\d{2}",
-    "M" => "\\w{3}",
+    "M" => "\\S{3,4}", //Using S instead of w to pick up chars like German umlaute
     "n" => "\\d{1,2}",
     "t" => "\\d{2}",
     "L" => "\\d",
@@ -1337,7 +1337,7 @@ function date_custom2iso($date, $format) {
   foreach ($array as $key => $value) {
     $patterns[] = "`(^|[^\\\\\\\\])".$key."`"; // the letter with no preceding '\'
     $repl1[] = '${1}(.)';                  // a single character
-    $repl2[] = '${1}('. $value .')';       // the
+    $repl2[] = '${1}('. $value .')';       // the value
   }
   $patterns[] = "`\\\\\\\\([".implode(array_keys($array))."])`";
   $repl1[] = '${1}';

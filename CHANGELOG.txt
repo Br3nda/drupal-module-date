@@ -1,5 +1,6 @@
 Date Module
 ===========
+- 213038 Loosen regex for month and day names to pick up non-ASCII characters like the German umlaute.
 
 Version 1.8
 ===========
