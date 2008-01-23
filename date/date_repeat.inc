@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.7 2008/01/15 12:50:43 karens Exp $
+//$Id: date_repeat.inc,v 1.8 2008/01/23 13:08:29 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -123,7 +123,8 @@ function _date_repeat_widget_validate($element) {
 
     $parts = date_repeat_split_rrule($rrule);
     $parsed = $parts[0];
-    $parsed_exceptions = $parts[1];
+    $parsed_exceptions = (array) $parts[1];
+    $exceptions = array();
     foreach ($parsed_exceptions as $exception) {
       $date = date_ical_date($exception);
       $exceptions[] = date_format($date, 'Y-m-d');

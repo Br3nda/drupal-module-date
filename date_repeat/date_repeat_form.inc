@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.4 2008/01/14 23:31:07 karens Exp $
+// $Id: date_repeat_form.inc,v 1.5 2008/01/23 13:08:30 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -235,6 +235,7 @@ function date_repeat_rrule_validate($element){
   $item = $form_values[$field_name]['rrule'];
   $item = date_repeat_merge($item);
 
+  $exceptions = array();
   foreach($item['EXDATE'] as $delta => $value) {
     if(!empty($value['datetime'])){
       $date = date_make_date($value['datetime'], 'UTC');
