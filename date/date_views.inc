@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.23 2008/01/23 13:08:29 karens Exp $
+// $Id: date_views.inc,v 1.24 2008/01/23 13:11:32 karens Exp $
 
 /**
  * Views field filters
@@ -717,7 +717,7 @@ function date_views_browser_period_format($period) {
 function date_views_browser_period_arg($arg = NULL, $period = 'month') {
   if (empty($arg)) {
     $now = date_now();
-    $arg = date_format($now, date_browser_period_format($period));
+    $arg = date_format($now, date_views_browser_period_format($period));
   }
   $range = date_views_date_range($arg);
   $date = date_make_date($range[0], 'UTC');
