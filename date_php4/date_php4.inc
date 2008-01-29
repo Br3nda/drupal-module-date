@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.18 2008/01/15 00:51:22 karens Exp $
+// $Id: date_php4.inc,v 1.19 2008/01/29 12:56:39 karens Exp $
 
 /**
  * @file
@@ -27,6 +27,8 @@
  *   date_date_set()
  *   date_timezone_set()
  *   date_offset_get()
+ *   date_timezone_get()
+ *   timezone_name_get()
  *   timezone_open()
  *   timezone_abbreviations_list()
  *   timezone_identifiers_list()
@@ -274,6 +276,24 @@ if (!function_exists('timezone_open')) {
  */
   function timezone_open($timezone) {
     return $timezone;
+  }
+}
+
+if (!function_exists('timezone_name_get')) {
+/**
+ *  PHP 4 equivalent for timezone_name_get().
+ */
+  function timezone_name_get($timezone) {
+    return $timezone;
+  }
+}
+
+if (!function_exists('date_timezone_get')) {
+/**
+ *  PHP 4 equivalent for date_timezone_get().
+ */
+  function date_timezone_get($date) {
+    return $date->timezone;
   }
 }
 
