@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.21 2008/01/29 21:27:10 karens Exp $
+// $Id: date_php4.inc,v 1.22 2008/01/29 22:46:09 karens Exp $
 
 /**
  * @file
@@ -505,9 +505,9 @@ if (!function_exists('date_modify')) {
       }
       elseif ($item == 'year') {
         // Move to the new year.
-        $year = date_part_extract($cdate, 'month');
-          for ($i = 1; $i < $count; $i++) {
-          if ($direction = '+') {
+        $year = date_part_extract($cdate, 'year');
+        for ($i = 1; $i <= $count; $i++) {
+          if ($direction == '+') {
             $year++;
           }
           else {
