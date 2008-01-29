@@ -1,24 +1,67 @@
+The files in this module have been reorganized and renamed. If you have an
+earlier version of the Date module installed, empty the original folder
+completely out and replace it with the new files. 
+
+If you don't remove the original files first, Drupal will try to use
+some of them and things will not work!!
+
 Installation instructions:
 
-1) Install the cck files from http://drupal.org/project/date.
+1) Download the whole package of files from http://drupal.org/project/date.
 
-2) Upload the date files to a 'date' folder in the modules directory. You should end
-   up with a structure like: drupal/modules/date/date.module. You can also place it
-   inside the cck folder. Either location will work.
+2) Upload the date files to the modules directory. The package includes files 
+   needed by the Date API, and optional modules to to create CCK date fields.
 
-   * Optional * Download the adodb date library from 
-   http://phplens.com/phpeverywhere/adodb_date_library
-   and add it to the folder. If included, it will allow you to use dates from
-   the year 100 to the year 3000. Without it, most date handling is limited to
-   1970 to 2038.
+3) Go to admin/build/modules and enable the needed modules from the Date/Time group. 
+
+You should end up with a structure like: 
+
+   /drupal/sites/all/modules/date/date_api.info
+   /drupal/sites/all/modules/date/date_api.install
+   /drupal/sites/all/modules/date/date_api.module
+   /drupal/sites/all/modules/date/date_api.inc
+   /drupal/sites/all/modules/date/date_api_elements.inc
+   /drupal/sites/all/modules/date/date_api_ical.inc
+
+   /drupal/sites/all/modules/date/date/date.info
+   /drupal/sites/all/modules/date/date/date.install
+   /drupal/sites/all/modules/date/date/date.module
+   /drupal/sites/all/modules/date/date/date_admin.inc
+   /drupal/sites/all/modules/date/date/date_views.inc
+   /drupal/sites/all/modules/date/date/date_elements.inc
+
+   /drupal/sites/all/modules/date/date_copy/date_copy.info
+   /drupal/sites/all/modules/date/date_copy/date_copy.module
+
+   /drupal/sites/all/modules/date/date_php4/date_php4.inc
+   /drupal/sites/all/modules/date/date_php4/date_php4_lib.inc
+   /drupal/sites/all/modules/date/date_php4/date_php4_calc.inc
+   /drupal/sites/all/modules/date/date_php4/date_php4_tz_identifiers.inc
+   /drupal/sites/all/modules/date/date_php4/date_php4_tz_abbreviations.inc
+   /drupal/sites/all/modules/date/date_php4/date_php4_tz_map.inc
+
+
+If you are using PHP 4 or PHP 5.0 or 5.1, native date handling won't work right.
+Install the Date_PHP4 module to enable wrapper functions so this code will work
+in old PHP versions. 
+
+In most cases, you should enable the Date Timezone module any time you use the
+Date API to be able to set the site and user timezone names. It is not enabled by 
+default in case another module is setting timezone names in the database.
+
+To install CCK Date Fields:
+
+1) The CCK date field is included in the Date files at http://drupal.org/project/date.
+
+2) Go to admin/build/modules and enable the Date module. Be sure that the Date API module,
+   the Date Timezone module, and the Content module are also installed.
+
+3) Go to admin/content/types to view cck content types and edit a content type.
+
+4) While viewing a content type, select the option to add a new field from the tabs at
+   the top of the page. Several options for date fields should be visible.
    
-3) Go to admin/modules and enable the date module. Be sure to submit the page
-   even if the date module is already selected. That will update the path to the files.
-
-4) Go to admin/node/types to view cck content types. Add or select a content type.
-
-5) While viewing a cck content type, select the option to add a new field. Several
-   options for date fields should be visible.
+More documentation is available at http://drupal.org/node/92460.
    
-6) If you already have date fields created from an earlier version, be sure to
-   edit each one and save your changes. There may be new options available that need to be set.
+   
+
