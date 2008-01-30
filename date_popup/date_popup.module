@@ -1,0 +1,450 @@
+<?php
+// $Id: date_popup.module,v 1.27.2.1 2008/01/30 15:56:33 karens Exp $
+/**
+ * @file
+ * A module to enable jquery calendar and time entry popups.
+ * Requires the Date API.
+ *
+ * Add a type of #date_popup to any date, time, or datetime field that will
+ * use this popup. Set #date_format to the way the date should be presented
+ * to the user in the form. Set #default_value to be a date in the local
+ * timezone, and note the timezone name in #date_timezone.
+ *
+ * The element will create two textfields, one for the date and one for the
+ * time. The date textfield will include a jQuery popup calendar date picker,
+ * and the time textfield uses a jQuery timepicker.
+ *
+ * If no time elements are included in the format string, only the date
+ * textfield will be created. If no date elements are included in the format
+ * string, only the time textfield, will be created.
+ *
+ */
+
+/**
+ * Load needed files.
+ */
+function date_popup_load() {
+  static $loaded = FALSE;
+  if ($loaded) {
+    return;
+  }
+  $path = drupal_get_path('module', 'date_popup');
+  drupal_add_js($path .'/lib/ui.calendar.js');
+  drupal_add_js($path .'/lib/jquery.timeentry.pack.js');
+  $loaded = TRUE;
+}
+
+/**
+ * Implementation of hook_menu().
+ */
+function date_popup_menu($may_cache) {
+  $items = array();
+  if (!$may_cache) {
+    drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/white.calendar.css');
+    drupal_add_css(drupal_get_path('module', 'date_popup')  .'/themes/timeentry.css');
+  }
+  return $items;
+}
+
+/**
+ * Implementation of hook_elements().
+ *
+ * Set the #type to date_popup and fill the element #default_value with
+ * a date adjusted to the proper local timezone.
+ *
+ * The element will create two textfields, one for the date and one for the
+ * time. The date textfield will include a jQuery popup calendar date picker,
+ * and the time textfield uses a jQuery timepicker.
+ *
+ * NOTE - Converting a date stored in the database from UTC to the local zone
+ * and converting it back to UTC before storing it is not handled by this
+ * element and must be done in pre-form and post-form processing!!
+ *
+ * #date_timezone
+ *   The local timezone to be used to create this date.
+ *
+ * #date_type
+ *   The type of date to be created from this element, could be
+ *   DATE_UNIX, DATE_DATETIME, or DATE_ISO.
+ *
+ * #date_format
+ *   The #date_format parts can be in any order, and use any of the normal
+ *   separators, but are limited to the following formats:
+ *     Y, m, d, H, h, i, s, a
+ *
+ *   So valid formats include:
+ *     Y-m-d H:i
+ *     m/d/Y h:ia
+ *
+ *   Invalid formats include things like:
+ *     m/j/y G:i
+ *
+ * #date_increment
+ *   Increment minutes and seconds by this amount, default is 1.
+ *
+ * #date_year_range
+ *   The number of years to go back and forward in a year selector,
+ *   default is -3:+3 (3 back and 3 forward).
+ *
+ */
+function date_popup_elements() {
+  return array(
+    'date_popup' => array(
+      '#input' => TRUE,
+      '#tree' => TRUE,
+      '#date_type' => DATE_DATETIME,
+      '#date_timezone' => date_default_timezone_name(),
+      '#date_format' => variable_get('date_format_short', 'm/d/Y - H:i'),
+      '#date_increment' => 1,
+      '#date_year_range' => '-3:+3',
+      '#process' => array('date_popup_process' => array()),
+      '#validate' => array('date_popup_validate' => array()),
+      ),
+    );
+}
+
+/**
+ * Implementation of hook_form_alter().
+ *
+ * Add popup to node and comment dates. Although the data in these
+ * fields is stored in the database as a unix timestamp, the value
+ * has been massaged into Y-m-d H:i by the time it gets to the form
+ * and the node and comment modules will expect that format when
+ * they save the data.
+ */
+function date_popup_form_alter($form_id, &$form) {
+  // jscalendar overloads these fields, so must not try to do this
+  // if jscalendar is installed.
+  if (!module_exists('jscalendar')) {
+    if ($form_id == 'comment_form' && isset($form['admin']) && isset($form['admin']['date'])) {
+      $form['admin']['date'] = date_popup_system_date_form($form['admin']['date']);
+    }
+    elseif (isset($form['type']) && $form['type']['#value'] .'_node_form' == $form_id && isset($form['author']) && isset($form['author']['date'])) {
+      $form['author']['date'] = date_popup_system_date_form($form['author']['date']);
+    }
+  }
+}
+
+/**
+ * Rework a system date form to use the date_popup element.
+ *
+ * Create a date object by undoing the core method of adjusting a date
+ * by the timezone offset. Set default value back to the database value,
+ * then adjust it using the timezone name.
+ */
+function date_popup_system_date_form($element, $edit = NULL) {
+  $element['#type'] = 'date_popup';
+  $element['#date_type'] = DATE_DATETIME;
+  $element['#date_format'] = 'Y-m-d H:i:s O';
+  $element['#date_timezone'] = date_default_timezone_name();
+
+  // Wipe out the description to use the popup description instead.
+  $element['#description'] = '';
+  if (!empty($element['#default_value'])) {
+    $value = strtotime($element['#default_value']);
+    $date = date_make_date($value, 'GMT', DATE_UNIX);
+    date_timezone_set($date, timezone_open($element['#date_timezone']));
+    $element['#default_value'] = date_format($date, $element['#date_format']);
+  }
+  else {
+    $date = date_now(date_default_timezone_name());
+    $element['#default_value'] = date_format($date, $element['#date_format']);
+  }
+  unset($element['#maxlength']);
+  return $element;
+}
+
+/**
+ * Javascript popup element processing.
+ * Add popup attributes to $element.
+ */
+function date_popup_process($element, $edit = NULL) {
+  date_popup_load();
+  include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
+  if (!empty($edit)) {
+    $input = $edit['date'] . (!empty($edit['time']) ? ' '. $edit['time'] : '');
+    $datetime = date_convert_from_custom($input, $element['#date_format']);
+    $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME);
+  }
+  elseif (!empty($element['#value'])) {
+    $date = date_make_date($element['#value'], $element['#date_timezone'], $element['#date_type']);
+  }
+  elseif ($element['#required']) {
+    $date = date_now($element['#date_timezone']);
+  }
+  date_increment_round($date, $element['#date_increment']);
+  $element['#tree'] = TRUE;
+  $element['date'] = date_popup_process_date($element, $edit, $date);
+  $element['time'] = date_popup_process_time($element, $edit, $date);
+  return $element;
+}
+
+/**
+ * Process the date portion of the element.
+ */
+function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
+  $granularity = date_format_order($element['#date_format']);
+  $date_granularity = array_intersect($granularity, array('month', 'day', 'year'));
+  $time_granularity = array_intersect($granularity, array('hour', 'minute', 'second'));
+  $date_format = (date_limit_format($element['#date_format'], $date_granularity));
+
+  if (empty($date_granularity)) return array();
+
+  // Center the range around the current year, but expand it far
+  // enough so it will pick up the year value in the field in case
+  // the value in the field is outside the initial range.
+  $this_year = date_format(date_now(), 'Y');
+  $value_year = is_object($date) ? date_format($date, 'Y') : $this_year;
+  if (!empty($value_year) && $this_year != $value_year) {
+    $range = explode(':', $element['#date_year_range']);
+    $min_year = min($value_year, $this_year + $range[0]);
+    $max_year = max($value_year, $this_year + $range[1]);
+    $year_range = sprintf('%+d', $min_year - $this_year) .':'. sprintf('%+d', $max_year - $this_year);
+  }
+  else {
+    $year_range = $element['#date_year_range'];
+  }
+  $settings =  "\n". //"prevText:'&lt;". t('Prev') ."', \n".
+    "nextText:'". t('Next') ."&gt;', \n".
+    "currentText:'". t('Today') ."', \n".
+    "clearText:'". t('Clear') ."', \n".
+    "closeText:'". t('Close') ."', \n".
+    "firstDate:". variable_get('date_first_day', 0) .", \n".
+    "dayNames: new Array('". implode("','", date_week_days_abbr(TRUE, TRUE, 1)) ."'), \n".
+    "monthNames:new Array('". implode("','", date_month_names(TRUE)) ."'), \n".
+    // Can't get the image to float to the right of the input element,
+    // so turning it off for now.
+    // TODO figure out why this isn't working
+    //"buttonImage: '". base_path() . drupal_get_path('module', 'date_api') ."/images/calendar.png', \n".
+    //"buttonImageOnly: false, \n".
+    "autoPopUp: 'focus', \n".
+    "closeAtTop:false, \n".
+    "speed: 'immediate', \n".
+    "dateFormat:'". date_popup_format_to_popup($date_format) ."', \n".
+    "yearRange:'". $year_range ."'\n".
+    "\n";
+
+  // This is just a placeholder to indicate the method to constrain from and to dates.
+  // Not yet implemented.
+  if ($fromto) {
+    $settings .+ ", minDate: (input.id == 'dTo' ? getDate($('#dFrom').val()) : null), \n".
+    "maxDate: (input.id == 'dFrom' ? getDate($('#dTo').val()) : null) ";
+  }
+
+  drupal_add_js('// Global Killswitch
+    if (Drupal.jsEnabled) {
+      $(document).ready(function() {$(\'.jquery-calendar-'. $element['#id'] .'\').calendar({'. $settings. '});
+      })}', 'inline');
+
+  // Create a unique class for each element so we can use custom settings.
+  $sub_element = array(
+    '#type' => 'textfield',
+    '#default_value' => is_object($date) ? date_format($date, $date_format) : '',
+    '#attributes' => array('class' => 'jquery-calendar-'. $element['#id']),
+    '#size' => 20,
+    '#maxlength' => 20,
+    );
+  // TODO, figure out exactly when we want this description. In many places it is not desired.
+  //$element['#description'] .= t(' Format: @date', array('@date' => date($date_format, time())));
+
+  return $sub_element;
+}
+
+/**
+ * Process the time portion of the element.
+ */
+function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
+  $granularity = date_format_order($element['#date_format']);
+  $time_granularity = array_intersect($granularity, array('hour', 'minute', 'second'));
+  $time_format = date_popup_format_to_popup_time(date_limit_format($element['#date_format'], $time_granularity));
+  if (empty($time_granularity)) return array();
+
+  $spinner_text = array(t('Now'), t('Previous field'), t('Next field'), t('Increment'), t('Decrement'));
+  $settings = "\n"."show24Hours: ". (strpos($element['#date_format'], 'H') ? 'true' : 'false') .", \n".
+  "showSeconds: ". (in_array('second', $granularity) ? 'true' : 'false') .", \n".
+  "timeSteps: [1,". $element['#date_increment'] .",". (in_array('second', $granularity) ? $element['#date_increment'] : 0) ."], \n".
+  "spinnerImage: ''\n";
+
+  // This is just a placeholder to indicate the method to constrain from and to times.
+  // Not yet implemented.
+  if ($fromto) {
+    $settings .+ ", minTime: (input.id == 'tTo' ? getTime($('#tFrom').val()) : null), \n".
+    "maxTime: (input.id == 'tFrom' ? getTime($('#tTo').val()) : null)} ";
+  }
+
+  drupal_add_js('// Global Killswitch
+    if (Drupal.jsEnabled) {
+      $(document).ready(function() {$(\'.jquery-timeentry-'. $element['#id'] .'\').timeEntry({' .$settings. '});
+      })}', 'inline');
+
+  // Create a unique class for each element so we can use custom settings.
+  $sub_element = array(
+    '#type' => 'textfield',
+    '#default_value' => is_object($date) ? date_format($date, $time_format) : '',
+    '#attributes' => array('class' => 'jquery-timeentry-'. $element['#id']),
+    '#size' => 10,
+    '#maxlength' => 10,
+    );
+  $element['#description'] .= t('  @date', array('@date' => date($time_format, time())));
+  return ($sub_element);
+}
+
+/**
+ * Massage the input values back into a single date.
+ */
+function date_popup_validate($element) {
+  include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
+  date_popup_load();
+  $valid_value = date_popup_input_value($element);
+  if (!empty($valid_value)) {
+    form_set_value($element, $valid_value);
+    return;
+  }
+  $error_field = implode('][', $element['#parents']);
+  if (isset($element['#value']['date'])) {
+    $message = NULL;
+    if (!empty($element['#value']['date'])) {
+      $message = t('The %label %date %time is not valid.', array('%label' => $element['#title'], '%date' => $element['#value']['date'], '%time' => $element['#value']['time']));
+    }
+    elseif ($element['#required']) {
+      $message = t('The %label date cannot be empty.', array('%label' => $element['#title']));
+    }
+    if (!empty($message)) {
+      form_set_error($error_field .'][date', $message);
+    }
+  }
+  if (isset($element['#value']['time'])) {
+    if (!empty($element['#value']['time'])) {
+      // We already displayed a message about this, but need another message
+      // here just to set the error field, so don't repeat the previous
+      // message.
+      $message = t('Please check the %label values.', array('%label' => $element['#title']));
+    }
+    elseif ($element['#required']) {
+      $message = t('The %label time cannot be empty.', array('%label' => $element['#title']));
+    }
+    if (!empty($message)) {
+      form_set_error($error_field .'][time', $message);
+    }
+  }
+  form_set_value($element, NULL);
+}
+
+/**
+ * Helper function for extracting a date value out of user input.
+ */
+function date_popup_input_value($element) {
+  $input = $element['#value']['date'];
+  if (!empty($element['#value']['time'])) {
+    $input .= ' '. $element['#value']['time'];
+  }
+  date_popup_load();
+  $granularity = date_format_order($element['#date_format']);
+  $value = date_convert_from_custom($input, date_limit_format($element['#date_format'], $granularity));
+  if (date_is_valid($value, DATE_DATETIME)) {
+    $date = date_make_date($value, $element['#date_timezone'], DATE_DATETIME);
+    $value = date_convert($date, DATE_OBJECT, $element['#date_type']);
+    return $value;
+  }
+  return NULL;
+}
+
+/**
+ * Allowable date formats.
+ */
+function date_popup_date_formats() {
+  return array(
+    'd/m/Y',
+    'd-m-Y',
+    'd.m.Y',
+    'm/d/Y',
+    'm-d-Y',
+    'm.d.Y',
+    'Y/m/d',
+    'Y-m-d',
+    'Y.m.d',
+    );
+}
+
+/**
+ * Allowable time formats.
+ */
+function date_popup_time_formats($with_seconds = FALSE) {
+  return array(
+    'H:i:s',
+    'h:i:sA',
+    );
+}
+
+function date_popup_formats() {
+  $formats = array();
+  foreach (date_popup_date_formats() as $format) {
+    foreach (date_popup_time_formats() as $time_format) {
+      $formats[] = $format .' '. $time_format;
+    }
+  }
+  return $formats;
+}
+
+/**
+ * Recreate a date format string so it has the values popup expects.
+ *
+ * @param string $format
+ *   a normal date format string, like Y-m-d
+ * @return string
+ *   a format string in popup format, like YMD-
+ */
+function date_popup_format_to_popup($format) {
+  if (empty($format)) {
+    $format = 'Y-m-d';
+  }
+  $sep = array();
+  ereg('\/|-|\.| ', $format, $sep);
+  $format = str_replace(array('d', 'j'), 'D', $format);
+  $format = str_replace(array('m', 'n'), 'M', $format);
+  $format = str_replace('y', 'Y', $format);
+  $format = str_replace(array(' ', '/', '-', '.', ':', 'l', 'z', 'w', 'W', 'g', 'G', 'h', 'H', 'i', 's', 'a', 'A'), '', $format);
+  return $format . $sep[0];
+}
+
+/**
+ * Recreate a date format string so it has the values popup expects.
+ *
+ * @param string $format
+ *   a normal date format string, like Y-m-d
+ * @return string
+ *   a format string in popup format, like YMD-
+ */
+function date_popup_format_to_popup_time($format) {
+  if (empty($format)) {
+    $format = 'H:i';
+  }
+  $format = str_replace(array('G'), 'H', $format);
+  $format = str_replace(array('g'), 'h', $format);
+  $format = str_replace(array('a'), 'A', $format);
+  $format = str_replace(array(' ', '/', '-', '.', 'l', 'z', 'w', 'W', 'd', 'j', 'm', 'n', 'y', 'Y'), '', $format);
+  return $format;
+}
+
+/**
+ * Reconstruct popup format string into normal format string.
+ *
+ * @param string $format
+ *   a string in popup format, like YMD-
+ * @return string
+ *   a normal date format string, like Y-m-d
+ */
+function date_popup_popup_to_format($format) {
+  $sep = substr($format, -1);
+  ereg('(MDY)', $format, $parts);
+  return implode($sep, $parts);
+}
+
+/**
+ * Format a date popup element.
+ *
+ * Use a class that will float date and time next to each other.
+ */
+function theme_date_popup($element) {
+  return '<div class="container-inline-date clear-block">'. theme('form_element', $element, $element['#children']) .'</div>';
+}
