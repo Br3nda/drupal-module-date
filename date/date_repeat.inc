@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.9 2008/01/23 16:23:29 karens Exp $
+//$Id: date_repeat.inc,v 1.10 2008/01/30 15:56:55 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -83,7 +83,7 @@ function _date_repeat_widget_validate($element) {
     //&& ($rrule != $element['rrule']['#prev_rrule']
     //|| $form_values[$field_name][0]['value'] != $element['rrule']['#prev_value']
     //|| $form_values[$field_name][0]['value2'] != $element['rrule']['#prev_value2'])
-    ){
+    ) {
 
     $item = $form_values[$field_name][0];
     $timezone = date_get_timezone($field['tz_handling'], $item[0]['timezone']);

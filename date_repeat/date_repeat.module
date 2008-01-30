@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.23 2008/01/14 23:31:07 karens Exp $
+// $Id: date_repeat.module,v 1.24 2008/01/30 15:56:56 karens Exp $
 /**
  * @file
  *
@@ -108,7 +108,7 @@ function date_repeat_dow_options() {
   $options = array();
   foreach (date_repeat_dow_count_options() as $count_key => $count_value) {
     foreach (date_repeat_dow_day_options() as $dow_key => $dow_value) {
-      $options[$count_key.$dow_key] = $count_value.' '.$dow_value;
+      $options[$count_key . $dow_key] = $count_value .' '. $dow_value;
     }
   }
   return $options;

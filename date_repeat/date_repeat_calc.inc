@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.4 2008/01/15 00:51:22 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.5 2008/01/30 15:56:56 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -102,7 +102,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
           );
       }
     }
-    while(!$finished) {
+    while (!$finished) {
       $period_finished = FALSE;
       while (!$period_finished) {
         foreach ($rrule['BYMONTHDAY'] as $monthday) {
