@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.23 2008/01/30 15:56:55 karens Exp $
+// $Id: date.install,v 1.24 2008/01/30 21:24:54 karens Exp $
 
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
@@ -371,6 +371,17 @@ function date_update_5201() {
   return $ret;
 }
 
+/**
+ * Get rid of jscalendar popup and use jQuery popup instead.
+ *
+ * @return unknown
+ */
+function date_update_5202() {
+  $ret = array();
+  $ret[] = update_sql("UPDATE {node_field_instance} SET widget_type = 'date_popup' WHERE widget_type = 'date_js'");
+  content_clear_type_cache();
+  return $ret;
+}
 
 function date_db_integrity($name) {
   $ret = array();
