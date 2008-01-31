@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.1 2008/01/30 15:56:32 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.2 2008/01/31 09:23:11 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -498,7 +498,7 @@ function date_ical_export($events, $calname = NULL) {
       }
       if ($event['start'] && $event['end']) {
         $output .= "DTSTART;". $timezone ."VALUE=DATE-TIME:". date_format($event['start'], DATE_FORMAT_ICAL) ."\n";
-        $output .= "DTEND;". $timezone ."VALUE=DATE-TIME:". date_format($event['start'], DATE_FORMAT_ICAL) ."\n";
+        $output .= "DTEND;". $timezone ."VALUE=DATE-TIME:". date_format($event['end'], DATE_FORMAT_ICAL) ."\n";
       }
       else {
         $output .= "DTSTART;". $timezone ."VALUE=DATE-TIME:". date_format($event['start'], DATE_FORMAT_ICAL) ."\n";
