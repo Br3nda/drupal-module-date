@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.5 2008/01/31 08:07:44 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.6 2008/01/31 08:12:45 karens Exp $
 
 /**
  * @file
@@ -64,7 +64,7 @@ if (!function_exists('date_create')) {
   function date_create($date_in = NULL, $timezone = NULL) {
     if (empty($date_in) || strtolower($date_in) == 'now') {
       // Create a current date for an empty value or 'now'.
-      $date_out = date_date('y-m-d H:i:s', time());
+      $date_out = date_date('Y-m-d H:i:s', time());
     }
     elseif (substr($date_in, 0, 1) == '@' && is_numeric(substr($date_in, 1))) {
       // An number prefixed with '@' is interpreted as a timestamp.
