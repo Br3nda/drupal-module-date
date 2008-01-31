@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.28 2008/01/30 15:56:55 karens Exp $
+//$Id: date_api_elements.inc,v 1.29 2008/01/31 07:26:54 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -280,7 +280,7 @@ function date_parts_element($element, $date, $format) {
       '#attributes' => array('class' => 'date-ampm'),
     );
     if ($element['#date_label_position'] == 'within') {
-      $sub_element['ampm']['#options'] = array('' => theme('date_part_label_ampm', 'ampm', $element)) + $sub_element['ampm']['#options'];
+      $sub_element['ampm']['#options'] = array('' => '-'. theme('date_part_label_ampm', 'ampm', $element)) + $sub_element['ampm']['#options'];
     }
     elseif ($element['#date_label_position'] != 'none') {
       $sub_element['ampm']['#title'] = theme('date_part_label_ampm', 'ampm', $element);
