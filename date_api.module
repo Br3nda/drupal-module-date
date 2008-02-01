@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.45 2008/01/30 15:56:55 karens Exp $
+// $Id: date_api.module,v 1.46 2008/02/01 11:48:54 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1125,7 +1125,7 @@ function date_format_order($format) {
  *   an array like ('year', 'month', 'day', 'hour', 'minute', 'second');
  */
 function date_nongranularity($granularity) {
-  return array_diff(array('year', 'month', 'day', 'hour', 'minute', 'second'), $granularity);
+  return array_diff(array('year', 'month', 'day', 'hour', 'minute', 'second'), (array) $granularity);
 }
 
 /**
