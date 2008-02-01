@@ -1,5 +1,9 @@
 <?php
-// $Id: date_timezone.install,v 1.1 2008/01/14 12:12:27 karens Exp $
+// $Id: date_timezone.install,v 1.2 2008/02/01 13:29:25 karens Exp $
+// Updates happen in random order, whether or not the module is enabled,
+// so include critical code here just to be sure.
+include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
+
 /**
  * @file
  * Installation file for Date Timezone
