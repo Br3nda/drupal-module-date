@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.25 2008/02/01 11:48:54 karens Exp $
+//$Id: date_elements.inc,v 1.26 2008/02/03 17:40:16 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -239,7 +239,7 @@ function _date_elements() {
   $type['date_combo'] = array(
     '#input' => TRUE, '#tree' => TRUE,
     '#field' => array(), '#delta' => 0,
-    '#columns' => array('value', 'value2', 'timezone', 'offset', 'offset2'),
+    '#columns' => array('value', 'value2', 'timezone'),
     '#process' => array('date_combo_process' => array()),
     '#validate' => array('date_combo_validate' => array()),
     );
@@ -326,8 +326,6 @@ function date_combo_validate($element) {
   $from_field = 'value';
   $to_field = 'value2';
   $tz_field = 'timezone';
-  $offset_field = 'offset';
-  $offset_field2 = 'offset2';
 
   // Update the timezone, if changed.
   $timezone = $element['#date_timezone'];
@@ -340,8 +338,6 @@ function date_combo_validate($element) {
     $item[$from_field] = NULL;
     $item[$to_field]   = NULL;
     $item[$tz_field]   = $timezone;
-    $item[$offset_field] = NULL;
-    $item[$offset_field2] = NULL;
     form_set_value($element, $item);
   }
   elseif (!form_get_errors()) {
