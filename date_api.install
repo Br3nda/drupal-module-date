@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.install,v 1.7 2008/02/08 16:29:42 karens Exp $
+// $Id: date_api.install,v 1.8 2008/02/09 20:34:57 karens Exp $
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
 include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
@@ -67,8 +67,8 @@ function date_api_uninstall() {
 function date_api_requirements($phase) {
   $requirements = array();
   $t = get_t();
-  //switch ($phase) {
- //   case 'runtime':
+  switch ($phase) {
+    case 'runtime':
       $tz_name = variable_get('date_default_timezone_name', NULL);
       $error = FALSE;
       if (version_compare(PHP_VERSION, '5.2', '<') && !module_exists('date_php4')) {
@@ -83,10 +83,10 @@ function date_api_requirements($phase) {
           'severity' => $severity,
           );
       }
-  //    break;
-  //   case 'install':
-  //    break;
-  //}
+      break;
+     case 'install':
+      break;
+  }
   return $requirements;
 }
 
