@@ -1,5 +1,5 @@
 <?php
-// $Id: date_pathauto.inc,v 1.5 2008/02/03 17:40:16 karens Exp $
+// $Id: date_pathauto.inc,v 1.6 2008/02/09 21:50:31 karens Exp $
 
 /*
  * Implementation of hook_pathauto_node().
@@ -7,7 +7,7 @@
  * Allows users to use the textual representation of the parts of a date field
  * as a component of paths.
  */
-function date_pathauto_node($op, $node = NULL) {
+function _date_pathauto_node($op, $node = NULL) {
   switch ($op) {
     case 'placeholders':
       $placeholders = array();
