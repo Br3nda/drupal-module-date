@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.2 2008/01/31 07:25:57 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.3 2008/02/09 21:53:16 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -163,7 +163,7 @@ function date_select_process($element, $edit = NULL) {
   }
   $element['#tree'] = TRUE;
   date_increment_round($date, $element['#date_increment']);
-  $element += date_parts_element($element, $date, $element['#date_format']);
+  $element += (array) date_parts_element($element, $date, $element['#date_format']);
   return $element;
 }
 
