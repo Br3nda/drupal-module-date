@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.4 2008/02/15 13:01:19 karens Exp $
+// $Id: date_views.inc,v 1.26.2.5 2008/02/15 16:00:15 karens Exp $
 
 /**
  * Views field filters
@@ -15,7 +15,6 @@ function _date_views_filters($field) {
       $ymd_handler = 'date_views_timestamp_handler_filter_ymd';
       break;
   }
-
   $format = $field['widget']['input_format'];
 
   // use this to default to current time
@@ -34,14 +33,14 @@ function _date_views_filters($field) {
 
   $filters = array(
     'default' => array(
-      'name' => t(DATE_ISO),
+      'name' => t('Date'),
       'operator' => $operator,
       'value' => date_views_handler_filter_date_value_form($field),
       'option' => 'string',
       'handler' => $handler,
       'type' => 'DATE',
       'extra' => array('column' => 'value', 'field' => $field),
-      'help' => t('This filter allows events to be filtered by their date. Enter dates in the format: %format. Enter \'now\' to use the current time. You may enter a delta (in seconds) to the option that will be added to the time; this is most useful when combined with now. If you have the jscalendar module from jstools installed, you can use a popup date picker here.', array('%format' => $format)),
+      'help' => t('This filter allows events to be filtered by their date. Enter dates in the format: %format. Enter \'now\' to use the current time. You may enter a delta (in seconds) to the option that will be added to the time; this is most useful when combined with now. ', array('%format' => $format)),
       ),
     'year' => array(
       'name' => t('Year'),
@@ -187,10 +186,11 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
 function _date_views_handler_filter_date_value_form($field) {
   include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
   $form = array(
-    '#type' => 'date_popup',
+    '#type' => module_exists('date_popup') ? 'date_popup' : 'date_text',
     '#date_timezone' => date_default_timezone_name(),
     '#date_type'   => $field['type'],
     '#date_format' => 'Y-m-d',
+    '#size' => 20,
   );
   return $form;
 }
