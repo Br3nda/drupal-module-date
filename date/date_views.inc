@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.5 2008/02/15 16:00:15 karens Exp $
+// $Id: date_views.inc,v 1.26.2.6 2008/02/15 16:18:14 karens Exp $
 
 /**
  * Views field filters
@@ -15,7 +15,11 @@ function _date_views_filters($field) {
       $ymd_handler = 'date_views_timestamp_handler_filter_ymd';
       break;
   }
-  $format = $field['widget']['input_format'];
+  // The $field array is missing widget info, get the complete widget
+  // with the format settings.
+  $types = content_types();
+  $widget = $types[$field['type_name']]['fields'][$field['field_name']]['widget'];
+  $format = !empty($widget['input_format_custom']) ? $widget['input_format_custom'] : $widget['input_format'];
 
   // use this to default to current time
   $current = array('' => t('<all>'), 'now' => t('now'));
