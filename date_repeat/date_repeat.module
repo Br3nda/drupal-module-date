@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.25 2008/02/15 13:23:55 karens Exp $
+// $Id: date_repeat.module,v 1.26 2008/02/15 14:08:46 karens Exp $
 /**
  * @file
  *
@@ -247,7 +247,7 @@ function date_repeat_split_rrule($rrule) {
 /**
  * Analyze a RRULE and return dates that match it.
  */
-function date_repeat_calc($rrule, $start, $end, $exceptions) {
+function date_repeat_calc($rrule, $start, $end, $exceptions = array()) {
   include_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_calc.inc');
   return _date_repeat_calc($rrule, $start, $end, $exceptions);
 }
