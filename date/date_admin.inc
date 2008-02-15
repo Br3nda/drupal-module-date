@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.23 2008/02/15 13:23:54 karens Exp $
+//$Id: date_admin.inc,v 1.24 2008/02/15 16:00:27 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -75,7 +75,7 @@ function date_widget_settings_form($widget) {
     );
 
   $options = array();
-  if ($widget['type'] == 'date_popup') {
+  if ($widget['type'] == 'date_popup' && module_exists('date_popup')) {
     $formats = date_popup_formats();
   }
   else {
