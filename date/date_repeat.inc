@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.9.2.2 2008/02/03 17:39:58 karens Exp $
+//$Id: date_repeat.inc,v 1.9.2.3 2008/02/15 13:01:19 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -118,6 +118,8 @@ function _date_repeat_widget_validate($element) {
       $value[$field_name][$delta] = array(
         'value' => date_format($date_start, date_type_format($field['type'])),
         'value2' => date_format($date_end, date_type_format($field['type'])),
+        'offset' => date_offset_get($date_start),
+        'offset2' => date_offset_get($date_end),
         'timezone' => $timezone,
         'rrule' => $delta == 0 ? $rrule : '',
         );
