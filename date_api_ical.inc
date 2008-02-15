@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.24 2008/02/15 13:23:53 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.25 2008/02/15 13:55:30 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -211,7 +211,7 @@ function date_ical_import($filename) {
       // PROPERTYATTRIBUTES, and PROPERTYVALUE
       preg_match('/([^;:]+)(?:;([^:]*))?:(.+)/', $line, $matches);
       $name = strtoupper(trim($matches[1]));
-      $attributes = $matches[2];
+      $field = $matches[2];
       $data = $matches[3];
 
       $parse_result = '';
