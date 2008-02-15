@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.46 2008/02/01 11:48:54 karens Exp $
+// $Id: date_api.module,v 1.47 2008/02/15 13:23:53 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.

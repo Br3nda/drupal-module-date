@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.6 2008/01/30 15:56:56 karens Exp $
+// $Id: date_repeat_form.inc,v 1.7 2008/02/15 13:23:55 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
