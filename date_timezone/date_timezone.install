@@ -1,8 +1,14 @@
 <?php
-// $Id: date_timezone.install,v 1.5 2008/02/15 13:23:55 karens Exp $
+// $Id: date_timezone.install,v 1.6 2008/02/15 14:52:38 karens Exp $
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
 include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
+
+function date_timezone_module_uninstall() {
+  $ret = array();
+  variable_del('date_default_timezone_name');
+  return $ret;
+}
 
 /**
  * @file
