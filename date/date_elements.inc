@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.27 2008/02/15 13:23:54 karens Exp $
+//$Id: date_elements.inc,v 1.28 2008/02/16 14:07:20 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -367,6 +367,9 @@ function date_combo_validate($element) {
       $function = $field['widget']['type'] .'_input_value';
       $to_date = $function($element[$to_field]);
       $item[$to_field] = $to_date;
+    }
+    else {
+      $item[$to_field] = $item[$from_field];
     }
 
     $from_date = date_make_date($item[$from_field], $timezone, $field['type']);
