@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.34 2008/02/16 14:21:32 karens Exp $
+//$Id: date_api_elements.inc,v 1.35 2008/02/16 19:32:47 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -394,7 +394,9 @@ function date_select_validate($element) {
  */
 function date_select_input_value($element) {
   if (date_is_valid($element['#value'], DATE_ARRAY)) {
-    return date_convert($element['#value'], DATE_ARRAY, $element['#date_type']);
+    // When converting from an array to a timestamp, the timezone is
+    // needed to avoid getting a timestamp for the UTC value.
+    return date_convert($element['#value'], DATE_ARRAY, $element['#date_type'], $element['#date_timezone']);
   }
   return NULL;
 }
