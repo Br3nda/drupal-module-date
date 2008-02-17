@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.6 2008/02/15 16:18:14 karens Exp $
+// $Id: date_views.inc,v 1.26.2.7 2008/02/17 13:59:00 karens Exp $
 
 /**
  * Views field filters
@@ -192,7 +192,6 @@ function _date_views_handler_filter_date_value_form($field) {
   $form = array(
     '#type' => module_exists('date_popup') ? 'date_popup' : 'date_text',
     '#date_timezone' => date_default_timezone_name(),
-    '#date_type'   => $field['type'],
     '#date_format' => 'Y-m-d',
     '#size' => 20,
   );
