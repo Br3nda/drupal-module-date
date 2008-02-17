@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.6 2008/02/15 13:23:55 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.7 2008/02/17 14:01:40 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.

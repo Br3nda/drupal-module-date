@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.7 2008/02/15 13:23:53 karens Exp $
+// $Id: date_api_sql.inc,v 1.8 2008/02/17 14:01:39 karens Exp $
 
 /**
  * Helper function to test if the database is set up to do timezone

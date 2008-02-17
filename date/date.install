@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.28 2008/02/15 13:23:54 karens Exp $
+// $Id: date.install,v 1.29 2008/02/17 14:01:39 karens Exp $
 
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.

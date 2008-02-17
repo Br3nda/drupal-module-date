@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.7 2008/02/15 13:23:55 karens Exp $
+// $Id: date_repeat_form.inc,v 1.8 2008/02/17 14:01:40 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -92,7 +92,6 @@ function _date_repeat_rrule_process($element) {
       '#default_value' => $UNTIL,
       '#date_timezone' => $element['#date_timezone'],
       '#date_format' => 'Y-m-d',
-      '#date_type' => DATE_DATETIME,
       '#date_label_position' => 'within',
       ),
     'tz' => array('#type' => 'hidden', '#value' => $element['#date_timezone']),
@@ -175,7 +174,6 @@ function _date_repeat_rrule_process($element) {
          '#default_value' => $EXCEPT,
          '#date_timezone' => $element['#date_timezone'],
          '#date_format' => 'Y-m-d',
-         '#date_type' => DATE_DATETIME,
          '#date_label_position' => 'within',
          ),
        'tz' => array('#type' => 'hidden', '#value' => $element['#date_timezone']),
