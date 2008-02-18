@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.51 2008/02/18 19:32:28 karens Exp $
+// $Id: date_api.module,v 1.52 2008/02/18 21:55:04 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1071,8 +1071,9 @@ function date_limit_format($format, $granularity) {
  * @return array of ordered granularity elements in this format string
  */
 function date_format_order($format) {
-  $max = strlen($format);
   $order = array();
+  if (empty($format)) return $order;
+  $max = strlen($format);
   for ($i = 0; $i <= $max; $i++) {
     $c = $format[$i];
     switch ($c) {
