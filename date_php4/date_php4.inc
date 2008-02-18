@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.25 2008/01/31 08:12:33 karens Exp $
+// $Id: date_php4.inc,v 1.26 2008/02/18 19:32:28 karens Exp $
 
 /**
  * @file
@@ -317,7 +317,7 @@ if (!function_exists('timezone_offset_get')) {
       return '';
     }
     $cached = cache_get('date_timezone_offsets:'. $date->timezone);
-    $offsets = unserialize($cached->data);
+    $offsets = isset($cached->data) ? $cached->data : array();
     if (empty($offsets)) {
       $offsets = array('dst' => 0);
       $zones = timezone_abbreviations_list();
@@ -332,7 +332,7 @@ if (!function_exists('timezone_offset_get')) {
           }
         }
       }
-      cache_set('date_timezone_offsets:'. $timezone, 'cache', serialize($offsets));
+      cache_set('date_timezone_offsets:'. $timezone, $offsets);
     }
     $timestamp = $date->timestamp;
     if ($offsets['dst'] == 1) {
@@ -363,7 +363,7 @@ if (!function_exists('date_offset_get')) {
       return '';
     }
     $cached = cache_get('date_timezone_offsets:'. $date->timezone);
-    $offsets = unserialize($cached->data);
+    $offsets = isset($cached->data) ? $cached->data : array();
     if (empty($offsets)) {
       $offsets = array('dst' => 0);
       $zones = timezone_abbreviations_list();
@@ -378,7 +378,7 @@ if (!function_exists('date_offset_get')) {
           }
         }
       }
-      cache_set('date_timezone_offsets:'. $timezone, 'cache', serialize($offsets));
+      cache_set('date_timezone_offsets:'. $timezone, $offsets);
     }
     if ($offsets['dst'] == 1) {
       include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');

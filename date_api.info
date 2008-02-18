@@ -1,4 +1,5 @@
-; $Id: date_api.info,v 1.5 2007/12/03 16:27:17 karens Exp $
+; $Id: date_api.info,v 1.6 2008/02/18 19:32:28 karens Exp $
 name = Date API
 description = A Date API that can be used by other modules.
 package = Date/Time
+core = 6.x
