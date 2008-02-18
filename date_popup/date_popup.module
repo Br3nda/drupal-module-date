@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.34 2008/02/17 14:01:40 karens Exp $
+// $Id: date_popup.module,v 1.35 2008/02/18 12:12:32 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -111,10 +111,11 @@ function date_popup_form_alter($form_id, &$form) {
   // jscalendar overloads these fields, so must not try to do this
   // if jscalendar is installed.
   if (!module_exists('jscalendar')) {
-    if ($form_id == 'comment_form' && isset($form['admin']) && isset($form['admin']['date'])) {
+    if ($form_id == 'comment_form' && isset($form['admin']) && $form['admin']['#access']) {
       $form['admin']['date'] = date_popup_system_date_form($form['admin']['date']);
     }
-    elseif (isset($form['type']) && $form['type']['#value'] .'_node_form' == $form_id && isset($form['author']) && isset($form['author']['date'])) {
+    elseif (isset($form['type']) && $form['type']['#value'] .'_node_form' == $form_id
+    && isset($form['author']) && $form['author']['#access']) {
       $form['author']['date'] = date_popup_system_date_form($form['author']['date']);
     }
   }
