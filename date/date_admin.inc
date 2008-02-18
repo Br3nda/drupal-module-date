@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.4 2008/02/18 12:28:22 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.5 2008/02/18 15:30:55 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -33,6 +33,9 @@ function _date_widget_settings($op, &$field) {
       }
       if ($field['widget']['type'] == 'date_select' && !preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $field['year_range'])) {
         form_set_error('year_range', t('Years back and forward must be in the format -9:+9.'));
+      }
+      if (isset($field['advanced']['label_position'])) {
+        form_set_value(array('#parents' => array('label_position')), $field['advanced']['label_position']);
       }
       // Munge the table display for text parts back into an array of text parts.
       if (is_array($field['advanced']['text_parts'])) {
