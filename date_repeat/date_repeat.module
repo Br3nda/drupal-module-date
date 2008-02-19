@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.28 2008/02/18 21:55:05 karens Exp $
+// $Id: date_repeat.module,v 1.29 2008/02/19 16:13:16 karens Exp $
 /**
  * @file
  *
@@ -24,6 +24,13 @@ function date_repeat_elements() {
     'element_validate' => array('date_repeat_rrule_validate'),
   );
   return $type;
+}
+
+function date_repeat_theme() {
+  return array(
+    'date_repeat' => array('arguments' => array('element' => NULL)),
+    'date_repeat_current_exceptions' => array('arguments' => array('element' => NULL)),
+  );
 }
 
 /**
