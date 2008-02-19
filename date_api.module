@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.52 2008/02/18 21:55:04 karens Exp $
+// $Id: date_api.module,v 1.53 2008/02/19 15:37:59 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1075,6 +1075,7 @@ function date_format_order($format) {
   if (empty($format)) return $order;
   $max = strlen($format);
   for ($i = 0; $i <= $max; $i++) {
+    if (!isset($format[$i])) break;
     $c = $format[$i];
     switch ($c) {
       case 'd':

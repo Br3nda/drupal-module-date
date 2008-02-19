@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.9 2008/02/18 21:55:05 karens Exp $
+// $Id: date_repeat_form.inc,v 1.10 2008/02/19 15:37:59 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -224,7 +224,7 @@ function date_repeat_merge($form_values) {
 /**
  * Adds and removes exceptions from the list of current exceptions.
  */
-function date_repeat_rrule_validate($element, $edit, $form_state, $form) {
+function date_repeat_rrule_validate($element, &$form_state, $form) {
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
 
   global $form_values;
@@ -248,8 +248,8 @@ function date_repeat_rrule_validate($element, $edit, $form_state, $form) {
   $item = date_repeat_merge($item);
   $item['EXDATE'] = implode(',', $exceptions);
   $rrule = date_api_ical_build_rrule($item);
-  //form_set_value($element['advanced']['EXDATE'], NULL);
-  form_set_value($element, $rrule);
+  //form_set_value($element['advanced']['EXDATE'], NULL, $form_state);
+  form_set_value($element, $rrule, $form_state);
 }
 
 /**
