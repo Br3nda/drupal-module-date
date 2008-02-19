@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.39 2008/02/19 15:37:59 karens Exp $
+//$Id: date_api_elements.inc,v 1.40 2008/02/19 15:45:16 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -335,7 +335,7 @@ function date_increment_round(&$date, $increment) {
 /**
  *  Validation function for date selector.
  */
-function date_select_validate($element, &$form_state, $form) {
+function date_select_validate($element, &$form_state) {
   $error_field = implode('][', $element['#parents']);
 
   // Strip field labels out of the results.
@@ -398,7 +398,7 @@ function date_select_input_value($element) {
 /**
  *  Validation for text input.
  */
-function date_text_validate($element, &$form_state, $form) {
+function date_text_validate($element, &$form_state) {
   $form_values = $element['#value'];
   $value = date_text_input_value($element);
 
@@ -436,7 +436,7 @@ function date_text_input_value($element) {
  *
  *  Move the timezone value from the nested field back to the original field.
  */
-function date_timezone_validate($element, &$form_state, $form) {
+function date_timezone_validate($element, &$form_state) {
   form_set_value($element, $element['#value']['timezone'], $form_state);
 }
 
