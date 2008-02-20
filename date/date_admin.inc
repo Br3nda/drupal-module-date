@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.33 2008/02/20 01:33:23 karens Exp $
+//$Id: date_admin.inc,v 1.34 2008/02/20 02:22:23 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -271,6 +271,9 @@ function date_field_settings_validate(&$form, &$form_state, $form_id) {
   if ($form_values['multiple'] == 99) {
     form_set_value($form['multiple'], 1, $form_state);
     form_set_value($form['repeat'], 1, $form_state);
+  }
+  else {
+    form_set_value($form['repeat'], 0, $form_state);
   }
 }
 
