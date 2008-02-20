@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.30 2008/02/20 13:52:53 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.31 2008/02/20 13:55:39 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -660,6 +660,7 @@ function date_api_ical_build_rrule($form_values) {
       }
     }
     if (!empty($ex_dates)) {
+      sort($ex_dates);
       $RRULE .= chr(13) . chr(10) .'EXDATE:'. implode(',', $ex_dates);
     }
   }
