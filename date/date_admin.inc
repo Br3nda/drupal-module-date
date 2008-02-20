@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.34 2008/02/20 02:22:23 karens Exp $
+//$Id: date_admin.inc,v 1.35 2008/02/20 12:46:58 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -308,7 +308,7 @@ function date_columns($field) {
 
 function date_field_settings_form($field) {
   $form = array(
-    '#element_validate' => array('date_field_settings_validate'),
+    '#element_validate' => array('date_field_settings_validate')
     );
   $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : (date_has_time($field['granularity']) ? 'site' : 'none');
 

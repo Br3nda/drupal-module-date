@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.19 2008/02/20 10:18:54 karens Exp $
+//$Id: date_repeat.inc,v 1.20 2008/02/20 12:46:59 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -132,25 +132,5 @@ function _date_repeat_widget_validate($element, &$form_state) {
     // item of the field.
     form_set_value(array('#parents' => array($field_name, 0, 'rrule')), $rrule, $form_state);
     form_set_value($element['rrule'], NULL, $form_state);
-  }
-}
-
-/**
- * Clean up Date Repeat column information.
- *
- * To be used for uninstalls, not currently implemented anywhere.
- */
-function _date_repeat_remove() {
-  $types = content_types();
-  foreach ($types as $type_name => $type) {
-    foreach ($type['fields'] as $field_name => $field) {
-      if ($field['repeat'] == 1) {
-        $db_info = content_database_info($field);
-        $table = $db_info['table'];
-        $column = $db_info['columns']['rrule']['column'];
-        db_query("ALTER TABLE {". $table ."} DROP $column");
-        db_query("UPDATE {node_field} set multiple = 1 WHERE field_name = '". $field['field_name'] ."'");
-      }
-    }
   }
 }
