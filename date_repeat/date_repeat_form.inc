@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.5.2.2 2008/02/17 13:59:00 karens Exp $
+// $Id: date_repeat_form.inc,v 1.5.2.3 2008/02/20 12:47:55 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -43,9 +43,9 @@ function _date_repeat_rrule_process($element) {
   else {
     $rrule = $element['#value'];
   }
-  // Unset the original string value of the RRULE so we can create
+  // Empty the original string value of the RRULE so we can create
   // an array of values for the form from the RRULE's contents.
-  unset($element['#value']);
+  $element['#value'] = '';
 
   $parts = date_repeat_split_rrule($rrule);
   $rrule = $parts[0];

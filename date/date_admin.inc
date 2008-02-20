@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.7 2008/02/19 13:17:34 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.8 2008/02/20 12:47:55 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -207,7 +207,7 @@ function _date_field_settings($op, $field) {
 
     case 'save':
 
-      $options = array('granularity', 'timezone_db', 'tz_handling', 'todate');
+      $options = array('granularity', 'timezone_db', 'tz_handling', 'todate', 'repeat');
       for ($i = 0; $i <= 3; $i++) {
         switch ($i) {
         case(1):
@@ -242,6 +242,23 @@ function _date_field_settings($op, $field) {
 }
 
 /**
+ * Custom field settings manipulation.
+ *
+ * CCK field settings can't use form_set_value(),
+ * so do it in a custom function.
+ */
+function date_field_settings_validate(&$form, $form_id) {
+  global $form_values;
+  if ($form_values['multiple'] == 99) {
+    form_set_value($form['multiple'], 1);
+    form_set_value($form['repeat'], 1, $form_state);
+  }
+  else {
+    form_set_value($form['repeat'], 0);
+  }
+}
+
+/**
  *  Callback for field columns.
  */
 function date_columns($field) {
@@ -268,7 +285,9 @@ function date_columns($field) {
 }
 
 function date_field_settings_form($field) {
-  $form = array();
+  $form = array(
+    '#element_validate' => array('date_field_settings_validate' => array())
+    );
   $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : (date_has_time($field['granularity']) ? 'site' : 'none');
 
   // Override the normal multiple checkbox when using date repeat.
@@ -279,11 +298,15 @@ function date_field_settings_form($field) {
     $options += array(99 => t('Repeating'));
     $description .= t(' Repeating dates display options to allow the user to select when and how often the date will repeat.');
   }
+  $form['repeat'] = array(
+    '#type' => 'value',
+    '#value' => $field['repeat'],
+    );
   $form['multiple'] = array(
     '#type' => 'radios',
     '#title' => t('Multiple'),
     '#options' => $options,
-    '#default_value' => $field['multiple'],
+    '#default_value' => !empty($field['repeat']) ? 99 : $field['multiple'],
     '#description' => $description,
   );
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.7 2008/02/15 13:01:19 karens Exp $
+// $Id: date.install,v 1.21.2.8 2008/02/20 12:47:55 karens Exp $
 
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
@@ -429,7 +429,7 @@ function date_db_integrity($name) {
           }
         }
       }
-      if ($field['multiple'] == 99) {
+      if ($field['repeat'] == 1) {
         if (!date_column_exists($table, $columns_start['rrule']['column'])) {
           unset($columns_start['rrule']);
         }

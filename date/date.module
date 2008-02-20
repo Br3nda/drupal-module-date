@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.1 2008/01/30 21:25:07 karens Exp $
+// $Id: date.module,v 1.39.2.2 2008/02/20 12:47:55 karens Exp $
 
 /**
  * @file
@@ -80,7 +80,7 @@ function date_field_formatter_info() {
 function date_field_formatter($field, $item, $formatter, $node) {
   // Call the right theme for this formatter.
   $dates = date_formatter_process($field, $item, $node, $formatter);
-  $output .= theme('date_format_'. $formatter, $field, $item, $node, $dates);
+  $output = theme('date_display_combination', $field, $item, $dates, $node);
   return $output;
 }
 

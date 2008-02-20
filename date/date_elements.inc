@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.7 2008/02/17 13:59:00 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.8 2008/02/20 12:47:55 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -172,7 +172,7 @@ function _date_widget($op, &$node, $field, &$items) {
       }
 
       // Add a date repeat form element, if needed.
-      if (module_exists('date_repeat') && $field['multiple'] == 99) {
+      if (module_exists('date_repeat') && $field['repeat'] == 1) {
         include_once(drupal_get_path('module', 'date') .'/date_repeat.inc');
         _date_repeat_widget($element, $node, $field, $items);
       }
