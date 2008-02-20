@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.11 2008/02/19 15:45:17 karens Exp $
+// $Id: date_repeat_form.inc,v 1.12 2008/02/20 01:33:23 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -75,6 +75,7 @@ function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
     '#suffix' => '</div>',
   );
 
+  $UNTIL = '';
   if (!empty($rrule['UNTIL']['datetime'])) {
     if (!is_array(!empty($rrule['UNTIL']['datetime']))) {
       $UNTIL = $rrule['UNTIL']['datetime'];

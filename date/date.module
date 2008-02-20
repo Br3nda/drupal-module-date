@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.50 2008/02/20 00:27:33 karens Exp $
+// $Id: date.module,v 1.51 2008/02/20 01:33:23 karens Exp $
 
 /**
  * @file
@@ -353,7 +353,7 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
  * This code and all the processes it uses are in a separate file,
  * included only when processing forms.
  */
-function date_widget(&$form, &$form_state, $field, $items, $delta) {
+function date_widget(&$form, &$form_state, &$field, $items, $delta) {
   include_once(drupal_get_path('module', 'date') .'/date_elements.inc');
   return _date_widget($form, $form_state, $field, $items, $delta);
 }
