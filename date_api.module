@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.56 2008/02/20 11:57:34 karens Exp $
+// $Id: date_api.module,v 1.57 2008/02/21 16:41:22 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -405,7 +405,7 @@ function date_timezone_names($required = FALSE, $refresh = FALSE) {
     $data = isset($cached->data) ? $cached->data : array();
     if (empty($data) || $refresh) {
       $data = timezone_identifiers_list();
-      cache_set('date_timezone_identifiers_list', $date);
+      cache_set('date_timezone_identifiers_list', $data);
     }
     foreach ($data as $name) {
       $zonenames[$name] = t($name);
