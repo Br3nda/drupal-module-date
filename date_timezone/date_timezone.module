@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.8.2.1 2008/02/19 12:19:43 karens Exp $
+// $Id: date_timezone.module,v 1.8.2.2 2008/02/21 16:40:22 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -52,7 +52,7 @@ function date_timezone_user_form(&$form) {
   $form['timezone']['#validate'] = array('date_timezone_update_user' => array());
   $form['timezone']['#uid'] = $account->uid;
   $form['timezone']['timezone']['#type'] = 'hidden';
-  $form['timezone']['timezone']['#value'] = $form['timezone']['#default_value'];
+  $form['timezone']['timezone']['#value'] = $form['timezone']['timezone']['#default_value'];
   $timezone = $account->timezone_name ? $account->timezone_name : variable_get('date_default_timezone_name', NULL);
 
   $form['timezone']['timezone_name'] = array(
