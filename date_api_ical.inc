@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.8 2008/02/20 13:55:27 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.9 2008/02/22 14:43:54 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -128,9 +128,9 @@ function date_ical_import($filename) {
     $line = trim($line);
     $vcal .= $line ."\n";
     // Deal with begin/end tags separately
-    if (preg_match('/(BEGIN|END):(\S+)/', $line, $matches)) {
+    if (preg_match('/(BEGIN|END):V(\S+)/', $line, $matches)) {
       $closure = $matches[1];
-      $type = $matches[2];
+      $type = 'V'. $matches[2];
       if ($closure == 'BEGIN') {
         array_push($parents, $type);
         array_push($subgroups, array());
