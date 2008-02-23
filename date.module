@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.32.2.55 2007/12/03 16:26:21 karens Exp $
+// $Id: date.module,v 1.32.2.56 2008/02/23 13:13:34 karens Exp $
 
 /**
  * @file
@@ -624,6 +624,20 @@ function date_views_query_alter(&$query, &$view) {
 function date_pathauto_node($op, $node = NULL) {
   include_once('./'. drupal_get_path('module', 'date') .'/date_pathauto.inc');
   return _date_pathauto_node($op, $node);
+}
+
+/**
+ * Callbacks for token.
+ */
+if (!function_exists('date_token_list')) {
+  function date_token_list($type = 'all') {
+    include_once(drupal_get_path('module', 'date') .'/date_token.inc');
+    return _date_token_list($type);
+  }
+  function date_token_values($type, $object = NULL, $options = array()) {
+    include_once(drupal_get_path('module', 'date') .'/date_token.inc');
+    return _date_token_values($type, $object, $options);
+  }
 }
 
 /**
