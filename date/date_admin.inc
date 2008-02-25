@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.8 2008/02/20 12:47:55 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.9 2008/02/25 20:43:36 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -247,14 +247,14 @@ function _date_field_settings($op, $field) {
  * CCK field settings can't use form_set_value(),
  * so do it in a custom function.
  */
-function date_field_settings_validate(&$form, $form_id) {
+function date_field_settings_validate($element) {
   global $form_values;
   if ($form_values['multiple'] == 99) {
-    form_set_value($form['multiple'], 1);
-    form_set_value($form['repeat'], 1, $form_state);
+    form_set_value($element['multiple'], 1);
+    form_set_value($element['repeat'], 1);
   }
   else {
-    form_set_value($form['repeat'], 0);
+    form_set_value($element['repeat'], 0);
   }
 }
 
@@ -278,7 +278,7 @@ function date_columns($field) {
     $db_columns['offset'] = array('type' => 'integer', 'length' => 10, 'not null' => FALSE, 'sortable' => TRUE);
     if ($field['todate']) $db_columns['offset2'] = array('type' => 'integer', 'length' => 10, 'not null' => FALSE, 'sortable' => TRUE);
   }
-  if ($field['multiple'] == 99) {
+  if ($field['repeat']) {
     $db_columns['rrule'] = array('type' => 'text', 'not null' => FALSE, 'sortable' => FALSE);
   }
   return $db_columns;
@@ -286,7 +286,7 @@ function date_columns($field) {
 
 function date_field_settings_form($field) {
   $form = array(
-    '#element_validate' => array('date_field_settings_validate' => array())
+    '#validate' => array('date_field_settings_validate' => array())
     );
   $tz_handling = $field['tz_handling'] ? $field['tz_handling'] : (date_has_time($field['granularity']) ? 'site' : 'none');
 

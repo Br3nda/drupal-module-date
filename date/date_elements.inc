@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.8 2008/02/20 12:47:55 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.9 2008/02/25 20:43:36 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -147,7 +147,7 @@ function _date_widget($op, &$node, $field, &$items) {
           '#validate' => array('date_widget_validate' => array()),
           ));
 
-      $max = $field['multiple'] == 1 ? 2 + sizeof($items) : 0;
+      $max = ($field['multiple'] == 1 && !$field['repeat']) ? 2 + sizeof($items) : 0;
       foreach (range(0, $max) as $delta) {
 
         $element[$field['field_name']][$delta] = array(
