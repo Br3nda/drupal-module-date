@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.13 2008/02/21 16:41:22 karens Exp $
+// $Id: date_timezone.module,v 1.14 2008/03/01 18:06:39 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -8,6 +8,18 @@
  * This module won't be needed once core starts tracking timezone names
  * instead of offsets.
  */
+
+/**
+ * Make sure a timezone has been selected.
+ */
+function date_timezone_menu($may_cache) {
+  if (!$may_cache) {
+    $tz_name = variable_get('date_default_timezone_name', NULL);
+    if (empty($tz_name) || $tz_name == 'GMT') {
+      drupal_set_message(t('The Date Timezone module requires you to !link.', array('!link' => l(t('set the site timezone name'), 'admin/settings/date-time'))), 'error');
+    }
+  }
+}
 
 /**
  * Implementation of hook_form_alter().
