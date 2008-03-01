@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.9 2008/02/25 20:43:36 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.10 2008/03/01 18:21:50 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -416,19 +416,23 @@ function date_format_options() {
     $formats = array_merge(date_short_formats(), date_medium_formats(), date_long_formats());
     $options = array();
     $now = date_example_date();
-    foreach ($formats as $format) {
-      // Create an option that shows date only without time, along with the
-      // default string which has both date and time.
-      $no_time = date_limit_format($format, array('month', 'day', 'year'));
-      $zones = array('', 'O', 'P', 'e');
-      foreach ($zones as $zone) {
-        $time_format = !empty($zone) ? $format .' '. $zone : $format;
-        $options[$no_time] = date_format_date($now, 'custom', $no_time);
-        $options[$time_format] = date_format_date($now, 'custom', $time_format);
+    if (!empty($now)) {
+      foreach ($formats as $format) {
+        // Create an option that shows date only without time, along with the
+        // default string which has both date and time.
+        $no_time = date_limit_format($format, array('month', 'day', 'year'));
+        $zones = array('', 'O', 'P', 'e');
+        foreach ($zones as $zone) {
+          $time_format = !empty($zone) ? $format .' '. $zone : $format;
+          $options[$no_time] = date_format_date($now, 'custom', $no_time);
+          $options[$time_format] = date_format_date($now, 'custom', $time_format);
+        }
       }
+      asort($options);
     }
-    asort($options);
-    cache_set('date_format_options:'. $user->uid, 'cache', serialize($options), CACHE_TEMPORARY);
+    if (!empty($options)) {
+      cache_set('date_format_options:'. $user->uid, 'cache', serialize($options), CACHE_TEMPORARY);
+    }
   }
   return $options;
 }
