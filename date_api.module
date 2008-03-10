@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.57 2008/02/21 16:41:22 karens Exp $
+// $Id: date_api.module,v 1.58 2008/03/10 22:46:45 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -478,6 +478,9 @@ function date_t($string) {
  *   A translated date string in the requested format.
  */
 function date_format_date($object, $type = 'medium', $format = '') {
+  if (empty($object)) {
+    return '';
+  }
   switch ($type) {
     case 'small':
       $format = variable_get('date_format_short', 'm/d/Y - H:i');
