@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.5 2008/03/10 22:42:33 karens Exp $
+// $Id: date.module,v 1.39.2.6 2008/03/10 22:56:57 karens Exp $
 
 /**
  * @file
@@ -388,8 +388,8 @@ function date_formatter_format($formatter, $field_name) {
     case 'medium':
     case 'short':
     case 'default':
-      $custom = 'output_format_custom'. $formatter != 'default' ? '_'. $formatter : '';
-      $value = 'output_format_date'. $formatter != 'default' ? '_'. $formatter : '';
+      $custom = 'output_format_custom'. ($formatter != 'default' ? '_'. $formatter : '');
+      $value = 'output_format_date'. ($formatter != 'default' ? '_'. $formatter : '');
       if ($field[$custom] > '') {
         $format = $field[$custom];
       }
