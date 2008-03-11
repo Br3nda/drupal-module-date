@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.10 2008/03/01 18:21:50 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.11 2008/03/11 10:30:49 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -121,11 +121,11 @@ function date_widget_settings_form($widget) {
   else {
     $form['increment'] = array(
       '#type' => 'hidden',
-      '#value' => !empty($widget['year_range']) ? $widget['year_range'] : '-3:+3',
+      '#value' => !empty($widget['increment']) ? $widget['increment'] : 1,
       );
     $form['year_range'] = array(
       '#type' => 'hidden',
-      '#value' => isset($widget['increment']) ? $widget['increment'] : 1,
+      '#value' => isset($widget['year_range']) ? $widget['year_range'] : '-3:+3',
       );
   }
 
