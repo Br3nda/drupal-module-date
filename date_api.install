@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.install,v 1.14 2008/03/11 12:10:54 karens Exp $
+// $Id: date_api.install,v 1.15 2008/03/11 12:49:33 karens Exp $
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
 include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
@@ -104,6 +104,10 @@ function date_api_update_5200() {
   if (!function_exists('date_create')) {
     module_enable(array('date_php4'));
   }
+  // When upgrading from previous versions that had no Date Timezone module
+  // some previously-enabled modules won't work, so enable it here and
+  // let the admin disable it if necessary.
+  module_enable(array('date_timezone'));
   return $ret;
 }
 
