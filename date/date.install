@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.10 2008/03/11 11:49:31 karens Exp $
+// $Id: date.install,v 1.21.2.11 2008/03/11 12:10:39 karens Exp $
 
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
@@ -335,7 +335,7 @@ function date_update_5104() {
  */
 function date_update_5200() {
   $ret = array();
-  module_enable('date_timezone');
+  module_enable(array('date_timezone'));
 
   // Make sure date module loads after date_api.
   $ret[] = update_sql("UPDATE {system} SET weight = 1 WHERE name = 'date'");

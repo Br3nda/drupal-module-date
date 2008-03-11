@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.install,v 1.5.2.8 2008/03/11 11:49:32 karens Exp $
+// $Id: date_api.install,v 1.5.2.9 2008/03/11 12:10:39 karens Exp $
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
 include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
@@ -102,7 +102,7 @@ function date_api_update_5000() {
 function date_api_update_5200() {
   $ret = array();
   if (!function_exists('date_create')) {
-    module_enable('date_php4');
+    module_enable(array('date_php4'));
   }
   return $ret;
 }
