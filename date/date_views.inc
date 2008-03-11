@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.8 2008/03/10 20:24:26 karens Exp $
+// $Id: date_views.inc,v 1.26.2.9 2008/03/11 10:45:56 karens Exp $
 
 /**
  * Views field filters
@@ -83,12 +83,16 @@ function _date_views_filters($field) {
     if ($field['todate']) {
       $filters2['to|default'] = $filters['default'];
       $filters2['to|default']['name'] = t('To Date');
+      $filters2['to|default']['extra'] = array('column' => 'value2', 'field' => $field);
       $filters2['to|year'] = $filters['year'];
       $filters2['to|year']['name'] = t('To Year');
+      $filters2['to|year']['extra'] = array('column' => 'value2', 'field' => $field);
       $filters2['to|month'] = $filters['month'];
       $filters2['to|month']['name'] = t('To Month');
+      $filters2['to|month']['extra'] = array('column' => 'value2', 'field' => $field);
       $filters2['to|day'] = $filters['day'];
       $filters2['to|day']['name'] = t('To Day');
+      $filters2['to|day']['extra'] = array('column' => 'value2', 'field' => $field);
       $filters += $filters2;
     }
     return $filters;
