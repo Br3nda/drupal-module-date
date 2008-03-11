@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.9 2008/03/11 10:45:56 karens Exp $
+// $Id: date_views.inc,v 1.26.2.10 2008/03/11 11:49:31 karens Exp $
 
 /**
  * Views field filters
@@ -121,11 +121,13 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
     date_modify($end, $results[2] . $results[3] .' '. $results[4]);
     $adjust = date_format($end, 'U') - date_format($start, 'U');
   }
-  else {
-    $value = isset($filter['value']['date']) ? $filter['value']['date'] : $filter['value'];
+  elseif (module_exists('date_popup')) {
     $element = _date_views_handler_filter_date_value_form($field);
     $element['#value'] = $filter['value'];
     $value = date_popup_input_value($element);
+  }
+  else {
+    $value = $filter['value'];
   }
 
   // Do some validation of input values before creating any SQL.
