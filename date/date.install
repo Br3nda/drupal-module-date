@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.33 2008/03/11 12:10:54 karens Exp $
+// $Id: date.install,v 1.34 2008/03/11 13:16:13 karens Exp $
 
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
@@ -233,6 +233,9 @@ function date_update_5200() {
  */
 function date_update_5201() {
   $ret = array();
+  if (db_result(db_query("SELECT COUNT(*) FROM {node_field_instance} WHERE widget_type = 'date_js'"))) {
+    module_enable(array('date_popup'));
+  }
   $ret[] = update_sql("UPDATE {node_field_instance} SET widget_type = 'date_popup' WHERE widget_type = 'date_js'");
   content_clear_type_cache();
   return $ret;
