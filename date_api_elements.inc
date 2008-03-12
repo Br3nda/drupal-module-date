@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.41 2008/02/19 18:22:02 karens Exp $
+//$Id: date_api_elements.inc,v 1.42 2008/03/12 13:21:09 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -283,7 +283,7 @@ function date_parts_element($element, $date, $format) {
     }
   }
 
-  if (strtolower($hours_format) == 'g' && date_has_time($granularity)) {
+  if (($hours_format == 'g' || $hours_format == 'h') && date_has_time($granularity)) {
     $sub_element['ampm'] = array(
       '#type' => 'select',
       '#default_value' => is_object($date) ? (date_format($date, 'G') >= 12 ? 'pm' : 'am') : '',
