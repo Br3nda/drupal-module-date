@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.install,v 1.1.2.5 2008/02/15 14:52:47 karens Exp $
+// $Id: date_timezone.install,v 1.1.2.6 2008/04/03 10:32:29 karens Exp $
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
 include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
@@ -27,7 +27,7 @@ function date_timezone_requirements($phase) {
   switch ($phase) {
     case 'runtime':
       $tz_name = variable_get('date_default_timezone_name', NULL);
-      if ($tz_name === NULL || $tz_name == 'GMT') {
+      if ($tz_name === NULL) {
         $error = TRUE;
         $severity = REQUIREMENT_ERROR;
         $value = $t('The Date Timezone module requires you to !link.', array('!link' => l($t('set the site timezone name'), 'admin/settings/date-time')));
