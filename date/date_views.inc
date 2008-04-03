@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.10 2008/03/11 11:49:31 karens Exp $
+// $Id: date_views.inc,v 1.26.2.11 2008/04/03 18:37:15 karens Exp $
 
 /**
  * Views field filters
@@ -459,7 +459,7 @@ function date_iso_week_range($value) {
   $min_date = date_format($date, DATE_FORMAT_ISO);
   date_modify($date, '+1 week');
   date_modify($date, '-1 second');
-  $max_date = date_foramt($date, DATE_FORMAT_ISO);
+  $max_date = date_format($date, DATE_FORMAT_ISO);
   return array($min_date, $max_date);
 }
 
