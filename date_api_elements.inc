@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.43 2008/04/01 18:21:13 karens Exp $
+//$Id: date_api_elements.inc,v 1.44 2008/04/10 01:08:28 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -579,7 +579,11 @@ function theme_date_timezone($element) {
  *   A themed HTML string representing the date selection boxes.
  */
 function theme_date_select($element) {
-  return '<div class="container-inline-date clear-block">'. theme('form_element', $element, $element['#children']) .'</div>';
+  $output = '';
+  if (isset($element['#children'])) {
+    $output = $element['#children'];
+  }
+  return '<div class="container-inline-date clear-block">'. theme('form_element', $element, $output) .'</div>';
 }
 
 /**

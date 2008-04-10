@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.57 2008/04/01 18:23:05 karens Exp $
+// $Id: date.module,v 1.58 2008/04/10 01:08:28 karens Exp $
 
 /**
  * @file
@@ -287,7 +287,7 @@ function date_clear_all($remove = FALSE) {
       cache_clear_all('date_browser_views', 'cache_views');
     }
     else {
-      date_views_browser_get_views(TRUE);
+      //date_views_browser_get_views(TRUE);
     }
   }
 }
