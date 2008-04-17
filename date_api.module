@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.60 2008/04/17 10:53:05 karens Exp $
+// $Id: date_api.module,v 1.61 2008/04/17 12:17:59 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -457,6 +457,22 @@ function date_t($string) {
     }
   }
   return strtr($string, $replace);
+}
+
+/**
+ * An override for interval formatting that adds past and future context
+ *
+ * @param DateTime $date
+ * @param integer $granularity
+ * @return formatted string
+ */
+function date_format_interval($date, $granularity = 2) {
+  $interval = time() - date_format($date, 'U');
+  if($interval > 0 ) {
+    return t('!time ago', array('!time' => format_interval($interval, $granularity)));
+  } else {
+    return format_interval(abs($interval), $granularity);
+  }
 }
 
 /**
