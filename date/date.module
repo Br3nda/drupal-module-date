@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.58 2008/04/10 01:08:28 karens Exp $
+// $Id: date.module,v 1.59 2008/04/17 11:40:24 karens Exp $
 
 /**
  * @file
@@ -195,6 +195,9 @@ function date_formatter_process($element) {
     else {
       // create a date object with a gmt timezone from the database value
       $value = $item[$processed];
+      if ($field['type'] == DATE_ISO) {
+        $value = date_fuzzy_datetime($value);
+      }
       $date = date_make_date($value, 'UTC', $field['type']);
       $dates[$processed] = array();
       $dates[$processed]['db']['object'] = $date;
