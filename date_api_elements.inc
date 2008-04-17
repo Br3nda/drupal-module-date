@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.13 2008/04/17 15:59:50 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.14 2008/04/17 16:45:19 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -349,6 +349,7 @@ function date_increment_round(&$date, $increment) {
  */
 function date_select_validate($element) {
   $error_field = implode('][', $element['#parents']);
+  $granularity = array_values(date_format_order($element['#date_format']));
 
   // Strip field labels out of the results.
   foreach ($element['#value'] as $field => $value) {
@@ -368,12 +369,12 @@ function date_select_validate($element) {
         '%min' => variable_get('date_min_year', 1), '%max' => variable_get('date_max_year', 4000))));
     }
   }
-  if ($element['#required'] || !empty($element['#value']['month'])) {
+  if (in_array('month', $granularity) && ($element['#required'] || !empty($element['#value']['month']))) {
     if ($element['#value']['month'] < 1 || $element['#value']['month'] > 12) {
       form_set_error($error_field .'][month', t('month must be a number between 1 and 12.'));
     }
   }
-  if ($element['#required'] || !empty($element['#value']['day'])) {
+  if (in_array('day', $granularity) && ($element['#required'] || !empty($element['#value']['day']))) {
     if ($element['#value']['day'] < 1 || $element['#value']['day'] > 31) {
       form_set_error($error_field .'][day', t('day must be a number between 1 and 31.'));
     }
@@ -385,7 +386,7 @@ function date_select_validate($element) {
       form_set_value($element, $value);
     }
     elseif ($element['#required']) {
-      form_set_error($error_field, t('A valid date cannot be constructed from %m-%d-%year.', array(
+      form_set_error($error_field, t('A valid date cannot be constructed from %m-%d-%y.', array(
         '%m' => $element['#value']['month'],
         '%d' => $element['#value']['day'],
         '%y' => $element['#value']['year'],
