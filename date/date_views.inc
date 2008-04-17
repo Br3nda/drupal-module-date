@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.11 2008/04/03 18:37:15 karens Exp $
+// $Id: date_views.inc,v 1.26.2.12 2008/04/17 12:48:09 karens Exp $
 
 /**
  * Views field filters
@@ -104,12 +104,11 @@ function _date_views_filters($field) {
 
 function _date_views_timestamp_filter_handler($op, $filter, $filterinfo, &$query) {
   // this is just a wrapper function that sets the date type
-  return _date_views_filter_handler($op, $filter, $filterinfo, $query, 'int');
-}
-function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = 'iso') {
+  return _date_views_filter_handler($op, $filter, $filterinfo, $query, DATE_UNIX);
+ }
+function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = DATE_ISO) {
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
-  include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
-
+  
   $adjust = 0;
   if (trim($filter['options']) == 'now') {
     $value = 'now';
