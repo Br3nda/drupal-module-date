@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.9.2.5 2008/02/20 12:47:55 karens Exp $
+//$Id: date_repeat.inc,v 1.9.2.6 2008/04/17 12:40:57 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -112,7 +112,9 @@ function _date_repeat_widget_validate($element) {
 
     $dates = date_repeat_calc($rrule, $start_datetime, $end_datetime, $exceptions);
     foreach ($dates as $delta => $date) {
-      $date_start = date_make_date($date, $timezone, $field['type']);
+      // date_repeat_calc always returns DATE_DATETIME dates, which is
+      // not necessarily $field['type'] dates.
+      $date_start = date_make_date($date, $timezone, DATE_DATETIME);      
       $date_end = drupal_clone($date_start);
       date_modify($date_end, '+'. $duration .' seconds');
       $value[$field_name][$delta] = array(
