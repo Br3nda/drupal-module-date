@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.11 2008/03/12 13:20:59 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.12 2008/04/17 10:51:57 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -174,6 +174,15 @@ function date_select_process($element, $edit = NULL) {
   $element['#tree'] = TRUE;
   date_increment_round($date, $element['#date_increment']);
   $element += (array) date_parts_element($element, $date, $element['#date_format']);
+  
+  // Store a hidden value for all date parts not in the current display.
+  $granularity = date_format_order($element['#date_format']);
+  foreach (date_nongranularity($granularity) as $field) {
+    $formats = array('year' => 'Y', 'month' => 'n', 'day' => 'j', 'hour' => 'H', 'minute' => 'i', 'second' => 's');
+    $element[$field] = array(
+      '#type' => 'hidden',
+      '#value' => is_object($date) ? intval(date_format($date, $formats[$field])) : 0);
+  }
   return $element;
 }
 
