@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.3 2008/02/15 13:01:19 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.4 2008/04/17 12:44:03 karens Exp $
 
 /**
  * Helper function to test if the database is set up to do timezone
@@ -248,7 +248,7 @@ function date_server_zone_adj() {
       case('mysql'):
       case('mysqli'):
         // In 4.1.1+ we can use difference between NOW() and UTC_TIMESTAMP().
-        if (version_compare(mysql_get_server_info(), '4.1.1', '>=')) {
+        if (version_compare(db_version(), '4.1.1', '>=')) {
           $server_zone_adj = db_result(db_query("SELECT UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(UTC_TIMESTAMP())"));
         }
         break;
