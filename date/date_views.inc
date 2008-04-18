@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.12 2008/04/17 12:48:09 karens Exp $
+// $Id: date_views.inc,v 1.26.2.13 2008/04/18 20:48:13 karens Exp $
 
 /**
  * Views field filters
@@ -284,49 +284,28 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
 
   switch ($op) {
     case 'summary':
-
-      // in the summary operation, the arg contains the selected option
-      $groupby = $arg;
-
-      switch ($groupby) {
+      switch ($arg) {
         case('year'):
           $format = 'Y';
-          $fieldinfo['field'] = date_sql_concat(array(
-              date_sql('YEAR', $table .'.'. $value, $field_type, $offset),
-              ));
+          $sql_format = 'Y';
           break;
         case('month'):
           $format = 'F Y';
-          $fieldinfo['field'] = date_sql_concat(array(
-              date_sql('YEAR', $table .'.'. $value, $field_type, $offset), "'-'",
-              date_sql_pad(date_sql('MONTH', $table .'.'. $value, $field_type, $offset)),
-              ));
+          $sql_format = 'Y-m';
           break;
         case('day'):
           $format = 'F j Y';
-          $fieldinfo['field'] = date_sql_concat(array(
-              date_sql('YEAR', $table .'.'. $value, $field_type, $offset), "'-'",
-              date_sql_pad(date_sql('MONTH', $table .'.'. $value, $field_type, $offset)), "'-'",
-              date_sql_pad(date_sql('DAY', $table .'.'. $value, $field_type, $offset)),
-              ));
+          $sql_format = 'Y-m-d';
           break;
         case('hour'):
           $format = 'F j Y - H';
-          $fieldinfo['field'] = date_sql_concat(array(
-              date_sql('YEAR', $table .'.'. $value, $field_type, $offset), "'-'",
-              date_sql_pad(date_sql('MONTH', $table .'.'. $value, $field_type, $offset)), "'-'",
-              date_sql_pad(date_sql('DAY', $table .'.'. $value, $field_type, $offset)), "'T'",
-              date_sql_pad(date_sql('HOUR', $table .'.'. $value, $field_type, $offset)),
-              ));
+          $sql_format = 'Y-m-d H';
           break;
         case('week'):
           $format = 'F j Y (W)';
-          $fieldinfo['field'] = date_sql_concat(array(
-              date_sql('YEAR', $table .'.'. $value, $field_type, $offset), "'-W'",
-              date_sql('WEEK', $table .'.'. $value, $field_type, $offset),
-              ));
           break;
       }
+      $fieldinfo['field'] = date_sql_format($sql_format, $table .'.'. $value, $field_type, $offset);    
       $fieldinfo['fieldname'] = 'range';
 
       $query->ensure_table($table);
@@ -347,7 +326,7 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
         $tz_name = date_default_timezone_name();
       }
       $date_type = $field_type == 'iso' ? DATE_ISO : DATE_UNIX;
-      $date = date_make_date($query->$value, 'UTC', $date_type);
+      $date = date_make_date($query->$value, date_default_timezone_name(), $date_type);
       date_timezone_set($date, timezone_open($tz_name));
       return l(date_format_date($date, 'custom', $format), $arg .'/'. $query->range);
 

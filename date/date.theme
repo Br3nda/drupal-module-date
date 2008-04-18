@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.1 2008/02/20 12:47:55 karens Exp $
+//$Id: date.theme,v 1.2.2.2 2008/04/18 20:48:13 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -149,7 +149,7 @@ function theme_date_views_browser_period_label($period, $date) {
  */
 function theme_date_views_browser_navigation($label, $period, $prev, $next, $view) {
     drupal_add_css(drupal_get_path('module', 'date_api') .'/date.css');
-    $output  = '<div class="book-navigation date-browser-navigation">';
+    $output  = '<div class="book-navigation date-browser-navigation clear-block">';
     $output .= '<div class="page-links">';
     $output .= l(t('‹ prev !period  ', array('!period' => $period)), $prev, array('class' => 'page-previous'));
     $output .= '<h3 class="date-browser-label"><span class="page-up">'. $label .'</span></h3>';

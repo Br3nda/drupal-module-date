@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.4 2008/04/17 12:44:03 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.5 2008/04/18 20:48:13 karens Exp $
 
 /**
  * Helper function to test if the database is set up to do timezone
@@ -44,67 +44,118 @@ function date_sql_db_timezone_support() {
  *  @return a SQL statement appropriate for the $db_type
  *
  *  example:          date_sql('WEEK', 'MYFIELD', 'int', 'MYOFFSETFIELD', '+')
- *  mysql returns:    WEEK(FROM_UNIXTIME(MYFIELD) + INTERVAL MYOFFSETFIELD SECOND, 3)
+ *  mysql returns:    WEEK(FROM_UNIXTIME(MYFIELD) + SEC_TO_TIME(MYOFFSETFIELD), 3)
  *  postgres returns: EXTRACT(WEEK FROM((MYFIELD::ABSTIME) + INTERVAL MYOFFSETFIELD SECONDS))
+ * 
+ *  DEPRECATED -- now just a wrapper function to ensure backwards compatibility.
  */
 function date_sql($result_type, $field, $date_type = DATE_UNIX, $offset = '', $offset_op = '+') {
-  global $db_type;
+  $field_type = $date_type == DATE_UNIX ? 'int' : 'iso';
+  if (!empty($offset) && $offset_op = '-') {
+    $offset = -$offset;
+  }
+  return date_sql_extract($result_type, $field, $field_type, $offset);
+}
 
-  // NOW() is timezone-adjusted by OS, adjust only for the server adj,
-  // correct offset will get added back in later step.
-  if ($date_type == 'NOW' || $field == 'NOW()') {
-    switch ($db_type) {
-      case('mysql'):
-      case('mysqli'):
-        if (date_server_zone_adj()) {
-          $field = "(NOW() - INTERVAL ". date_server_zone_adj() ." SECOND)";
-        }
-        break;
-      case('pgsql'):
-        if (date_server_zone_adj()) {
-          $field = "(NOW() - INTERVAL '". date_server_zone_adj() ." SECONDS')";
-        }
-        break;
-     }
+/**
+ * Helper function to create cross-database SQL dates.
+ *
+ * @param $field
+ *   The real table and field name, like 'tablename.fieldname'.
+ * @param $field_type
+ *   The type of date field, 'int' or 'datetime'.
+ * @param $set_offset
+ *   The name of a field that holds the timezone offset or a fixed timezone
+ *   offset value. If not provided, the normal Drupal timezone handling
+ *   will be used, i.e. $set_offset = 0 will make no timezone adjustment.
+ * @return
+ *   An appropriate SQL string for the db type and field type.
+ */
+function date_sql_field($field, $field_type = 'int', $set_offset = NULL) {
+  if ($field == 'NOW()') {
+      return $field;
   }
-  // Convert integer field value to native date format.
-  // Since FROM_UNIXTIME() and TIMESTAMP() are timezone adjusted,
-  // remove server adj, correct offset will get added back in later step.
-  elseif ($date_type == DATE_UNIX && $field) {
-    switch ($db_type) {
-      case('mysql'):
-      case('mysqli'):
-        $field = "FROM_UNIXTIME($field)";
-        if (date_server_zone_adj()) {
-          $field = "($field - INTERVAL ". date_server_zone_adj() ." SECOND)";
-        }
-                break;
-      case('pgsql'):
-        $field = "($field::ABSTIME)";
-        if (date_server_zone_adj()) {
-          $field = "($field - INTERVAL '". date_server_zone_adj() ." SECONDS')";
-        }
-        break;
-    }
+  $db_type = $GLOBALS['db_type'];
+  $offset = $set_offset !== NULL ? $set_offset : _views_get_timezone();
+  switch ($db_type) {
+    case 'mysql':
+    case 'mysqli':
+      switch ($field_type) {
+        case 'int':
+          $field = "FROM_UNIXTIME($field)";
+          break;
+        case 'iso':
+          $field = "STR_TO_DATE($field, '%Y-%m-%%%%dT%T')";
+          break;
+        case 'datetime':
+          break;
+      }
+      if (!empty($offset)) {
+        $field = "ADDTIME($field, SEC_TO_TIME($offset))";
+      }
+      return $field;
+    case 'pgsql':
+      switch ($field_type) {
+        case 'int':
+          $field = "$field::ABSTIME";
+          break;
+        case 'iso':
+          $field = $field = "TO_DATE($field, 'FMYYYY-FMMM-FMDDTFMHH:FMMI:FMSS')";
+          break;
+        case 'datetime':
+          break;
+      }
+      if (!empty($offset)) {
+        $field = "($field + 'INTERVAL $offset SECONDS')";
+      }
+      return $field;
   }
-  // Get rid of the 'T' in ISO dates to match native date field.
-  // This makes it possible to use SQL date functions on the value.
-  elseif ($date_type == DATE_ISO && $field) {
-    $field = " REPLACE($field,'T',' ')";
+}
+
+/**
+ * Helper function to create cross-database SQL date formatting.
+ *
+ * @param $format
+ *   A format string for the result, like 'Y-m-d H:i:s'.
+ * @param $field
+ *   The real table and field name, like 'tablename.fieldname'.
+ * @param $field_type
+ *   The type of date field, 'int' or 'datetime'.
+ * @param $set_offset
+ *   The name of a field that holds the timezone offset or a fixed timezone
+ *   offset value. If not provided, the normal Drupal timezone handling
+ *   will be used, i.e. $set_offset = 0 will make no timezone adjustment.
+ * @return
+ *   An appropriate SQL string for the db type and field type.
+ */
+function date_sql_format($format, $field, $field_type = 'int', $set_offset = NULL) {
+  $db_type = $GLOBALS['db_type'];
+  $field = date_sql_field($field, $field_type, $set_offset);
+  switch ($db_type) {
+    case 'mysql':
+    case 'mysqli':
+      $replace = array(
+        'Y' => '%Y',
+        'm' => '%m',
+        'd' => '%%d',
+        'H' => '%H',
+        'i' => '%i',
+        's' => '%s',
+        );
+      $format = strtr($format, $replace);
+      return "DATE_FORMAT($field, '$format')";
+    case 'pgsql':
+      $replace = array(
+        'Y' => 'YY',
+        'm' => 'MM',
+        'd' => 'DD',
+        'H' => 'HH24',
+        'i' => 'MI',
+        's' => 'SS',
+        );
+      $format = strtr($format, $replace);
+      return "TO_CHAR($field, '$format')";
   }
-  // Now apply requested offset to the adjusted query field.
-  if ($offset) {
-    switch ($db_type) {
-    case('mysql'):
-    case('mysqli'):
-      $field = "($field $offset_op INTERVAL ($offset) SECOND)";
-      break;
-    case('pgsql'):
-      $field = "($field $offset_op INTERVAL '$offset SECONDS')";
-      break;
-    }
-  }
-  return date_sql_extract($result_type, $field);
 }
 
 /**
@@ -144,9 +195,11 @@ function date_db_sql($result_type, $field, $timezone_to, $timezone_from = 'UTC')
  *  @param $field - the name of the date field to be analyzed
  *  @return a SQL statement appropriate for the $db_type
  */
-function date_sql_extract($result_type, $field) {
+function date_sql_extract($result_type, $field, $field_type = 'int', $set_offset = NULL) {
   global $db_type;
-
+  
+  $field = date_sql_field($field, $field_type, $set_offset);
+  
   // Return requested sql.
   // Note there is no space after FROM to avoid db_rewrite problems
   // see http://drupal.org/node/79904.

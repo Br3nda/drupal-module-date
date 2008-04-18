@@ -62,3 +62,7 @@ span.date-display-separator {
   clear:both;
   float:none;
 }
+
+.date-browser-navigation h3 {
+  border:none;
+}
