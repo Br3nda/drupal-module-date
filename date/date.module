@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.8 2008/04/17 12:17:47 karens Exp $
+// $Id: date.module,v 1.39.2.9 2008/04/19 09:58:04 karens Exp $
 
 /**
  * @file
@@ -80,7 +80,12 @@ function date_field_formatter_info() {
 function date_field_formatter($field, $item, $formatter, $node) {
   // Call the right theme for this formatter.
   $dates = date_formatter_process($field, $item, $node, $formatter);
-  $output = theme('date_display_combination', $field, $item, $dates, $node);
+  if ($formatter != 'format_interval') {
+    $output = theme('date_display_combination', $field, $item, $dates, $node);
+  }
+  else {
+    $output = theme('date_format_interval', $field, $item, $dates, $node);
+  }
   return $output;
 }
 
@@ -144,8 +149,8 @@ function date_formatter_process($field, $item, $node, $formatter = 'default') {
       //format the date, special casing the 'interval' format which doesnt need to be processed
       $dates[$processed]['formatted'] = '';
       if (is_object($date)) {
-        if ($format == 'interval') {
-           $dates[$processed]['formatted'] = date_format_interval($date);
+        if ($format == 'format_interval') {
+          $dates[$processed]['interval'] = date_format_interval($date);
         } 
         elseif (!empty($format)) {
           $dates[$processed]['formatted'] = date_format_date($date, 'custom', $format) . $append;
@@ -391,7 +396,7 @@ function date_formatter_format($formatter, $field_name) {
     case 'feed':
       return 'D, j M Y H:i:s O';
     case 'format_interval':
-      return 'interval';
+      return 'format_interval';
 
     case 'long':
     case 'medium':
