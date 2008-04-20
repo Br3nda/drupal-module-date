@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.3 2008/04/19 09:58:04 karens Exp $
+//$Id: date.theme,v 1.2.2.4 2008/04/20 16:10:41 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -81,10 +81,10 @@ function theme_date_display_combination($field, $item, $dates, $node = NULL) {
  */
 function theme_date_format_interval($field, $item, $dates, $node = NULL) {
   // Time to compare dates to
-  $now = date_format(date_make_date('now', date_default_timezone()), DATE_DATETIME);
+  $now = date_format(date_make_date('now', date_default_timezone()), DATE_FORMAT_DATETIME);
   $start = $dates['value']['local']['datetime'];
   $end = $dates['value2']['local']['datetime'];
-
+  
   // 1) The date is entirely in the future
   if ($now < $start) {
     return t('!time from now', array('!time' => $dates['value']['interval']));
