@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.11 2008/03/11 10:30:49 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.12 2008/04/21 18:54:18 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -31,8 +31,15 @@ function _date_widget_settings($op, &$field) {
           form_set_error('default_value_code2', t('The Strtotime default value for the To Date is invalid.'));
         }
       }
-      if ($field['widget']['type'] == 'date_select' && !preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $field['year_range'])) {
+      if ($field['widget_type'] == 'date_select' && !preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $field['year_range'])) {
         form_set_error('year_range', t('Years back and forward must be in the format -9:+9.'));
+      }
+      // Only a limited set of formats is available for the Date Popup module
+      if ($field['widget_type'] == 'date_popup') {
+        if (!empty($field['input_format_custom']) || !in_array($field['input_format'], date_popup_formats())) {
+          form_set_value(array('#parents' => array('input_format_custom')), NULL);
+          form_set_value(array('#parents' => array('input_format')), DATE_FORMAT_DATETIME);
+        }
       }
       if (isset($field['advanced']['label_position'])) {
         form_set_value(array('#parents' => array('label_position')), $field['advanced']['label_position']);
@@ -96,12 +103,20 @@ function date_widget_settings_form($widget) {
     '#options' => $options,
     '#description' => t('Set the order and format for the date parts in the input form. The format will be adapted to remove values not in the granularity for this field.'),
   );
-
-  $form['input']['format']['input_format_custom'] = array(
-    '#type' => 'textfield',  '#title' => t('*Custom input format'),
-    '#default_value' => $widget['input_format_custom'] ? $widget['input_format_custom'] : '',
-    '#description' => t('The custom format, if provided, will override the input format selected above. See more about custom date formats below.'),
-  );
+  // Only a limited set of formats is available for the Date Popup module
+  if ($widget['type'] != 'date_popup') {
+    $form['input']['format']['input_format_custom'] = array(
+      '#type' => 'textfield',  '#title' => t('*Custom input format'),
+      '#default_value' => $widget['input_format_custom'] ? $widget['input_format_custom'] : '',
+      '#description' => t('The custom format, if provided, will override the input format selected above. See more about custom date formats below.'),
+    );
+  }
+  else {
+    $form['input']['format']['input_format_custom'] = array(
+      '#type' => 'hidden',
+      '#value' => '',
+      );
+  }
   if ($widget['type'] == 'date_select' || $widget['type'] == 'date_popup') {
     $form['input']['year_range'] = array(
       '#type' => 'textfield',
