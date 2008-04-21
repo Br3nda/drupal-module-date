@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.11 2008/04/17 16:45:19 karens Exp $
+// $Id: date_api.module,v 1.44.2.12 2008/04/21 16:55:39 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -843,6 +843,7 @@ function date_convert($date, $from_type, $to_type) {
       $obj = date_create($datetime, timezone_open('UTC'));
     case DATE_UNIX:
       if (!is_numeric($date)) return NULL;
+      return;
       $obj = date_create("@$date", timezone_open('UTC'));
       break;
   }
@@ -964,7 +965,7 @@ function date_part_extract($date, $part, $type = DATE_DATETIME) {
     case DATE_ICAL:
       return (integer) substr($date, $ipositions[$part], $part == 'year' ? 4 : 2);
     case DATE_UNIX:
-      $date = date_make_date($date, 'UTC', DATE_UNIX);
+      $date = date_create("@$date", timezone_open('UTC'));
       return date_format($date, $formats[$part]);
     case DATE_OBJECT:
       return date_format($date, $formats[$part]);
@@ -985,12 +986,11 @@ function date_is_valid($date, $type = DATE_DATETIME) {
   if (($type == DATE_ISO || $type == DATE_DATETIME) && !preg_match(DATE_REGEX_LOOSE, $date)) return FALSE;
   if ($type == DATE_UNIX and !is_numeric($date)) return FALSE;
   if ($type == DATE_ARRAY and !is_array($date)) return FALSE;
-
+  
   // If checkdate works, no need for further tests.
   $year = date_part_extract($date, 'year', $type);
   $month = date_part_extract($date, 'month', $type);
   $day = date_part_extract($date, 'day', $type);
-
   if (!checkdate($month, $day, $year)) {
     // ISO dates and arrays can have empty date parts
     if ($type == DATE_ISO || $type == DATE_ARRAY) {
