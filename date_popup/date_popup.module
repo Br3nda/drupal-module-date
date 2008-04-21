@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.10 2008/04/17 14:09:09 karens Exp $
+// $Id: date_popup.module,v 1.27.2.11 2008/04/21 19:23:48 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -145,6 +145,7 @@ function date_popup_process($element, $edit = NULL) {
   // This happens when the processing bypasses the element validation step
   // that resets the value from the date and time
   // subparts.
+  $date = NULL;
   if (!empty($edit) || is_array($element['#value'])) {
     if (empty($edit)) {
       $edit = $element['#value'];
@@ -156,9 +157,12 @@ function date_popup_process($element, $edit = NULL) {
   elseif (!empty($element['#value'])) {
     $date = date_make_date($element['#value'], $element['#date_timezone']);
   }
-  elseif ($element['#required']) {
-    $date = date_now($element['#date_timezone']);
-  }
+  // TODO keep an eye on this, commented out so it is possible to provide
+  // blank initial value for required date.
+  //elseif ($element['#required']) {
+  //  $date = date_now($element['#date_timezone']);
+  //}
+  
   date_increment_round($date, $element['#date_increment']);
   $element['#tree'] = TRUE;
   $element['date'] = date_popup_process_date($element, $edit, $date);
