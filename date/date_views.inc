@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.14 2008/04/22 02:18:06 karens Exp $
+// $Id: date_views.inc,v 1.26.2.15 2008/04/22 21:18:42 karens Exp $
 
 /**
  * Views field filters
@@ -591,7 +591,14 @@ function _date_views_query_alter(&$query, &$view) {
   $date_views_browser_views = date_views_browser_get_views();
   if (in_array($view->name, array_keys($date_views_browser_views))) {
     $name       = explode(':', $view->argument[0]['type']);
-    $field_name = trim($name[1]);
+    $tofield_name = trim($name[1]);
+    $field_name = substr($tofield_name, 0, 3) == 'to|' ? substr($tofield_name, 3) : $tofield_name;
+    if ($field_name == $tofield_name) {
+      $value = 'value';
+    }
+    else {
+      $value = 'value2';
+    }
     $field      = content_fields($field_name);
     $field_type = $field['type'] == DATE_UNIX ? 'int' : 'iso';
     $db_info    = content_database_info($field);
@@ -602,7 +609,6 @@ function _date_views_query_alter(&$query, &$view) {
     $value2     = !empty($db_info['columns']['value2']['column']) ? $db_info['columns']['value2']['column'] : $db_info['columns']['value']['column'];
     $combo = date_sql_concat(array($table .'.'. $value, "'|'", $table .'.'. $value2)) .' AS date_combo ';
     $query->add_field($combo, NULL);
-
     $path = explode('/', $view->url);
     $pos = sizeof($path);
     if ($view->build_type == 'block' || arg($pos) == '') {
