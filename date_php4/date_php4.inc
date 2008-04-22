@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.6 2008/01/31 08:12:45 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.7 2008/04/22 17:38:47 karens Exp $
 
 /**
  * @file
@@ -819,7 +819,7 @@ function date_is_dst($region, $timestamp) {
  *   Whether the date functions are being tested, used to force the
  *   low level function even for current dates.
  */
-function date_getdate($timestamp = false, $is_gmt = false, $test = false) {
+function date_getdate($timestamp = false, $is_gmt = false, $test = true) {
   if ($timestamp === false) return getdate();
   // Check if test or number in 32-bit signed range
   // Below PHP 5.2 in windows, must be positive integer
@@ -843,7 +843,7 @@ function date_getdate($timestamp = false, $is_gmt = false, $test = false) {
 /**
  * Like date_getdate with no GMT conversion.
  */
-function date_gmgetdate($timestamp = false, $test = false) {
+function date_gmgetdate($timestamp = false, $test = true) {
   if (!$timestamp) return array();
   $array    = date_getdate($timestamp, TRUE, $test);
   $array[0] = $timestamp;
@@ -864,7 +864,7 @@ function date_gmgetdate($timestamp = false, $test = false) {
  *   whether the date functions are being tested, used to force the
  *   low level function even for current dates.
 */
-function date_date($format, $timestamp = false, $is_gmt = false, $test = false) {
+function date_date($format, $timestamp = false, $is_gmt = false, $test = true) {
   if ($timestamp === false) return ($is_gmt)? @gmdate($format): @date($format);
   if (!$test && abs($timestamp) <= 0x7FFFFFFF) {
     // Below PHP 5.2 in windows, must be positive integer
@@ -894,7 +894,7 @@ function date_gmdate($format, $timestamp = false, $test = false) {
  *   low level function even for current dates.
 */
 function date_mktime($hr, $min, $sec, $mon = false, $day = false,
-  $year = false, $is_gmt = false, $test = false) {
+  $year = false, $is_gmt = false, $test = true) {
   $hr = intval($hr);
   $min = intval($min);
   $sec = intval($sec);
@@ -924,7 +924,7 @@ function date_mktime($hr, $min, $sec, $mon = false, $day = false,
  * Like date_mktime with no GMT conversion.
 */
 function date_gmmktime($hr, $min, $sec, $mon = false, $day = false,
-  $year = false, $test = false) {
+  $year = false, $test = true) {
   return date_mktime($hr, $min, $sec, $mon, $day, $year, true, $test);
 }
 
