@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.9.2.6 2008/04/17 12:40:57 karens Exp $
+//$Id: date_repeat.inc,v 1.9.2.7 2008/04/22 19:59:09 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -86,18 +86,34 @@ function _date_repeat_widget_validate($element) {
     ) {
 
     $item = $form_values[$field_name][0];
+    
+    // By the time we get here, the start and end dates have been 
+    // adjusted back to UTC, but we want localtime dates to do
+    // things like '+1 Tuesday', so adjust back to localtime.
     $timezone = date_get_timezone($field['tz_handling'], $item[0]['timezone']);
-    $start = date_make_date($item['value'], $timezone, $field['type']);
-    $start_datetime = date_format($start, DATE_FORMAT_DATETIME);
-    if (!empty($item['value2']) && $new_field['value2'] != $item['value']) {
-      $end = date_make_date($item['value2'], $timezone, $field['type']);
-      $duration = date_diff($start, $end);
+    if (date_timezone_convert($field, $item)) {
+      $start = date_make_date($item['value'], 'UTC', $field['type']);
+      date_timezone_set($start, timezone_open($timezone));
+      if (!empty($item['value2']) && $new_field['value2'] != $item['value']) {
+        $end = date_make_date($item['value2'], 'UTC', $field['type']);
+        date_timezone_set($end, timezone_open($timezone));
+      }
+      else {
+        $end = $start;
+      }
     }
     else {
-      $end = $start;
-      $duration = 0;
+      $start = date_make_date($item['value'], $timezone, $field['type']);
+      if (!empty($item['value2']) && $new_field['value2'] != $item['value']) {
+        $end = date_make_date($item['value2'], $timezone, $field['type']);
+      }
+      else {
+        $end = $start;
+      }
     }
 
+    $duration = date_diff($start, $end);
+    $start_datetime = date_format($start, DATE_FORMAT_DATETIME);
     $end = date_ical_date($values['UNTIL'], $timezone);
     $end_datetime = date_format($end, DATE_FORMAT_DATETIME);
 
@@ -114,9 +130,14 @@ function _date_repeat_widget_validate($element) {
     foreach ($dates as $delta => $date) {
       // date_repeat_calc always returns DATE_DATETIME dates, which is
       // not necessarily $field['type'] dates.
-      $date_start = date_make_date($date, $timezone, DATE_DATETIME);      
+      // Convert returned dates back to UTC before storing.
+      $date_start = date_make_date($date, $timezone, DATE_DATETIME);  
+      if (date_timezone_convert($field, $item)) {
+        date_timezone_set($date_start, timezone_open('UTC'));    
+      }
       $date_end = drupal_clone($date_start);
       date_modify($date_end, '+'. $duration .' seconds');
+      
       $value[$field_name][$delta] = array(
         'value' => date_format($date_start, date_type_format($field['type'])),
         'value2' => date_format($date_end, date_type_format($field['type'])),
