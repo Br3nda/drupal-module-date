@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.13 2008/04/18 20:48:13 karens Exp $
+// $Id: date_views.inc,v 1.26.2.14 2008/04/22 02:18:06 karens Exp $
 
 /**
  * Views field filters
@@ -101,13 +101,13 @@ function _date_views_filters($field) {
 /**
  *  Handler for date filter.
  */
-
 function _date_views_timestamp_filter_handler($op, $filter, $filterinfo, &$query) {
   // this is just a wrapper function that sets the date type
   return _date_views_filter_handler($op, $filter, $filterinfo, $query, DATE_UNIX);
  }
 function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = DATE_ISO) {
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
+  include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
   
   $adjust = 0;
   if (trim($filter['options']) == 'now') {
@@ -120,15 +120,36 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
     date_modify($end, $results[2] . $results[3] .' '. $results[4]);
     $adjust = date_format($end, 'U') - date_format($start, 'U');
   }
-  elseif (module_exists('date_popup')) {
-    $element = _date_views_handler_filter_date_value_form($field);
-    $element['#value'] = $filter['value'];
-    $value = date_popup_input_value($element);
-  }
   else {
-    $value = $filter['value'];
+    // If the date_popup or date_textfield elements are used as a exposed filters, their
+    // #validation functions will never get called, so validate and
+    // reconstruct them here.
+    if (is_array($filter['value'])) {
+      $input = $filter['value']['date'];
+      if (!empty($filter['value']['time'])) {
+        $input .= ' '. $filter['value']['time'] .':00';
+      }
+      elseif (!empty($input)) {
+        $input .= ' 00:00:00';
+      }
+    }
+    else {
+      $input = $filter['value'];
+    }
+    if (!empty($input)) {
+      $value = date_convert_from_custom($input, DATE_FORMAT_DATETIME);
+      if (date_is_valid($value, DATE_DATETIME)) {
+        $date = date_make_date($value, date_default_timezone_name(), DATE_DATETIME);
+        $value = date_convert($date, DATE_OBJECT, DATE_DATETIME);
+        $filter['value']['date'] = substr($value, 0, 10);
+        $filter['value']['time'] = substr($value, 11, 8);
+      }
+      else {
+        drupal_set_message(t('That is not a valid date.'));
+        $value = NULL;
+      }
+    }
   }
-
   // Do some validation of input values before creating any SQL.
   $type = $filterinfo['type'];
   switch ($type) {
