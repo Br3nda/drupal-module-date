@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.15 2008/04/21 19:23:48 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.16 2008/04/22 20:45:50 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -141,7 +141,9 @@ function date_text_process($element, $edit = NULL) {
   $element['date']['#weight'] = !empty($element['date']['#weight']) ? $element['date']['#weight'] : $element['#weight'];
   $element['date']['#default_value'] = is_object($date) ? date_format($date , $element['#date_format']) : '';
   $element['date']['#attributes']['class'] = $element['date']['#attributes']['class'] .' date-date';
-  $element['date']['#required'] = $element['#required'];
+  // Keep the system from creating an error message for the sub-element.
+  // We'll set our own message on the parent element.
+  //$element['date']['#required'] = $element['#required'];
   $element['date']['#theme'] = 'date_textfield_element';
   return $element;
 }
@@ -417,7 +419,9 @@ function date_select_input_value($element) {
 function date_text_validate($element) {
   $form_values = $element['#value'];
   $value = date_text_input_value($element);
-
+  $sub_error_field = implode('][', $element['#parents']) .'][date';
+  $error_field = implode('][', $element['#parents']);
+    
   if (!$element['#required'] && empty($value)) {
     form_set_value($element, NULL);
   }
@@ -425,8 +429,7 @@ function date_text_validate($element) {
     form_set_value($element, $value);
   }
   else {
-    $error_field = implode('][', $element['#parents']);
-    form_set_error($error_field, t('A valid date cannot be created from %date', array('%date' => $value)));
+    form_set_error($error_field, t('A valid date is required for %title.', array('%title' => $element['#title']))); 
   }
 }
 
