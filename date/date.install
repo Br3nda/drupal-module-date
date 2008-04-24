@@ -1,14 +1,15 @@
 <?php
-// $Id: date.install,v 1.36 2008/04/17 12:02:21 karens Exp $
+// $Id: date.install,v 1.37 2008/04/24 00:26:26 karens Exp $
 
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
 include_once('./'. drupal_get_path('module', 'content') .'/content.module');
-include_once('./'. drupal_get_path('module', 'content') .'/content_admin.inc');
+include_once('./'. drupal_get_path('module', 'content') .'/includes/content.admin.inc');
 include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
 include_once('./'. drupal_get_path('module', 'date') .'/date.module');
-include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
-
+if (module_exists('views')) {
+  include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+}
 /**
  * Implementation of hook_install().
  */
