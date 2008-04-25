@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.39.2.1 2008/04/25 18:11:37 karens Exp $
+// $Id: date_views.inc,v 1.39.2.2 2008/04/25 18:44:29 karens Exp $
 
 views_include_handlers();
 
@@ -16,7 +16,7 @@ function _date_views_data($field) {
   $data[$table_alias][$field['field_name'] .'_value']['argument']['handler'] = 'date_views_argument_handler';
 
   // Set the date type in the handlers.
-  $date_type = $field['type'] == 'date' ? 'iso' : 'int';
+  $date_type = $field['type'] == DATE_ISO ? 'iso' : ($field['type'] == DATE_DATETIME ? 'datetime' : 'int');
   $data[$table_alias][$field['field_name'] .'_value']['field']['date_type'] = $date_type;
   $data[$table_alias][$field['field_name'] .'_value']['filter']['date_type'] = $date_type;
   $data[$table_alias][$field['field_name'] .'_value']['argument']['date_type'] = $date_type;
@@ -67,7 +67,7 @@ class date_views_argument_handler extends views_handler_argument_date {
  * The subclass simply adds properties,
  * for field-specific subclasses to use if they need to.
  */
-class date_views_filter_handler extends views_handler_filter_custom_date {
+class date_views_filter_handler extends views_handler_filter_flexible_date {
   var $content_field;
 
   function construct() {
@@ -680,6 +680,7 @@ function date_views_offset($field) {
 //********************************************************************************//
 //********************************************************************************//
 
+
 // TODO Remove the code below if this gets added to the Views module in http://drupal.org/node/241759.
 /**
  * A class to manipulate dates.
@@ -693,7 +694,7 @@ class views_date_handler {
    * Make sure granularity has a sane default value.
    */
   function construct($date_type = 'int') {
-    $this->granularity = $this->granularity_keys();
+    $this->granularity = 'day';
     $this->db_type = $GLOBALS['db_type'];
     $this->date_type = $date_type;
   }
@@ -702,16 +703,19 @@ class views_date_handler {
    * An array of all date parts,
    * optionally limited to an array of allowed parts.
    */
-  function date_parts($limit = array()) {
+  function date_parts($limit = NULL) {
     $parts =  array(
       'year' => t('Year'), 'month' => t('Month'), 'day' => t('Day'),
       'hour' => t('Hour'), 'minute' => t('Minute'), 'second' => t('Second'),
-      'adjustment' => t('Adjustment'),
       );
     if (!empty($limit)) {
+      $last = FALSE;
       foreach ($parts as $key => $part) {
-        if (!in_array($key, $limit)) {
+        if ($last) {
           unset($parts[$key]);
+        }
+        if ($key == $limit) {
+          $last = TRUE;
         }
       }
     }
@@ -719,44 +723,40 @@ class views_date_handler {
   }
 
   /**
-   * The minimum valid value for a date part, or an array of all minimums.
+   * Part information.
+   *
+   * @param $op
+   *   'min', 'max', 'format', or 'sep'. 
+   *   Returns all info if empty.
+   * @param $part
+   *   'year', 'month', 'day', 'hour', 'minute', or 'second.
+   *   returns info for all parts if empty.
    */
-  function part_min($part = NULL) {
-    $min = array(
+  function part_info($op = NULL, $part = NULL) {
+    $info = array();
+    $info['min'] = array(
       'year' => 100, 'month' => 1, 'day' => 1,
       'hour' => 0, 'minute' => 0, 'second' => 0);
-    if (!empty($part) && array_key_exists($part, $min)) {
-      return $min[$part];
-    }
-    return $min;
-  }
-
-  /**
-   * The maximum valid value for a date part, or an array of all maximums.
-   */
-  function part_max($part = NULL) {
-    $max = array(
+    $info['max'] = array(
       'year' => 4000, 'month' => 12, 'day' => 31,
       'hour' => 23, 'minute' => 59, 'second' => 59);
-    if (!empty($part) && array_key_exists($part, $max)) {
-      return $max[$part];
-    }
-    return $max;
-  }
-
-  /**
-   * The SQL format for a date part, or an array of all formats.
-   */
-  function part_format($part = NULL) {
-    $formats = array(
+    $info['format'] = array(
       'year' => 'Y', 'month' => 'm', 'day' => 'd',
       'hour' => 'H', 'minute' => 'i', 'second' => 's');
-    if (!empty($part) && array_key_exists($part, $formats)) {
-      return $formats[$part];
+    $info['sep'] = array(
+      'year' => '', 'month' => '-', 'day' => '-',
+      'hour' => ' ', 'minute' => '-', 'second' => '-');
+    if (!empty($op)) {
+      if (!empty($part)) {
+        return $info[$op][$part];
+      }
+      else {
+        return $info[$op];
+      }
     }
-    return $formats;
+    return $info;
   }
-
+  
   /**
    * Convert a format string into help text,
    * i.e. 'Y-m-d' becomes 'YYYY-MM-DD'.
@@ -830,50 +830,13 @@ class views_date_handler {
   }
 
   /**
-   * Normalized, validated granularity key array.
-   *
-   * Produce a simple key array from a variety of
-   * possible granularity inputs:
-   *   date_parts() array format:
-   *       $key => $label,
-   *       $key2 => $label2,
-   *       $key3 => $label3,
-   *   FAPI checkboxes $form_values format:
-   *       $key => 0,
-   *       $key2 => $key2,
-   *       $key3 => $key3,
-   *   Normal format:
-   *       0 => $key,
-   *       1 => $key2,
-   *       2 => $key3,
-   *
-   * @param array $granularity
-   *   The granularity array to analyze, all possible keys will
-   *   be returned if left empty.
-   */
-  function granularity_keys($granularity = array()) {
-    $keys = array_keys($this->date_parts());
-    $labels = array_values($this->date_parts());
-    $values = array();
-    foreach ((array) $granularity as $key => $value) {
-      if (is_numeric($key) && in_array($value, $keys)) {
-        $values[] = $value;
-      }
-      elseif (in_array($key, $keys) && $value !== 0) {
-        $values[] = $key;
-      }
-    }
-    return !empty($values) ? $values : $keys;
-  }
-
-  /**
    * A form element to select the granularity.
    */
   function granularity_form($granularity) {
     $form = array(
       '#title' => t('Granularity'),
-      '#type' => 'checkboxes',
-      '#default_value' => $this->granularity_keys($granularity),
+      '#type' => 'radios',
+      '#default_value' => $granularity,
       '#options' => $this->date_parts(),
      );
      return $form;
@@ -888,18 +851,22 @@ class views_date_handler {
    *   The name of a field that holds the timezone offset or a fixed timezone
    *   offset value. If not provided, the normal Drupal timezone handling
    *   will be used, i.e. $set_offset = 0 will make no timezone adjustment.
+   * @param $date_type
+   *   Can be 'int', 'iso', or 'datetime'.
+   *   If not set it will use the date_type set for the current field.
    * @return
    *   An appropriate SQL string for the db type and field type.
    */
-  function sql_field($field, $set_offset = NULL) {
-    if ($field == 'NOW()') {
-      return $field;
+  function sql_field($field, $set_offset = NULL, $date_type = NULL) {
+    if (strtoupper($field) == 'NOW') {
+      return $this->sql_offset("NOW()", $set_offset);
     }
     $offset = $set_offset !== NULL ? $set_offset : views_get_timezone();
+    $date_type = !empty($date_type) ? $date_type : $this->date_type;
     switch ($this->db_type) {
       case 'mysql':
       case 'mysqli':
-        switch ($this->date_type) {
+        switch ($date_type) {
           case 'int':
             $field = "FROM_UNIXTIME($field)";
             break;
@@ -909,12 +876,9 @@ class views_date_handler {
           case 'datetime':
             break;
         }
-        if (!empty($offset)) {
-          $field = "($field + INTERVAL $offset SECOND)";
-        }
-        return $field;
+        break;
       case 'pgsql':
-        switch ($this->date_type) {
+        switch ($date_type) {
           case 'int':
             $field = "$field::ABSTIME";
             break;
@@ -924,13 +888,27 @@ class views_date_handler {
           case 'datetime':
             break;
         }
-        if (!empty($offset)) {
-          $field = "($field + 'INTERVAL $offset SECONDS')";
-        }
-        return $field;
+      break;
     }
+    return $this->sql_offset($field, $offset);
   }
 
+  /**
+   * Adjust a field value by an offset in seconds.
+   */
+  function sql_offset($field, $offset = NULL) {
+    if (!empty($offset)) {
+      switch ($this->db_type) {
+        case 'mysql':
+        case 'mysqli':
+          return "ADDTIME($field, SEC_TO_TIME($offset))";
+        case 'pgsql':
+          return "($field + 'INTERVAL $offset SECONDS')";;
+      }
+    }
+    return $field;
+  }
+  
   /**
    * Helper function to create cross-database SQL date formatting.
    *
@@ -942,11 +920,14 @@ class views_date_handler {
    *   The name of a field that holds the timezone offset or a fixed timezone
    *   offset value. If not provided, the normal Drupal timezone handling
    *   will be used, i.e. $set_offset = 0 will make no timezone adjustment.
+   * @param $date_type
+   *   Can be 'int', 'iso', or 'datetime'.
+   *   If not set it will use the date_type set for the current field.
    * @return
    *   An appropriate SQL string for the db type and field type.
    */
-  function sql_format($format, $field, $set_offset = NULL) {
-    $field = $this->sql_field($field, $set_offset);
+  function sql_format($format, $field, $set_offset = NULL, $date_type = NULL) {
+    $field = $this->sql_field($field, $set_offset, $date_type);
     switch ($this->db_type) {
       case 'mysql':
       case 'mysqli':
@@ -985,11 +966,14 @@ class views_date_handler {
    *   The name of a field that holds the timezone offset or a fixed timezone
    *   offset value. If not provided, the normal Drupal timezone handling
    *   will be used, i.e. $set_offset = 0 will make no timezone adjustment.
+   * @param $date_type
+   *   Can be 'int', 'iso', or 'datetime'.
+   *   If not set it will use the date_type set for the current field.
    * @return
    *   An appropriate SQL string for the db type and field type.
    */
-  function sql_extract($extract_type, $field, $set_offset = NULL) {
-    $field = $this->sql_field($field, $set_offset);
+  function sql_extract($extract_type, $field, $set_offset = NULL, $date_type = NULL) {
+    $field = $this->sql_field($field, $set_offset, $date_type);
 
     // Note there is no space after FROM to avoid db_rewrite problems
     // see http://drupal.org/node/79904.
@@ -1042,8 +1026,8 @@ class views_date_handler {
 /**
  * A flexible, configurable date filter.
  *
- * This filter allows you to select one or more date parts to filter on,
- * such as year, month, and day; month only; a complete date, etc.
+ * This filter allows you to select a granularity of date parts to filter on,
+ * such as year, month, day, etc.
  *
  * Each part can be set to blank to show all values; 'now' to filter for
  * the current value of that part, or a specific value.
@@ -1051,7 +1035,7 @@ class views_date_handler {
  * An adjustment field is provided that will adjust the selected filter
  * value by something like '+90 days' or '-1 month';
  */
-class views_handler_filter_custom_date extends views_handler_filter_numeric {
+class views_handler_filter_flexible_date extends views_handler_filter_numeric {
   var $date_handler = NULL;
 
   // Add a date handler to the filter.
@@ -1067,13 +1051,15 @@ class views_handler_filter_custom_date extends views_handler_filter_numeric {
   function init(&$view, $options) {
     parent::init(&$view, $options);
     $handler = $this->date_handler;
-    $handler->granularity = $handler->granularity_keys($options['granularity']);
+    $handler->granularity = $options['granularity'];
+    $handler->adjustment_field = $options['adjustment_field'];
   }
 
   // Set default values for the date filter.
   function options(&$options) {
     parent::options($options);
-    $options['granularity'] = $this->date_handler->granularity_keys();
+    $options['granularity'] = 'day';
+    $options['adjustment_field'] = 0;
 
     // We use different values than the parent form, so we must
     // construct our own value options.
@@ -1092,13 +1078,18 @@ class views_handler_filter_custom_date extends views_handler_filter_numeric {
 
   function extra_options_form(&$form, &$form_state) {
     $form['granularity'] = $this->date_handler->granularity_form($this->options['granularity']);
-    $form['granularity']['#description'] = t('Limit the filter to use only the selected date parts.');
-  }
-
-  function extra_options_validate($form, &$form_state) {
-    $values = $form_state['values'];
-    $handler = $this->date_handler;
-    form_set_value($form['granularity'], $handler->granularity_keys($values['granularity']), $form_state);
+    $form['granularity']['#description'] = t('Filter for all date parts up to the selected granularity. You will be able to choose a specific value, all values, or \'now\' for each of those parts. For instance, selecting \'day\' will create a filter for a selected year, month, and day.');
+    $form['adjustment_field'] = array(
+      '#type' => 'radios',
+      '#title' => t('Adjustment option'),
+      '#default_value' => $this->options['adjustment_field'],
+      '#options' => array(
+        0 => t('Date only'), 
+        1 => t('Both date and adjustment'), 
+        2 => t('Adjustment only'),
+        ),
+      '#description' => t('Add an optional textfield to the filter where you can type in a value like \'+1 day\'. The adjustment will be added to the other selected values when using both date and adjustment, or set an offset to the current date when the adjustment is used alone.'),
+      );
   }
 
   /**
@@ -1138,28 +1129,12 @@ class views_handler_filter_custom_date extends views_handler_filter_numeric {
       '#suffix' => '</div></div></div>',
       '#value' => t('Blank values do no filtering, \'now\' filters for the current value.'),
       );
-    if (in_array('adjustment', $handler->granularity)) {
-      $form['value']['description']['#value'] .= t(' \'Adjustment\' adds a value like \'+1 day\' to the other values.');
+    if ($this->options['adjustment_field'] == 1) {
+      $form['value']['description']['#value'] .= t(' \'Adjustment\' filters for an offset like \'+1 day\' from the other values, most useful when used with \'now\'.');
     }
-
-  }
-
-  /**
-   * The first date part used in this instance, to know when to start
-   * a new sub-grouping.
-   */
-  function first_part() {
-    $parts = (array) $this->date_handler->granularity;
-    return array_shift($parts);
-  }
-
-  /**
-   * The last date part used in this instance, to know when to end
-   * a sub-grouping.
-   */
-  function last_part() {
-    $parts = (array) $this->date_handler->granularity;
-    return array_pop($parts);
+    elseif ($this->options['adjustment_field'] == 2) {
+      $form['value']['description']['#value'] = t('\'Adjustment\' filters for an offset like \'+1 day\' from the current time.');
+    }
   }
 
   /**
@@ -1182,20 +1157,36 @@ class views_handler_filter_custom_date extends views_handler_filter_numeric {
   function date_parts_form($prefix, $source, $which, $operator_values) {
     $prefixname = $prefix == 'value' ? '' : ($prefix == 'min' ? t('From') : t('To'));
     $handler = $this->date_handler;
-    $min = $handler->part_min();
-    $max = $handler->part_max();
+    $min = $handler->part_info('min');
+    $max = $handler->part_info('max');
     $limit = $handler->granularity;
-    foreach ($handler->date_parts($limit) as $key => $name) {
+    switch ($this->options['adjustment_field']) {
+      case 1:
+        $parts = $handler->date_parts($limit) + array('adjustment' => t('Adjustment'));
+        $first_item = 'year';
+        $last_item = 'adjustment';
+        break;
+      case 2:
+        $parts = array('adjustment' => t('Adjustment'));
+        $first_item = 'adjustment';
+        $last_item = 'adjustment';
+        break;
+      default:
+        $parts = $handler->date_parts($limit);
+        $first_item = 'year';
+        $last_item = $this->options['granularity'];
+        break;
+    }
+    foreach ($parts as $key => $name) {
       $options = array('' => '', 'now' => 'now');
       $type = 'select';
       if ($key == 'year' || $key == 'adjustment') {
         $type = 'textfield';
       }
       $form[$prefix . $key] = array(
-        '#title' => t('@value', array('@type' => $prefixname, '@value' => $name)),
+        '#title' => t('@type @value', array('@type' => $prefixname, '@value' => $name)),
         '#type' => $type,
         '#size' => $key == 'adjustment' ? 20 : ($key == 'year' ? 6 : 1),
-        //'#options' => $options,
         '#default_value' => !empty($this->value[$prefix . $key]) ? $this->value[$prefix . $key] : '',
         '#prefix' => '<div class="views-exposed-date-filter">',
         '#suffix' => '</div>',
@@ -1222,11 +1213,11 @@ class views_handler_filter_custom_date extends views_handler_filter_numeric {
         $form[$prefix . $key] += $dependency;
       }
       // Add wrappers to force each date grouping to a separate line.
-      if ($key == $this->first_part()) {
+      if ($key == $first_item) {
         $form[$prefix . $key]['#prefix'] = '<div class="clear-block"><div class="views-left-75">' .
           $form[$prefix . $key]['#prefix'];
       }
-      if ($key == $this->last_part()) {
+      if ($key == $last_item) {
         $form[$prefix . $key]['#suffix'] .= '</div></div>';
       }
     }
@@ -1239,62 +1230,60 @@ class views_handler_filter_custom_date extends views_handler_filter_numeric {
       return;
     }
     $handler = $this->date_handler;
-    $min = $handler->part_min();
-    $max = $handler->part_max();
+    $parts = $handler->date_parts();
+    $min = $handler->part_info('min');
+    $max = $handler->part_info('max');
     $values = $form_state['values']['options']['value'];
-
     // Validate date values.
     unset($values['offset']);
     foreach ($values as $name => $value) {
-      $pos = 3;
-      if (substr($name, 0, 5) == 'value') {
-        $pos = 5;
-      }
-      $part = substr($name, $pos, strlen($name));
+      $part = str_replace(array('min', 'max', 'value'), '', $value);
       if (!empty($part) && $value != '' && $value != 'now' &&
         ($value < $min[$part] || $value > $max[$part])) {
         form_error($form['value'][$name], t('@value is invalid.', array('@value' => $parts[$part])));
       }
     }
   }
-
+  
   // Update the summary values to provide
   // meaningful information for each option.
   function admin_summary() {
     $handler = $this->date_handler;
     $output = check_plain($this->operator) . ' ';
-
+    $parts = $handler->date_parts();
+    
     // If the filter is exposed, display the granularity.
     if ($this->options['exposed']) {
-      return t('<strong>Exposed</strong> @format', array('@format' => implode(', ', ($handler->date_parts($handler->granularity)))));
+      return t('<strong>Exposed</strong> Granularity: @format', array('@format' => $parts[$handler->granularity]));
     }
     // If the filter is not exposed, display the selected values.
     // Check both empty and is_numeric to show all non-blank values,
     // including zero values.
-    $min = array();
-    $max = array();
+    $min = '';
+    $max = '';
     $handler = $this->date_handler;
+    $separators = $handler->part_info('sep');
     if (in_array($this->operator, $this->operator_values(2))) {
       foreach ($handler->date_parts($this->value['granularity']) as $key => $part) {
         if (!empty($this->value['min'. $key]) || !empty($this->value['max'. $key])
         || is_numeric($this->value['min'. $key]) || is_numeric($this->value['max'. $key])) {
-          $min[] = $part .'='. check_plain($this->value['min'. $key]);
-          $max[] = $part .'='. check_plain($this->value['max'. $key]);
+          $min .= $separators[$key] . check_plain($this->value['min'. $key]);
+          $max .= $separators[$key] . check_plain($this->value['max'. $key]);
         }
       }
-      $output .= t('@min and @max', array('@min' => implode(': ', $min), '@max' => implode(': ', $max)));
+      $output .= t('@min and @max', array('@min' => $min, '@max' => $max));
     }
     else {
       foreach ($handler->date_parts($handler->granularity) as $key => $part) {
         if (!empty($this->value['value'. $key]) || is_numeric($this->value['value'. $key])) {
-          $min[]= $part .'='. check_plain($this->value['value'. $key]);
+          $min .= $separators[$key] . check_plain($this->value['value'. $key]);
         }
       }
-      $output .= implode(': ', $min);
+      $output .= $min;
     }
     return $output;
   }
-
+ 
   function op_between($field) {
     $value = $this->date_filter('min', $field, '>=');
     $value = $this->date_filter('max', $field, '<=');
@@ -1310,29 +1299,56 @@ class views_handler_filter_custom_date extends views_handler_filter_numeric {
     $handler = $this->date_handler;
     $granularity = $handler->granularity;
     $parts = $handler->date_parts();
-    unset($parts['adjustment']);
+    $filter_parts = $handler->date_parts($handler->granularity);
     if (!empty($this->value[$prefix .'adjustment'])) {
-      $adjustment = views_get_timezone() + strtotime($this->value[$prefix .'adjustment']) - time();
-    }
-    foreach ($parts as $key => $label) {
-      if (!empty($adjustment)) {
-          $extract = $handler->sql_extract(strtoupper($key), $field, $adjustment);
-        }
-        else {
-          $extract = $handler->sql_extract(strtoupper($key), $field);
+      // See if there are any filters other than the adjustment.
+      // If not, compare to NOW().
+      $adjustment = strtotime($this->value[$prefix .'adjustment'], 0);
+      if ($this->options['adjustment_field'] == 2) {
+        $sql = $handler->sql_field($field, 0) .
+          " $operator ". $handler->sql_field('NOW', $adjustment);
+        $this->query->add_where($this->options['group'], $sql);
+        return;
       }
-      if (!in_array($key, $granularity) || empty($this->value[$prefix . $key])) {
-        // Skip this value
+    }
+    $format = '';
+    $value = '';
+    $separators = $handler->part_info('sep');
+    $formats = $handler->part_info('format');
+    foreach ($filter_parts as $key => $part) {
+      $sep = $separators[$key];
+      $pattern = $key == 'year' ? '%04d' : '%02d';
+      if (is_numeric($this->value[$prefix . $key]) || $this->value[$prefix . $key] == 'now') {
+        $format .= !empty($format) ? $sep : '';
+        $format .= $formats[$key];
+      }
+      if (is_numeric($this->value[$prefix . $key])) {
+        $value .= !empty($value) ? $sep : '';
+        $value .= sprintf($pattern, check_plain($this->value[$prefix . $key]));  
       }
       elseif ($this->value[$prefix . $key] == 'now') {
-        $value = $handler->sql_extract(strtoupper($key), "NOW()", 0);
-        $this->query->add_where($this->options['group'], $extract ." $operator %s", $value);
+        $value .= !empty($value) ? $sep : '';
+        $value .= date($formats[$key]);
       }
       else {
-        $value = $this->value[$prefix . $key];
-        $this->query->add_where($this->options['group'], $extract. " $operator %s", $value);
+        // When we hit an empty (all values) option in the middle of
+        // our date parts, we have to stop and create separate queries 
+        // for each non-empty grouping.
+        if ($format > '' && $format != $sep) {
+          $sql = $handler->sql_format($format, $field, views_get_timezone()) .
+            " $operator ". $handler->sql_format($format, "'$value'", $adjustment, 'datetime');
+          $this->query->add_where($this->options['group'], $sql);
+        }
+        $format = '';
+        $value = '';
       }
     }
+    if ($format > '' && $format != $sep) {
+      $sql = $handler->sql_format($format, $field, views_get_timezone()) .
+        " $operator ". $handler->sql_format($format, "'$value'", $adjustment, 'datetime');
+      $this->query->add_where($this->options['group'], $sql);
+    }
+    return;
   }
 }
 
