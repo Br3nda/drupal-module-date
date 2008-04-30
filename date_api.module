@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.64 2008/04/21 16:55:50 karens Exp $
+// $Id: date_api.module,v 1.64.2.1 2008/04/30 11:34:57 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -705,7 +705,7 @@ function date_day_of_week_name($date = NULL, $abbr = TRUE, $type = DATE_DATETIME
  *   the type of dates provided:
  *   DATE_OBJECT, DATE_DATETIME, DATE_ISO, DATE_UNIX, DATE_ARRAY
  */
-function date_diff($date1_in, $date2_in, $measure = 'seconds', $type = DATE_OBJECT) {
+function date_difference($date1_in, $date2_in, $measure = 'seconds', $type = DATE_OBJECT) {
   // Create cloned objects or original dates will be impacted by
   // the date_modify() operations done in this code.
   $date1 = drupal_clone(date_convert($date1_in, $type, DATE_OBJECT));

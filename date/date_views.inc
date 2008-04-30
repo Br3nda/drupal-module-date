@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.39.2.2 2008/04/25 18:44:29 karens Exp $
+// $Id: date_views.inc,v 1.39.2.3 2008/04/30 11:34:57 karens Exp $
 
 views_include_handlers();
 
@@ -188,18 +188,8 @@ class date_views_browser_argument_handler extends views_handler_argument_formula
     $form['granularity'] = $handler->granularity_form($this->options['granularity']);
     $form['granularity']['#description'] = t('Time range for each page, i.e. if you use a \'Month\' date range, the page will show the selected month and the back/next links will take you to the next and previous month.');
     $form['granularity']['#type'] = 'select';
-    unset($form['granularity']['#options']['adjustment']);
     unset($form['granularity']['#options']['second']);
     unset($form['granularity']['#options']['minute']);
-  }
-
-  /**
-   * Re-work the form values array into a proper granularity array.
-   */
-  function options_validate($form, &$form_state) {
-    $values = $form_state['values'];
-    $handler = $this->date_handler;
-    form_set_value($form['granularity'], $handler->granularity_keys($values['options']['granularity']), $form_state);
   }
 
   // Update the summary values to show selected granularity.
@@ -689,7 +679,7 @@ class views_date_handler {
   var $granularity = array();
   var $db_type = 'mysql';
   var $date_type = 'int';
-
+  
   /**
    * Make sure granularity has a sane default value.
    */
@@ -697,6 +687,73 @@ class views_date_handler {
     $this->granularity = 'day';
     $this->db_type = $GLOBALS['db_type'];
     $this->date_type = $date_type;
+  }
+
+  /**
+   * See if the db has timezone name support.
+   */
+  function has_tz_support() {
+    static $has_support = FALSE;
+    switch ($this->db_type) {
+      case 'mysql':
+      case 'mysqli':
+        $test = db_result(db_query("SELECT CONVERT_TZ('2008-03-11 01:00:00', 'UTC', 'US/Central')"));
+        if (!empty($test)) {
+          $has_support = TRUE;
+        }
+        break;
+      case 'pgsql':
+        $has_support = TRUE;
+      break;
+    }
+    return $has_support;
+  }
+
+  /**
+   * Return timezone offset.
+   */
+  function get_offset() {
+    $this->set_timezone();
+    global $user;
+    if (variable_get('configurable_timezones', 1) && $user->uid && strlen($user->timezone)) {
+      $timezone = $user->timezone;
+    }
+    else {
+      $timezone = variable_get('date_default_timezone', 0);
+    }
+    return $timezone;
+  }
+  
+  /**
+   * Override this to provide timezone name support.
+   */
+  function get_timezone() {
+    $this->set_timezone();
+    global $user;
+    if (variable_get('configurable_timezones', 1) && $user->uid && strlen($user->timezone_name)) {
+      $timezone = $user->timezone_name;
+    }
+    else {
+      $timezone = variable_get('date_default_timezone_name', NULL);
+    }
+    return $timezone;
+  }
+
+  /**
+   * Set the database timzone to UTC 
+   * to ensure consistency in date handling.
+   */
+  function set_timezone() {
+    static $already_set = false;
+    if (!$already_set) {
+      if ($this->db_type == 'mysqli' || version_compare(mysql_get_server_info(), '4.1.3', '>=')) {
+        db_query("SET @@session.time_zone = '+00:00'");
+      }
+      elseif ($this->db_type == 'pgsql') {
+        db_query("SET TIME ZONE '+00:00'");
+      }
+      $already_set = true;
+    }
   }
 
   /**
@@ -726,7 +783,7 @@ class views_date_handler {
    * Part information.
    *
    * @param $op
-   *   'min', 'max', 'format', or 'sep'. 
+   *   'min', 'max', 'format', 'sep', 'empty_now', 'empty_min', 'empty_max'. 
    *   Returns all info if empty.
    * @param $part
    *   'year', 'month', 'day', 'hour', 'minute', or 'second.
@@ -745,7 +802,16 @@ class views_date_handler {
       'hour' => 'H', 'minute' => 'i', 'second' => 's');
     $info['sep'] = array(
       'year' => '', 'month' => '-', 'day' => '-',
-      'hour' => ' ', 'minute' => '-', 'second' => '-');
+      'hour' => ' ', 'minute' => ':', 'second' => ':');
+    $info['empty_now'] = array(
+      'year' => date('Y'), 'month' => date('m'), 'day' => min('28', date('d')),
+      'hour' => date('H'), 'minute' => date('i'), 'second' => date('s'));  
+    $info['empty_min'] = array(
+      'year' => '1000', 'month' => '01', 'day' => '01',
+      'hour' => '00', 'minute' => '00', 'second' => '00');  
+    $info['empty_max'] = array(
+      'year' => '9999', 'month' => '12', 'day' => '31',
+      'hour' => '23', 'minute' => '59', 'second' => '59');  
     if (!empty($op)) {
       if (!empty($part)) {
         return $info[$op][$part];
@@ -756,7 +822,25 @@ class views_date_handler {
     }
     return $info;
   }
-  
+
+  /**
+   * Create a complete datetime value out of an 
+   * incomplete array of selected values.
+   */
+  function complete_date($selected, $type = 'now') {
+    $compare = array_merge($this->part_info('empty_'. $type), $selected);
+    // If this is a max date, make sure the last day of 
+    // the month is the right one for this date.
+    if ($type == 'max') {
+      $compare['day'] = date('t', mktime(0, 0, 0, $compare['month'], 1, $compare['year']));
+    }
+    $value = '';
+    $separators = $this->part_info('sep');
+    foreach ($this->date_parts() as $key => $name) {
+      $value .= $separators[$key] . $compare[$key];
+    }
+    return $value;
+  }
   /**
    * Convert a format string into help text,
    * i.e. 'Y-m-d' becomes 'YYYY-MM-DD'.
@@ -781,13 +865,20 @@ class views_date_handler {
    *
    * @param $format
    *   a format string
-   * @param $granularity
-   *   an array of allowed date parts, all others will be removed
-   *   array('year', 'month', 'day', 'hour', 'minute', 'second');
+   * @param $limit
+   *   The minimum date part to use in this format, can be
+   *   'year', 'month', 'day', 'hour', 'minute', 'second';
    * @return
    *   a format string with all other elements removed
    */
-  function limit_format($format, $granularity) {
+  function limit_format($format, $limit) {
+    $granularity = array();
+    foreach ($this->date_parts() as $key => $value) {
+      $granularity[] = $key;
+      if ($key == $limit) {
+        break;
+      }
+    }
     // Strip out timezone formatting.
     $regex = array('([OZPe])');
     // Get rid of dash separating date and time if either is missing.
@@ -847,21 +938,26 @@ class views_date_handler {
    *
    * @param $field
    *   The real table and field name, like 'tablename.fieldname'.
-   * @param $set_offset
-   *   The name of a field that holds the timezone offset or a fixed timezone
-   *   offset value. If not provided, the normal Drupal timezone handling
-   *   will be used, i.e. $set_offset = 0 will make no timezone adjustment.
+   * @param $offset
+   *   The name of a field that holds the timezone offset or an
+   *   offset value. If NULL, the normal Drupal timezone handling
+   *   will be used, if $set_offset = 0 no adjustment will be made.
+   * @param $zone_name
+   *   The name of a timezone, or a field that holds the timezone name. 
+   *   If provided, the offset will be ignored. If not provided, 
+   *   the offset will be used instead.
    * @param $date_type
    *   Can be 'int', 'iso', or 'datetime'.
    *   If not set it will use the date_type set for the current field.
    * @return
    *   An appropriate SQL string for the db type and field type.
    */
-  function sql_field($field, $set_offset = NULL, $date_type = NULL) {
+  function sql_field($field, $offset = NULL, $zone_name = NULL, $date_type = NULL) {
+    $offset = $offset !== NULL ? $offset : $this->get_offset();
+    $zone_name = $zone_name !== NULL ? $zone_name : $this->get_timezone();
     if (strtoupper($field) == 'NOW') {
-      return $this->sql_offset("NOW()", $set_offset);
+      return $this->sql_tz("NOW()", $offset, $zone_name);
     }
-    $offset = $set_offset !== NULL ? $set_offset : views_get_timezone();
     $date_type = !empty($date_type) ? $date_type : $this->date_type;
     switch ($this->db_type) {
       case 'mysql':
@@ -890,9 +986,32 @@ class views_date_handler {
         }
       break;
     }
-    return $this->sql_offset($field, $offset);
+    return $this->sql_tz($field, $offset, $zone_name);
   }
 
+  /**
+   * Select a date value from the database, adjusting the value
+   * for the timezone.
+   * 
+   * Check whether database timezone conversion is supported in
+   * this system and use it if possible, otherwise use an
+   * offset.
+   */
+  function sql_tz($field, $offset = NULL, $zone_name = NULL) {
+    if (!$this->has_tz_support() || empty($zone_name)) {
+      return $this->sql_offset($field, $offset);
+    }
+    switch ($this->db_type) {
+      case 'mysql':
+      case 'mysqli':
+        return "CONVERT_TZ($field, 'UTC', $zone_name)";
+      case 'pgsql':
+        // WITH TIME ZONE assumes the date is using the system
+        // timezone, which should have been set to UTC.
+        return "TIMESTAMP WITH TIME ZONE $field AT TIME ZONE $zone_name";
+    }
+  }
+  
   /**
    * Adjust a field value by an offset in seconds.
    */
@@ -916,18 +1035,10 @@ class views_date_handler {
    *   A format string for the result, like 'Y-m-d H:i:s'.
    * @param $field
    *   The real table and field name, like 'tablename.fieldname'.
-   * @param $set_offset
-   *   The name of a field that holds the timezone offset or a fixed timezone
-   *   offset value. If not provided, the normal Drupal timezone handling
-   *   will be used, i.e. $set_offset = 0 will make no timezone adjustment.
-   * @param $date_type
-   *   Can be 'int', 'iso', or 'datetime'.
-   *   If not set it will use the date_type set for the current field.
    * @return
    *   An appropriate SQL string for the db type and field type.
    */
-  function sql_format($format, $field, $set_offset = NULL, $date_type = NULL) {
-    $field = $this->sql_field($field, $set_offset, $date_type);
+  function sql_format($format, $field) {
     switch ($this->db_type) {
       case 'mysql':
       case 'mysqli':
@@ -962,19 +1073,10 @@ class views_date_handler {
    *   The type of value to extract from the date, like 'MONTH'.
    * @param $field
    *   The real table and field name, like 'tablename.fieldname'.
-   * @param $set_offset
-   *   The name of a field that holds the timezone offset or a fixed timezone
-   *   offset value. If not provided, the normal Drupal timezone handling
-   *   will be used, i.e. $set_offset = 0 will make no timezone adjustment.
-   * @param $date_type
-   *   Can be 'int', 'iso', or 'datetime'.
-   *   If not set it will use the date_type set for the current field.
    * @return
    *   An appropriate SQL string for the db type and field type.
    */
-  function sql_extract($extract_type, $field, $set_offset = NULL, $date_type = NULL) {
-    $field = $this->sql_field($field, $set_offset, $date_type);
-
+  function sql_extract($extract_type, $field) {
     // Note there is no space after FROM to avoid db_rewrite problems
     // see http://drupal.org/node/79904.
     switch ($extract_type) {
@@ -1077,19 +1179,22 @@ class views_handler_filter_flexible_date extends views_handler_filter_numeric {
   function has_extra_options() { return TRUE; }
 
   function extra_options_form(&$form, &$form_state) {
-    $form['granularity'] = $this->date_handler->granularity_form($this->options['granularity']);
-    $form['granularity']['#description'] = t('Filter for all date parts up to the selected granularity. You will be able to choose a specific value, all values, or \'now\' for each of those parts. For instance, selecting \'day\' will create a filter for a selected year, month, and day.');
     $form['adjustment_field'] = array(
       '#type' => 'radios',
-      '#title' => t('Adjustment option'),
+      '#title' => t('Filter type'),
       '#default_value' => $this->options['adjustment_field'],
       '#options' => array(
         0 => t('Date only'), 
         1 => t('Both date and adjustment'), 
         2 => t('Adjustment only'),
         ),
-      '#description' => t('Add an optional textfield to the filter where you can type in a value like \'+1 day\'. The adjustment will be added to the other selected values when using both date and adjustment, or set an offset to the current date when the adjustment is used alone.'),
+      '#description' => t('Choose a date to filter on, or use an adjustment field for a value like \'+1 day\'. When you use both date and adjustment, the adjustment will be added to the date. When the adjustment field is used with no date field, the adjustment will be made to the current date.'),
       );
+    $form['granularity'] = $this->date_handler->granularity_form($this->options['granularity']);
+    $form['granularity']['#description'] = '<p>'. t('Select a granularity for the date filter. For instance, selecting \'day\' will create a filter where you can select the year, month, and day. You will be able to choose a specific value, all values, or \'now\' for each date part in the filter.') .'</p>';
+    if (!$this->date_handler->has_tz_support()) {
+      $form['granularity']['#description'] .= '<p>'. t('This database does not appear to have native timezone support. Filtering using hour, minute, or second granularity is likely to return incorrect results at least some of the time on systems without native timezone support, so it is recommended to set the granularity to no more than \'day\'.') .'</p>';
+    }
   }
 
   /**
@@ -1300,19 +1405,19 @@ class views_handler_filter_flexible_date extends views_handler_filter_numeric {
     $granularity = $handler->granularity;
     $parts = $handler->date_parts();
     $filter_parts = $handler->date_parts($handler->granularity);
+    $adjustment = 0;
     if (!empty($this->value[$prefix .'adjustment'])) {
-      // See if there are any filters other than the adjustment.
-      // If not, compare to NOW().
       $adjustment = strtotime($this->value[$prefix .'adjustment'], 0);
+      // See if there are any filters other than the adjustment.
+      // If not, compare to NOW() and return.
       if ($this->options['adjustment_field'] == 2) {
-        $sql = $handler->sql_field($field, 0) .
-          " $operator ". $handler->sql_field('NOW', $adjustment);
+        $sql = $handler->sql_field($field, 0) . " $operator ". $handler->sql_field('NOW', $adjustment);
         $this->query->add_where($this->options['group'], $sql);
         return;
       }
     }
     $format = '';
-    $value = '';
+    $selected = array();
     $separators = $handler->part_info('sep');
     $formats = $handler->part_info('format');
     foreach ($filter_parts as $key => $part) {
@@ -1323,29 +1428,30 @@ class views_handler_filter_flexible_date extends views_handler_filter_numeric {
         $format .= $formats[$key];
       }
       if (is_numeric($this->value[$prefix . $key])) {
-        $value .= !empty($value) ? $sep : '';
-        $value .= sprintf($pattern, check_plain($this->value[$prefix . $key]));  
+        $selected[$key] = sprintf($pattern, check_plain($this->value[$prefix . $key]));  
       }
       elseif ($this->value[$prefix . $key] == 'now') {
-        $value .= !empty($value) ? $sep : '';
-        $value .= date($formats[$key]);
+        $selected[$key] = date($formats[$key]);
       }
       else {
         // When we hit an empty (all values) option in the middle of
-        // our date parts, we have to stop and create separate queries 
-        // for each non-empty grouping.
+        // our date parts, stop and start a new query.
         if ($format > '' && $format != $sep) {
-          $sql = $handler->sql_format($format, $field, views_get_timezone()) .
-            " $operator ". $handler->sql_format($format, "'$value'", $adjustment, 'datetime');
+          $value = $handler->complete_date($selected);
+          $value = $handler->sql_field("'$value'", $adjustment, NULL, 'datetime');
+          $field = $handler->sql_field($field, $handler->get_offset(), $handler->get_timezone());
+          $sql = $handler->sql_format($format, $field) ." $operator ". $handler->sql_format($format, $value);
           $this->query->add_where($this->options['group'], $sql);
         }
         $format = '';
-        $value = '';
+        $selected = array();
       }
     }
     if ($format > '' && $format != $sep) {
-      $sql = $handler->sql_format($format, $field, views_get_timezone()) .
-        " $operator ". $handler->sql_format($format, "'$value'", $adjustment, 'datetime');
+      $value = $handler->complete_date($selected);
+      $value = $handler->sql_field("'$value'", $adjustment, NULL, 'datetime');
+      $field = $handler->sql_field($field, $handler->get_offset(), $handler->get_timezone());
+      $sql = $handler->sql_format($format, $field) ." $operator ". $handler->sql_format($format, $value);
       $this->query->add_where($this->options['group'], $sql);
     }
     return;
@@ -1395,7 +1501,7 @@ class views_handler_argument_date extends views_handler_argument_formula {
     parent::options($options);
     $parts = $this->date_handler->date_parts();
     unset($parts['adjustment']);
-    $options['granularity'] = $this->date_handler->granularity_keys($parts);
+    $options['granularity'] = 'day');
   }
 
   /**
@@ -1405,18 +1511,9 @@ class views_handler_argument_date extends views_handler_argument_formula {
     parent::options_form($form, $form_state);
     // Select the granularity of the date parts to use in the argument.
     $handler = $this->date_handler;
-    $form['granularity'] = $handler->granularity_form($this->options['granularity']);
+    $form['granularity'] = $this->options['granularity'];
     $form['granularity']['#description'] = t('Limit the argument to use only the selected date parts.');
     unset($form['granularity']['#options']['adjustment']);
-  }
-
-  /**
-   * Re-work the form values array into a proper granularity array.
-   */
-  function options_validate($form, &$form_state) {
-    $values = $form_state['values'];
-    $handler = $this->date_handler;
-    form_set_value($form['granularity'], $handler->granularity_keys($values['options']['granularity']), $form_state);
   }
 
   // Update the summary values to show selected granularity.
