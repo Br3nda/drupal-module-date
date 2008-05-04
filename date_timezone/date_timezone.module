@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.8.2.6 2008/04/03 10:32:29 karens Exp $
+// $Id: date_timezone.module,v 1.8.2.7 2008/05/04 14:05:54 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -103,5 +103,48 @@ function date_timezone_update_user($element) {
     $date = date_make_date('now', $timezone);
     $offset = date_offset_get($date);
     form_set_value($element['timezone'], $offset);
+  }
+}
+
+/**
+ * Update the site timezone offset when cron runs.
+ * 
+ * This is to make sure that modules that rely on the timezone offset
+ * have current information to process.
+ */
+function date_timezone_cron() {
+  $date = date_now(variable_get('date_default_timezone_name', NULL));
+  $offset = date_offset_get($date);
+  if ($offset != variable_get('date_default_timezone', 0)) {
+    variable_set('date_default_timezone', $offset);
+  }
+}
+
+/**
+ * Update user timezone information at login.
+ * 
+ * This is to make sure that modules that rely on the timezone offset
+ * have current information to process.
+ */
+function date_timezone_user($op, &$edit, &$account, $category = NULL) {
+  if ($account->uid && $op == 'login' && variable_get('configurable_timezones', 1)) {
+    if (strlen($account->timezone_name)) {
+      $date = date_now($account->timezone_name);
+      $offset = date_offset_get($date);
+      if ($offset != $account->timezone) {
+        $account->timezone = $offset;
+        db_query("UPDATE {users} SET timezone='%s' WHERE uid = %d", $offset, $account->uid);
+      }
+    }
+    else {
+      // If the user doesn't already have a timezone name selected, 
+      // default it to the site timezone name and offset.
+      $timezone = variable_get('date_default_timezone_name', NULL);
+      if (!empty($timezone)) {
+        $date = date_now($timezone);
+        $offset = date_offset_get($date);
+        db_query("UPDATE {users} SET timezone_name = '%s', timezone='%s' WHERE uid = %d", $timezone, $offset, $account->uid);
+      }
+    }
   }
 }
