@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.5 2008/04/18 20:48:13 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.6 2008/05/07 14:01:56 karens Exp $
 
 /**
  * Helper function to test if the database is set up to do timezone
@@ -85,7 +85,7 @@ function date_sql_field($field, $field_type = 'int', $set_offset = NULL) {
           $field = "FROM_UNIXTIME($field)";
           break;
         case 'iso':
-          $field = "STR_TO_DATE($field, '%Y-%m-%%%%dT%T')";
+          $field = "STR_TO_DATE($field, '%Y-%m-%%dT%T')";
           break;
         case 'datetime':
           break;
