@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.8.2.8 2008/05/08 14:41:03 karens Exp $
+// $Id: date_timezone.module,v 1.8.2.9 2008/05/08 15:08:01 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -13,11 +13,12 @@
  * Make sure a timezone has been selected.
  */
 function date_timezone_menu($may_cache) {
+  global $user;
   $items = array();
   if (!$may_cache) {
     drupal_add_js(drupal_get_path('module', 'date_timezone') .'/date_timezone.js');
     $tz_name = variable_get('date_default_timezone_name', NULL);
-    if ($_GET['q'] != 'admin/settings/date-time' && (empty($tz_name))) {
+    if (!empty($user->uid) && $_GET['q'] != 'admin/settings/date-time' && (empty($tz_name))) {
       drupal_set_message(t('The Date Timezone module requires you to !link.', array('!link' => l(t('set the site timezone name'), 'admin/settings/date-time'))), 'error');
     }
     $items[] = array(
