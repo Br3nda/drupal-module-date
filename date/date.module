@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.61 2008/04/19 09:58:16 karens Exp $
+// $Id: date.module,v 1.61.2.1 2008/05/08 14:41:29 karens Exp $
 
 /**
  * @file
@@ -179,6 +179,10 @@ function date_theme() {
  */
 function date_formatter_process($element) {
   $dates = array();
+  $timezone = date_default_timezone_name();
+  if (empty($timezone)) {
+    return $dates;
+  }
   $field_name = $element['#field_name'];
   $fields = content_fields();
   $field = $fields[$field_name];
