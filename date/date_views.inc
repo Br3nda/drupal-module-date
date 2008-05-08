@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.39.2.4 2008/05/08 15:28:54 karens Exp $
+// $Id: date_views.inc,v 1.39.2.5 2008/05/08 16:00:22 karens Exp $
 
 views_include_handlers();
 
@@ -1501,7 +1501,7 @@ class views_handler_argument_date extends views_handler_argument_formula {
     parent::options($options);
     $parts = $this->date_handler->date_parts();
     unset($parts['adjustment']);
-    $options['granularity'] = 'day');
+    $options['granularity'] = 'day';
   }
 
   /**
