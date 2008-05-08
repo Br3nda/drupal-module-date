@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.42 2008/04/21 19:24:02 karens Exp $
+// $Id: date_popup.module,v 1.42.2.1 2008/05/08 15:22:11 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -202,7 +202,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
     "currentText:'". t('Today') ."', \n".
     "clearText:'". t('Clear') ."', \n".
     "closeText:'". t('Close') ."', \n".
-    "firstDate:". variable_get('date_first_day', 0) .", \n".
+    "firstDay:". variable_get('date_first_day', 0) .", \n".
     "dayNames: new Array('". implode("','", date_week_days_abbr(TRUE, TRUE, 1)) ."'), \n".
     "monthNames:new Array('". implode("','", date_month_names(TRUE)) ."'), \n".
     // Can't get the image to float to the right of the input element,
