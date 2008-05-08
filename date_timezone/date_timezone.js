@@ -41,7 +41,7 @@ Drupal.setDefaultTimezone = function() {
   var path = 'user/timezone/' + abbreviation + '/' + offsetNow + '/' + isDaylightSavingTime;
   $.getJSON(location.pathname, { q: path, date: dateString }, function (data) {
     if (data) {
-      $("#edit-date-default-timezone, #edit-user-register-timezone").val(data);
+      $("#edit-date-default-timezone, #edit-user-register-timezone, #edit-timezone-name").val(data);
     }
   });
 };
