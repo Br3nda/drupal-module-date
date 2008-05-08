@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.install,v 1.1.2.6 2008/04/03 10:32:29 karens Exp $
+// $Id: date_timezone.install,v 1.1.2.7 2008/05/08 14:41:03 karens Exp $
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
 include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
@@ -50,3 +50,169 @@ function date_timezone_requirements($phase) {
     }
   return $requirements;
 }
+
+/**
+ * Get rid of deprecated timezone names.
+ */
+function date_timezone_update_5200() {
+  $ret = array();
+  $old = variable_get('date_default_timezone_name', NULL);
+  if (!empty($old)) {
+    $new = date_timezone_replacement($old);
+    if (!empty($new) && $new != $old) {
+      variable_set('date_default_timezone_name', $new);
+    }
+  }
+  $results = db_query("SELECT DISTINCT timezone_name FROM {users} ORDER BY timezone_name");
+  while($row = db_fetch_object($results)) {
+    if (!empty($row->timezone_name)) {
+      $new = date_timezone_replacement($row->timezone_name);
+      if (!empty($new) && $new != $row->timezone_name) {
+        db_query("UPDATE {users} SET timezone_name = '%s' WHERE timezone_name = '%s'", $new, $row->timezone_name);
+      }
+    }
+  }
+  // Make sure the timezone name list gets updated.
+  cache_clear_all('date_timezone_identifiers_list', 'cache');
+  date_timezone_names(FALSE, TRUE);
+  return $ret;
+}
+
+/**
+ * Create replacement values for deprecated timezone names.
+ */
+function _date_timezone_replacement($old) {
+  $replace = array (
+  'Brazil/Acre' => 'America/Rio_Branco',
+  'Brazil/DeNoronha' => 'America/Noronha',
+  'Brazil/East' => 'America/Recife',
+  'Brazil/West' => 'America/Manaus',
+  'Canada/Atlantic' => 'America/Halifax',
+  'Canada/Central' => 'America/Winnipeg',
+  'Canada/East-Saskatchewan' => 'America/Regina',
+  'Canada/Eastern' => 'America/Toronto',
+  'Canada/Mountain' =>'America/Edmonton',
+  'Canada/Newfoundland' => 'America/St_Johns',
+  'Canada/Pacific' => 'America/Vancouver',
+  'Canada/Saskatchewan' => 'America/Regina',
+  'Canada/Yukon' => 'America/Whitehorse',
+  'CET' => 'Europe/Berlin',
+  'Chile/Continental' => 'America/Santiago',
+  'Chile/EasterIsland' => 'Pacific/Easter',
+  'CST6CDT' => 'America/Chicago',
+  'Cuba' => 'America/Havana',
+  'EET' => 'Europe/Bucharest',
+  'Egypt' => 'Africa/Cairo',
+  'Eire' => 'Europe/Belfast',
+  'EST' => 'America/New_York',
+  'EST5EDT' => 'America/New_York',
+  'GB' => 'Europe/London',
+  'GB-Eire' => 'Europe/Belfast',
+  'Etc/GMT' => 'UTC',
+  'Etc/GMT+0' => 'UTC',
+  'Etc/GMT+1' => 'UTC',
+  'Etc/GMT+10' => 'UTC',
+  'Etc/GMT+11' => 'UTC',
+  'Etc/GMT+12' => 'UTC',
+  'Etc/GMT+2' => 'UTC',
+  'Etc/GMT+3' => 'UTC',
+  'Etc/GMT+4' => 'UTC',
+  'Etc/GMT+5' => 'UTC',
+  'Etc/GMT+6' => 'UTC',
+  'Etc/GMT+7' => 'UTC',
+  'Etc/GMT+8' => 'UTC',
+  'Etc/GMT+9' => 'UTC',
+  'Etc/GMT-0' => 'UTC',
+  'Etc/GMT-1' => 'UTC',
+  'Etc/GMT-10' => 'UTC',
+  'Etc/GMT-11' => 'UTC',
+  'Etc/GMT-12' => 'UTC',
+  'Etc/GMT-13' => 'UTC',
+  'Etc/GMT-14' => 'UTC',
+  'Etc/GMT-2' => 'UTC',
+  'Etc/GMT-3' => 'UTC',
+  'Etc/GMT-4' => 'UTC',
+  'Etc/GMT-5' => 'UTC',
+  'Etc/GMT-6' => 'UTC',
+  'Etc/GMT-7' => 'UTC',
+  'Etc/GMT-8' => 'UTC',
+  'Etc/GMT-9' => 'UTC',
+  'Etc/GMT0' => 'UTC',
+  'Etc/Greenwich' => 'UTC',
+  'Etc/UCT' => 'UTC',
+  'Etc/Universal' => 'UTC',
+  'Etc/UTC' => 'UTC',
+  'Etc/Zulu' => 'UTC',
+  'Factory' => 'UTC',
+  'GMT' => 'UTC',
+  'GMT+0' => 'UTC',
+  'GMT-0' => 'UTC',
+  'GMT0' => 'UTC',
+  'Hongkong' => 'Asia/Hong_Kong',
+  'HST' => 'Pacific/Honolulu',
+  'Iceland' => 'Atlantic/Reykjavik',
+  'Iran' => 'Asia/Tehran',
+  'Israel' => 'Asia/Tel_Aviv',
+  'Jamaica' => 'America/Jamaica',
+  'Japan' => 'Asia/Tokyo',
+  'Kwajalein' => 'Pacific/Kwajalein',
+  'Libya' => 'Africa/Tunis',
+  'MET' => 'Europe/Budapest',
+  'Mexico/BajaNorte' => 'America/Tijuana',
+  'Mexico/BajaSur' => 'America/Mazatlan',
+  'Mexico/General' => 'America/Mexico_City',
+  'MST' => 'America/Boise',
+  'MST7MDT' => 'America/Boise',
+  'Navajo' => 'America/Phoenix',
+  'NZ' => 'Pacific/Auckland',
+  'NZ-CHAT' => 'Pacific/Chatham',
+  'Poland' => 'Europe/Warsaw',
+  'Portugal' => 'Europe/Lisbon',
+  'PRC' => 'Asia/Chongqing',
+  'PST8PDT' => 'America/Los_Angeles',
+  'ROC' => 'Asia/Taipei',
+  'ROK' => 'Asia/Seoul',
+  'Singapore' =>'Asia/Singapore',
+  'Turkey' => 'Europe/Istanbul',
+  'US/Alaska' => 'America/Anchorage',
+  'US/Aleutian' => 'America/Adak',
+  'US/Arizona' => 'America/Phoenix',
+  'US/Central' => 'America/Chicago',
+  'US/East-Indiana' => 'America/Indianapolis',
+  'US/Eastern' => 'America/New_York',
+  'US/Hawaii' => 'Pacific/Honolulu',
+  'US/Indiana-Starke' => 'America/Indiana/Knox',
+  'US/Michigan' => 'America/Detroit',
+  'US/Mountain' => 'America/Boise',
+  'US/Pacific' => 'America/Los_Angeles',
+  'US/Pacific-New' => 'America/Los_Angeles',
+  'US/Samoa' => 'Pacific/Samoa',
+  'W-SU' => 'Europe/Moscow',
+  'WET' => 'Europe/Paris',
+  );
+  if (array_key_exists($old, $replace)) {
+    return $replace[$old];
+  }
+  else {
+    return $old;
+  }
+}
+
+print('<?php
+
+/**
+ * These strings exist only for the extractor to pick them up and make them
+ * available for translation. Putting them here keeps them from being parsed
+ * on normal pages.
+ *
+ * Idea borrowed from Event module. Thanks killes!
+ *
+');
+
+foreach (timezone_identifiers_list() as $timezone) {
+  if (preg_match('!^((Africa|America|Antarctica|Arctic|Asia|Atlantic|Australia|Europe|Indian|Pacific)/|UTC$)!', $timezone)) {
+    print "t('$timezone')\n";
+  }
+}
+
+print("*/\n");

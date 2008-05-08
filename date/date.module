@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.9 2008/04/19 09:58:04 karens Exp $
+// $Id: date.module,v 1.39.2.10 2008/05/08 14:41:02 karens Exp $
 
 /**
  * @file
@@ -114,8 +114,11 @@ function date_field_formatter($field, $item, $formatter, $node) {
  */
 function date_formatter_process($field, $item, $node, $formatter = 'default') {
   $dates = array();
-  if (!is_array($field) || !is_array($item)) return $dates;
-
+  $timezone = date_default_timezone_name();
+  if (!is_array($field) || !is_array($item) || empty($timezone)) {
+    return $dates;
+  }
+  
   $format = date_formatter_format($formatter, $field['field_name']);
   $process = date_process_values($field);
   foreach ($process as $processed) {

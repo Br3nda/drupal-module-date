@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.14 2008/04/17 12:02:09 karens Exp $
+// $Id: date.install,v 1.21.2.15 2008/05/08 14:41:02 karens Exp $
 
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
@@ -395,6 +395,31 @@ function date_update_5202() {
  */
 function date_update_5203() {
   return date_data_integrity('5203');
+}
+
+/**
+ * Get rid of deprecated timezone names.
+ */
+function date_update_5204() {
+  $ret = array();
+  $fields = content_fields();
+  foreach ($fields as $field) {
+    if (($field['type'] == 'date' || $field['type'] == 'datestamp') && $field['tz_handling'] == 'date') {
+      $db_info = content_database_info($field);
+      $table = $db_info['table'];
+      $column = $db_info['columns']['timezone']['column'];
+      $results = db_query("SELECT DISTINCT $column FROM {$table} ORDER BY $column");
+      while($row = db_fetch_object($results)) {
+        if (!empty($row->timezone_name)) {
+          $new = date_timezone_replacement($row->timezone_name);
+          if (!empty($new) && $new != $old) {
+            db_query("UPDATE {$table} SET $column = '%s' WHERE $column = '%s'", $new, $row->timezone_name);
+          }
+        }
+      }
+    }
+  }
+  return $ret;
 }
 
 /**
