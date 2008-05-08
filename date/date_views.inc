@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.39.2.3 2008/04/30 11:34:57 karens Exp $
+// $Id: date_views.inc,v 1.39.2.4 2008/05/08 15:28:54 karens Exp $
 
 views_include_handlers();
 
@@ -141,7 +141,7 @@ class date_views_browser_argument_handler extends views_handler_argument_formula
    * for the results.
    */
   function init(&$view, $options) {
-    parent::init(&$view, $options);
+    parent::init($view, $options);
     $handler = $this->date_handler;
     $handler->granularity = $handler->granularity_keys($options['granularity']);
     switch ($handler->granularity[0]) {
@@ -1151,7 +1151,7 @@ class views_handler_filter_flexible_date extends views_handler_filter_numeric {
   }
 
   function init(&$view, $options) {
-    parent::init(&$view, $options);
+    parent::init($view, $options);
     $handler = $this->date_handler;
     $handler->granularity = $options['granularity'];
     $handler->adjustment_field = $options['adjustment_field'];
@@ -1486,7 +1486,7 @@ class views_handler_argument_date extends views_handler_argument_formula {
    * for the results.
    */
   function init(&$view, $options) {
-    parent::init(&$view, $options);
+    parent::init($view, $options);
     $handler = $this->date_handler;
     $handler->granularity = $handler->granularity_keys($options['granularity']);
     $sql_format = $handler->limit_format('Y-m-d\TH:i:s', $handler->granularity);
