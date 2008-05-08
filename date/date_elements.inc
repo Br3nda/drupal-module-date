@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.12 2008/04/22 19:08:04 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.13 2008/05/08 15:15:55 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -385,7 +385,7 @@ function date_combo_validate($element) {
     }
 
     if ($item[$from_field] > $item[$to_field]) {
-      form_set_error(implode('][', $element['#parents']), t('The From date must be greater than the To date.'));
+      form_set_error(implode('][', $element['#parents']), t('The To date must be greater than the From date.'));
     }
     else {
       // Convert input dates back to their UTC values and re-format to ISO
