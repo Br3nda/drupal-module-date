@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.15 2008/04/22 21:18:42 karens Exp $
+// $Id: date_views.inc,v 1.26.2.16 2008/05/09 17:23:22 karens Exp $
 
 /**
  * Views field filters
@@ -35,46 +35,37 @@ function _date_views_filters($field) {
         '<=' => t('less than or equal to'),
         );
   $description = 'Filter by %option. Set a default date and time in the <strong>Value</strong>. To default to the current time instead of a fixed time, leave the <strong>Value</strong> empty and enter \'now\' in the <strong>Option</strong>. You may also use something like \'now +1 day\' to default to one day from the current time.';
+  $filter = array(
+    'operator' => $operator,
+    'option' => 'string',
+    'handler' => $handler,
+    'extra' => array('column' => 'value', 'field' => $field),
+    'cacheable' => 'no',
+  );
   $filters = array(
-    'default' => array(
+    'default' => $filter + array(
       'name' => t('Date'),
-      'operator' => $operator,
       'value' => date_views_handler_filter_date_value_form($field),
-      'option' => 'string',
-      'handler' => $handler,
       'type' => 'DATE',
-      'extra' => array('column' => 'value', 'field' => $field),
       'help' => t($description, array('%option' => t('date'))),
       ),
-    'year' => array(
+    'year' => $filter + array(
       'name' => t('Year'),
-      'operator' => $operator,
-      'handler' => $handler,
-      'option' => 'string',
       'type' => 'YEAR',
-      'extra' => array('column' => 'value', 'field' => $field),
       'help' => t($description, array('%option' => t('year'))),
       ),
-    'month' => array(
+    'month' => $filter + array(
       'name' => t('Month'),
-      'operator' => $operator,
       'list' => $months,
       'list-type' => 'select',
-      'handler' => $handler,
-      'option' => 'string',
       'type' => 'MONTH',
-      'extra' => array('column' => 'value', 'field' => $field),
       'help' => t($description, array('%option' => t('month'))),
-       ),
-    'day' => array(
+      ),
+    'day' => $filter + array(
       'name' => t('Day'),
-      'operator' => $operator,
       'list' => $days,
       'list-type' => 'select',
-      'handler' => $handler,
-      'option' => 'string',
       'type' => 'DAY',
-      'extra' => array('column' => 'value', 'field' => $field),
       'help' => t($description, array('%option' => t('day'))),
       ),
     );
@@ -103,23 +94,49 @@ function _date_views_filters($field) {
  */
 function _date_views_timestamp_filter_handler($op, $filter, $filterinfo, &$query) {
   // this is just a wrapper function that sets the date type
-  return _date_views_filter_handler($op, $filter, $filterinfo, $query, DATE_UNIX);
+  return _date_views_filter_handler($op, $filter, $filterinfo, $query, 'int');
  }
-function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = DATE_ISO) {
+function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = 'iso') {
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
+  $field   = $filterinfo['extra']['field'];
+  $column = $filterinfo['extra']['column'];
+  $db_info = $filterinfo['content_db_info'];
+  $table   = 'node_data_'. $field['field_name'];
+  $sql_field = "$table.". $db_info['columns'][$column]['column'];
+
+  if ($field['tz_handling'] == 'date') {
+    $timezone = "$table." . $db_info['columns']['timezone']['column'];
+  }
+  else {
+    $timezone = date_default_timezone_name();
+  }
+  $date_handler = new date_sql_handler();
+  $date_handler->construct($field_type, $timezone);
+      
+  $sql = '';  
   
-  $adjust = 0;
-  if (trim($filter['options']) == 'now') {
-    $value = 'now';
+  // Comparing to NOW.
+  if (!empty($filter['options'])) {
+    if (trim($filter['options']) == 'now') {
+      $adjustment = 0;
+    }
+    else {
+      $adjustment = strtotime(trim(str_replace('now', '', $filter['options'])), 0);
+    }
+        
+    switch ($filterinfo['type']) {
+      case 'YEAR':
+      case 'MONTH':
+      case 'DAY':
+        $sql = $date_handler->sql_where_extract($filterinfo['type'], $sql_field, $filter['operator'], $value, FALSE);
+        break;
+      default:
+        $sql = $date_handler->sql_where_date('DATE', $sql_field, $filter['operator'], 'NOW', $adjustment);
+        break;
+    }
   }
-  elseif (preg_match('/(now) ([+|-])\s?([0-9]{1,4}).([day(s)?|week(s)?|month(s)?|year(s)?|hour(s)?|minute(s)?}second(s)?]{1,10})/', $filter['options'], $results)) {
-    $value = $results[1];
-    $start = date_now();
-    $end = drupal_clone($start);
-    date_modify($end, $results[2] . $results[3] .' '. $results[4]);
-    $adjust = date_format($end, 'U') - date_format($start, 'U');
-  }
+  // Comparing to an input date.
   else {
     // If the date_popup or date_textfield elements are used as a exposed filters, their
     // #validation functions will never get called, so validate and
@@ -137,59 +154,33 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
       $input = $filter['value'];
     }
     if (!empty($input)) {
-      $value = date_convert_from_custom($input, DATE_FORMAT_DATETIME);
-      if (date_is_valid($value, DATE_DATETIME)) {
-        $date = date_make_date($value, date_default_timezone_name(), DATE_DATETIME);
-        $value = date_convert($date, DATE_OBJECT, DATE_DATETIME);
-        $filter['value']['date'] = substr($value, 0, 10);
-        $filter['value']['time'] = substr($value, 11, 8);
+      $input = date_fuzzy_datetime($input);
+      if (date_is_valid($input, DATE_DATETIME)) {
+        $date = date_make_date($input, date_default_timezone_name(), DATE_DATETIME);
+        $formats = array('YEAR' => 'Y', 'MONTH' => 'n', 'DAY' => 'j', 'DATE' => DATE_FORMAT_DATETIME);
+        $value = date_format_date($date, 'custom', $formats[$filterinfo['type']]);
+        switch ($filterinfo['type']) {
+          case 'YEAR':
+          case 'MONTH':
+          case 'DAY':
+            $sql = $date_handler->sql_where_extract($filterinfo['type'], $sql_field, $filter['operator'], $value);
+            break;
+          default:
+            $sql = $date_handler->sql_where_date('DATE', $sql_field, $filter['operator'], $value);
+            break;
+        }
+        $filter['value']['date'] = date_format_date($date, 'custom', 'Y-m-d');
+        $filter['value']['time'] = date_format_date($date, 'custom', 'H:i');
       }
       else {
         drupal_set_message(t('That is not a valid date.'));
-        $value = NULL;
       }
     }
   }
-  // Do some validation of input values before creating any SQL.
-  $type = $filterinfo['type'];
-  switch ($type) {
-    case 'YEAR':
-    case 'MONTH':
-    case 'DAY':
-      if (empty($value) || !($value == 'now' || is_numeric($value))) {
-        return;
-      }
-      break;
-    default:
-      if ($field_type == 'int' && (empty($value) || !($value == 'now' || date_is_valid($value, DATE_UNIX)))) {
-        return;
-      }
-      elseif (empty($value) || !($value == 'now' || date_is_valid($value, DATE_ISO))) {
-        return;
-      }
-      break;
+  if (!empty($sql)) {
+    $query->ensure_table($table);
+    $query->add_where($sql);
   }
-
-  $field   = $filterinfo['extra']['field'];
-  $column = $filterinfo['extra']['column'];
-  $db_info = $filterinfo['content_db_info'];
-  $table   = 'node_data_'. $field['field_name'];
-  $table_field   = $db_info['columns'][$column]['column'];
-
-  // When using NOW(), must adjust out the server zone adj which may not match
-  // the offset we really want, and add back the right offset.
-  // This will be necessary any time the server timezone does not match the site or date zone
-  // because the server is going to adjust the value of NOW() for the server timezone.
-  switch ($type) {
-    case('DATE'):
-      $date = $value == 'now' ? date_sql('NOW', 'NOW()', $field_type, intval(date_views_offset($field) + $adjust)) : "'$value'";
-      break;
-    default:
-      $date = $value == 'now' ? date_sql($type, "NOW()", $field_type, intval(date_views_offset($field) + $adjust)) : $value;
-      break;
-  }
-  $query->ensure_table($table);
-  $query->add_where(date_sql($type, $table .".". $table_field, $field_type, date_views_offset($field)) .' '. $filter['operator'] .' '. $date);
 }
 
 /**
@@ -300,7 +291,16 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
   $value      = $db_info['columns'][$value]['column'];
   $timezone   = $db_info['columns']['timezone']['column'];
   $table      = 'node_data_'. $field['field_name'];
+  $sql_field = "$table.$value";
 
+  if ($field['tz_handling'] == 'date') {
+    $timezone_field = "$table.$timezone";
+  }
+  else {
+    $timezone_field = date_default_timezone_name();
+  }
+  $date_handler = new date_sql_handler();
+  $date_handler->construct($field_type);
   $offset = date_views_offset($field);
 
   switch ($op) {
@@ -326,7 +326,7 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
           $format = 'F j Y (W)';
           break;
       }
-      $fieldinfo['field'] = date_sql_format($sql_format, $table .'.'. $value, $field_type, $offset);    
+      $fieldinfo['field'] = $date_handler->sql_format($sql_format, $date_handler->sql_field($sql_field, $offset));
       $fieldinfo['fieldname'] = 'range';
 
       $query->ensure_table($table);
@@ -361,8 +361,8 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
       if ($field['tz_handling'] == 'date') {
         $query->add_field($timezone, $table);
       }
-      $query->add_where(date_sql('DATE', $table .'.'. $value, $field_type, $offset) .">='". str_replace('T', ' ', $range[0]) ."'");
-      $query->add_where(date_sql('DATE', $table .'.'. $value, $field_type, $offset) ."<='". str_replace('T', ' ', $range[1]) ."'");
+      $query->add_where($date_handler->sql_where_date('DATE', $sql_field, ">=", $range[0]), $offset);
+      $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", $range[1]), $offset);
       break;
 
     case 'title':
@@ -621,11 +621,15 @@ function _date_views_query_alter(&$query, &$view) {
       // if no argument specified, add the current date range to the query
       $arg  = date_views_browser_period_arg($arg, $view->argument[0]['options']);
       if ($range  = date_views_date_range($arg)) {
+        $date_handler = new date_sql_handler();
+        $date_handler->construct($field_type);
+        $offset = date_views_offset($field);
         $query->ensure_table($table);
         $query->add_field('nid', 'node');
         $query->add_field($value, $table);
-        $query->add_where(date_sql('DATE', $table .'.'. $value, $field_type, $offset) .">='". str_replace('T', ' ', $range[0]) ."'");
-        $query->add_where(date_sql('DATE', $table .'.'. $value, $field_type, $offset) ."<='". str_replace('T', ' ', $range[1]) ."'");
+        $sql_field = "$table.$value";
+        $query->add_where($date_handler->sql_where_date('DATE', $sql_field, ">=", $range[0]), $offset);
+        $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", $range[1]), $offset);
       }
     }
   }
