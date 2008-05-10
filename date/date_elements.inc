@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.13 2008/05/08 15:15:55 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.14 2008/05/10 00:46:49 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -290,7 +290,9 @@ function date_combo_process($element, $edit = NULL) {
     '#date_year_range'  => $field['widget']['year_range'],
     '#date_label_position' => $field['widget']['label_position'],
     );
-
+  
+  $element[$from_field]['#description'] .= ' '. t('Format: @date', array('@date' => date($element[$from_field]['#date_format'], time())));
+  
   // Give this element the right type, using a Date API
   // or a Date Popup element type.
 

@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.16 2008/04/22 20:45:50 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.17 2008/05/10 00:46:50 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -446,6 +446,13 @@ function date_text_input_value($element) {
   // If it creates a valid date, use it.
   if (date_is_valid($value)) {
     return $value;
+  }
+  // If that didn't work, try strtotime().
+  else {
+   $date = strtotime($input, 0);
+   if (date_is_valid($date, DATE_UNIX)) {
+     return date_convert($date, DATE_UNIX, DATE_DATETIME);
+   }
   }
   return NULL;
 }
