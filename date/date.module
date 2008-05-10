@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.61.2.1 2008/05/08 14:41:29 karens Exp $
+// $Id: date.module,v 1.61.2.2 2008/05/10 00:47:09 karens Exp $
 
 /**
  * @file
@@ -78,7 +78,7 @@ function date_widget_info() {
         ),
     ),
     'date_text' => array(
-      'label' =>  t('Text Field with strtotime validation'),
+      'label' =>  t('Text Field with custom input format'),
       'field types' => array('date', 'datestamp', 'datetime'),
       'multiple values' => CONTENT_HANDLE_MODULE,
       'callbacks' => array(
