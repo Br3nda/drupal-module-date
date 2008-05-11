@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.8 2008/05/11 06:54:59 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.9 2008/05/11 22:03:19 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -173,6 +173,10 @@ class date_sql_handler {
         }
       break;
     }
+    // Fix Views bug that does double replacement of %%d.
+    // TODO remove once the bug fix gets into an official Views release.
+    $field = str_replace('%%d', '***SQLD***', $field);
+    
     // Adjust the resulting value to the right timezone/offset.
     return $this->sql_tz($field, $offset);
   }
@@ -267,7 +271,11 @@ class date_sql_handler {
           's' => '%s',
           );
         $format = strtr($format, $replace);
-        return "DATE_FORMAT($field, '$format')";
+        $field = "DATE_FORMAT($field, '$format')";
+        // Fix Views bug that does double replacement of %%d.
+        // TODO remove once the bug fix gets into an official Views release.
+        $field = str_replace('%%d', '***SQLD***', $field);
+        return $field;
       case 'pgsql':
         $replace = array(
           'Y' => 'YY',
