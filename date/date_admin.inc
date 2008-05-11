@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.40 2008/04/24 00:26:26 karens Exp $
+//$Id: date_admin.inc,v 1.40.2.1 2008/05/11 06:53:34 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -484,7 +484,7 @@ function date_timezone_handling_options() {
     'site' => t('Site\'s time zone'),
     'date' => t('Date\'s time zone'),
     'user' => t('User\'s time zone'),
-    'gmt' => 'UTC',
+    'utc' => 'UTC',
     'none' => t('No time zone conversion'),
     );
 }

@@ -1,200 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.9 2008/04/17 12:44:16 karens Exp $
-
-/**
- * Helper function to test if the database is set up to do timezone
- * conversions natively.
- */
-function date_sql_db_timezone_support() {
-  global $db_type;
-
-  switch ($db_type) {
-    case 'mysql':
-    case 'mysqli':
-      // If the timezone tables are empty, there is no support.
-      $tables = db_result(db_query("SELECT COUNT(*) FROM mysql.time_zone_name;"));
-      // Make sure the function returns a valid value and the data is current.
-      $test = db_result(db_query("SELECT CONVERT_TZ('2007-03-11 2:00:00','US/Eastern','US/Central')"));
-      if (empty($tables)) {
-        return FALSE;
-      }
-      elseif ($test == '2007-03-11 01:00:00') {
-        return TRUE;
-      }
-      return FALSE;
-
-    case 'postgres':
-      // TODO, need to find a way to test this for sure in postgres, but it
-      // seems to be the default situation.
-      return TRUE;
-  }
-}
-
-/**
- *  Cross-database date SQL wrapper function for fields that are not native
- *  datetime fields and databases that don't support native timezone handling.
- *  Allows use of normalized native date functions in both mysql and postgres.
- *  Designed to be extensible to other databases.
- *
- *  @param $result_type - NOW, DATE, YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, DOW, DOY, WEEK
- *  @param $field - the name of the date field to be analyzed
- *  @param $date_type - the type of date field being analyzed, DATE_UNIX or DATE_ISO
- *  @param $offset - timezone offset in seconds, can be either a value or fieldname
- *  @param $offset_op - the operation to perform on the offset, + or -
- *  @return a SQL statement appropriate for the $db_type
- *
- *  example:          date_sql('WEEK', 'MYFIELD', 'int', 'MYOFFSETFIELD', '+')
- *  mysql returns:    WEEK(FROM_UNIXTIME(MYFIELD) + INTERVAL MYOFFSETFIELD SECOND, 3)
- *  postgres returns: EXTRACT(WEEK FROM((MYFIELD::ABSTIME) + INTERVAL MYOFFSETFIELD SECONDS))
- */
-function date_sql($result_type, $field, $date_type = DATE_UNIX, $offset = '', $offset_op = '+') {
-  global $db_type;
-
-  // NOW() is timezone-adjusted by OS, adjust only for the server adj,
-  // correct offset will get added back in later step.
-  if ($date_type == 'NOW' || $field == 'NOW()') {
-    switch ($db_type) {
-      case('mysql'):
-      case('mysqli'):
-        if (date_server_zone_adj()) {
-          $field = "(NOW() - INTERVAL ". date_server_zone_adj() ." SECOND)";
-        }
-        break;
-      case('pgsql'):
-        if (date_server_zone_adj()) {
-          $field = "(NOW() - INTERVAL '". date_server_zone_adj() ." SECONDS')";
-        }
-        break;
-     }
-  }
-  // Convert integer field value to native date format.
-  // Since FROM_UNIXTIME() and TIMESTAMP() are timezone adjusted,
-  // remove server adj, correct offset will get added back in later step.
-  elseif ($date_type == DATE_UNIX && $field) {
-    switch ($db_type) {
-      case('mysql'):
-      case('mysqli'):
-        $field = "FROM_UNIXTIME($field)";
-        if (date_server_zone_adj()) {
-          $field = "($field - INTERVAL ". date_server_zone_adj() ." SECOND)";
-        }
-                break;
-      case('pgsql'):
-        $field = "($field::ABSTIME)";
-        if (date_server_zone_adj()) {
-          $field = "($field - INTERVAL '". date_server_zone_adj() ." SECONDS')";
-        }
-        break;
-    }
-  }
-  // Get rid of the 'T' in ISO dates to match native date field.
-  // This makes it possible to use SQL date functions on the value.
-  elseif ($date_type == DATE_ISO && $field) {
-    $field = " REPLACE($field,'T',' ')";
-  }
-  // Now apply requested offset to the adjusted query field.
-  if ($offset) {
-    switch ($db_type) {
-    case('mysql'):
-    case('mysqli'):
-      $field = "($field $offset_op INTERVAL ($offset) SECOND)";
-      break;
-    case('pgsql'):
-      $field = "($field $offset_op INTERVAL '$offset SECONDS')";
-      break;
-    }
-  }
-  return date_sql_extract($result_type, $field);
-}
-
-/**
- *  Cross-database date SQL wrapper function for fields that are native
- *  datetime fields and databases that support native timezone handling.
- *  Allows use of normalized native date functions in both mysql and postgres.
- *  Designed to be extensible to other databases.
- *
- *  @param $result_type - NOW, DATE, YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, DOW, DOY, WEEK
- *  @param $field - the name of the date field to be analyzed
- *  @param $timezone_to - the name of the timezone to convert the date to
- *  @param $timezone_from - the timezone that the date in the db is stored in.
- *  @return a SQL statement appropriate for the $db_type
- */
-function date_db_sql($result_type, $field, $timezone_to, $timezone_from = 'UTC') {
-  global $db_type;
-
-  switch ($db_type) {
-    case('mysql'):
-    case('mysqli'):
-      $field = "(CONVERT_TZ('$field', '$timezone_from', '$timezone_to'))";
-      break;
-    case('pgsql'):
-      $field = "(SELECT TIMESTAMP WITH TIME ZONE '$field $timezone_from' AT TIME ZONE '$timezone_to')";
-      break;
-  }
-  return date_sql_extract($result_type, $field);
-}
-
-
-/**
- *  Cross-database method of extracting date information from datetime fields.
- *  Allows use of normalized native date functions in both mysql and postgres.
- *  Designed to be extensible to other databases.
- *
- *  @param $result_type - NOW, DATE, YEAR, MONTH, DAY, HOUR, MINUTE, SECOND, DOW, DOY, WEEK
- *  @param $field - the name of the date field to be analyzed
- *  @return a SQL statement appropriate for the $db_type
- */
-function date_sql_extract($result_type, $field) {
-  global $db_type;
-
-  // Return requested sql.
-  // Note there is no space after FROM to avoid db_rewrite problems
-  // see http://drupal.org/node/79904.
-  switch ($result_type) {
-  case('NOW'):
-  case('DATE'):
-    return $field;
-  case('YEAR'):
-    return "EXTRACT(YEAR FROM($field))";
-  case('MONTH'):
-    return "EXTRACT(MONTH FROM($field))";
-  case('DAY'):
-    return "EXTRACT(DAY FROM($field))";
-  case('HOUR'):
-    return "EXTRACT(HOUR FROM($field))";
-  case('MINUTE'):
-    return "EXTRACT(MINUTE FROM($field))";
-  case('SECOND'):
-    return "EXTRACT(SECOND FROM($field))";
-  case('WEEK'):  // ISO week number for date
-    switch ($db_type) {
-      case('mysql'):
-      case('mysqli'):
-        // WEEK using arg 3 in mysql should return the same value as postgres EXTRACT
-        return "WEEK($field, 3)";
-      case('pgsql'):
-        return "EXTRACT(WEEK FROM($field))";
-    }
-  case('DOW'):
-    switch ($db_type) {
-      case('mysql'):
-      case('mysqli'):
-        // mysql returns 1 for Sunday through 7 for Saturday
-        // php date functions and postgres use 0 for Sunday and 6 for Saturday
-        return "INTEGER(DAYOFWEEK($field) - 1)";
-      case('pgsql'):
-        return "EXTRACT(DOW FROM($field))";
-    }
-  case('DOY'):
-    switch ($db_type) {
-      case('mysql'):
-      case('mysqli'):
-        return "DAYOFYEAR($field)";
-      case('pgsql'):
-        return "EXTRACT(DOY FROM($field))";
-    }
-  }
-}
+// $Id: date_api_sql.inc,v 1.9.2.1 2008/05/11 06:53:34 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -232,36 +37,402 @@ function date_sql_pad($str, $size = 2, $pad = '0', $side = 'l') {
 }
 
 /**
- *  Server timezone adjustment.
- *
- *  Used to compute default timezone adjustment made by SQL server
- *  so server adjustment can be removed and replaced with correct timezone
- *  adjustment values.
- *
- *  @return amount in seconds that DB server adjusts for timezone.
+ * A class to manipulate date SQL.
  */
-function date_server_zone_adj() {
-  global $db_type;
-  static $server_zone_adj;
-  if (!isset($server_zone_adj)) {
-    switch ($db_type) {
-      case('mysql'):
-      case('mysqli'):
-        // In 4.1.1+ we can use difference between NOW() and UTC_TIMESTAMP().
-        if (version_compare(db_version(), '4.1.1', '>=')) {
-          $server_zone_adj = db_result(db_query("SELECT UNIX_TIMESTAMP(NOW()) - UNIX_TIMESTAMP(UTC_TIMESTAMP())"));
-        }
+class date_sql_handler {
+  var $db_type = 'mysql';
+  var $date_type = DATE_UNIX;
+  var $db_timezone = 'UTC'; // A string timezone name.
+  var $local_timezone = NULL; // A string timezone name.
+  var $db_timezone_field = NULL; // Use if the db timezone is stored in a field.
+  var $local_timezone_field = NULL; // Use if the local timezone is stored in a field.
+  var $offset_field = NULL; // Use if the offset is stored in a field.
+  
+  function construct($date_type = DATE_UNIX, $local_timezone = NULL) {
+    $this->db_type = $GLOBALS['db_type'];
+    $this->date_type = $date_type;
+    $this->db_timezone = 'UTC';
+    $this->local_timezone = isset($local_timezone) ? $local_timezone : date_default_timezone_name();
+    date_api_set_db_timezone();
+  }
+
+  /**
+   * See if the db has timezone name support.
+   */
+  function db_tz_support($reset = FALSE) {
+    $has_support = variable_get('date_db_tz_support', -1);
+    if ($has_support == -1 || $reset) {
+      date_api_set_db_timezone();
+      $has_support = FALSE;
+      switch ($this->db_type) {
+        case 'mysql':
+        case 'mysqli':
+          $test = db_result(db_query("SELECT CONVERT_TZ('2008-02-15 12:00:00', 'UTC', 'US/Central')"));
+          if ($test == '2008-02-15 06:00:00') {
+            $has_support = TRUE;
+          }
+          break;
+        case 'pgsql':
+          $test = "TIMESTAMP WITH TIME ZONE '2008-02-15 12:00:00' AT TIME ZONE 'US/Central'";
+          if ($test == '2008-02-15 06:00:00') {
+            $has_support = TRUE;
+          }
         break;
-      case('pgsql'):
-        // EXTRACT TIMEZONE returns the timezone adjustment in seconds.
-        $server_zone_adj = db_result(db_query("SELECT EXTRACT('TIMEZONE' FROM NOW())"));
-        break;
+      }
+      variable_set('date_db_tz_support', $has_support);
     }
-    // If no value got set by this point,
-    // fall back to using php timezone adjustment as an estimate.
-    if (!isset($server_zone_adj)) {
-      $server_zone_adj = date('Z');
+    return $has_support;
+  }
+  
+  /**
+   * Set the database timzone offset.
+   * 
+   * Setting the db timezone to UTC is done to ensure consistency in date 
+   * handling whether or not the database can do proper timezone conversion.
+   * 
+   * Views filters that not exposed are cached and won't set the timezone
+   * so views date filters should add 'cacheable' => 'no' to their 
+   * definitions to ensure that the database timezone gets set properly 
+   * when the query is executed.
+   * 
+   * @param $offset
+   *   An offset value to set the database timezone to. This will only
+   *   set a fixed offset, not a timezone, so any value other than
+   *   '+00:00' should be used with caution.
+   */
+  function set_db_timezone($offset = '+00:00') {
+    static $already_set = FALSE;
+    $type = $GLOBALS['db_type'];
+    if (!$already_set) {
+      if ($type == 'mysqli' || version_compare(db_version(), '4.1.3', '>=')) {
+        db_query("SET @@session.time_zone = '$offset'");
+      }
+      elseif ($type == 'pgsql') {
+        db_query("SET TIME ZONE '$offset'");
+      }
+      $already_set = true;
     }
   }
-  return $server_zone_adj;
+  
+  /**
+   * Return timezone offset for the date being processed.
+   */
+  function get_offset() {
+    if (!empty($this->db_timezone) && !empty($this->local_timezone)) {
+      if ($this->db_timezone != $this->local_timezone) {
+        $date = date_make_date('now', $this->db_timezone);
+        date_timezone_set($date, timezone_open($this->local_timezone));
+        return date_offset_get($date);
+      }
+    }
+    return 0;
+  }
+  
+  /**
+   * Helper function to create cross-database SQL dates.
+   *
+   * @param $field
+   *   The real table and field name, like 'tablename.fieldname'.
+   * @param $offset
+   *   The name of a field that holds the timezone offset or an
+   *   offset value. If NULL, the normal Drupal timezone handling
+   *   will be used, if $offset = 0 no adjustment will be made.
+   * @return
+   *   An appropriate SQL string for the db type and field type.
+   */
+  function sql_field($field, $offset = NULL) {
+    if (strtoupper($field) == 'NOW') {
+      // NOW() will be in UTC since that is what we set the db timezone to.
+      $this->local_timezone = 'UTC';
+      return 'NOW()';
+    }
+    switch ($this->db_type) {
+      case 'mysql':
+      case 'mysqli':
+        switch ($this->date_type) {
+          case DATE_UNIX:
+            $field = "FROM_UNIXTIME($field)";
+            break;
+          case DATE_ISO:
+            $field = "STR_TO_DATE($field, '%Y-%m-%%dT%T')";
+            break;
+          case DATE_DATETIME:
+            break;
+        }
+        break;
+      case 'pgsql':
+        switch ($date_type) {
+          case DATE_UNIX:
+            $field = "$field::ABSTIME";
+            break;
+          case DATE_ISO:
+            $field = "TO_DATE($field, 'FMYYYY-FMMM-FMDDTFMHH:FMMI:FMSS')";
+            break;
+          case DATE_DATETIME:
+            break;
+        }
+      break;
+    }
+    // Adjust the resulting value to the right timezone/offset.
+    return $this->sql_tz($field, $offset);
+  }
+
+  /**
+   * Adjust a field value by an offset in seconds.
+   */
+  function sql_offset($field, $offset = NULL) {
+    if (!empty($offset)) {
+      switch ($this->db_type) {
+        case 'mysql':
+        case 'mysqli':
+          return "ADDTIME($field, SEC_TO_TIME($offset))";
+        case 'pgsql':
+          return "($field + 'INTERVAL $offset SECONDS')";;
+      }
+    }
+    return $field;
+  }
+  
+  /**
+   * Select a date value from the database, adjusting the value
+   * for the timezone.
+   * 
+   * Check whether database timezone conversion is supported in
+   * this system and use it if possible, otherwise use an
+   * offset.
+   * 
+   * @param $offset
+   *   Set a fixed offset or offset field to use for the date. 
+   *   If set, no timezone conversion will be done and the 
+   *   offset will be used.
+   */
+  function sql_tz($field, $offset = NULL) {
+    // If the timezones are values they need to be quoted, but
+    // if they are field names they do not.
+    $dbzone    = $this->db_timezone_field ? $this->db_timezone_field : "'{$this->db_timezone}'";
+    $localzone = $this->local_timezone_field ? $this->local_timezone_field : "'{$this->local_timezone}'"; 
+     
+    // If a fixed offset is required, use it.
+    if ($offset !== NULL) {
+      return $this->sql_offset($field, $offset);
+    }
+    // If the db and local timezones are the same, make no adjustment.
+    elseif ($db_zone == $localzone) {
+      return $this->sql_offset($field, 0);
+    }
+    // If the db has no timezone support, adjust by the offset,
+    // could be either a field name or a value.
+    elseif (!$this->db_tz_support()) {
+      if (!empty($this->offset_field)) {
+        return $this->sql_offset($field, $this->offset_field);
+      }
+      else {
+        return $this->sql_offset($field, $this->get_offset());
+      }
+    }
+    // Otherwise make a database timezone adjustment to the field.
+    else {
+      switch ($this->db_type) {
+        case 'mysql':
+        case 'mysqli':
+          return "CONVERT_TZ($field, $dbzone, $localzone)";
+        case 'pgsql':
+          // WITH TIME ZONE assumes the date is using the system
+          // timezone, which should have been set to UTC.
+          return "TIMESTAMP WITH TIME ZONE $field AT TIME ZONE $localzone";
+      }
+    }
+  }
+  
+  /**
+   * Helper function to create cross-database SQL date formatting.
+   *
+   * @param $format
+   *   A format string for the result, like 'Y-m-d H:i:s'.
+   * @param $field
+   *   The real table and field name, like 'tablename.fieldname'.
+   * @return
+   *   An appropriate SQL string for the db type and field type.
+   */
+  function sql_format($format, $field) {
+    switch ($this->db_type) {
+      case 'mysql':
+      case 'mysqli':
+        $replace = array(
+          'Y' => '%Y',
+          'm' => '%m',
+          'd' => '%%d',
+          'H' => '%H',
+          'i' => '%i',
+          's' => '%s',
+          );
+        $format = strtr($format, $replace);
+        return "DATE_FORMAT($field, '$format')";
+      case 'pgsql':
+        $replace = array(
+          'Y' => 'YY',
+          'm' => 'MM',
+          'd' => 'DD',
+          'H' => 'HH24',
+          'i' => 'MI',
+          's' => 'SS',
+          );
+        $format = strtr($format, $replace);
+        return "TO_CHAR($field, '$format')";
+    }
+  }
+
+  /**
+   * Helper function to create cross-database SQL date extraction.
+   *
+   * @param $extract_type
+   *   The type of value to extract from the date, like 'MONTH'.
+   * @param $field
+   *   The real table and field name, like 'tablename.fieldname'.
+   * @return
+   *   An appropriate SQL string for the db type and field type.
+   */
+  function sql_extract($extract_type, $field) {
+    // Note there is no space after FROM to avoid db_rewrite problems
+    // see http://drupal.org/node/79904.
+    switch (strtoupper($extract_type)) {
+    case('DATE'):
+      return $field;
+    case('YEAR'):
+      return "EXTRACT(YEAR FROM($field))";
+    case('MONTH'):
+      return "EXTRACT(MONTH FROM($field))";
+    case('DAY'):
+      return "EXTRACT(DAY FROM($field))";
+    case('HOUR'):
+      return "EXTRACT(HOUR FROM($field))";
+    case('MINUTE'):
+      return "EXTRACT(MINUTE FROM($field))";
+    case('SECOND'):
+      return "EXTRACT(SECOND FROM($field))";
+    case('WEEK'):  // ISO week number for date
+      switch ($this->db_type) {
+        case('mysql'):
+        case('mysqli'):
+          // WEEK using arg 3 in mysql should return the same value as postgres EXTRACT
+          return "WEEK($field, 3)";
+        case('pgsql'):
+          return "EXTRACT(WEEK FROM($field))";
+      }
+    case('DOW'):
+      switch ($this->db_type) {
+        case('mysql'):
+        case('mysqli'):
+          // mysql returns 1 for Sunday through 7 for Saturday
+          // php date functions and postgres use 0 for Sunday and 6 for Saturday
+          return "INTEGER(DAYOFWEEK($field) - 1)";
+        case('pgsql'):
+          return "EXTRACT(DOW FROM($field))";
+      }
+    case('DOY'):
+      switch ($this->db_type) {
+        case('mysql'):
+        case('mysqli'):
+          return "DAYOFYEAR($field)";
+        case('pgsql'):
+          return "EXTRACT(DOY FROM($field))";
+      }
+    }
+  }
+  
+  /**
+   * Create a where clause to compare a complete date field to a complete date value.
+   *
+   * @param string $type
+   *   The type of value we're comparing to, could be another field
+   *   or a date value.
+   * @param string $field
+   *   The db table and field name, like "$table.$field".
+   * @param string $operator
+   *   The db comparison operator to use, like '='.
+   * @param int $value
+   *   The value to compare the extracted date part to, could be a
+   *   field name or a date string or NOW().
+   * @return 
+   *   SQL for the where clause for this operation.
+   */
+  function sql_where_date($type, $field, $operator, $value, $adjustment = 0) {
+    $type = strtoupper($type);
+    if (strtoupper($value) == 'NOW') {
+      $value = $this->sql_field('NOW', $adjustment);
+    }
+    elseif ($type == 'FIELD') {
+      $value = $this->sql_field($value, $adjustment);
+    }    
+    elseif ($type == 'DATE') {
+      $date = date_make_date($value, date_default_timezone_name(), DATE_DATETIME);
+      if (!empty($adjustment)) {
+        date_modify($date, $adjustment .' seconds');
+      }
+      // When comparing a field to a date we can avoid doing timezone 
+      // conversion by altering the comparison date to the db timezone.
+      // This won't work if the timezone is a field instead of a value.
+      if (empty($this->db_timezone_field) && empty($this->local_timezone_field)) {
+        date_timezone_set($date, timezone_open($this->db_timezone));
+        $this->local_timezone = $this->db_timezone;
+      }
+      $value = "'". date_format_date($date, 'custom', DATE_FORMAT_DATETIME) ."'";
+    }    
+    if ($this->local_timezone != $this->db_timezone) {
+      $field = $this->sql_field($field);
+    }
+    else {
+      $field = $this->sql_field($field, 0);
+    }
+    return "$field $operator $value";
+  }
+  
+  /**
+   * Create a where clause to compare an extracted part of a field to an integer value.
+   *
+   * @param string $part
+   *   The part to extract, YEAR, MONTH, DAY, etc.
+   * @param string $field
+   *   The db table and field name, like "$table.$field".
+   * @param string $operator
+   *   The db comparison operator to use, like '='.
+   * @param int $value
+   *   The integer value to compare the extracted date part to.
+   * @return 
+   *   SQL for the where clause for this operation.
+   */
+  function sql_where_extract($part, $field, $operator, $value) {
+    if ($this->local_timezone != $this->db_timezone) {
+      $field = $this->sql_field($field);
+    }
+    else {
+      $field = $this->sql_field($field, 0);
+    }
+    return $this->sql_extract($part, $field) ." $operator $value";
+  }
+  
+  /**
+   * Create a where clause to compare a formated field to a formated value.
+   *
+   * @param string $format
+   *   The format to use on the date and the value when comparing them.
+   * @param string $field
+   *   The db table and field name, like "$table.$field".
+   * @param string $operator
+   *   The db comparison operator to use, like '='.
+   * @param string $value
+   *   The value to compare the extracted date part to, could be a
+   *   field name or a date string or NOW().
+   * @return 
+   *   SQL for the where clause for this operation.
+   */
+  function sql_where_format($format, $field, $operator, $value) {
+    if ($this->local_timezone != $this->db_timezone) {
+      $field = $this->sql_field($field);
+    }
+    else {
+      $field = $this->sql_field($field, 0);
+    }
+    return $this->sql_format($format, $field) ." $operator '$value'";
+  }
 }

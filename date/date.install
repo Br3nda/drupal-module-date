@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.37.2.1 2008/05/08 14:41:29 karens Exp $
+// $Id: date.install,v 1.37.2.2 2008/05/11 06:53:34 karens Exp $
 
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
@@ -285,6 +285,22 @@ function date_update_5204() {
     }
   }
   return $ret;
+}
+
+function date_update_5205() {
+  $ret = array();
+  $fields = content_fields();
+  foreach ($fields as $field) {
+    if (strstr($field['type'], 'date')) {
+      $field_settings = unserialize(db_result(db_query("SELECT global_settings from {node_field} where field_name = '%s'", $field['field_name'])));
+      foreach ($field_settings as $key => $value) {
+        if ($key == 'tz_handling' && $value == 'gmt') {
+          $field_settings[$key] = 'utc';
+        }
+      }
+      db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name = '%s'", serialize($field_settings), $field['field_name']);
+    }
+  }
 }
 
 /**

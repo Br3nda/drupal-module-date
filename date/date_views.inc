@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.39.2.5 2008/05/08 16:00:22 karens Exp $
+// $Id: date_views.inc,v 1.39.2.6 2008/05/11 06:53:34 karens Exp $
 
 views_include_handlers();
 
@@ -14,13 +14,6 @@ function _date_views_data($field) {
   // Swap the filter and argument handlers to the date handlers.
   $data[$table_alias][$field['field_name'] .'_value']['filter']['handler'] = 'date_views_filter_handler';
   $data[$table_alias][$field['field_name'] .'_value']['argument']['handler'] = 'date_views_argument_handler';
-
-  // Set the date type in the handlers.
-  $date_type = $field['type'] == DATE_ISO ? 'iso' : ($field['type'] == DATE_DATETIME ? 'datetime' : 'int');
-  $data[$table_alias][$field['field_name'] .'_value']['field']['date_type'] = $date_type;
-  $data[$table_alias][$field['field_name'] .'_value']['filter']['date_type'] = $date_type;
-  $data[$table_alias][$field['field_name'] .'_value']['argument']['date_type'] = $date_type;
-  $data[$table_alias][$field['field_name'] .'_value']['sort']['date_type'] = $date_type;
 
   // Add in another set of fields, filters, and aguments for the To date.
   if ($field['todate']) {
@@ -131,8 +124,8 @@ class date_views_browser_argument_handler extends views_handler_argument_formula
     $this->additional_fields = $this->definition['additional fields'];
     $this->date_handler = new views_date_handler();
     $this->date_handler->construct();
-    if (isset($this->definition['date_type'])) {
-      $this->date_handler->date_type = $this->definition['date_type'];
+    if (isset($this->definition['content_field'])) {
+      $this->date_handler->date_type = $this->definition['content_field']['type'];
     }
   }
 
@@ -648,111 +641,30 @@ function date_views_browser_navigation($view, $period) {
   $label = date_views_browser_period_label($arg, $period);
   return theme('date_views_browser_navigation', $label, $period, $prev, $next, $view);
 }
-/**
- *  Return field or value for a timezone offset.
- */
-function date_views_offset($field) {
-  switch ($field['tz_handling']) {
-  case(DATE_ISO):
-    $offset = 'node_data_'. $field['field_name'] .'.'. $field['field_name'] .'_offset';
-    break;
-  case('site'):
-    $offset = variable_get('date_default_timezone', 0);
-    break;
-  default:
-    $offset = '';
-    break;
-  }
-  return $offset;
-}
 
 //********************************************************************************//
 //********************************************************************************//
 //********************************************************************************//
 
+include_once(drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
 
-// TODO Remove the code below if this gets added to the Views module in http://drupal.org/node/241759.
+
 /**
  * A class to manipulate dates.
  */
-class views_date_handler {
-  var $granularity = array();
+class views_date_handler extends date_sql_handler {
+  var $granularity = 'day';
   var $db_type = 'mysql';
-  var $date_type = 'int';
+  var $date_type = DATE_UNIX;
   
   /**
    * Make sure granularity has a sane default value.
    */
-  function construct($date_type = 'int') {
+  function construct($date_type = DATE_UNIX, $local_timezone = NULL) {
     $this->granularity = 'day';
     $this->db_type = $GLOBALS['db_type'];
-    $this->date_type = $date_type;
-  }
-
-  /**
-   * See if the db has timezone name support.
-   */
-  function has_tz_support() {
-    static $has_support = FALSE;
-    switch ($this->db_type) {
-      case 'mysql':
-      case 'mysqli':
-        $test = db_result(db_query("SELECT CONVERT_TZ('2008-03-11 01:00:00', 'UTC', 'US/Central')"));
-        if (!empty($test)) {
-          $has_support = TRUE;
-        }
-        break;
-      case 'pgsql':
-        $has_support = TRUE;
-      break;
-    }
-    return $has_support;
-  }
-
-  /**
-   * Return timezone offset.
-   */
-  function get_offset() {
-    $this->set_timezone();
-    global $user;
-    if (variable_get('configurable_timezones', 1) && $user->uid && strlen($user->timezone)) {
-      $timezone = $user->timezone;
-    }
-    else {
-      $timezone = variable_get('date_default_timezone', 0);
-    }
-    return $timezone;
-  }
-  
-  /**
-   * Override this to provide timezone name support.
-   */
-  function get_timezone() {
-    $this->set_timezone();
-    global $user;
-    if (variable_get('configurable_timezones', 1) && $user->uid && strlen($user->timezone_name)) {
-      $timezone = $user->timezone_name;
-    }
-    else {
-      $timezone = variable_get('date_default_timezone_name', NULL);
-    }
-    return $timezone;
-  }
-
-  /**
-   * Set the database timzone to UTC 
-   * to ensure consistency in date handling.
-   */
-  function set_timezone() {
-    static $already_set = false;
-    if (!$already_set) {
-      if ($this->db_type == 'mysqli' || version_compare(mysql_get_server_info(), '4.1.3', '>=')) {
-        db_query("SET @@session.time_zone = '+00:00'");
-      }
-      elseif ($this->db_type == 'pgsql') {
-        db_query("SET TIME ZONE '+00:00'");
-      }
-      $already_set = true;
+    if (isset($this->definition['content_field'])) {
+      $this->date_handler->date_type = $this->definition['content_field']['type'];
     }
   }
 
@@ -932,197 +844,6 @@ class views_date_handler {
      );
      return $form;
   }
-
-  /**
-   * Helper function to create cross-database SQL dates.
-   *
-   * @param $field
-   *   The real table and field name, like 'tablename.fieldname'.
-   * @param $offset
-   *   The name of a field that holds the timezone offset or an
-   *   offset value. If NULL, the normal Drupal timezone handling
-   *   will be used, if $set_offset = 0 no adjustment will be made.
-   * @param $zone_name
-   *   The name of a timezone, or a field that holds the timezone name. 
-   *   If provided, the offset will be ignored. If not provided, 
-   *   the offset will be used instead.
-   * @param $date_type
-   *   Can be 'int', 'iso', or 'datetime'.
-   *   If not set it will use the date_type set for the current field.
-   * @return
-   *   An appropriate SQL string for the db type and field type.
-   */
-  function sql_field($field, $offset = NULL, $zone_name = NULL, $date_type = NULL) {
-    $offset = $offset !== NULL ? $offset : $this->get_offset();
-    $zone_name = $zone_name !== NULL ? $zone_name : $this->get_timezone();
-    if (strtoupper($field) == 'NOW') {
-      return $this->sql_tz("NOW()", $offset, $zone_name);
-    }
-    $date_type = !empty($date_type) ? $date_type : $this->date_type;
-    switch ($this->db_type) {
-      case 'mysql':
-      case 'mysqli':
-        switch ($date_type) {
-          case 'int':
-            $field = "FROM_UNIXTIME($field)";
-            break;
-          case 'iso':
-            $field = "STR_TO_DATE($field, '%Y-%m-%%dT%T')";
-            break;
-          case 'datetime':
-            break;
-        }
-        break;
-      case 'pgsql':
-        switch ($date_type) {
-          case 'int':
-            $field = "$field::ABSTIME";
-            break;
-          case 'iso':
-            $field = "TO_DATE($field, 'FMYYYY-FMMM-FMDDTFMHH:FMMI:FMSS')";
-            break;
-          case 'datetime':
-            break;
-        }
-      break;
-    }
-    return $this->sql_tz($field, $offset, $zone_name);
-  }
-
-  /**
-   * Select a date value from the database, adjusting the value
-   * for the timezone.
-   * 
-   * Check whether database timezone conversion is supported in
-   * this system and use it if possible, otherwise use an
-   * offset.
-   */
-  function sql_tz($field, $offset = NULL, $zone_name = NULL) {
-    if (!$this->has_tz_support() || empty($zone_name)) {
-      return $this->sql_offset($field, $offset);
-    }
-    switch ($this->db_type) {
-      case 'mysql':
-      case 'mysqli':
-        return "CONVERT_TZ($field, 'UTC', $zone_name)";
-      case 'pgsql':
-        // WITH TIME ZONE assumes the date is using the system
-        // timezone, which should have been set to UTC.
-        return "TIMESTAMP WITH TIME ZONE $field AT TIME ZONE $zone_name";
-    }
-  }
-  
-  /**
-   * Adjust a field value by an offset in seconds.
-   */
-  function sql_offset($field, $offset = NULL) {
-    if (!empty($offset)) {
-      switch ($this->db_type) {
-        case 'mysql':
-        case 'mysqli':
-          return "ADDTIME($field, SEC_TO_TIME($offset))";
-        case 'pgsql':
-          return "($field + 'INTERVAL $offset SECONDS')";;
-      }
-    }
-    return $field;
-  }
-  
-  /**
-   * Helper function to create cross-database SQL date formatting.
-   *
-   * @param $format
-   *   A format string for the result, like 'Y-m-d H:i:s'.
-   * @param $field
-   *   The real table and field name, like 'tablename.fieldname'.
-   * @return
-   *   An appropriate SQL string for the db type and field type.
-   */
-  function sql_format($format, $field) {
-    switch ($this->db_type) {
-      case 'mysql':
-      case 'mysqli':
-        $replace = array(
-          'Y' => '%Y',
-          'm' => '%m',
-          'd' => '%%d',
-          'H' => '%H',
-          'i' => '%i',
-          's' => '%s',
-          );
-        $format = strtr($format, $replace);
-        return "DATE_FORMAT($field, '$format')";
-      case 'pgsql':
-        $replace = array(
-          'Y' => 'YY',
-          'm' => 'MM',
-          'd' => 'DD',
-          'H' => 'HH24',
-          'i' => 'MI',
-          's' => 'SS',
-          );
-        $format = strtr($format, $replace);
-        return "TO_CHAR($field, '$format')";
-    }
-  }
-
-  /**
-   * Helper function to create cross-database SQL date extraction.
-   *
-   * @param $extract_type
-   *   The type of value to extract from the date, like 'MONTH'.
-   * @param $field
-   *   The real table and field name, like 'tablename.fieldname'.
-   * @return
-   *   An appropriate SQL string for the db type and field type.
-   */
-  function sql_extract($extract_type, $field) {
-    // Note there is no space after FROM to avoid db_rewrite problems
-    // see http://drupal.org/node/79904.
-    switch ($extract_type) {
-    case('DATE'):
-      return $field;
-    case('YEAR'):
-      return "EXTRACT(YEAR FROM($field))";
-    case('MONTH'):
-      return "EXTRACT(MONTH FROM($field))";
-    case('DAY'):
-      return "EXTRACT(DAY FROM($field))";
-    case('HOUR'):
-      return "EXTRACT(HOUR FROM($field))";
-    case('MINUTE'):
-      return "EXTRACT(MINUTE FROM($field))";
-    case('SECOND'):
-      return "EXTRACT(SECOND FROM($field))";
-    case('WEEK'):  // ISO week number for date
-      switch ($this->db_type) {
-        case('mysql'):
-        case('mysqli'):
-          // WEEK using arg 3 in mysql should return the same value as postgres EXTRACT
-          return "WEEK($field, 3)";
-        case('pgsql'):
-          return "EXTRACT(WEEK FROM($field))";
-      }
-    case('DOW'):
-      switch ($this->db_type) {
-        case('mysql'):
-        case('mysqli'):
-          // mysql returns 1 for Sunday through 7 for Saturday
-          // php date functions and postgres use 0 for Sunday and 6 for Saturday
-          return "INTEGER(DAYOFWEEK($field) - 1)";
-        case('pgsql'):
-          return "EXTRACT(DOW FROM($field))";
-      }
-    case('DOY'):
-      switch ($this->db_type) {
-        case('mysql'):
-        case('mysqli'):
-          return "DAYOFYEAR($field)";
-        case('pgsql'):
-          return "EXTRACT(DOY FROM($field))";
-      }
-    }
-  }
 }
 
 /**
@@ -1145,9 +866,10 @@ class views_handler_filter_flexible_date extends views_handler_filter_numeric {
     parent::construct();
     $this->date_handler = new views_date_handler();
     $this->date_handler->construct();
-    if (isset($this->definition['date_type'])) {
-      $this->date_handler->date_type = $this->definition['date_type'];
+    if (isset($this->definition['content_field'])) {
+      $this->date_handler->date_type = $this->definition['content_field']['type'];
     }
+    $this->date_handler->local_timezone = date_default_timezone_name();
   }
 
   function init(&$view, $options) {
@@ -1437,10 +1159,9 @@ class views_handler_filter_flexible_date extends views_handler_filter_numeric {
         // When we hit an empty (all values) option in the middle of
         // our date parts, stop and start a new query.
         if ($format > '' && $format != $sep) {
-          $value = $handler->complete_date($selected);
-          $value = $handler->sql_field("'$value'", $adjustment, NULL, 'datetime');
-          $field = $handler->sql_field($field, $handler->get_offset(), $handler->get_timezone());
-          $sql = $handler->sql_format($format, $field) ." $operator ". $handler->sql_format($format, $value);
+          $date = date_make_date($handler->complete_date($selected));
+          $value = date_format($date, $format);
+          $sql = $handler->sql_where_format($format, $field, $operator, $value);
           $this->query->add_where($this->options['group'], $sql);
         }
         $format = '';
@@ -1448,10 +1169,9 @@ class views_handler_filter_flexible_date extends views_handler_filter_numeric {
       }
     }
     if ($format > '' && $format != $sep) {
-      $value = $handler->complete_date($selected);
-      $value = $handler->sql_field("'$value'", $adjustment, NULL, 'datetime');
-      $field = $handler->sql_field($field, $handler->get_offset(), $handler->get_timezone());
-      $sql = $handler->sql_format($format, $field) ." $operator ". $handler->sql_format($format, $value);
+      $date = date_make_date($handler->complete_date($selected));
+      $value = date_format($date, $format);
+      $sql = $handler->sql_where_format($format, $field, $operator, $value);
       $this->query->add_where($this->options['group'], $sql);
     }
     return;
@@ -1590,5 +1310,4 @@ class views_handler_argument_date extends views_handler_argument_formula {
       $i += $key == 'year' ? 5 : 3;
     }
   }
-
 }
