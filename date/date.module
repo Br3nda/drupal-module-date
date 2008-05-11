@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.11 2008/05/10 00:46:49 karens Exp $
+// $Id: date.module,v 1.39.2.12 2008/05/11 06:54:59 karens Exp $
 
 /**
  * @file
@@ -190,10 +190,8 @@ function date_get_timezone($handling, $timezone = '') {
     case('date'):
       $timezone = empty($timezone) ? $timezone : date_default_timezone_name();
       break;
-    case('user'):
-      $timezone = date_default_timezone_name();
     case('none'):
-    case('gmt'):
+    case('utc'):
       $timezone = 'UTC';
       break;
     default:

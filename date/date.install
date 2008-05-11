@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.15 2008/05/08 14:41:02 karens Exp $
+// $Id: date.install,v 1.21.2.16 2008/05/11 06:54:59 karens Exp $
 
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
@@ -422,6 +422,22 @@ function date_update_5204() {
   return $ret;
 }
 
+function date_update_5205() {
+  $ret = array();
+  $fields = content_fields();
+  foreach ($fields as $field) {
+    if (strstr($field['type'], 'date')) {
+      $field_settings = unserialize(db_result(db_query("SELECT global_settings from {node_field} where field_name = '%s'", $field['field_name'])));
+      foreach ($field_settings as $key => $value) {
+        if ($key == 'tz_handling' && $value == 'gmt') {
+          $field_settings[$key] = 'utc';
+        }
+      }
+      db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name = '%s'", serialize($field_settings), $field['field_name']);
+    }
+  }
+}
+
 /**
  * See if a table column already exists.
  */
@@ -582,13 +598,13 @@ function date_data_integrity($name, $force_recalc = FALSE) {
             if (empty($item['offset']) || empty($item['timezone']) || $force_recalc) {
               $needs_fix = TRUE;
               $timezone = date_get_timezone($field['tz_handling'], $item['timezone']);
-              $date = date_make_date($item['value'], 'GMT', $field['type']);
+              $date = date_make_date($item['value'], 'UTC', $field['type']);
               if (!empty($date) && !empty($timezone)) {
                 date_timezone_set($date, timezone_open($timezone));
                 $add[$delta]['timezone'] = $field['required'] || $item['value'] ? $timezone : NULL;
                 $add[$delta]['offset']   = $field['required'] || $item['value'] ? date_offset_get($date) : NULL;
               }
-              $date = date_make_date($item['value2'], 'GMT', $field['type']);
+              $date = date_make_date($item['value2'], 'UTC', $field['type']);
               if (!empty($date) && !empty($timezone)) {
                 date_timezone_set($date, timezone_open($timezone));
                 $add[$delta]['offset2']   = $field['required'] || $item['value'] ? date_offset_get($date) : NULL;

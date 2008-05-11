@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.16 2008/05/09 17:23:22 karens Exp $
+// $Id: date_views.inc,v 1.26.2.17 2008/05/11 06:54:59 karens Exp $
 
 /**
  * Views field filters
@@ -94,9 +94,9 @@ function _date_views_filters($field) {
  */
 function _date_views_timestamp_filter_handler($op, $filter, $filterinfo, &$query) {
   // this is just a wrapper function that sets the date type
-  return _date_views_filter_handler($op, $filter, $filterinfo, $query, 'int');
+  return _date_views_filter_handler($op, $filter, $filterinfo, $query, DATE_UNIX);
  }
-function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = 'iso') {
+function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = DATE_ISO) {
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
   $field   = $filterinfo['extra']['field'];
@@ -198,24 +198,6 @@ function _date_views_handler_filter_date_value_form($field) {
 }
 
 /**
- *  Return field or value for a timezone offset.
- */
-function date_views_offset($field) {
-  switch ($field['tz_handling']) {
-  case('date'):
-    $offset = 'node_data_'. $field['field_name'] .'.'. $field['field_name'] .'_offset';
-    break;
-  case('site'):
-    $offset = variable_get('date_default_timezone', 0);
-    break;
-  default:
-    $offset = '';
-    break;
-  }
-  return $offset;
-}
-
-/**
  * Views arguments for Date fields.
  */
 function _date_views_arguments($field) {
@@ -269,9 +251,9 @@ function _date_views_arguments($field) {
  */
 function _date_views_timestamp_argument_range_handler($op, &$query, $argtype, $arg = '') {
   // this is just a wrapper function that sets the date type
-  return _date_views_argument_range_handler($op, $query, $argtype, $arg, 'int');
+  return _date_views_argument_range_handler($op, $query, $argtype, $arg, DATE_UNIX);
 }
-function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $field_type = 'iso') {
+function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $field_type = DATE_ISO) {
   static $format;
 
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
@@ -293,16 +275,12 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
   $table      = 'node_data_'. $field['field_name'];
   $sql_field = "$table.$value";
 
-  if ($field['tz_handling'] == 'date') {
-    $timezone_field = "$table.$timezone";
-  }
-  else {
-    $timezone_field = date_default_timezone_name();
-  }
   $date_handler = new date_sql_handler();
   $date_handler->construct($field_type);
-  $offset = date_views_offset($field);
-
+  if ($field['tz_handling'] == 'date') {
+    $date_handler->local_timezone_field = "$table.$timezone";
+  }
+  
   switch ($op) {
     case 'summary':
       switch ($arg) {
@@ -326,9 +304,9 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
           $format = 'F j Y (W)';
           break;
       }
-      $fieldinfo['field'] = $date_handler->sql_format($sql_format, $date_handler->sql_field($sql_field, $offset));
+      $fieldinfo['field'] = $date_handler->sql_format($sql_format, $date_handler->sql_field($sql_field));
       $fieldinfo['fieldname'] = 'range';
-
+      
       $query->ensure_table($table);
       $query->add_field($value, $table);
       if ($field['tz_handling'] == 'date') {
@@ -346,9 +324,10 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
       else {
         $tz_name = date_default_timezone_name();
       }
-      $date_type = $field_type == 'iso' ? DATE_ISO : DATE_UNIX;
-      $date = date_make_date($query->$value, date_default_timezone_name(), $date_type);
-      date_timezone_set($date, timezone_open($tz_name));
+      $date = date_make_date($query->$value, date_default_timezone_name(), $field_type);
+      if (!empty($tz_name)) {
+        date_timezone_set($date, timezone_open($tz_name));
+      }
       return l(date_format_date($date, 'custom', $format), $arg .'/'. $query->range);
 
     case 'sort':
@@ -356,13 +335,14 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
 
     case 'filter':
       $range = date_views_date_range($arg, $field);
+            
       $query->ensure_table($table);
       $query->add_field($value, $table);
       if ($field['tz_handling'] == 'date') {
         $query->add_field($timezone, $table);
       }
-      $query->add_where($date_handler->sql_where_date('DATE', $sql_field, ">=", $range[0]), $offset);
-      $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", $range[1]), $offset);
+      $query->add_where($date_handler->sql_where_date('DATE', $sql_field, ">=", $range[0]));
+      $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", $range[1]));
       break;
 
     case 'title':
@@ -600,7 +580,6 @@ function _date_views_query_alter(&$query, &$view) {
       $value = 'value2';
     }
     $field      = content_fields($field_name);
-    $field_type = $field['type'] == DATE_UNIX ? 'int' : 'iso';
     $db_info    = content_database_info($field);
     $table      = 'node_data_'. $field['field_name'];
 
@@ -623,7 +602,7 @@ function _date_views_query_alter(&$query, &$view) {
       if ($range  = date_views_date_range($arg)) {
         $date_handler = new date_sql_handler();
         $date_handler->construct($field_type);
-        $offset = date_views_offset($field);
+        $date_handler->offset_field = "$table.". $db_info['columns']['offset']['column'];
         $query->ensure_table($table);
         $query->add_field('nid', 'node');
         $query->add_field($value, $table);

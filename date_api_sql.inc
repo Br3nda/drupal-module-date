@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.7 2008/05/09 17:23:23 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.8 2008/05/11 06:54:59 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -38,30 +38,30 @@ function date_sql_pad($str, $size = 2, $pad = '0', $side = 'l') {
 
 /**
  * A class to manipulate date SQL.
- * 
- * TODO
- *  do more debugging for situations when dates are stored in something other than UTC.
  */
 class date_sql_handler {
   var $db_type = 'mysql';
-  var $date_type = 'int';
-  var $db_timezone = 'UTC';
-  var $local_timezone = NULL;
+  var $date_type = DATE_UNIX;
+  var $db_timezone = 'UTC'; // A string timezone name.
+  var $local_timezone = NULL; // A string timezone name.
+  var $db_timezone_field = NULL; // Use if the db timezone is stored in a field.
+  var $local_timezone_field = NULL; // Use if the local timezone is stored in a field.
+  var $offset_field = NULL; // Use if the offset is stored in a field.
   
-  function construct($date_type = 'int', $local_timezone = NULL) {
+  function construct($date_type = DATE_UNIX, $local_timezone = NULL) {
     $this->db_type = $GLOBALS['db_type'];
     $this->date_type = $date_type;
     $this->db_timezone = 'UTC';
-    $this->local_timezone = isset($local_timezone) ? $local_timezone : $this->get_timezone();
+    $this->local_timezone = isset($local_timezone) ? $local_timezone : date_default_timezone_name();
     date_api_set_db_timezone();
   }
 
   /**
    * See if the db has timezone name support.
    */
-  function db_tz_support() {
+  function db_tz_support($reset = FALSE) {
     $has_support = variable_get('date_db_tz_support', -1);
-    if ($has_support == -1) {
+    if ($has_support == -1 || $reset) {
       date_api_set_db_timezone();
       $has_support = FALSE;
       switch ($this->db_type) {
@@ -83,35 +83,51 @@ class date_sql_handler {
     }
     return $has_support;
   }
-
+  
   /**
-   * Return timezone offset.
+   * Set the database timzone offset.
+   * 
+   * Setting the db timezone to UTC is done to ensure consistency in date 
+   * handling whether or not the database can do proper timezone conversion.
+   * 
+   * Views filters that not exposed are cached and won't set the timezone
+   * so views date filters should add 'cacheable' => 'no' to their 
+   * definitions to ensure that the database timezone gets set properly 
+   * when the query is executed.
+   * 
+   * @param $offset
+   *   An offset value to set the database timezone to. This will only
+   *   set a fixed offset, not a timezone, so any value other than
+   *   '+00:00' should be used with caution.
    */
-  function get_offset() {
-    global $user;
-    if (variable_get('configurable_timezones', 1) && $user->uid && strlen($user->timezone)) {
-      $timezone = $user->timezone;
+  function set_db_timezone($offset = '+00:00') {
+    static $already_set = FALSE;
+    $type = $GLOBALS['db_type'];
+    if (!$already_set) {
+      if ($type == 'mysqli' || version_compare(db_version(), '4.1.3', '>=')) {
+        db_query("SET @@session.time_zone = '$offset'");
+      }
+      elseif ($type == 'pgsql') {
+        db_query("SET TIME ZONE '$offset'");
+      }
+      $already_set = true;
     }
-    else {
-      $timezone = variable_get('date_default_timezone', 0);
-    }
-    return $timezone;
   }
   
   /**
-   * Override this to provide timezone name support.
+   * Return timezone offset for the date being processed.
    */
-  function get_timezone() {
-    global $user;
-    if (variable_get('configurable_timezones', 1) && $user->uid && strlen($user->timezone_name)) {
-      $timezone = $user->timezone_name;
+  function get_offset() {
+    if (!empty($this->db_timezone) && !empty($this->local_timezone)) {
+      if ($this->db_timezone != $this->local_timezone) {
+        $date = date_make_date('now', $this->db_timezone);
+        date_timezone_set($date, timezone_open($this->local_timezone));
+        return date_offset_get($date);
+      }
     }
-    else {
-      $timezone = variable_get('date_default_timezone_name', NULL);
-    }
-    return $timezone;
+    return 0;
   }
-
+  
   /**
    * Helper function to create cross-database SQL dates.
    *
@@ -134,62 +150,33 @@ class date_sql_handler {
       case 'mysql':
       case 'mysqli':
         switch ($this->date_type) {
-          case 'int':
+          case DATE_UNIX:
             $field = "FROM_UNIXTIME($field)";
             break;
-          case 'iso':
+          case DATE_ISO:
             $field = "STR_TO_DATE($field, '%Y-%m-%%dT%T')";
             break;
-          case 'datetime':
+          case DATE_DATETIME:
             break;
         }
         break;
       case 'pgsql':
         switch ($date_type) {
-          case 'int':
+          case DATE_UNIX:
             $field = "$field::ABSTIME";
             break;
-          case 'iso':
+          case DATE_ISO:
             $field = "TO_DATE($field, 'FMYYYY-FMMM-FMDDTFMHH:FMMI:FMSS')";
             break;
-          case 'datetime':
+          case DATE_DATETIME:
             break;
         }
       break;
     }
+    // Adjust the resulting value to the right timezone/offset.
     return $this->sql_tz($field, $offset);
   }
 
-  /**
-   * Select a date value from the database, adjusting the value
-   * for the timezone.
-   * 
-   * Check whether database timezone conversion is supported in
-   * this system and use it if possible, otherwise use an
-   * offset.
-   * 
-   * @param $offset
-   *   Set a fixed offset to use for the date. If set, no timezone
-   *   conversion will be done and the offset will be used.
-   */
-  function sql_tz($field, $offset = NULL) {
-    if (!$this->db_tz_support() || $offset !== NULL) {
-      if ($offset === NULL) {
-        $offset = $this->get_offset();
-      }
-      return $this->sql_offset($field, $offset);
-    }
-    switch ($this->db_type) {
-      case 'mysql':
-      case 'mysqli':
-        return "CONVERT_TZ($field, $this->db_timezone, $this->local_timezone)";
-      case 'pgsql':
-        // WITH TIME ZONE assumes the date is using the system
-        // timezone, which should have been set to UTC.
-        return "TIMESTAMP WITH TIME ZONE $field AT TIME ZONE $this->local_timezone";
-    }
-  }
-  
   /**
    * Adjust a field value by an offset in seconds.
    */
@@ -204,6 +191,57 @@ class date_sql_handler {
       }
     }
     return $field;
+  }
+  
+  /**
+   * Select a date value from the database, adjusting the value
+   * for the timezone.
+   * 
+   * Check whether database timezone conversion is supported in
+   * this system and use it if possible, otherwise use an
+   * offset.
+   * 
+   * @param $offset
+   *   Set a fixed offset or offset field to use for the date. 
+   *   If set, no timezone conversion will be done and the 
+   *   offset will be used.
+   */
+  function sql_tz($field, $offset = NULL) {
+    // If the timezones are values they need to be quoted, but
+    // if they are field names they do not.
+    $dbzone    = $this->db_timezone_field ? $this->db_timezone_field : "'{$this->db_timezone}'";
+    $localzone = $this->local_timezone_field ? $this->local_timezone_field : "'{$this->local_timezone}'"; 
+     
+    // If a fixed offset is required, use it.
+    if ($offset !== NULL) {
+      return $this->sql_offset($field, $offset);
+    }
+    // If the db and local timezones are the same, make no adjustment.
+    elseif ($db_zone == $localzone) {
+      return $this->sql_offset($field, 0);
+    }
+    // If the db has no timezone support, adjust by the offset,
+    // could be either a field name or a value.
+    elseif (!$this->db_tz_support()) {
+      if (!empty($this->offset_field)) {
+        return $this->sql_offset($field, $this->offset_field);
+      }
+      else {
+        return $this->sql_offset($field, $this->get_offset());
+      }
+    }
+    // Otherwise make a database timezone adjustment to the field.
+    else {
+      switch ($this->db_type) {
+        case 'mysql':
+        case 'mysqli':
+          return "CONVERT_TZ($field, $dbzone, $localzone)";
+        case 'pgsql':
+          // WITH TIME ZONE assumes the date is using the system
+          // timezone, which should have been set to UTC.
+          return "TIMESTAMP WITH TIME ZONE $field AT TIME ZONE $localzone";
+      }
+    }
   }
   
   /**
@@ -305,6 +343,9 @@ class date_sql_handler {
   /**
    * Create a where clause to compare a complete date field to a complete date value.
    *
+   * @param string $type
+   *   The type of value we're comparing to, could be another field
+   *   or a date value.
    * @param string $field
    *   The db table and field name, like "$table.$field".
    * @param string $operator
@@ -327,6 +368,13 @@ class date_sql_handler {
       $date = date_make_date($value, date_default_timezone_name(), DATE_DATETIME);
       if (!empty($adjustment)) {
         date_modify($date, $adjustment .' seconds');
+      }
+      // When comparing a field to a date we can avoid doing timezone 
+      // conversion by altering the comparison date to the db timezone.
+      // This won't work if the timezone is a field instead of a value.
+      if (empty($this->db_timezone_field) && empty($this->local_timezone_field)) {
+        date_timezone_set($date, timezone_open($this->db_timezone));
+        $this->local_timezone = $this->db_timezone;
       }
       $value = "'". date_format_date($date, 'custom', DATE_FORMAT_DATETIME) ."'";
     }    
@@ -385,6 +433,6 @@ class date_sql_handler {
     else {
       $field = $this->sql_field($field, 0);
     }
-    return $this->sql_format($format, $field) ." $operator '". $this->sql_format($format, $value) ."'";
+    return $this->sql_format($format, $field) ." $operator '$value'";
   }
 }
