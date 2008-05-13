@@ -6,7 +6,6 @@
  */
 function _date_content_generate($node, $field) {
   $node_field = array();
-  
   if (isset($field['widget']['year_range'])) {
     $split = ':';
     $back = str_replace('-', '', $split[0]);

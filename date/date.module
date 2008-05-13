@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.61.2.3 2008/05/11 06:53:34 karens Exp $
+// $Id: date.module,v 1.61.2.4 2008/05/13 20:13:35 karens Exp $
 
 /**
  * @file
@@ -11,9 +11,6 @@
  */
 function date_init() {
   include_once(drupal_get_path('module', 'date') .'/date.theme');
-  if (module_exists('views')) {
-    include_once(drupal_get_path('module', 'date') .'/date_views.inc');
-  }
   if (module_exists('token')) {
     include_once(drupal_get_path('module', 'date') .'/date_token.inc');
   }
@@ -385,6 +382,14 @@ function date_widget(&$form, &$form_state, &$field, $items, $delta) {
 function date_elements() {
   include_once(drupal_get_path('module', 'date') .'/date_elements.inc');
   return _date_elements();
+}
+
+/**
+ * Implementation of Devel module's hook_content_generate().
+ */
+function date_content_generate($node, $field) {
+  include_once(drupal_get_path('module', 'date') .'/date_content_generate.inc');
+  return _date_content_generate($node, $field);
 }
 
 /**
