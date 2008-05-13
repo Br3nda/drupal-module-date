@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.64.2.4 2008/05/11 06:53:34 karens Exp $
+// $Id: date_api.module,v 1.64.2.5 2008/05/13 19:58:37 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -402,21 +402,22 @@ function date_timezone_names($required = FALSE, $refresh = FALSE) {
   if (empty($zonenames)) {
     $zonenames = array();
     $cached = cache_get('date_timezone_identifiers_list');
-    $data = $cached->data;
-    if (empty($data) || $refresh) {
+    if ($refresh || !$data = $cached->data) {
       $data = timezone_identifiers_list();
-      foreach ($data as $delta => $zone) {
-        // Because many time zones exist in PHP only for backward 
-        // compatibility reasons and should not be used, the list is 
-        // filtered by a regular expression.
-        if (preg_match('!^((Africa|America|Antarctica|Arctic|Asia|Atlantic|Australia|Europe|Indian|Pacific)/|UTC$)!', $zone)) {
-          $zonenames[$zone] = t($zone);
-        }      
-        else {
-          unset($data[$delta]);
-        }
-        cache_set('date_timezone_identifiers_list', $data);
+    }
+    foreach ($data as $delta => $zone) {
+      // Because many time zones exist in PHP only for backward 
+      // compatibility reasons and should not be used, the list is 
+      // filtered by a regular expression.
+      if (preg_match('!^((Africa|America|Antarctica|Arctic|Asia|Atlantic|Australia|Europe|Indian|Pacific)/|UTC$)!', $zone)) {
+        $zonenames[$zone] = t($zone);
+      }      
+      else {
+        unset($data[$delta]);
       }
+    }
+    if (!empty($data)) {
+      cache_set('date_timezone_identifiers_list', $data);
     }
   }
   $none = array('' => '');
