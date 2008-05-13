@@ -1,12 +1,12 @@
 <?php
-// $Id: date.views.inc,v 1.1.2.1 2008/05/13 20:13:35 karens Exp $
+// $Id: date.views.inc,v 1.1.2.2 2008/05/13 20:15:46 karens Exp $
 
 views_include_handlers();
 
 /**
  * Implementation of hook_views_data().
  */
-function _date_views_data($field) {
+function date_views_data($field) {
   $data = content_views_field_views_data($field);
   $db_info = content_database_info($field);
   $table_alias = content_views_tablename($field);
