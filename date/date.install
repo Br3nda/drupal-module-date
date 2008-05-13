@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.37.2.2 2008/05/11 06:53:34 karens Exp $
+// $Id: date.install,v 1.37.2.3 2008/05/13 11:00:31 karens Exp $
 
 // Updates happen in random order, whether or not the module is enabled,
 // so include critical code here just to be sure.
@@ -277,7 +277,7 @@ function date_update_5204() {
       while($row = db_fetch_object($results)) {
         if (!empty($row->timezone_name)) {
           $new = date_timezone_replacement($row->timezone_name);
-          if (!empty($new) && $new != $old) {
+          if (!empty($new) && $new != $row->timezone_name) {
             db_query("UPDATE {$table} SET $column = '%s' WHERE $column = '%s'", $new, $row->timezone_name);
           }
         }
@@ -301,6 +301,7 @@ function date_update_5205() {
       db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name = '%s'", serialize($field_settings), $field['field_name']);
     }
   }
+  return $ret;
 }
 
 /**
