@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.40.2.2 2008/05/13 11:02:01 karens Exp $
+//$Id: date_admin.inc,v 1.40.2.3 2008/05/15 16:45:14 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -266,7 +266,6 @@ function _date_field_settings($op, $field) {
       return date_columns($field);
 
     case 'views data':
-      include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
       return _date_views_data($field);
   }
 }

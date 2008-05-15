@@ -1,12 +1,12 @@
 <?php
-// $Id: date.views.inc,v 1.1.2.2 2008/05/13 20:15:46 karens Exp $
+// $Id: date.views.inc,v 1.1.2.3 2008/05/15 16:45:14 karens Exp $
 
 views_include_handlers();
 
 /**
  * Implementation of hook_views_data().
  */
-function date_views_data($field) {
+function _date_views_data($field) {
   $data = content_views_field_views_data($field);
   $db_info = content_database_info($field);
   $table_alias = content_views_tablename($field);
@@ -14,7 +14,8 @@ function date_views_data($field) {
   // Swap the filter and argument handlers to the date handlers.
   $data[$table_alias][$field['field_name'] .'_value']['filter']['handler'] = 'date_views_filter_handler';
   $data[$table_alias][$field['field_name'] .'_value']['argument']['handler'] = 'date_views_argument_handler';
-
+  $data[$table_alias][$field['field_name'] .'_value']['argument']['empty name field'] = t('Undated');
+  
   // Add in another set of fields, filters, and aguments for the To date.
   if ($field['todate']) {
     $data[$table_alias][$field['field_name'] .'_value2'] = $data[$table_alias][$field['field_name'] .'_value'];
@@ -45,7 +46,7 @@ function date_views_data($field) {
  * The subclass simply adds properties,
  * for field-specific subclasses to use if they need to.
  */
-class date_views_argument_handler extends views_handler_argument_date {
+class date_views_argument_handler extends views_handler_argument_date2 {
   var $content_field;
 
   function construct() {
@@ -1186,7 +1187,7 @@ class views_handler_filter_flexible_date extends views_handler_filter_numeric {
  *
  * @ingroup views_argument_handlers
  */
-class views_handler_argument_date extends views_handler_argument_formula {
+class views_handler_argument_date2 extends views_handler_argument_formula {
   var $date_handler = NULL;
 
   /**
