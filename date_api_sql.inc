@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.9.2.1 2008/05/11 06:53:34 karens Exp $
+// $Id: date_api_sql.inc,v 1.9.2.2 2008/05/17 11:22:59 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -259,9 +259,9 @@ class date_sql_handler {
       case 'mysql':
       case 'mysqli':
         $replace = array(
-          'Y' => '%Y',
-          'm' => '%m',
-          'd' => '%%d',
+          'Y' => '%Y', 'y' => '%y',
+          'm' => '%m', 'n' => '%c',
+          'd' => '%%d', 'j' => '%e',
           'H' => '%H',
           'i' => '%i',
           's' => '%s',
@@ -270,9 +270,9 @@ class date_sql_handler {
         return "DATE_FORMAT($field, '$format')";
       case 'pgsql':
         $replace = array(
-          'Y' => 'YY',
-          'm' => 'MM',
-          'd' => 'DD',
+          'Y' => 'YY', 'y' => 'Y',
+          'm' => 'MM', 'n' => 'M',
+          'd' => 'DD', 'j' => 'D',
           'H' => 'HH24',
           'i' => 'MI',
           's' => 'SS',
