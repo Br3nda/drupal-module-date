@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.49.2.1 2008/05/10 00:47:09 karens Exp $
+//$Id: date_api_elements.inc,v 1.49.2.2 2008/05/23 19:30:33 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -73,7 +73,7 @@ function _date_api_elements() {
     '#element_validate' => array('date_select_validate'),
     ));
   $type['date_text'] = array_merge($date_base, array(
-    '#process' => array('date_text_process' => array()),
+    '#process' => array('date_text_process'),
     '#element_validate' => array('date_text_validate'),
     ));
   $type['date_timezone'] = array(
