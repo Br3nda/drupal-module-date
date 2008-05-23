@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.9.2.2 2008/05/17 11:22:59 karens Exp $
+// $Id: date_api_sql.inc,v 1.9.2.3 2008/05/23 18:14:00 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -372,7 +372,7 @@ class date_sql_handler {
       // When comparing a field to a date we can avoid doing timezone 
       // conversion by altering the comparison date to the db timezone.
       // This won't work if the timezone is a field instead of a value.
-      if (empty($this->db_timezone_field) && empty($this->local_timezone_field)) {
+      if (empty($this->db_timezone_field) && empty($this->local_timezone_field) && $this->db_timezone_field != $this->local_timezone_field) {
         date_timezone_set($date, timezone_open($this->db_timezone));
         $this->local_timezone = $this->db_timezone;
       }
