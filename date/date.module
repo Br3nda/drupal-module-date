@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.13 2008/05/24 09:40:03 karens Exp $
+// $Id: date.module,v 1.39.2.14 2008/05/24 10:09:13 karens Exp $
 
 /**
  * @file
@@ -220,6 +220,7 @@ function date_timezone_convert($field, $item = array()) {
  *   whether or not to completely remove the caches.
  */
 function date_clear_all($remove = FALSE) {
+  cache_clear_all('date_', 'cache', '*');
   if (module_exists('views')) {
     if ($remove) {
       cache_clear_all('date_browser_views', 'cache_views');
