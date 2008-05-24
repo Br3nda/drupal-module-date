@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.61.2.4 2008/05/13 20:13:35 karens Exp $
+// $Id: date.module,v 1.61.2.5 2008/05/24 09:30:58 karens Exp $
 
 /**
  * @file
@@ -412,6 +412,9 @@ function date_field_settings($op, $field) {
 function date_formatter_format($formatter, $field_name) {
   $fields = content_fields();
   $field = $fields[$field_name];
+  if ($field['tz_handling'] == 'date') {
+    $field['granularity'][] = 'timezone';
+  }
   switch ($formatter) {
     case 'ical':
       return 'Ymd\THis';
