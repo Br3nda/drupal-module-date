@@ -1,13 +1,17 @@
 <?php
-// $Id: date.install,v 1.21.2.17 2008/05/15 16:40:23 karens Exp $
+// $Id: date.install,v 1.21.2.18 2008/05/24 10:07:48 karens Exp $
 
-// Updates happen in random order, whether or not the module is enabled,
-// so include critical code here just to be sure.
-include_once('./'. drupal_get_path('module', 'content') .'/content.module');
-include_once('./'. drupal_get_path('module', 'content') .'/content_admin.inc');
-include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
-include_once('./'. drupal_get_path('module', 'date') .'/date.module');
-include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+function date_install_load() {
+  // Updates happen in random order, whether or not the module is enabled,
+  // so include critical code here just to be sure.
+  include_once('./'. drupal_get_path('module', 'content') .'/content.module');
+  include_once('./'. drupal_get_path('module', 'content') .'/includes/content.admin.inc');
+  include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
+  include_once('./'. drupal_get_path('module', 'date') .'/date.module');
+  if (module_exists('views')) {
+    include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+  }
+}
 
 /**
  * Implementation of hook_install().
@@ -18,6 +22,7 @@ include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
  * Reset the date caches.
  */
 function date_install() {
+  date_install_load();
   $ret = array();
   date_clear_all();
   return $ret;
@@ -28,6 +33,7 @@ function date_install() {
  *
  */
 function date_uninstall() {
+  date_install_load();
   $ret = array();
   // Empty the date caches.
   date_clear_all(TRUE);
@@ -39,6 +45,7 @@ function date_uninstall() {
  * Reset the calendar caches.
  */
 function date_enable() {
+  date_install_load();
   date_clear_all();
 }
 
@@ -47,10 +54,12 @@ function date_enable() {
  * Empty the date caches.
  */
 function date_disable() {
+  date_install_load();
   date_clear_all(TRUE);
 }
 
 function date_update_1() {
+  date_install_load();
   $ret = array();
   if (!db_table_exists('node_field_date_data')) {
     return $ret;
@@ -70,6 +79,7 @@ function date_update_1() {
 }
 
 function date_update_2() {
+  date_install_load();
   $ret = array();
   if (!db_table_exists('node_field_date_data')) {
     return $ret;
@@ -99,6 +109,7 @@ function date_update_2() {
  * Data is now stored in per-field tables.
  */
 function date_update_3() {
+  date_install_load();
   $ret = array();
   if (!db_table_exists('node_field_date_data')) {
     return $ret;
@@ -140,6 +151,7 @@ function date_update_3() {
 // a conditional update, can be rerun if changes didn't get made properly previously
 
 function date_update_4() {
+  date_install_load();
   $ret = array();
   content_clear_type_cache();
   $fields = content_fields();
@@ -197,6 +209,7 @@ function date_update_7() {
  * Prepare for Version 5.2 updates, make changes to field and widget settings.
  */
 function date_update_5100() {
+  date_install_load();
   $ret = array();
   $fields = content_fields();
   foreach ($fields as $field) {
@@ -305,6 +318,7 @@ function date_update_5101() {
  * Make sure date module loads after date_api.
  */
 function date_update_5102() {
+  date_install_load();
   variable_del('date_version');
   $ret[] = update_sql("UPDATE {system} SET weight = 1 WHERE name = 'date'");
   return date_db_integrity('5103');
@@ -325,6 +339,7 @@ function date_update_5103() {
  * automatically whenever views_invalidate_cache() is called.
  */
 function date_update_5104() {
+  date_install_load();
   $ret = array();
   cache_clear_all('date_browser_views', 'cache');
   return $ret;
@@ -334,6 +349,7 @@ function date_update_5104() {
  * Version 5.2 updates.
  */
 function date_update_5200() {
+  date_install_load();
   $ret = array();
   module_enable(array('date_timezone'));
 
@@ -368,6 +384,7 @@ function date_update_5200() {
  * @return unknown
  */
 function date_update_5201() {
+  date_install_load();
   $ret = array();
   if (db_result(db_query("SELECT COUNT(*) FROM {node_field_instance} WHERE widget_type = 'date_js'"))) {
     $result = db_query("SELECT field_name, widget_type, widget_settings from {node_field_instance} where widget_type = 'date_js'");
@@ -387,6 +404,7 @@ function date_update_5201() {
  * Database integrity update, supercedes most previous data integrity updates.
  */
 function date_update_5202() {
+  date_install_load();
   return date_db_integrity('5202');
 }
 
@@ -394,6 +412,7 @@ function date_update_5202() {
  * Data integrity update, supercedes most previous data integrity updates.
  */
 function date_update_5203() {
+  date_install_load();
   return date_data_integrity('5203');
 }
 
@@ -401,6 +420,7 @@ function date_update_5203() {
  * Get rid of deprecated timezone names.
  */
 function date_update_5204() {
+  date_install_load();
   $ret = array();
   $fields = content_fields();
   foreach ($fields as $field) {
@@ -423,6 +443,7 @@ function date_update_5204() {
 }
 
 function date_update_5205() {
+  date_install_load();
   $ret = array();
   $fields = content_fields();
   foreach ($fields as $field) {
