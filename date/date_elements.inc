@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.46.2.2 2008/05/10 00:47:09 karens Exp $
+//$Id: date_elements.inc,v 1.46.2.3 2008/05/24 08:57:09 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -127,7 +127,7 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
   }
 
   include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
-  $timezone = date_get_timezone($field['tz_handling'], isset($items[0]['timezone']) ? $items[0]['timezone'] : '');
+  $timezone = date_get_timezone($field['tz_handling'], isset($items[0]['timezone']) ? $items[0]['timezone'] : date_default_timezone_name());
 
   // Convert UTC dates to their local values in DATETIME format,
   // and adjust the default values as specified in the field settings.
@@ -154,15 +154,16 @@ function _date_widget(&$form, &$form_state, &$field, $items, $delta = 0) {
     '#date_timezone' => $timezone,
     '#element_validate' => array('date_combo_validate', 'date_widget_validate'),
   );
+
   if ($field['tz_handling'] == 'date' && $delta == 0) {
-    $element += array(
+    $element['timezone'] = array(
       '#type' => $delta == 0 ? 'date_timezone' : 'hidden',
       '#delta' => $delta,
       '#default_value' => $timezone,
       '#weight' => $delta + .2,
       );
   }
-
+  
   // Add a date repeat form element, if needed.
   if (module_exists('date_repeat') && $field['repeat'] == 1) {
     include_once(drupal_get_path('module', 'date') .'/date_repeat.inc');
