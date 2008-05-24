@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.37.2.6 2008/05/24 10:07:20 karens Exp $
+// $Id: date.install,v 1.37.2.7 2008/05/24 10:17:34 karens Exp $
 
 function date_install_load() {
   // Updates happen in random order, whether or not the module is enabled,
@@ -75,8 +75,8 @@ function date_update_5100() {
   foreach ($fields as $field) {
     if (strstr($field['type'], 'date')) {
 
-      $field_settings = unserialize(db_result(db_query("SELECT global_settings from {node_field} where field_name = '%s'", $field['field_name'])));
-      $widget_settings = unserialize(db_result(db_query("SELECT widget_settings from {node_field_instance} where field_name = '%s'", $field['field_name'])));
+      $field_settings = unserialize(db_result(db_query("SELECT global_settings from {". content_field_tablename() ."} where field_name = '%s'", $field['field_name'])));
+      $widget_settings = unserialize(db_result(db_query("SELECT widget_settings from {". content_instance_tablename() ."} where field_name = '%s'", $field['field_name'])));
 
       // Move input format from field settings to widget settings, where it should have been all along.
       $input_format = $field_settings['input_format'];
@@ -155,8 +155,8 @@ function date_update_5100() {
       }
       // Save the new settings. Use db_query instead of update_sql to get proper handling for serialized array and
       // because the query must be run immediately so we can rebuild the cache.
-      db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name='%s'", serialize($field_settings), $field['field_name']);
-      db_query("UPDATE {node_field_instance} SET widget_settings = '%s' WHERE field_name='%s'", serialize($widget_settings), $field['field_name']);
+      db_query("UPDATE {". content_field_tablename() ."} SET global_settings = '%s' WHERE field_name='%s'", serialize($field_settings), $field['field_name']);
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_settings = '%s' WHERE field_name='%s'", serialize($widget_settings), $field['field_name']);
       $ret[] = array('success' => TRUE, 'query' => 'field settings updated to '. serialize($field_settings) .'<br />widget settings updated to '. serialize($widget_settings));
     }
   }
@@ -224,14 +224,14 @@ function date_update_5200() {
   $fields = content_fields();
   foreach ($fields as $field) {
     if (strstr($field['type'], 'date')) {
-      $field_settings = unserialize(db_result(db_query("SELECT global_settings from {node_field} where field_name = '%s'", $field['field_name'])));
+      $field_settings = unserialize(db_result(db_query("SELECT global_settings from {". content_field_tablename() ."} where field_name = '%s'", $field['field_name'])));
       $granularity = array();
       foreach ((array) $field_settings['granularity'] as $item) {
         $granularity[] = strtr($item, $replace);
       }
       $field_settings['granularity'] = $granularity;
       // Save the new settings.
-      db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name='%s'", serialize($field_settings), $field['field_name']);
+      db_query("UPDATE {". content_field_tablename() ."} SET global_settings = '%s' WHERE field_name='%s'", serialize($field_settings), $field['field_name']);
     }
   }
  content_clear_type_cache();
@@ -246,14 +246,14 @@ function date_update_5200() {
 function date_update_5201() {
   date_install_load();
   $ret = array();
-  if (db_result(db_query("SELECT COUNT(*) FROM {node_field_instance} WHERE widget_type = 'date_js'"))) {
-    $result = db_query("SELECT field_name, widget_type, widget_settings from {node_field_instance} where widget_type = 'date_js'");
+  if (db_result(db_query("SELECT COUNT(*) FROM {". content_instance_tablename() ."} WHERE widget_type = 'date_js'"))) {
+    $result = db_query("SELECT field_name, widget_type, widget_settings from {". content_instance_tablename() ."} where widget_type = 'date_js'");
     while ($widget = db_fetch_array($result)) {
       // Change the format to one date_popup can use.
       $widget_settings = unserialize($widget['widget_settings']);
       $widget_settings['input_format'] = DATE_FORMAT_DATETIME;
       $widget_settings['input_format_custom'] = '';
-      db_query("UPDATE {node_field_instance} SET widget_type = 'date_popup', widget_settings = '%s' WHERE field_name = '%s'", serialize($widget_settings), $widget['field_name']);
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_type = 'date_popup', widget_settings = '%s' WHERE field_name = '%s'", serialize($widget_settings), $widget['field_name']);
     }
   }
   content_clear_type_cache();
@@ -308,13 +308,13 @@ function date_update_5205() {
   $fields = content_fields();
   foreach ($fields as $field) {
     if (strstr($field['type'], 'date')) {
-      $field_settings = unserialize(db_result(db_query("SELECT global_settings from {node_field} where field_name = '%s'", $field['field_name'])));
+      $field_settings = unserialize(db_result(db_query("SELECT global_settings from {". content_field_tablename() ."} where field_name = '%s'", $field['field_name'])));
       foreach ($field_settings as $key => $value) {
         if ($key == 'tz_handling' && $value == 'gmt') {
           $field_settings[$key] = 'utc';
         }
       }
-      db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name = '%s'", serialize($field_settings), $field['field_name']);
+      db_query("UPDATE {". content_field_tablename() ."} SET global_settings = '%s' WHERE field_name = '%s'", serialize($field_settings), $field['field_name']);
     }
   }
   return $ret;
