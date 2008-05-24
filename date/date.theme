@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.5 2008/04/22 21:18:42 karens Exp $
+//$Id: date.theme,v 1.2.2.6 2008/05/24 09:40:03 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -38,28 +38,41 @@
  *    $dates['value2']['formatted_time'] - only the time part of the formatted To date
  */
 function theme_date_display_combination($field, $item, $dates, $node = NULL) {
+  $dates = date_formatter_process($element);
+
   $date1 = $dates['value']['formatted'];
   $date2 = $dates['value2']['formatted'];
+  // Pull the timezone out of the formatted result and tack it
+  // back on at the end, if it is in the current formatted date.
+  $timezone = '';
+  if (!empty($item['timezone']) && strpos($date1, $item['timezone'])) {
+    $timezone = ' '. $item['timezone'];
+  }
+  $date1 = str_replace($item['timezone'], '', $date1);
+  $date2 = str_replace($item['timezone'], '', $date2);
+    
   // No date values, display nothing.
+  $output = '';
   if (empty($date1) && empty($date2)) {
     $output .= '';
   }
+  
   // From and To dates match or there is no To date, display a complete single date.
   elseif ($date1 == $date2 || empty($date2)) {
-    $output .= '<span class="date-display-single">'. $date1 .'</span>';
+    $output .= '<span class="date-display-single">'. $date1 . $timezone .'</span>';
   }
   // Same day, different times, don't repeat the date but show both From and To times.
   elseif ($dates['value']['formatted_date'] == $dates['value2']['formatted_date']) {
     $output .= '<span class="date-display-single">'. $dates['value']['formatted_date'] .'</span> '.
       '<span class="date-display-start">'. $dates['value']['formatted_time'] .'</span>'.
       '<span class="date-display-separator"> - </span>'.
-      '<span class="date-display-end">'. $dates['value2']['formatted_time'] .'</span>';
+      '<span class="date-display-end">'. $dates['value2']['formatted_time'] . $timezone .'</span>';
   }
   // Different days, display both in their entirety.
   else {
     $output .= '<span class="date-display-start">'. $date1 .'</span>'.
       '<span class="date-display-separator"> - </span>'.
-      '<span class="date-display-end">'. $date2 .'</span>';
+      '<span class="date-display-end">'. $date2 . $timezone. '</span>';
   }
   if (module_exists('date_repeat') && !empty($item['rrule'])) {
     include_once(drupal_get_path('module', 'date') .'/date_repeat.inc');

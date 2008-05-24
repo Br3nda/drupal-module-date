@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.19 2008/05/13 19:58:10 karens Exp $
+// $Id: date_api.module,v 1.44.2.20 2008/05/24 09:40:03 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1121,8 +1121,6 @@ function date_limit_value($date, $granularity, $type = DATE_DATETIME) {
  *   a format string with all other elements removed
  */
 function date_limit_format($format, $granularity) {
-  // Strip out timezone formatting.
-  $regex = array('([OZPe])');
   // Get rid of dash separating date and time if either is missing.
   if (!date_has_time($granularity)
     || sizeof(array_intersect($granularity, array('year', 'month', 'day')) == 0)) {
@@ -1152,6 +1150,10 @@ function date_limit_format($format, $granularity) {
       case 'second':
         $regex[] = '([:]?[s])';
         break;
+      case 'timezone':
+        $regex[] = array('([OZPe])');
+        break;
+    
     }
   }
   // Remove selected values from string.
@@ -1223,7 +1225,7 @@ function date_format_order($format) {
  *   an array like ('year', 'month', 'day', 'hour', 'minute', 'second');
  */
 function date_nongranularity($granularity) {
-  return array_diff(array('year', 'month', 'day', 'hour', 'minute', 'second'), (array) $granularity);
+  return array_diff(array('year', 'month', 'day', 'hour', 'minute', 'second', 'timezone'), (array) $granularity);
 }
 
 /**
