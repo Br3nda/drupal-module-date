@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.61.2.6 2008/05/24 10:07:20 karens Exp $
+// $Id: date.module,v 1.61.2.7 2008/05/25 21:56:00 karens Exp $
 
 /**
  * @file
@@ -256,7 +256,7 @@ function date_get_timezone($handling, $timezone = '') {
       $timezone = date_default_timezone_name(FALSE);
       break;
     case('date'):
-      $timezone = empty($timezone) ? $timezone : date_default_timezone_name();
+      $timezone = !empty($timezone) ? $timezone : date_default_timezone_name();
       break;
     case('none'):
     case('utc'):
