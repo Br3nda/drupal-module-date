@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.10 2008/05/24 10:09:13 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.11 2008/05/25 10:15:45 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -447,8 +447,11 @@ class date_sql_handler {
 
 /**
  * A class to manipulate date SQL.
+ * 
+ * This is the more feature-rich version from D6 that I'm going to start
+ * moving toward.
  */
-class date_sql_handler {
+class date_sql_handler2 {
   var $db_type = 'mysql';
   var $date_type = DATE_UNIX;
   var $db_timezone = 'UTC'; // A string timezone name.
