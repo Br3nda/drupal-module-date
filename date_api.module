@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.64.2.8 2008/05/27 10:34:54 karens Exp $
+// $Id: date_api.module,v 1.64.2.9 2008/05/27 14:11:56 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1333,6 +1333,7 @@ function date_api_theme() {
        'template' => 'date-nav', 
        'arguments' => array('view' => NULL)
        ),
+    'date_nav_title' => array('arguments' => array('type' => NULL, 'view' => NULL)),
     'date_timezone' => array('arguments' => array('element' => NULL)),
     'date_select' => array('arguments' => array('element' => NULL)),
     'date_text' => array('arguments' => array('element' => NULL)),

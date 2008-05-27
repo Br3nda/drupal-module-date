@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.40.2.3 2008/05/15 16:45:14 karens Exp $
+//$Id: date_admin.inc,v 1.40.2.4 2008/05/27 14:11:56 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -266,7 +266,22 @@ function _date_field_settings($op, $field) {
       return date_columns($field);
 
     case 'views data':
-      return _date_views_data($field);
+      $data = content_views_field_views_data($field);
+      $db_info = content_database_info($field);
+      $table_alias = content_views_tablename($field);
+
+      // Unset the filter and argument handlers, dates can use the generic 
+      // date argument and filter handlers created by the Date API.
+      unset($data[$table_alias][$field['field_name'] .'_value']['argument']);
+      unset($data[$table_alias][$field['field_name'] .'_value']['filter']);
+  
+      // Add in another set of fields for the To date.
+      if ($field['todate']) {
+        $data[$table_alias][$field['field_name'] .'_value2'] = $data[$table_alias][$field['field_name'] .'_value'];
+        $data[$table_alias][$field['field_name'] .'_value']['title'] = t('!label (!field value)', array('!label' => t($field['widget']['label']), '!field' => t($field['field_name'])));
+        $data[$table_alias][$field['field_name'] .'_value2']['title'] = t('!label (!field value2)', array('!label' => t($field['widget']['label']), '!field' => t($field['field_name'])));
+      }
+      return $data;
   }
 }
 

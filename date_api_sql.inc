@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.9.2.3 2008/05/23 18:14:00 karens Exp $
+// $Id: date_api_sql.inc,v 1.9.2.4 2008/05/27 14:11:56 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -53,6 +53,9 @@ class date_sql_handler {
     $this->date_type = $date_type;
     $this->db_timezone = 'UTC';
     $this->local_timezone = isset($local_timezone) ? $local_timezone : date_default_timezone_name();
+    if (isset($this->definition['content_field'])) {
+      $this->date_handler->date_type = $this->definition['content_field']['type'];
+    }
     date_api_set_db_timezone();
   }
 
@@ -434,5 +437,281 @@ class date_sql_handler {
       $field = $this->sql_field($field, 0);
     }
     return $this->sql_format($format, $field) ." $operator '$value'";
+  }
+
+  /**
+   * An array of all date parts,
+   * optionally limited to an array of allowed parts.
+   */
+  function date_parts($limit = NULL) {
+    $parts =  array(
+      'year' => t('Year'), 'month' => t('Month'), 'day' => t('Day'),
+      'hour' => t('Hour'), 'minute' => t('Minute'), 'second' => t('Second'),
+      );
+    if (!empty($limit)) {
+      $last = FALSE;
+      foreach ($parts as $key => $part) {
+        if ($last) {
+          unset($parts[$key]);
+        }
+        if ($key == $limit) {
+          $last = TRUE;
+        }
+      }
+    }
+    return $parts;
+  }
+
+  /**
+   * Part information.
+   *
+   * @param $op
+   *   'min', 'max', 'format', 'sep', 'empty_now', 'empty_min', 'empty_max'. 
+   *   Returns all info if empty.
+   * @param $part
+   *   'year', 'month', 'day', 'hour', 'minute', or 'second.
+   *   returns info for all parts if empty.
+   */
+  function part_info($op = NULL, $part = NULL) {
+    $info = array();
+    $info['min'] = array(
+      'year' => 100, 'month' => 1, 'day' => 1,
+      'hour' => 0, 'minute' => 0, 'second' => 0);
+    $info['max'] = array(
+      'year' => 4000, 'month' => 12, 'day' => 31,
+      'hour' => 23, 'minute' => 59, 'second' => 59);
+    $info['format'] = array(
+      'year' => 'Y', 'month' => 'm', 'day' => 'd',
+      'hour' => 'H', 'minute' => 'i', 'second' => 's');
+    $info['sep'] = array(
+      'year' => '', 'month' => '-', 'day' => '-',
+      'hour' => ' ', 'minute' => ':', 'second' => ':');
+    $info['empty_now'] = array(
+      'year' => date('Y'), 'month' => date('m'), 'day' => min('28', date('d')),
+      'hour' => date('H'), 'minute' => date('i'), 'second' => date('s'));  
+    $info['empty_min'] = array(
+      'year' => '1000', 'month' => '01', 'day' => '01',
+      'hour' => '00', 'minute' => '00', 'second' => '00');  
+    $info['empty_max'] = array(
+      'year' => '9999', 'month' => '12', 'day' => '31',
+      'hour' => '23', 'minute' => '59', 'second' => '59');  
+    if (!empty($op)) {
+      if (!empty($part)) {
+        return $info[$op][$part];
+      }
+      else {
+        return $info[$op];
+      }
+    }
+    return $info;
+  }
+
+  /**
+   * Create a complete datetime value out of an 
+   * incomplete array of selected values.
+   * 
+   * For example, array('year' => 2008, 'month' => 05) will fill
+   * in the day, hour, minute and second with the earliest possible
+   * values if type = 'min', the latest possible values if type = 'max',
+   * and the current values if type = 'now'.
+   */
+  function complete_date($selected, $type = 'now') {
+    $compare = array_merge($this->part_info('empty_'. $type), $selected);
+    // If this is a max date, make sure the last day of 
+    // the month is the right one for this date.
+    if ($type == 'max') {
+      $compare['day'] = date('t', mktime(0, 0, 0, $compare['month'], 1, $compare['year']));
+    }
+    $value = '';
+    $separators = $this->part_info('sep');
+    foreach ($this->date_parts() as $key => $name) {
+      $value .= $separators[$key] . (!empty($selected[$key]) ? $selected[$key] : $compare[$key]);
+    }
+    return $value;
+  }
+  /**
+   * Convert a format string into help text,
+   * i.e. 'Y-m-d' becomes 'YYYY-MM-DD'.
+   *
+   * @param unknown_type $format
+   * @return unknown
+   */
+  function format_help($format) {
+    $replace = array(
+      'Y' => 'YYYY', 'm' => 'MM', 'd' => 'DD',
+      'H' => 'HH', 'i' => 'MM', 's' => 'SS', '\T' => 'T');
+    return strtr($format, $replace);
+  }
+
+  /**
+   *  A function to test the validity of various date parts
+   */
+  function part_is_valid($value, $type) {
+    if ( !preg_match('/^[0-9]*$/', $value) ) {
+      return false;
+    }
+    $value = intval($value);
+    if ($value <= 0) return false;
+    switch ($type) {
+      case 'year':
+        if ($value < DATE_MIN_YEAR) return false;
+        break;
+      case 'month':
+        if ($value < 0 || $value > 12) return false;
+        break;
+      case 'day':
+        if ($value < 0 || $value > 31) return false;
+        break;
+      case 'week':
+        if ($value < 0 || $value > 53) return false;
+    }
+    return true;
+  }
+
+  function views_formats($granularity, $type = 'sql') {
+    $formats = array('display', 'sql');
+    switch ($granularity) {
+      case('year'):
+        $formats['display'] = 'Y';
+        $formats['sql'] = 'Y';
+        break;
+      case('month'):
+        $formats['display'] = 'F Y';
+        $formats['sql'] = 'Y-m';
+        break;
+      case('day'):
+        $formats['display'] = 'F j Y';
+        $formats['sql'] = 'Y-m-d';
+        break;
+      case('hour'):
+        $formats['display'] = 'F j Y - H';
+        $formats['sql'] = 'Y-m-d\TH';
+        break;
+      case('week'):
+        $formats['display'] = 'F j Y (W)';
+        $formats['sql'] = 'Y-\WW';
+        break;
+    }
+    return $formats[$type];
+  }
+
+  /**
+   * Parse date parts from an ISO date argument.
+   * 
+   * Based on ISO 8601 date duration and time interval standards.
+   *
+   * See http://en.wikipedia.org/wiki/ISO_8601#Week_dates for definitions of ISO weeks.
+   * See http://en.wikipedia.org/wiki/ISO_8601#Duration for definitions of ISO duration and time interval.
+   *
+   * Parses a value like 2006-01-01--2006-01-15, or 2006-W24, or @P1W.
+   * Separate from and to dates or date and period with a double hyphen (--).
+   *
+   * The 'to' portion of the argument can be eliminated if it is the same as the 'from' portion.
+   * Use @ instead of a date to substitute in the current date and time.
+   *
+   * Use periods (P1H, P1D, P1W, P1M, P1Y) to get next hour/day/week/month/year from now.
+   * Use date before P sign to get next hour/day/week/month/year from that date.
+   * Use period then date to get a period that ends on the date.
+   *
+   */
+  function arg_parts($argument) {
+    $fromto = explode('--', $argument);
+    $values = array();
+    foreach ($fromto as $arg) {
+      $parts = array();
+      if ($date == '@') {
+        $parts['date'] = date_array(date_now());
+      }
+      elseif (preg_match('/(\d{4})?-?(W)?(\d{1,2})?-?(\d{1,2})?[T\s]?(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?/', $arg, $matches)) {
+        $date = array();
+        if (!empty($matches[1])) $date['year'] = $matches[1];
+        if (!empty($matches[3])) {
+          if (empty($matches[2])) {
+            $date['month'] = $matches[3];
+          }
+          else {
+            $date['week'] = $matches[3];
+          }    
+        }
+        if (!empty($matches[4])) $date['day'] = $matches[4];
+        if (!empty($matches[5])) $date['hour'] = $matches[5];
+        if (!empty($matches[6])) $date['minute'] = $matches[6];
+        if (!empty($matches[7])) $date['second'] = $matches[7];
+        $parts['date'] = $date;
+      }
+      if (preg_match('/^P(\d{1,4}[Y])?(\d{1,2}[M])?(\d{1,2}[W])?(\d{1,2}[D])?([T]{0,1})?(\d{1,2}[H])?(\d{1,2}[M])?(\d{1,2}[S])?/', $arg, $matches)) {
+        $period = array();
+        if (!empty($matches[1])) $period['year'] =  str_replace('Y', '', $matches[1]);
+        if (!empty($matches[2])) $period['month'] = str_replace('M', '', $matches[2]);
+        if (!empty($matches[3])) $period['week'] = str_replace('W', '', $matches[3]);
+        if (!empty($matches[4])) $period['day'] = str_replace('D', '', $matches[4]);
+        if (!empty($matches[6])) $period['hour'] = str_replace('H', '', $matches[6]);
+        if (!empty($matches[7])) $period['minute'] = str_replace('M', '', $matches[7]);
+        if (!empty($matches[8])) $period['second'] = str_replace('S', '', $matches[8]);
+        $parts['period'] = $period;
+      }
+      $values[] = $parts;
+    }
+    return $values;
+  }
+
+  /**
+   * Use the parsed values from the ISO argument to determine the
+   * min and max date for this period.
+   */
+  function arg_range($arg) {
+      
+    // Parse the argument to get its parts
+    $parts = $this->arg_parts($arg);
+
+    // Intercept invalid info and fall back to the current date.
+    if (empty($parts[0]) || empty($parts[0]['date']) && empty($parts[0]['period'])) {
+      $now = date_now();
+      return array($now, $now);
+    }
+    
+    // Build a range from a period-only argument (assumes the min date is now.)
+    if (empty($parts[0]['date']) && !empty($parts[0]['period']) && (empty($parts[1]) || empty($parts[1]['date']))) {
+      $min_date = date_now();
+      $max_date = drupal_clone($min_date);
+      foreach ($parts[0]['period'] as $part => $value) {
+        date_modify($max_date, "+$value $part");
+      }
+      date_modify($max_date, '-1 second');
+      return array($min_date, $max_date);
+    }
+    if (!empty($parts[0]['date'])) {
+      $min_date = date_make_date($this->complete_date($parts[0]['date'], 'min'));
+      
+      // Build a range from a single date-only argument.
+      if (empty($parts[1]) || (empty($parts[1]['date']) && empty($parts[1]['period']))) {
+        $max_date = date_make_date($this->complete_date($parts[0]['date'], 'max'));
+        return array($min_date, $max_date);
+      }
+      // Build a range from start date + period.
+      elseif (!empty($parts[1]['period'])) {
+        foreach ($parts[1]['period'] as $part => $value) {
+          $max_date = drupal_clone($min_date);
+          date_modify($max_date, "+$value $part");
+        }
+        date_modify($max_date, '-1 second');
+        return array($min_date, $max_date);
+      }
+    }
+    // Build a range from start date and end date.
+    if (!empty($parts[1]['date'])) {
+      $max_date = $this->complete_date($parts[1]['date'], 'max');
+      if (isset($min_date)) {
+        return array($min_date, $max_date);
+      }
+    }
+    // Build a range from period + end date.
+    if (!empty($parts[0]['period'])) {
+      foreach ($parts[0]['period'] as $part => $value) {
+        $min_date = drupal_clone($max_date);
+        date_modify($min_date, "-$value $part");
+      }
+      return array($min_date, $max_date);
+    }
   }
 }
