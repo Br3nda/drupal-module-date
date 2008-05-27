@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.21 2008/05/26 12:05:05 karens Exp $
+// $Id: date_api.module,v 1.44.2.22 2008/05/27 10:34:21 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -666,7 +666,7 @@ function date_days_in_year($date = NULL, $type = DATE_OBJECT) {
  * @param string $type
  * @return integer
  */
-function date_weeks_in_year($date = NULL, $type = DATE_OBJECT) {
+function date_iso_weeks_in_year($date = NULL, $type = DATE_OBJECT) {
   if (empty($date)) {
     $date = date_now();
     $type = DATE_OBJECT;
@@ -798,7 +798,7 @@ function date_difference($date1_in, $date2_in, $measure = 'seconds', $type = DAT
         $year_diff = date_format($date2, 'o') - date_format($date1, 'o');
         for ($i = 1; $i <= $year_diff; $i++) {
           date_modify($date1, '+1 year');
-          $week_diff += date_weeks_in_year($date1);
+          $week_diff += date_iso_weeks_in_year($date1);
         }
         return $week_diff;
     }
