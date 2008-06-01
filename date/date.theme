@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.7 2008/06/01 20:33:11 karens Exp $
+//$Id: date.theme,v 1.2.2.8 2008/06/01 20:34:11 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -38,8 +38,6 @@
  *    $dates['value2']['formatted_time'] - only the time part of the formatted To date
  */
 function theme_date_display_combination($field, $item, $dates, $node = NULL) {
-  $dates = date_formatter_process($field, $item, $node);
-
   $date1 = $dates['value']['formatted'];
   $date2 = $dates['value2']['formatted'];
   // Pull the timezone out of the formatted result and tack it
