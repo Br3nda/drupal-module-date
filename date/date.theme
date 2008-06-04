@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.8 2008/06/01 20:34:11 karens Exp $
+//$Id: date.theme,v 1.2.2.9 2008/06/04 13:20:41 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -38,17 +38,26 @@
  *    $dates['value2']['formatted_time'] - only the time part of the formatted To date
  */
 function theme_date_display_combination($field, $item, $dates, $node = NULL) {
+function theme_date_display_combination($element) {
+  $dates = date_formatter_process($element);
+  
   $date1 = $dates['value']['formatted'];
-  $date2 = $dates['value2']['formatted'];
+  if (isset($dates['value2'])) {
+    $date2 = $dates['value2']['formatted'];
+  }
+  else {
+    $date2 = $date1;
+  }
+  
   // Pull the timezone out of the formatted result and tack it
   // back on at the end, if it is in the current formatted date.
   $timezone = '';
-  if (!empty($item['timezone']) && strpos($date1, $item['timezone'])) {
-    $timezone = ' '. $item['timezone'];
+  if (!empty($element['#item']['timezone']) && strpos($date1, $element['#item']['timezone'])) {
+    $timezone = ' '. $element['#item']['timezone'];
   }
-  $date1 = str_replace($item['timezone'], '', $date1);
-  $date2 = str_replace($item['timezone'], '', $date2);
-    
+  $date1 = str_replace($timezone, '', $date1);
+  $date2 = str_replace($timezone, '', $date2);
+      
   // No date values, display nothing.
   $output = '';
   if (empty($date1) && empty($date2)) {
