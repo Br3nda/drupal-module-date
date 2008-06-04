@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.20 2008/05/28 18:08:46 karens Exp $
+// $Id: date.install,v 1.21.2.21 2008/06/04 13:28:34 karens Exp $
 
 function date_install_load() {
   // Updates happen in random order, whether or not the module is enabled,
@@ -11,6 +11,7 @@ function date_install_load() {
   if (module_exists('views')) {
     include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
   }
+  include_once('./'. drupal_get_path('module', 'date_timezone') .'/date_timezone.module');
 }
 
 /**
