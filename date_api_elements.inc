@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.17 2008/05/10 00:46:50 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.18 2008/06/06 13:29:22 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -185,11 +185,13 @@ function date_select_process($element, $edit = NULL) {
   
   // Store a hidden value for all date parts not in the current display.
   $granularity = date_format_order($element['#date_format']);
+  $formats = array('year' => 'Y', 'month' => 'n', 'day' => 'j', 'hour' => 'H', 'minute' => 'i', 'second' => 's');
   foreach (date_nongranularity($granularity) as $field) {
-    $formats = array('year' => 'Y', 'month' => 'n', 'day' => 'j', 'hour' => 'H', 'minute' => 'i', 'second' => 's');
-    $element[$field] = array(
-      '#type' => 'hidden',
-      '#value' => is_object($date) ? intval(date_format($date, $formats[$field])) : 0);
+    if ($field != 'timezone') {
+      $element[$field] = array(
+        '#type' => 'hidden',
+        '#value' => is_object($date) ? intval(date_format($date, $formats[$field])) : 0);
+    }
   }
   return $element;
 }
