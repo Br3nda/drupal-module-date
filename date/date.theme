@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.10 2008/06/04 14:01:26 karens Exp $
+//$Id: date.theme,v 1.2.2.11 2008/06/06 13:47:10 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -38,8 +38,6 @@
  *    $dates['value2']['formatted_time'] - only the time part of the formatted To date
  */
 function theme_date_display_combination($field, $item, $dates, $node = NULL) {
-  $dates = date_formatter_process($element);
-  
   $date1 = $dates['value']['formatted'];
   if (isset($dates['value2'])) {
     $date2 = $dates['value2']['formatted'];
