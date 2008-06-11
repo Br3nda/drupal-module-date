@@ -1,0 +1,82 @@
+//$Id: CHANGELOG.txt,v 1.1.6.2 2008/06/11 12:20:57 karens Exp $
+Date Module 5.2
+=================
+TODO
+ - Get repeating dates working again.
+ 
+Version 5.2-rc2
+=================
+- Fix computation of week range computed from views arguments.
+- Get the generic date argument handler pulled completely out of the Calendar module and into the Date API in a way that it can be used for any Views date field in any view.
+- Now that a current date argument has been added to Views, remove the current date plugin from the Date API views handling.
+- #263377 Re-fix patch that I broke in later commit.
+- Comment out RRULE temporarily until repeating rules are fixed.
+- Omit the timezone from the process to store the current date parts in the form.
+- Change expected form values to match latest changes in CCK admin form.
+- #261631 No longer using $append, so get rid of it.
+- More work to ensure all the right timezone files are available in installations and updates.
+- #264208 Fix fatal typo in date_limit_format() regex.
+- #263377 Fix bad arguments for date_formatter_process.
+- #263078 Fix error in setting up db session info that was triggering the MYSQL code for POSTGRES.
+- Add calendar week calculations to the Date API so we can move them out of Calendar module to be able to use them in any date application.
+- Fix critical typo in date_get_timezone() that set the timezone to the site timezone even if it isn't right.
+- #258688 fix typo in file name that used the D6 content module naming convention.
+- Backport the sql handler from the D6 version. Still need to incorporate the new code into date_views.
+- #130689 Move include code in the install file into a function and out of the global scope.
+- Fixes needed to display the timezone when that format is selected, and to pull the timezone out of format strings.
+- #255911 node_submit() is not necessary for data integrity check.
+- Fix for critical flaw in the new timezone list handling that was creating an invalid array.
+- #257059 and #248935, committing a work-around for a Views error that has been fixed but is not in an official release yet.
+- Working in a new sql handler class so we can use the same class in both.
+- Update date copy to convert either version 1 or version 2 Event nodes.
+- Add missing strtotime validation and format help text to textfield date and clarify that it's really a custom input format (which uses strtotime if the custom input fails).
+- #247752 Rework the SQL code used for Views filters and arguments and update Date and Calendar views to use the new code.
+- Change method of getting translations for all timezones into the install file.
+- #256079 make translation of abbreviations easier.
+- #256078 Fix typo in popup calendar.
+- #255739 Fix backwards validation message when testing that the To date is greater than the From date.
+- Trigger js timezone detection on user edit form as well as registration form.
+- Make sure anonymous users don't see timezone message.
+- Prepare for proposed core timezone handling from #11077 by getting rid of deprecated timezones and adding in js timezone name detection.
+- Rework default timezone handling to force a valid date even when timezones are not set to get rid of numerous installation and operational errors caused by invalid date objects.
+- #248935 Double escaping no longer needed with latest Views dev version, so remove it.
+- Update site timezone offset during cron and user offset during login to make sure that modules that rely on the timezone offset  have current information to process when the offset changes.
+- #251511 Rename function to avoid clash with Diff module.
+- #232820 Clean up Date Browser block theme.
+- #234073 Make sure empty but required textfield gets a meaningful error message.
+- Clean up timezone handling in date repeat logic.
+- #234021 fix date_repeat timestamp errors.
+- #234102 It turns out that we must always force use of the lower level date functions because regular strtotime and mktime can be off by one hour during daylight savings time.
+- #219003 Add validation code to date views filter handlers so they will work correctly as exposed filters.
+- #234073 Provide a way to make required textfield start out with blank values.
+- #239900, #249399 Limit available formats for Date Popup to available formats and hide custom format code which won't work right here.
+- Can't use date_make_date within date_part_extract without setting up potential circular reference.
+- Format_interval logic was backwards.
+- Starting some improvements to Views handling, including new sql function to allow formatting dates in sql.
+- #236889 Make sure date_select validation only checks required granularity.
+- #234073 Provide a way to make a required date start out with blank values.
+- #247749 don't use date popup on system date form, too many potential conflicts.
+- #233805 was using wrong value for date type in views filter.
+- #234360 fix date_server_zone_adj() function.
+- #242433 adjust timestamps to datetime when creating repeating dates.
+- #233415 separate ical retrieval and parser so other modules like feedapi can use the parser alone.
+- #240980 coder compliance fixups.
+- #225738 Add special case handling for year only or year and month only ISO dates.
+- #244025 make the jquery calendar code more efficient.
+
+Version 5.2-rc
+==============
+NOTE! The new version has several new files and is completely re-organized. Empty the module folder completely before adding the contents of the new version. If you don't do that, Drupal may try to use some of the invalid, older files and things will not work correctly. After updating the files on your system, visit the modules page and look for the new Date/Time section and enable the new modules. Then visit update.php to update your database and make sure your site timezone name is correctly set at admin/settings/date-time.
+
+If you use the Token module, be sure to use the latest version of it, too, currently that is the development version. The older version was using the older Date API.
+
+This version should be matched up with the 5.2 version of the Calendar module.
+
+* The Date API now uses PHP 5.2 date functions for better date and timezone handling (and has PHP 4 emulations for those functions so the module will work in PHP4). Although the code will work with PHP 4, it is significantly faster and more efficient under PHP 5.2 or higher, so PHP 5.2 is highly recommended.
+* No more need for the adodb date library, historical dates earlier than 1970 and later than 2038 are handled without any external code.
+* iCal integration is greatly improved, an iCal parser can parse events, alarms, most types of dates and timezones, duration, repeat rules, and more.
+* The Date API creates date elements that can be used by any module, including 'date_select', 'date_textfield', and 'date_timezone'.
+* A new Date Timezone module overloads the site and user timezone selectors to allow you to select a timezone name instead of a timezone offset, and that stored name is used to properly adjust date values. It also detects the user's timezone name automatically and updates the user record with that name.
+* A new Date Popup module creates a jQuery popup calendar date picker and time picker, and the element is available to other modules as a form type of 'date_popup'.
+* The Date module now has lots of new ways to define default values -- you can set a the default to 'blank', 'now', or 'relative', where relative is something like '+90 days'. The To date has a separate default value, which can be the same as the From date or do something different.
+* A Date Repeat API module has been added which can be used by any other module. The CCK Date module uses it to allow you to select 'repeating' as a type of multiple date, present the user with a form to select the repeat rules for their date, and then create all the multiple values that match those rules.
