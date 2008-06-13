@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.16 2008/06/04 22:01:58 karens Exp $
+// $Id: date.module,v 1.39.2.17 2008/06/13 19:30:25 karens Exp $
 
 /**
  * @file
@@ -431,4 +431,9 @@ function date_formatter_format($formatter, $field_name) {
       break;
   }
   return date_limit_format($format, date_granularity($field));
+}
+
+function date_content_generate($node, $field) {
+  include_once(drupal_get_path('module', 'date') .'/date_content_generate.inc');
+  return _date_content_generate($node, $field);
 }
