@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.7 2008/04/22 17:38:47 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.8 2008/06/15 11:01:05 karens Exp $
 
 /**
  * @file
@@ -399,7 +399,7 @@ if (!function_exists('date_modify')) {
  * Will work for things like date_modify($date, '+1 Sunday');
  *
  * @param $date
- *   a date object created by create_date() to use as a reference
+ *   a date object created by date_create() to use as a reference
  *   point for the calculation.
  * @param $change
  *   something like following phrases:
