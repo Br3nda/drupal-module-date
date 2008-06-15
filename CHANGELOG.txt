@@ -1,8 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.2 2008/06/11 12:20:57 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.3 2008/06/15 11:04:16 karens Exp $
 Date Module 5.2
 =================
 TODO
  - Get repeating dates working again.
+
+Version 5.2-dev
+=================
+- #270626 Fix documentation errors that use create_date() instead of date_create().
  
 Version 5.2-rc2
 =================
