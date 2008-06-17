@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.17 2008/06/17 11:07:38 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.18 2008/06/17 11:22:49 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -75,8 +75,6 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
       }
     }
   }
-  dsm('saving '.$field['field_name']);
-  dsm($items);
   $node->$field['field_name'] = $items;
 }
 
