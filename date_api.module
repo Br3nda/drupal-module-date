@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.24 2008/06/17 14:30:29 karens Exp $
+// $Id: date_api.module,v 1.44.2.25 2008/06/17 18:48:16 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -975,9 +975,19 @@ function date_convert($date, $from_type, $to_type) {
  * Create valid datetime value from incomplete ISO dates or arrays.
  */
 function date_fuzzy_datetime($date) {
+  // A text ISO date, like MMMM-YY-DD HH:MM:SS
   if (!is_array($date)) {
     $date = date_iso_array($date);
   }
+  // An date/time value in the format:
+  //  array('date' => MMMM-YY-DD, 'time' => HH:MM:SS).
+  elseif (array_key_exists('date', $date) || array_key_exists('time', $date)) {
+    $date_part = array_key_exists('date', $date) ? $date['date'] : '';
+    $time_part = array_key_exists('time', $date) ? $date['time'] : '';
+    $date = date_iso_array(trim($date_part .' '. $time_part));
+  }
+  // Otherwise date must in in format:
+  //  array('year' => YYYY, 'month' => MM, 'day' => DD).
   if (empty($date['year'])) {
     $date['year'] = date('Y');
   }
