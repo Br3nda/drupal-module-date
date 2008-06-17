@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.20 2008/06/17 13:23:27 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.21 2008/06/17 20:34:57 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -129,7 +129,7 @@ function _date_widget($op, &$node, $field, &$items) {
       }
       $columns = array_keys($columns);
       $timezone = date_get_timezone($field['tz_handling'], $items[0]['timezone']);
-
+      
       // Convert UTC dates to their local values in DATETIME format,
       // and adjust the default values as specified in the field settings.
 

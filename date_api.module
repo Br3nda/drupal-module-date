@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.25 2008/06/17 18:48:16 karens Exp $
+// $Id: date_api.module,v 1.44.2.26 2008/06/17 20:34:57 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1009,12 +1009,12 @@ function date_fuzzy_datetime($date) {
 function date_iso_array($date) {
   preg_match(DATE_REGEX_LOOSE, $date, $regs);
   return array(
-    'year' => intval($regs[1]),
-    'month' => intval($regs[2]),
-    'day' => intval($regs[3]),
-    'hour' => intval($regs[5]),
-    'minute' => intval($regs[6]),
-    'second' => intval($regs[7]),
+    'year' => isset($regs[1]) ? intval($regs[1]) : '',
+    'month' => isset($regs[2]) ? intval($regs[2]) : '',
+    'day' => isset($regs[3]) ? intval($regs[3]) : '',
+    'hour' => isset($regs[5]) ? intval($regs[5]) : '',
+    'minute' => isset($regs[6]) ? intval($regs[6]) : '',
+    'second' => isset($regs[7]) ? intval($regs[7]) : '',
     );        
 }
 
