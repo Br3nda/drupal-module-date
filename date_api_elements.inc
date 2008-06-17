@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.18 2008/06/06 13:29:22 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.19 2008/06/17 13:23:25 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -145,6 +145,7 @@ function date_text_process($element, $edit = NULL) {
   // We'll set our own message on the parent element.
   //$element['date']['#required'] = $element['#required'];
   $element['date']['#theme'] = 'date_textfield_element';
+  $element['date']['#description'] .= ' '. t('Format: @date', array('@date' => date($element['#date_format'], time())));
   return $element;
 }
 

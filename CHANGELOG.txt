@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.7 2008/06/17 12:42:03 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.8 2008/06/17 13:23:25 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -34,6 +34,7 @@ Timezone handling
 
 Other
 
+- Have the date_text element handle its own format description instead of doing it in the Date module.
 - Empty values were getting saved.
 - #257353 No need for format description when using select widget.
 - #270626 Fix documentation errors that use create_date() instead of date_create().
