@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.5 2008/06/17 11:07:38 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.6 2008/06/17 11:46:20 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -6,6 +6,7 @@ TODO
 
 Version 5.2-dev
 =================
+- #270304 Timezone was not getting saved.
 - Empty values were getting saved.
 - #257353 No need for format description when using select widget.
 - #270626 Fix documentation errors that use create_date() instead of date_create().
