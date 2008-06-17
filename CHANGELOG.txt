@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.6 2008/06/17 11:46:20 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.7 2008/06/17 12:42:03 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -6,52 +6,58 @@ TODO
 
 Version 5.2-dev
 =================
-- #270304 Timezone was not getting saved.
+
+New Features
+
+- #187599 Backport content_generate so Devel module can create data for CCK fields when creating nodes.
+- #233415 separate ical retrieval and parser so other modules like feedapi can use the parser alone.
+- Update date copy to convert either version 1 or version 2 Event nodes.
+
+
+Timezone handling
+
+- #270304 Timezone was not getting saved in field and user account.
+- Omit the timezone from the process to store the current date parts in the form.
+- More work to ensure all the right timezone files are available in installations and updates.
+- Fix critical typo in date_get_timezone() that set the timezone to the site timezone even if it isn't right.
+- Display the timezone when that format is selected, and pull the timezone out of format strings.
+- Change method of getting translations for all timezones into the install file.
+- Trigger js timezone detection on user edit form and registration form.
+- Make sure anonymous users don't see timezone message.
+- Fix critical flaw in the new timezone list handling that was creating an invalid array.
+- Prepare for proposed core timezone handling from #11077 by getting rid of deprecated timezones and adding in js timezone name detection.
+- Rework default timezone handling to force a valid date even when timezones are not set to get rid of numerous installation and operational errors caused by invalid date objects.
+- Update site timezone offset during cron and user offset during login to make sure that modules that rely on the timezone offset  have current information to process when the offset changes.
+- Clean up timezone handling in date repeat logic.
+- #234360 fix date_server_zone_adj() function.
+- Backport the improved sql handler (with better timezone handling) from the D6 version. Still need to incorporate the new code into date_views.
+
+Other
+
 - Empty values were getting saved.
 - #257353 No need for format description when using select widget.
 - #270626 Fix documentation errors that use create_date() instead of date_create().
- 
-Version 5.2-rc2
-=================
 - Fix computation of week range computed from views arguments.
-- Get the generic date argument handler pulled completely out of the Calendar module and into the Date API in a way that it can be used for any Views date field in any view.
-- Now that a current date argument has been added to Views, remove the current date plugin from the Date API views handling.
 - #263377 Re-fix patch that I broke in later commit.
 - Comment out RRULE temporarily until repeating rules are fixed.
-- Omit the timezone from the process to store the current date parts in the form.
 - Change expected form values to match latest changes in CCK admin form.
 - #261631 No longer using $append, so get rid of it.
-- More work to ensure all the right timezone files are available in installations and updates.
 - #264208 Fix fatal typo in date_limit_format() regex.
 - #263377 Fix bad arguments for date_formatter_process.
 - #263078 Fix error in setting up db session info that was triggering the MYSQL code for POSTGRES.
 - Add calendar week calculations to the Date API so we can move them out of Calendar module to be able to use them in any date application.
-- Fix critical typo in date_get_timezone() that set the timezone to the site timezone even if it isn't right.
 - #258688 fix typo in file name that used the D6 content module naming convention.
-- Backport the sql handler from the D6 version. Still need to incorporate the new code into date_views.
 - #130689 Move include code in the install file into a function and out of the global scope.
-- Fixes needed to display the timezone when that format is selected, and to pull the timezone out of format strings.
 - #255911 node_submit() is not necessary for data integrity check.
-- Fix for critical flaw in the new timezone list handling that was creating an invalid array.
 - #257059 and #248935, committing a work-around for a Views error that has been fixed but is not in an official release yet.
-- Working in a new sql handler class so we can use the same class in both.
-- Update date copy to convert either version 1 or version 2 Event nodes.
 - Add missing strtotime validation and format help text to textfield date and clarify that it's really a custom input format (which uses strtotime if the custom input fails).
-- #247752 Rework the SQL code used for Views filters and arguments and update Date and Calendar views to use the new code.
-- Change method of getting translations for all timezones into the install file.
 - #256079 make translation of abbreviations easier.
 - #256078 Fix typo in popup calendar.
 - #255739 Fix backwards validation message when testing that the To date is greater than the From date.
-- Trigger js timezone detection on user edit form as well as registration form.
-- Make sure anonymous users don't see timezone message.
-- Prepare for proposed core timezone handling from #11077 by getting rid of deprecated timezones and adding in js timezone name detection.
-- Rework default timezone handling to force a valid date even when timezones are not set to get rid of numerous installation and operational errors caused by invalid date objects.
 - #248935 Double escaping no longer needed with latest Views dev version, so remove it.
-- Update site timezone offset during cron and user offset during login to make sure that modules that rely on the timezone offset  have current information to process when the offset changes.
 - #251511 Rename function to avoid clash with Diff module.
 - #232820 Clean up Date Browser block theme.
 - #234073 Make sure empty but required textfield gets a meaningful error message.
-- Clean up timezone handling in date repeat logic.
 - #234021 fix date_repeat timestamp errors.
 - #234102 It turns out that we must always force use of the lower level date functions because regular strtotime and mktime can be off by one hour during daylight savings time.
 - #219003 Add validation code to date views filter handlers so they will work correctly as exposed filters.
@@ -64,9 +70,7 @@ Version 5.2-rc2
 - #234073 Provide a way to make a required date start out with blank values.
 - #247749 don't use date popup on system date form, too many potential conflicts.
 - #233805 was using wrong value for date type in views filter.
-- #234360 fix date_server_zone_adj() function.
 - #242433 adjust timestamps to datetime when creating repeating dates.
-- #233415 separate ical retrieval and parser so other modules like feedapi can use the parser alone.
 - #240980 coder compliance fixups.
 - #225738 Add special case handling for year only or year and month only ISO dates.
 - #244025 make the jquery calendar code more efficient.
