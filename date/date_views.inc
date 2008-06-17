@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.17 2008/05/11 06:54:59 karens Exp $
+// $Id: date_views.inc,v 1.26.2.18 2008/06/17 14:30:30 karens Exp $
 
 /**
  * Views field filters
@@ -260,7 +260,7 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
 
   $name = explode(':', is_array($argtype) ? $argtype['type'] : $argtype);
   $tofield_name = trim($name[1]);
-  $field_name = substr($tofield_name, 0, 3) == 'to|' ? substr($tofield_name, 3) : $tofield_name;
+  $field_name = drupal_substr($tofield_name, 0, 3) == 'to|' ? drupal_substr($tofield_name, 3) : $tofield_name;
   if ($field_name == $tofield_name) {
     $value = 'value';
   }
@@ -572,7 +572,7 @@ function _date_views_query_alter(&$query, &$view) {
   if (in_array($view->name, array_keys($date_views_browser_views))) {
     $name       = explode(':', $view->argument[0]['type']);
     $tofield_name = trim($name[1]);
-    $field_name = substr($tofield_name, 0, 3) == 'to|' ? substr($tofield_name, 3) : $tofield_name;
+    $field_name = drupal_substr($tofield_name, 0, 3) == 'to|' ? drupal_substr($tofield_name, 3) : $tofield_name;
     if ($field_name == $tofield_name) {
       $value = 'value';
     }

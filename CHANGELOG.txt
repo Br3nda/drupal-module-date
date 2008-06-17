@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.9 2008/06/17 14:10:41 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.10 2008/06/17 14:30:29 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -34,6 +34,7 @@ Timezone handling
 
 Other
 
+- #260611 Replace substr with drupal_substr where used to get month and day abbreviations.
 - The granularity options were not saved correctly by CCK when provided as checkboxes, change them back to a select widget and fix the bad values in an update.
 - Have the date_text element handle its own format description instead of doing it in the Date module.
 - Empty values were getting saved.

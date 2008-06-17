@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_calc.inc,v 1.3.2.1 2008/01/30 15:56:32 karens Exp $
+// $Id: date_php4_calc.inc,v 1.3.2.2 2008/06/17 14:30:30 karens Exp $
 /**
  * Calculates and manipulates dates with no reliance on 32-bit system
  * timestamps, to work on dates before 1970 and after 2038.
@@ -570,7 +570,7 @@ function date_calc_get_month_abbrname($month, $length = 3) {
   if (empty($month)) {
     $month = date_calc_get_month();
   }
-  return substr(date_calc_get_month_fullname($month), 0, $length);
+  return drupal_substr(date_calc_get_month_fullname($month), 0, $length);
 }
 
 /**
