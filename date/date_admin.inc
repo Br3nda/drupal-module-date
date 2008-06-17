@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.13 2008/05/11 06:54:59 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.14 2008/06/17 14:10:41 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -332,11 +332,10 @@ function date_field_settings_form($field) {
     '#default_value' => $field['todate'] ? $field['todate'] : '',
     );
   $form['input']['granularity'] = array(
-    '#type' => 'checkboxes', '#title' => t('Granularity'),
+    '#type' => 'select', '#title' => t('Granularity'),
     '#default_value' => $field['granularity'] ? $field['granularity'] : array('year', 'month', 'day', 'hour', 'minute'),
     '#options' => date_granularity_names(),
     '#multiple' => TRUE,
-    '#size' => min(count($options), 6),
     '#description' => t('Set the date elements to be stored (at least a year is required).'),
     );
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.21 2008/06/04 13:28:34 karens Exp $
+// $Id: date.install,v 1.21.2.22 2008/06/17 14:10:41 karens Exp $
 
 function date_install_load() {
   // Updates happen in random order, whether or not the module is enabled,
@@ -458,6 +458,44 @@ function date_update_5205() {
       db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name = '%s'", serialize($field_settings), $field['field_name']);
     }
   }
+  return $ret;
+}
+
+/**
+ * Granularity options were not saved correctly by CCK if created using checkboxes.
+ * Checkboxes have been changed back to a select and we need to fix the values
+ * stored in the settings.
+ * 
+ * The bad values would have been stored in the form
+ *   array(
+ *     'year' => 'year'
+ *     'month' => 'month',
+ *     'day' => 0,
+ *     'hour' => 0,
+ *     'minute' => 0,
+ *     'second' => 0,
+ *   );
+ * 
+ * Good values would have been stored in the form
+ *   array(
+ *     'year' => 'year',
+ *     'month' => 'month',
+ *   );
+ *
+ * @return unknown
+ */
+function date_update_5206() {
+  date_install_load();
+  $ret = array();
+  $result = db_query("SELECT field_name, global_settings from {node_field} where type LIKE 'date_%'");
+  while ($field = db_fetch_array($result)) {
+    // Change the format to one date_popup can use.
+    $field_settings = unserialize($field['global_settings']);
+    $granularity = array_filter($field_settings['granularity']);
+    $field_settings['granularity'] = $granularity;
+    db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name = '%s'", serialize($field_settings), $field['field_name']);
+  }
+  content_clear_type_cache();
   return $ret;
 }
 
