@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.16 2008/06/17 10:40:52 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.17 2008/06/17 11:07:38 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -54,6 +54,7 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
     // Don't save empty values.
     if (empty($item['value']) && $delta !== 0) {
       unset($items[$delta]);
+      continue;
     }
     // For convenience, we process all possible columns in the element,
     // but now we need to remove columns not used by this field.
@@ -74,6 +75,8 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
       }
     }
   }
+  dsm('saving '.$field['field_name']);
+  dsm($items);
   $node->$field['field_name'] = $items;
 }
 
@@ -350,8 +353,9 @@ function date_combo_validate($element) {
   if (!empty($form_values['timezone']) &&
     $form_values[$field_name]['timezone'] != $element['#date_timezone']) {
     $timezone = $form_values[$field_name]['timezone'];
+    dsm('updating timezone to '. $timezone);
   }
-
+  
   if (empty($item[$from_field])) {
     $item[$from_field] = NULL;
     $item[$to_field]   = NULL;
