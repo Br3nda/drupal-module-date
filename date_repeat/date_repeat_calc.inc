@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.4.2.1 2008/01/30 15:56:33 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.4.2.2 2008/06/18 12:08:39 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -32,7 +32,7 @@
  * Compute dates that match the requested rule, within a specified date range.
  */
 function _date_repeat_calc($rrule, $start, $end, $exceptions) {
-  include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
 
   // TODO, is this the right timezone to use? Generally date calculations
   // work best if done in UTC, but need to verify it won't create problems.

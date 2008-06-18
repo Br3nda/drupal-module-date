@@ -1,17 +1,19 @@
 <?php
-// $Id: date.install,v 1.21.2.22 2008/06/17 14:10:41 karens Exp $
+// $Id: date.install,v 1.21.2.23 2008/06/18 12:08:39 karens Exp $
 
 function date_install_load() {
-  // Updates happen in random order, whether or not the module is enabled,
-  // so include critical code here just to be sure.
-  include_once('./'. drupal_get_path('module', 'content') .'/content.module');
-  include_once('./'. drupal_get_path('module', 'content') .'/content_admin.inc');
-  include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
-  include_once('./'. drupal_get_path('module', 'date') .'/date.module');
-  if (module_exists('views')) {
-    include_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
+  // Updates happen in random order so include critical code here just to be sure.
+  include_once(drupal_get_path('module', 'content') .'/content.module');
+  include_once(drupal_get_path('module', 'content') .'/content_admin.inc');
+  include_once(drupal_get_path('module', 'date_api') .'/date_api.module');
+  if (version_compare(PHP_VERSION, '5.2', '<') && !module_exists('date_php4')) {
+    include_once(drupal_get_path('module', 'date_php4') .'/date_php4/date_php4.module');
   }
-  include_once('./'. drupal_get_path('module', 'date_timezone') .'/date_timezone.module');
+  include_once(drupal_get_path('module', 'date_timezone') .'/date_timezone.module');
+  include_once(drupal_get_path('module', 'date') .'/date.module');
+  if (module_exists('views')) {
+    include_once(drupal_get_path('module', 'date') .'/date_views.inc');
+  }
 }
 
 /**

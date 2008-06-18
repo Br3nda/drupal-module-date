@@ -1,10 +1,12 @@
 <?php
-// $Id: date_timezone.install,v 1.1.2.9 2008/06/04 13:32:29 karens Exp $
-// Updates happen in random order, whether or not the module is enabled,
-// so include critical code here just to be sure.
+// $Id: date_timezone.install,v 1.1.2.10 2008/06/18 12:08:40 karens Exp $
 function date_timezone_load() {
-  include_once('./'. drupal_get_path('module', 'date_api') .'/date_api.module');
-  include_once('./'. drupal_get_path('module', 'date_timezone') .'/date_timezone.module');
+  // Updates happen in random order so include critical code here just to be sure.
+  include_once(drupal_get_path('module', 'date_api') .'/date_api.module');
+  if (version_compare(PHP_VERSION, '5.2', '<') && !module_exists('date_php4')) {
+    include_once(drupal_get_path('module', 'date_php4') .'/date_php4/date_php4.module');
+  }
+  include_once(drupal_get_path('module', 'date_timezone') .'/date_timezone.module');
 }
 
 function date_timezone_module_uninstall() {

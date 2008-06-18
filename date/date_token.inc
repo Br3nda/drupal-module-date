@@ -1,5 +1,5 @@
 <?php
-//$Id: date_token.inc,v 1.1.2.3 2008/04/03 10:38:05 karens Exp $
+//$Id: date_token.inc,v 1.1.2.4 2008/06/18 12:08:39 karens Exp $
 /**
  * @file
  * Token module integration.
@@ -34,7 +34,7 @@ function _date_token_list($type = 'all') {
 function _date_token_values($type, $object = NULL, $options = array()) {
   if ($type == 'field') {
     $item = $object[0];
-
+    
     $item['value'] = trim($item['value']);
     $item_type = (is_numeric($item['value']) ? DATE_UNIX : DATE_ISO);
     $timezone = !empty($item['timezone']) ? $item['timezone'] : date_default_timezone_name();
