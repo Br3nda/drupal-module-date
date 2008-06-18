@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.11 2008/06/17 18:48:16 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.12 2008/06/18 11:14:06 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -34,6 +34,7 @@ Timezone handling
 
 Other
 
+- Add a is_string() test to the date_is_valid() function.
 - Date_fuzzy_date was not handling input from date_popup or date_text in the right way.
 - #260611 Replace substr with drupal_substr where used to get month and day abbreviations.
 - The granularity options were not saved correctly by CCK when provided as checkboxes, change them back to a select widget and fix the bad values in an update.

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.26 2008/06/17 20:34:57 karens Exp $
+// $Id: date_api.module,v 1.44.2.27 2008/06/18 11:14:06 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1093,7 +1093,7 @@ function date_part_extract($date, $part, $type = DATE_DATETIME) {
 function date_is_valid($date, $type = DATE_DATETIME) {
   if (empty($date)) return FALSE;
   if ($type == DATE_OBJECT && !is_object($date)) return FALSE;
-  if (($type == DATE_ISO || $type == DATE_DATETIME) && !preg_match(DATE_REGEX_LOOSE, $date)) return FALSE;
+  if (($type == DATE_ISO || $type == DATE_DATETIME) && (!is_string($date) || !preg_match(DATE_REGEX_LOOSE, $date))) return FALSE;
   if ($type == DATE_UNIX and !is_numeric($date)) return FALSE;
   if ($type == DATE_ARRAY and !is_array($date)) return FALSE;
   
