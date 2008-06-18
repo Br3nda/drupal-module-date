@@ -1,5 +1,5 @@
 <?php
-// $Id: date_pathauto.inc,v 1.3.2.4 2008/02/15 13:11:55 karens Exp $
+// $Id: date_pathauto.inc,v 1.3.2.5 2008/06/18 13:02:34 karens Exp $
 
 /*
  * Implementation of hook_pathauto_node().
@@ -60,7 +60,9 @@ function _date_pathauto_node($op, $node = NULL) {
       node_invoke_nodeapi($node, 'view', false, false);
 
       foreach (content_fields() as $field) {
-        if ($field['type'] == 'date' || $field['type'] == 'datestamp' && is_array($field['granularity'])) {
+        if ($field['type_name'] == $node->type && 
+        ($field['type'] == 'date' || $field['type'] == 'datestamp') 
+        && is_array($field['granularity'])) {
           // this could probably be done better
           $fieldname = $field['field_name'];
           $datefield = $node->$fieldname;

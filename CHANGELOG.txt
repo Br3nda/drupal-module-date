@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.13 2008/06/18 12:43:07 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.14 2008/06/18 13:02:34 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -33,7 +33,7 @@ Timezone handling
 - Backport the improved sql handler (with better timezone handling) from the D6 version. Still need to incorporate the new code into date_views.
 
 Other
-
+- #251479 Keep pathauto from trying to compute date value for node type without a date.
 - #232959 Need to add a little extra room in the css for the collapsible fieldsets or we get scroll bars.
 - Add a is_string() test to the date_is_valid() function.
 - Date_fuzzy_date was not handling input from date_popup or date_text in the right way.
