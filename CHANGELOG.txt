@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.12 2008/06/18 11:14:06 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.13 2008/06/18 12:43:07 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -34,6 +34,7 @@ Timezone handling
 
 Other
 
+- #232959 Need to add a little extra room in the css for the collapsible fieldsets or we get scroll bars.
 - Add a is_string() test to the date_is_valid() function.
 - Date_fuzzy_date was not handling input from date_popup or date_text in the right way.
 - #260611 Replace substr with drupal_substr where used to get month and day abbreviations.
