@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.18 2008/06/17 14:30:30 karens Exp $
+// $Id: date_views.inc,v 1.26.2.19 2008/06/18 15:51:50 karens Exp $
 
 /**
  * Views field filters
@@ -105,15 +105,18 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   $table   = 'node_data_'. $field['field_name'];
   $sql_field = "$table.". $db_info['columns'][$column]['column'];
 
+  $timezone   = $db_info['columns']['timezone']['column'];
+  $table      = 'node_data_'. $field['field_name'];
+  
+  $date_handler = new date_sql_handler();
+  $date_handler->construct($field_type);
   if ($field['tz_handling'] == 'date') {
-    $timezone = "$table." . $db_info['columns']['timezone']['column'];
+    $date_handler->local_timezone_field = "$table.$timezone";
   }
   else {
     $timezone = date_default_timezone_name();
   }
-  $date_handler = new date_sql_handler();
-  $date_handler->construct($field_type, $timezone);
-      
+
   $sql = '';  
   
   // Comparing to NOW.
@@ -274,7 +277,7 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
   $timezone   = $db_info['columns']['timezone']['column'];
   $table      = 'node_data_'. $field['field_name'];
   $sql_field = "$table.$value";
-
+  
   $date_handler = new date_sql_handler();
   $date_handler->construct($field_type);
   if ($field['tz_handling'] == 'date') {

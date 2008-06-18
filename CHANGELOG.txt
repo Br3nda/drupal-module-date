@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.14 2008/06/18 13:02:34 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.15 2008/06/18 15:51:50 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -16,6 +16,7 @@ New Features
 
 Timezone handling
 
+- Backport the improved sql handler (with better timezone handling) from the D6 version.
 - #270304 Timezone was not getting saved in field and user account.
 - Omit the timezone from the process to store the current date parts in the form.
 - More work to ensure all the right timezone files are available in installations and updates.
@@ -30,9 +31,9 @@ Timezone handling
 - Update site timezone offset during cron and user offset during login to make sure that modules that rely on the timezone offset  have current information to process when the offset changes.
 - Clean up timezone handling in date repeat logic.
 - #234360 fix date_server_zone_adj() function.
-- Backport the improved sql handler (with better timezone handling) from the D6 version. Still need to incorporate the new code into date_views.
 
 Other
+
 - #251479 Keep pathauto from trying to compute date value for node type without a date.
 - #232959 Need to add a little extra room in the css for the collapsible fieldsets or we get scroll bars.
 - Add a is_string() test to the date_is_valid() function.
