@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.15 2008/06/18 15:51:50 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.16 2008/06/19 22:54:42 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -34,8 +34,8 @@ Timezone handling
 
 Other
 
+- #232959 Get rid of unwanted scrollbars in date fieldsets using trick discovered by threexk.
 - #251479 Keep pathauto from trying to compute date value for node type without a date.
-- #232959 Need to add a little extra room in the css for the collapsible fieldsets or we get scroll bars.
 - Add a is_string() test to the date_is_valid() function.
 - Date_fuzzy_date was not handling input from date_popup or date_text in the right way.
 - #260611 Replace substr with drupal_substr where used to get month and day abbreviations.
