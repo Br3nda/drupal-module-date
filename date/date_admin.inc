@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.14 2008/06/17 14:10:41 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.15 2008/06/20 01:32:30 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -222,7 +222,7 @@ function _date_field_settings($op, $field) {
 
     case 'save':
 
-      $options = array('granularity', 'timezone_db', 'tz_handling', 'todate', 'repeat');
+      $options = array('granularity', 'timezone_db', 'tz_handling', 'todate', 'repeat', 'repeat_collapsed');
       for ($i = 0; $i <= 3; $i++) {
         switch ($i) {
         case(1):
@@ -311,7 +311,7 @@ function date_field_settings_form($field) {
 
   if (module_exists('date_repeat')) {
     $options += array(99 => t('Repeating'));
-    $description .= t(' Repeating dates display options to allow the user to select when and how often the date will repeat.');
+    $description .= t(' Repeating dates will allow the user to select when and how often the date will repeat.');
   }
   $form['repeat'] = array(
     '#type' => 'value',
@@ -364,6 +364,15 @@ function date_field_settings_form($field) {
     '#type' => 'hidden',
     '#value' => 'UTC',
     );
+  if (module_exists('date_repeat')) {
+    $form['repeat_collapsed'] = array(
+      '#type' => 'radios',
+      '#default_value' => $field['repeat_collapsed'] ? $field['repeat_collapsed'] : 0,
+      '#options' => array(0 => t('Expanded'), 1 => t('Collapsed')),
+      '#title' => t('Repeat display'),
+      '#description' => t('If set to use repeating dates, should the repeat options form start out expanded or collapsed? Set to \'Yes\' to make those options less obtrusive.'),
+      );
+  }
 
   $form['#suffix'] = t('<div class="form-item"><div class="description">* The custom format, if provided, will override the selected display or input options. Define a php date format string like \'m-d-Y H:i\' (see !link for more details).</div></div>', array('!link' => l('http://php.net/date', 'http://php.net/date')));
 

@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.16 2008/06/19 22:54:42 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.17 2008/06/20 01:32:30 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -8,7 +8,9 @@ Version 5.2-dev
 =================
 
 New Features
-
+- #272551 Add option to expand or collapse repeating date options.
+- #261610 Prepare for a jQuery popup in the calendar by adding a unique id to the 'node'
+    and altering the date theme to surpress all other dates if $node->date_id is set.
 - #187599 Backport content_generate so Devel module can create data for CCK fields when creating nodes.
 - #233415 separate ical retrieval and parser so other modules like feedapi can use the parser alone.
 - Update date copy to convert either version 1 or version 2 Event nodes.

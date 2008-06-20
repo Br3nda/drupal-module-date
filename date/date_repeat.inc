@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.9.2.8 2008/04/30 11:34:40 karens Exp $
+//$Id: date_repeat.inc,v 1.9.2.9 2008/06/20 01:32:30 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -37,6 +37,7 @@ function _date_repeat_widget(&$element, &$node, $field, &$items) {
     '#prev_value' => $items[0]['value'],
     '#prev_value2' => $items[0]['value2'],
     '#prev_rrule' => $items[0]['rrule'],
+    '#repeat_collapsed' => $field['repeat_collapsed'],
     );
 }
 /**

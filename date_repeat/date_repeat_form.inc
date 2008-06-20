@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.5.2.5 2008/02/20 13:55:27 karens Exp $
+// $Id: date_repeat_form.inc,v 1.5.2.6 2008/06/20 01:32:30 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -55,7 +55,7 @@ function _date_repeat_rrule_process($element) {
   $element['#title'] = t('Repeat');
   $element['#description'] = t('Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat.');
   $element['#collapsible'] = TRUE;
-  $element['#collapsed'] = FALSE;
+  $element['#collapsed'] = !empty($element['#repeat_collapsed']) ? $element['#repeat_collapsed'] : 0;
 
   $element['INTERVAL'] = array(
     '#type' => 'select',
