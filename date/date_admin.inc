@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.16 2008/06/20 16:13:32 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.17 2008/06/20 18:43:22 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -370,7 +370,7 @@ function date_field_settings_form($field) {
       '#default_value' => !empty($field['repeat_collapsed']) ? intval($field['repeat_collapsed']) : 0,
       '#options' => array(0 => t('Expanded'), 1 => t('Collapsed')),
       '#title' => t('Repeat display'),
-      '#description' => t('If set to use repeating dates, should the repeat options form start out expanded or collapsed? Set to \'Yes\' to make those options less obtrusive.'),
+      '#description' => t('If set to use repeating dates, should the repeat options form start out expanded or collapsed? Set to \'Collapsed\' to make those options less obtrusive.'),
       );
   }
 

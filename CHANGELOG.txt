@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.19 2008/06/20 13:31:18 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.20 2008/06/20 18:43:22 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -14,9 +14,10 @@ New Features
 - #187599 Backport content_generate so Devel module can create data for CCK fields when creating nodes.
 - #233415 separate ical retrieval and parser so other modules like feedapi can use the parser alone.
 - Update date copy to convert either version 1 or version 2 Event nodes.
-
+- Trigger js timezone detection on user edit form and registration form.
 
 Timezone handling
+
 - Change method of showing multiple values with timezones on forms and show them in every instance. 
   This is to simplify the processing and avoid errors when trying to apply the timezone in the 
   first item to all other items.
@@ -27,7 +28,6 @@ Timezone handling
 - Fix critical typo in date_get_timezone() that set the timezone to the site timezone even if it isn't right.
 - Display the timezone when that format is selected, and pull the timezone out of format strings.
 - Change method of getting translations for all timezones into the install file.
-- Trigger js timezone detection on user edit form and registration form.
 - Make sure anonymous users don't see timezone message.
 - Fix critical flaw in the new timezone list handling that was creating an invalid array.
 - Prepare for proposed core timezone handling from #11077 by getting rid of deprecated timezones and adding in js timezone name detection.
@@ -38,6 +38,7 @@ Timezone handling
 
 Other
 
+- Clean up Date popup validation.
 - Fix undefined indexes in date_repeat_calc.inc.
 - #232959 Get rid of unwanted scrollbars in date fieldsets using trick discovered by threexk.
 - #251479 Keep pathauto from trying to compute date value for node type without a date.
