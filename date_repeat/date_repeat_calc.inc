@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.4.2.2 2008/06/18 12:08:39 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.4.2.3 2008/06/20 13:31:18 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -46,7 +46,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
   $end_date = date_make_date($end, $timezone);
 
   // If the rule has an UNTIL, see if that is earlier than the end date.
-  if ($rrule['UNTIL']) {
+  if (!empty($rrule['UNTIL'])) {
     $until_date = date_ical_date($rrule['UNTIL']);
     if (date_format($until_date, 'U') < date_format($end_date, 'U')) {
       $end_date = $until_date;
@@ -54,8 +54,12 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
   }
 
   // Get an integer value for the interval, if none given, '1' is implied.
-  $interval = max(1, $rrule['INTERVAL']);
-  $count = $rrule['COUNT'];
+  $interval = max(1, isset($rrule['INTERVAL']) ? $rrule['INTERVAL'] : 1);
+  $count = isset($rrule['COUNT']) ? $rrule['COUNT'] : NULL;
+  
+  if (empty($rrule['FREQ'])) {
+    $rrule['FREQ'] = 'DAILY';
+  }
 
   // Find the time period to jump forward between dates.
   switch ($rrule['FREQ']) {
@@ -83,7 +87,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
   // BYMONTHDAY will look for specific days of the month in one or more months.
   // This process is only valid when frequency is monthly or yearly.
 
-  if ($rrule['BYMONTHDAY']) {
+  if (!empty($rrule['BYMONTHDAY'])) {
     if (!in_array($rrule['FREQ'], array('MONTHLY', 'YEARLY'))) {
       return $days;
     }
@@ -148,11 +152,11 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
   // just repeating the start date. Because of imputed BYDAY above, this
   // will only test TRUE for a DAILY or less frequency (like HOURLY).
 
-  elseif (!$rrule['BYDAY']) {
+  elseif (empty($rrule['BYDAY'])) {
     // $current_day will keep track of where we are in the calculation.
     $current_day = drupal_clone($start_date);
     $finished = FALSE;
-    $months = $rrule['BYMONTH'];
+    $months = !empty($rrule['BYMONTH']) ? $rrule['BYMONTH'] : array();
     while (!$finished) {
       date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule);
       $finished = date_repeat_is_finished($current_day, $days, $count, $end_date);
@@ -176,7 +180,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
 
     // Find the right first day of the week to use, iCal rules say Monday
     // should be used if none is specified.
-    $week_start_rule = $rrule['WKST'] ? $rrule['WKST'] : 'MO';
+    $week_start_rule = !empty($rrule['WKST']) ? $rrule['WKST'] : 'MO';
     $week_start_day = $day_names[$week_start_rule];
 
     // Make sure the week days array is sorted into week order,
@@ -313,15 +317,15 @@ function date_repeat_adjust_rrule($rrule, $start_date) {
   // RFC 2445 says if no day or monthday is specified when creating repeats for
   // weeks, months, or years, impute the value from the start date.
 
-  if (!$rrule['BYDAY'] && $rrule['FREQ'] == 'WEEKLY') {
+  if (empty($rrule['BYDAY']) && $rrule['FREQ'] == 'WEEKLY') {
     $rrule['BYDAY'] = array(date_repeat_dow2day(date_format($start_date, 'w')));
   }
-  elseif (!$rrule['BYDAY'] && !$rrule['BYMONTHDAY'] && $rrule['FREQ'] == 'MONTHLY') {
+  elseif (empty($rrule['BYDAY']) && empty($rrule['BYMONTHDAY']) && $rrule['FREQ'] == 'MONTHLY') {
     $rrule['BYMONTHDAY'] = array(date_format($start_date, 'j'));
   }
-  elseif (!$rrule['BYDAY'] && !$rrule['BYMONTHDAY'] && !$rrule['BYYEARDAY'] && $rrule['FREQ'] == 'YEARLY') {
+  elseif (empty($rrule['BYDAY']) && empty($rrule['BYMONTHDAY']) && empty($rrule['BYYEARDAY']) && $rrule['FREQ'] == 'YEARLY') {
     $rrule['BYMONTHDAY'] = array(date_format($start_date, 'j'));
-    if (!$rrule['BYMONTH']) {
+    if (empty($rrule['BYMONTH'])) {
       $rrule['BYMONTH'] = array(date_format($start_date, 'n'));
     }
   }
