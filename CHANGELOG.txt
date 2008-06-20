@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.17 2008/06/20 01:32:30 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.18 2008/06/20 12:56:39 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -17,7 +17,9 @@ New Features
 
 
 Timezone handling
-
+- Change method of showing multiple values with timezones on forms and show them in every instance. 
+  This is to simplify the processing and avoid errors when trying to apply the timezone in the 
+  first item to all other items.
 - Backport the improved sql handler (with better timezone handling) from the D6 version.
 - #270304 Timezone was not getting saved in field and user account.
 - Omit the timezone from the process to store the current date parts in the form.
