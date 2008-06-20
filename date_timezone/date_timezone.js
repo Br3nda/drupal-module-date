@@ -1,3 +1,4 @@
+// $Id: date_timezone.js,v 1.1.2.3 2008/06/20 12:26:06 karens Exp $
 /**
  * Set the client's system time zone as default values of form fields.
  */
