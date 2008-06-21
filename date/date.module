@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.20 2008/06/20 11:52:53 karens Exp $
+// $Id: date.module,v 1.39.2.21 2008/06/21 14:11:08 karens Exp $
 
 /**
  * @file
@@ -81,9 +81,9 @@ function date_field_formatter($field, $item, $formatter, $node) {
   // If we're trying to display only a single date on a node, see if
   // this is the right one.
   if (isset($node->date_id)) {
-    $parts = explode(':', $node->date_id);
-    $id_field = $node->{$parts[1]};
-    $id_date = $id_field[$parts[2]][$parts[3]];
+    list($module, $nid, $field_name, $delta, $other) = explode(':', $node->date_id);
+    $id_field = $node->{$field_name};
+    $id_date = $id_field[$delta];
     if ($id_date != $item) {
       return;
     }

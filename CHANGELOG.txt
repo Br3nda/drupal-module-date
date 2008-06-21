@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.20 2008/06/20 18:43:22 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.21 2008/06/21 14:11:08 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -37,7 +37,6 @@ Timezone handling
 - #234360 fix date_server_zone_adj() function.
 
 Other
-
 - Clean up Date popup validation.
 - Fix undefined indexes in date_repeat_calc.inc.
 - #232959 Get rid of unwanted scrollbars in date fieldsets using trick discovered by threexk.
