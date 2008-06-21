@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.14 2008/06/20 18:43:23 karens Exp $
+// $Id: date_popup.module,v 1.27.2.15 2008/06/21 12:46:23 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -258,16 +258,11 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
     "maxTime: (input.id == 'tFrom' ? getTime($('#tTo').val()) : null)} ";
   }
 
-  drupal_add_js('// Global Killswitch
-    if (Drupal.jsEnabled) {
-      $(document).ready(function() {$(\'.jquery-timeentry-'. $element['#id'] .'\').timeEntry({' .$settings. '});
-      })}', 'inline');
-
-  // Create a unique class for each element so we can use custom settings.
-  $sub_element = array(
+  // Create a unique class for each set of custom settings.
+  $class = date_popup_js_settings_class('jquery-timeentry', 'timeEntry', $settings);  $sub_element = array(
     '#type' => 'textfield',
     '#default_value' => is_object($date) ? date_format($date, $time_format) : '',
-    '#attributes' => array('class' => 'jquery-timeentry-'. $element['#id']),
+    '#attributes' => array('class' => $class),
     '#size' => 10,
     '#maxlength' => 10,
     );
