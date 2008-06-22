@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.20 2008/06/19 21:13:39 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.21 2008/06/22 12:34:48 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -422,7 +422,6 @@ function date_select_input_value($element) {
 function date_text_validate($element) {
   $form_values = $element['#value'];
   $value = date_text_input_value($element);
-  $sub_error_field = implode('][', $element['#parents']) .'][date';
   $error_field = implode('][', $element['#parents']);
     
   if (!$element['#required'] && empty($value)) {
@@ -443,9 +442,17 @@ function date_text_input_value($element) {
   $form_values = $element['#value'];
   $input = $form_values['date'];
   if (!$element['#required'] && trim($input) == '') return NULL;
-
+  
   $value = date_convert_from_custom($input, $element['#date_format']);
-
+  
+  // Check for special case when using partial dates, like year only.
+  // We have to create a valid date out of the results to test validity.
+  $granularity = date_format_order($element['#date_format']);
+  $non_granularity = date_nongranularity($granularity);
+  if (array_intersect($non_granularity, array('year', 'month', 'day'))) {
+    $value = date_fuzzy_datetime(str_replace(' ', 'T', $value));
+  }
+  
   // If it creates a valid date, use it.
   if (date_is_valid($value)) {
     return $value;

@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.22 2008/06/22 11:49:43 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.23 2008/06/22 12:34:48 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -38,6 +38,7 @@ Timezone handling
 
 Other
 
+- #270358 Fix handling of year-only or month-only text fields to save the right values.
 - Remove unneeded hook_form_alter() used to fix radio values for granularity.
 - Make sure granularity is in correct format before setting value in field settings form.
 - Clean up Date popup validation.
