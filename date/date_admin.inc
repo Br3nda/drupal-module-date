@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.17 2008/06/20 18:43:22 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.18 2008/06/22 11:49:43 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -331,9 +331,17 @@ function date_field_settings_form($field) {
     '#description' => t("Display a matching second date field as a 'To date'. If marked 'Optional' field will be presented but not required. If marked 'Required' the 'To date' will be required if the 'From date' is required or filled in."),
     '#default_value' => $field['todate'] ? $field['todate'] : '',
     );
+    
+  // Make sure granularity is in the right format and has no empty values.
+  if (!empty($field['granularity']) && is_array($field['granularity'])) {
+    $granularity = array_filter($field['granularity']);  
+  }
+  else {
+    $granularity = array('year', 'month', 'day', 'hour', 'minute');
+  }
   $form['input']['granularity'] = array(
     '#type' => 'select', '#title' => t('Granularity'),
-    '#default_value' => $field['granularity'] ? $field['granularity'] : array('year', 'month', 'day', 'hour', 'minute'),
+    '#default_value' => $granularity,
     '#options' => date_granularity_names(),
     '#multiple' => TRUE,
     '#description' => t('Set the date elements to be stored (at least a year is required).'),
@@ -366,14 +374,13 @@ function date_field_settings_form($field) {
     );
   if (module_exists('date_repeat')) {
     $form['repeat_collapsed'] = array(
-      '#type' => 'radios',
+      '#type' => 'select',
       '#default_value' => !empty($field['repeat_collapsed']) ? intval($field['repeat_collapsed']) : 0,
       '#options' => array(0 => t('Expanded'), 1 => t('Collapsed')),
       '#title' => t('Repeat display'),
       '#description' => t('If set to use repeating dates, should the repeat options form start out expanded or collapsed? Set to \'Collapsed\' to make those options less obtrusive.'),
       );
   }
-
   $form['#suffix'] = t('<div class="form-item"><div class="description">* The custom format, if provided, will override the selected display or input options. Define a php date format string like \'m-d-Y H:i\' (see !link for more details).</div></div>', array('!link' => l('http://php.net/date', 'http://php.net/date')));
 
   return $form;

@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.25 2008/06/20 18:43:22 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.26 2008/06/22 11:49:43 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -341,7 +341,6 @@ function date_combo_validate($element) {
   $tz_field = 'timezone';
   $offset_field = 'offset';
   $offset_field2 = 'offset2';
-  
   if (empty($item[$from_field])) {
     $item[$from_field] = NULL;
     $item[$to_field]   = NULL;

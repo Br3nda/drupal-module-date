@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.21 2008/06/21 14:11:08 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.22 2008/06/22 11:49:43 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -37,6 +37,9 @@ Timezone handling
 - #234360 fix date_server_zone_adj() function.
 
 Other
+
+- Remove unneeded hook_form_alter() used to fix radio values for granularity.
+- Make sure granularity is in correct format before setting value in field settings form.
 - Clean up Date popup validation.
 - Fix undefined indexes in date_repeat_calc.inc.
 - #232959 Get rid of unwanted scrollbars in date fieldsets using trick discovered by threexk.
