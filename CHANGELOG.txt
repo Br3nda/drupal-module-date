@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.23 2008/06/22 12:34:48 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.24 2008/06/22 12:52:54 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -38,6 +38,7 @@ Timezone handling
 
 Other
 
+- The jQuery calendar requires year, month, and day or it won't work, add validation for that in the settings.
 - #270358 Fix handling of year-only or month-only text fields to save the right values.
 - Remove unneeded hook_form_alter() used to fix radio values for granularity.
 - Make sure granularity is in correct format before setting value in field settings form.

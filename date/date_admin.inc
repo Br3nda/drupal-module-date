@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.18 2008/06/22 11:49:43 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.19 2008/06/22 12:52:55 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -34,11 +34,18 @@ function _date_widget_settings($op, &$field) {
       if ($field['widget_type'] == 'date_select' && !preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $field['year_range'])) {
         form_set_error('year_range', t('Years back and forward must be in the format -9:+9.'));
       }
-      // Only a limited set of formats is available for the Date Popup module
       if ($field['widget_type'] == 'date_popup') {
+        // Only a limited set of formats is available for the Date Popup module
         if (!empty($field['input_format_custom']) || !in_array($field['input_format'], date_popup_formats())) {
           form_set_value(array('#parents' => array('input_format_custom')), NULL);
           form_set_value(array('#parents' => array('input_format')), DATE_FORMAT_DATETIME);
+        }
+        // The jQuery calendar requires year, month, and day or it won't work.
+        $date_parts = array('year', 'month', 'day');
+        $intersection = array_intersect($date_parts, $field['granularity']);
+        if ($intersection != $date_parts) {
+          form_set_error('granularity', t('The Date Popup widget not work unless granularity includes year, month, and day.'));
+          
         }
       }
       if (isset($field['advanced']['label_position'])) {
