@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.27 2008/06/18 11:14:06 karens Exp $
+// $Id: date_api.module,v 1.44.2.28 2008/06/23 20:34:55 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1217,39 +1217,54 @@ function date_limit_format($format, $granularity) {
     $regex[] = '( -)';
   }
   if (!date_has_time($granularity)) {
-      $regex[] = '(a|A)';
+      $regex[] = '((?<!\\\\)[a|A])';
   }
   // Create regular expressions to remove selected values from string.
+  // Use {?<!\\\\) to keep escaped letters from being removed.
   foreach (date_nongranularity($granularity) as $element) {
     switch ($element) {
       case 'year':
-        $regex[] = '([\-/\.]?[Yy][\-/\.,]?)';
+        $regex[] = '((?<!\\\\)[Yy])';
         break;
       case 'day':
-        $regex[] = '([\-/\.]?[lDdj][\-/\.,]?)';
+        $regex[] = '((?<!\\\\)[lDdj])';
         break;
       case 'month':
-        $regex[] = '([\-/\.]?[FMmn][\-/\.,]?)';
+        $regex[] = '((?<!\\\\)[FMmn])';
         break;
       case 'hour':
-        $regex[] = '([HhGg][:]?)';
+        $regex[] = '((?<!\\\\)[HhGg])';
         break;
       case 'minute':
-        $regex[] = '([:]?[i])';
+        $regex[] = '((?<!\\\\)[i])';
         break;
       case 'second':
-        $regex[] = '([:]?[s])';
+        $regex[] = '((?<!\\\\)[s])';
         break;
       case 'timezone':
-        $regex[] = '([OZPe])';
+        $regex[] = '((?<!\\\\)[OZPe])';
         break;
     
     }
   }
   // Remove selected values from string.
-  // Don't leave any trailing punctuation behind.
   $format = trim(preg_replace($regex, array(), $format));
-  return preg_replace('([\-/\.,]$)', '', $format);
+  
+  // TODO There is probably a simpler method to accomplish the following:
+  // Once the values are removed, we have orphaned and doubled punctuation.
+  // Remove remaining doubled punctuation from string.
+  $punc   = array('(::)', '(,,)', '(\-\-)', '(\/\/)', '(\.\.)');
+  $punc2  = array(':', ',', '-', '/', '.');
+  $format = preg_replace($punc, $punc2, $format);
+  // Remove orpaned punctuation with leading space from string.
+  $format = preg_replace('(\s[\-/\.,:])', '', $format);
+  // Remove orpaned punctuation with trailing space from string.
+  $format = preg_replace('([\-/\.,:]\s)', '', $format);
+  // Clean up orphaned am/pm format.
+  $format = preg_replace('([\-/\.,:]([a|A]))', '${1}', $format);
+  // Remove orpaned punctuation at the end of the string.
+  $format = preg_replace('([\-/\.,:]$)', '', $format);
+  return $format;
 }
 
 /**
