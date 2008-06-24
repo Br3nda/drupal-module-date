@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.15 2008/06/21 12:46:23 karens Exp $
+// $Id: date_popup.module,v 1.27.2.16 2008/06/24 13:59:04 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -277,11 +277,16 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
 function date_popup_validate($element) {
   include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
   date_popup_load();
+  
   if ($element['#delta'] == 0) {
     $valid_value = date_popup_input_value($element);
   }
   else {
     $valid_value = date_popup_input_value($element, TRUE);
+  }
+  if (empty($valid_value) && !$element['#required']) {
+    form_set_value($element, NULL);
+    return;
   }
   if (!empty($valid_value)) {
     form_set_value($element, $valid_value);
@@ -337,7 +342,7 @@ function date_popup_input_value($element, $auto_complete = FALSE) {
   elseif (!$auto_complete) {
     $value = date_convert_from_custom($input, $format);
   }
-  else {
+  elseif (!empty($input)) {
     $value = date_convert(date_fuzzy_datetime($input), DATE_ISO, DATE_DATETIME);
   }
   if (date_is_valid($value, DATE_DATETIME)) {
