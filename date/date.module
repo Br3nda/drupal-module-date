@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.22 2008/06/22 11:49:43 karens Exp $
+// $Id: date.module,v 1.39.2.23 2008/06/24 12:54:49 karens Exp $
 
 /**
  * @file
@@ -88,7 +88,6 @@ function date_field_formatter($field, $item, $formatter, $node) {
       return;
     }
   }
-
   // Call the right theme for this formatter.
   $dates = date_formatter_process($field, $item, $node, $formatter);
   if ($formatter != 'format_interval') {

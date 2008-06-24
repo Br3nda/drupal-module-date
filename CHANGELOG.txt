@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.25 2008/06/23 20:34:55 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.26 2008/06/24 12:54:49 karens Exp $
 Date Module 5.2
 =================
 TODO
@@ -38,6 +38,7 @@ Timezone handling
 
 Other
 
+- #273727 Small fixes to field settings validation.
 - #248338 and #254819 clean up date_limit_format() to better handle punctuation and escaped letters.
 - The jQuery calendar requires year, month, and day or it won't work, add validation for that in the settings.
 - #270358 Fix handling of year-only or month-only text fields to save the right values.

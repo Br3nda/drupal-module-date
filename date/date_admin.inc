@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.20 2008/06/24 11:55:47 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.21 2008/06/24 12:54:49 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -220,7 +220,7 @@ function _date_field_settings($op, $field) {
 
     case 'validate':
       if (!in_array('year', $field['granularity'])) {
-        form_set_error('granularity', t('Input granularity must include a year.'));
+        form_set_error('granularity', t('Granularity must include a year.'));
       }
       if ($field['tz_handling'] != 'none' && !in_array('hour', array_filter($field['granularity']))) {
         form_set_error('tz_handling', t('Dates without hours granularity must not use any timezone handling.'));
