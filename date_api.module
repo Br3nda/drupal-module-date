@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.29 2008/06/24 11:46:10 karens Exp $
+// $Id: date_api.module,v 1.44.2.30 2008/06/26 21:46:55 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -46,6 +46,16 @@ function date_api_menu($may_cache) {
   $items = array();
   if (!$may_cache) {
     drupal_add_css(drupal_get_path('module', 'date_api')  .'/date.css');
+    // Check that required modules are available and silently enable them if needed.
+    // Make sure the Date PHP4 module is always enabled when needed.
+    if (!function_exists('date_create')) {
+      module_enable(array('date_php4'));
+    }
+    // The timezone module was originally going to be optional
+    // but too many things break without it.
+    if (!module_exists('date_timezone')) {
+      module_enable(array('date_timezone'));
+    }
   }
 }
 
