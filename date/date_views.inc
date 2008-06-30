@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.19 2008/06/18 15:51:50 karens Exp $
+// $Id: date_views.inc,v 1.26.2.20 2008/06/30 17:03:27 karens Exp $
 
 /**
  * Views field filters
@@ -109,7 +109,7 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   $table      = 'node_data_'. $field['field_name'];
   
   $date_handler = new date_sql_handler();
-  $date_handler->construct($field_type);
+  $date_handler->construct($field['type']);
   if ($field['tz_handling'] == 'date') {
     $date_handler->local_timezone_field = "$table.$timezone";
   }
@@ -279,7 +279,7 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
   $sql_field = "$table.$value";
   
   $date_handler = new date_sql_handler();
-  $date_handler->construct($field_type);
+  $date_handler->construct($field['type']);
   if ($field['tz_handling'] == 'date') {
     $date_handler->local_timezone_field = "$table.$timezone";
   }
@@ -604,7 +604,7 @@ function _date_views_query_alter(&$query, &$view) {
       $arg  = date_views_browser_period_arg($arg, $view->argument[0]['options']);
       if ($range  = date_views_date_range($arg)) {
         $date_handler = new date_sql_handler();
-        $date_handler->construct($field_type);
+        $date_handler->construct($field['type']);
         $date_handler->offset_field = "$table.". $db_info['columns']['offset']['column'];
         $query->ensure_table($table);
         $query->add_field('nid', 'node');
