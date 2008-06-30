@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.20 2008/06/30 17:03:27 karens Exp $
+// $Id: date_views.inc,v 1.26.2.21 2008/06/30 21:25:58 karens Exp $
 
 /**
  * Views field filters
@@ -97,6 +97,9 @@ function _date_views_timestamp_filter_handler($op, $filter, $filterinfo, &$query
   return _date_views_filter_handler($op, $filter, $filterinfo, $query, DATE_UNIX);
  }
 function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = DATE_ISO) {
+  if (empty($filter['value']) && empty($filter['options'])) {
+    return;
+  }
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
   $field   = $filterinfo['extra']['field'];
@@ -118,29 +121,35 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   }
 
   $sql = '';  
-  
+  $adjustment = trim(str_replace('now', '', $filter['options']));
+  $adj_seconds = strtotime($adjustment, 0);
+          
   // Comparing to NOW.
-  if (!empty($filter['options'])) {
-    if (trim($filter['options']) == 'now') {
-      $adjustment = 0;
-    }
-    else {
-      $adjustment = strtotime(trim(str_replace('now', '', $filter['options'])), 0);
-    }
-        
+  if (empty($filter['value']) && !empty($filter['options'])) {
     switch ($filterinfo['type']) {
       case 'YEAR':
       case 'MONTH':
       case 'DAY':
+        $formats = array('YEAR' => 'Y', 'MONTH' => 'n', 'DAY' => 'j');
+        $date = date_now();
+        date_time_set($date, 0, 0, 0);
+        if (!empty($adjustment)){
+          date_modify($date, $adjustment);
+        }
+        $value = date_format($date, $formats[$filterinfo['type']]);
         $sql = $date_handler->sql_where_extract($filterinfo['type'], $sql_field, $filter['operator'], $value, FALSE);
         break;
       default:
-        $sql = $date_handler->sql_where_date('DATE', $sql_field, $filter['operator'], 'NOW', $adjustment);
+        $date = date_now();
+        $start = date_format($date, 'U');
+        date_time_set($date, 0, 0, 0);
+        $adj_seconds -= $start - date_format($date, 'U');
+        $sql = $date_handler->sql_where_date('DATE', $sql_field, $filter['operator'], 'NOW', $adj_seconds);
         break;
     }
   }
   // Comparing to an input date.
-  else {
+  elseif ($filterinfo['type'] == 'DATE') {
     // If the date_popup or date_textfield elements are used as a exposed filters, their
     // #validation functions will never get called, so validate and
     // reconstruct them here.
@@ -160,25 +169,22 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
       $input = date_fuzzy_datetime($input);
       if (date_is_valid($input, DATE_DATETIME)) {
         $date = date_make_date($input, date_default_timezone_name(), DATE_DATETIME);
+        if (!empty($adjustment)) {
+          date_modify($date, $adjustment);
+        }
         $formats = array('YEAR' => 'Y', 'MONTH' => 'n', 'DAY' => 'j', 'DATE' => DATE_FORMAT_DATETIME);
         $value = date_format_date($date, 'custom', $formats[$filterinfo['type']]);
-        switch ($filterinfo['type']) {
-          case 'YEAR':
-          case 'MONTH':
-          case 'DAY':
-            $sql = $date_handler->sql_where_extract($filterinfo['type'], $sql_field, $filter['operator'], $value);
-            break;
-          default:
-            $sql = $date_handler->sql_where_date('DATE', $sql_field, $filter['operator'], $value);
-            break;
-        }
-        $filter['value']['date'] = date_format_date($date, 'custom', 'Y-m-d');
-        $filter['value']['time'] = date_format_date($date, 'custom', 'H:i');
+        $sql = $date_handler->sql_where_date('DATE', $sql_field, $filter['operator'], $value);
       }
       else {
         drupal_set_message(t('That is not a valid date.'));
       }
     }
+  }
+  // Comparing to a YEAR, MONTH, or DAY.
+  else {
+    $value = $filter['value'];
+    $sql = $date_handler->sql_where_extract($filterinfo['type'], $sql_field, $filter['operator'], $value);
   }
   if (!empty($sql)) {
     $query->ensure_table($table);

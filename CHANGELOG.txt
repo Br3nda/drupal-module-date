@@ -1,8 +1,6 @@
-//$Id: CHANGELOG.txt,v 1.1.6.32 2008/06/30 17:12:35 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.33 2008/06/30 21:25:58 karens Exp $
 Date Module 5.2
 =================
-TODO
- - Get repeating dates working again.
 
 Version 5.2-dev
 =================
@@ -10,8 +8,7 @@ Version 5.2-dev
 New Features
 
 - #272551 Add option to expand or collapse repeating date options.
-- #261610 Prepare for a jQuery popup in the calendar by adding a unique id to the 'node'
-    and altering the date theme to surpress all other dates if $node->date_id is set.
+- #261610 Add option for the date theme to display only a single date if $node->date_id is set.
 - #187599 Backport content_generate so Devel module can create data for CCK fields when creating nodes.
 - #233415 separate ical retrieval and parser so other modules like feedapi can use the parser alone.
 - Update date copy to convert either version 1 or version 2 Event nodes.
@@ -43,6 +40,8 @@ Timezone handling
 
 Other
 
+- Rework Views filters, especially the 'now' and '+1' filters.
+- #251994 Add code to adjust NOW() by a number of seconds to allow NOW() to be the beginning of the day.
 - Was using wrong value for field type in Views and losing conversion to the right date value.
 - Remove as many dependencies as possible from install files and auto-enable necessary modules.
 - Date Popup was not handling empty non-required values correctly and they were defaulting to current date.

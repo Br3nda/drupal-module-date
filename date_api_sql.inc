@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.13 2008/06/18 15:51:50 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.14 2008/06/30 21:25:58 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -130,7 +130,7 @@ class date_sql_handler {
     if (strtoupper($field) == 'NOW') {
       // NOW() will be in UTC since that is what we set the db timezone to.
       $this->local_timezone = 'UTC';
-      return 'NOW()';
+      return $this->sql_offset('NOW()', $offset);
     }
     switch ($this->db_type) {
       case 'mysql':
