@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.9.2.9 2008/06/20 01:32:30 karens Exp $
+//$Id: date_repeat.inc,v 1.9.2.10 2008/06/30 17:04:52 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -91,7 +91,7 @@ function _date_repeat_widget_validate($element) {
     // By the time we get here, the start and end dates have been 
     // adjusted back to UTC, but we want localtime dates to do
     // things like '+1 Tuesday', so adjust back to localtime.
-    $timezone = date_get_timezone($field['tz_handling'], $item[0]['timezone']);
+    $timezone = date_get_timezone($field['tz_handling'], $item['timezone']);
     if (date_timezone_convert($field, $item)) {
       $start = date_make_date($item['value'], 'UTC', $field['type']);
       date_timezone_set($start, timezone_open($timezone));
