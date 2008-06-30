@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.11 2008/06/06 13:47:10 karens Exp $
+//$Id: date.theme,v 1.2.2.12 2008/06/30 21:58:25 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -46,12 +46,12 @@ function theme_date_display_combination($field, $item, $dates, $node = NULL) {
     $date2 = $date1;
   }
   
-  // Pull the timezone out of the formatted result and tack it
+  // Pull the timezone, if any, out of the formatted result and tack it
   // back on at the end, if it is in the current formatted date.
-  $timezone = '';
-  if (!empty($element['#item']['timezone']) && strpos($date1, $element['#item']['timezone'])) {
-    $timezone = ' '. $element['#item']['timezone'];
-  }
+  $timezone = $dates['value']['formatted'];
+  $timezone = str_replace($dates['value']['formatted_date'], '', $timezone);
+  $timezone = str_replace($dates['value']['formatted_time'], '', $timezone);
+  
   $date1 = str_replace($timezone, '', $date1);
   $date2 = str_replace($timezone, '', $date2);
       

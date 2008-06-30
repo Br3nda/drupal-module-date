@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.23 2008/06/24 12:54:49 karens Exp $
+// $Id: date.module,v 1.39.2.24 2008/06/30 21:58:25 karens Exp $
 
 /**
  * @file
@@ -391,9 +391,8 @@ if (!function_exists('date_token_list')) {
 function date_formatter_format($formatter, $field_name) {
   $fields = content_fields();
   $field = $fields[$field_name];
-  if ($field['tz_handling'] == 'date') {
-    $field['granularity'][] = 'timezone';
-  }  
+  // Any field might want to display the timezone name.
+  $field['granularity'][] = 'timezone';
   switch ($formatter) {
     case 'ical':
       return 'Ymd\THis';

@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.33 2008/06/30 21:25:58 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.34 2008/06/30 21:58:25 karens Exp $
 Date Module 5.2
 =================
 
@@ -40,6 +40,7 @@ Timezone handling
 
 Other
 
+- #276544 Rework system for handling timezone in date theme.
 - Rework Views filters, especially the 'now' and '+1' filters.
 - #251994 Add code to adjust NOW() by a number of seconds to allow NOW() to be the beginning of the day.
 - Was using wrong value for field type in Views and losing conversion to the right date value.
