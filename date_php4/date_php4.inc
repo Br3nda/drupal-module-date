@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.8 2008/06/15 11:01:05 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.9 2008/06/30 17:12:36 karens Exp $
 
 /**
  * @file
@@ -259,7 +259,7 @@ if (!function_exists('date_timezone_set')) {
  *
  */
   function date_timezone_set(&$date, $timezone) {
-    $offset_old = timezone_offset_get($date->timezone, $date);
+    $offset_old = date_offset_get($date);
     $new_date = date_create($date->value, $timezone);
     $offset_new = date_offset_get($new_date);
     $date->timestamp = ($date->timestamp - $offset_old + $offset_new);
@@ -313,11 +313,8 @@ if (!function_exists('timezone_offset_get')) {
  *    the offset in seconds for the supplied date object.
  */
   function timezone_offset_get($timezone, $date) {
-    if (empty($date->timezone)) {
-      return '';
-    }
     $cached = cache_get('date_timezone_offsets:'. $date->timezone);
-    $offsets = unserialize($cached->data);
+    $offsets = isset($cached->data) ? unserialize($cached->data) : array();
     if (empty($offsets)) {
       $offsets = array('dst' => 0);
       $zones = timezone_abbreviations_list();
@@ -336,8 +333,7 @@ if (!function_exists('timezone_offset_get')) {
     }
     $timestamp = $date->timestamp;
     if ($offsets['dst'] == 1) {
-      include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
-      if (date_is_dst($timezone_map[$timezone]['dst_region'], $timestamp)) {
+      if (date_is_dst($timestamp, $timezone)) {
         return $offsets['dst_offset'];
       }
     }
@@ -359,34 +355,7 @@ if (!function_exists('date_offset_get')) {
  *    the offset in seconds for the supplied date object.
  */
   function date_offset_get($date) {
-    if (empty($date->timezone)) {
-      return '';
-    }
-    $cached = cache_get('date_timezone_offsets:'. $date->timezone);
-    $offsets = unserialize($cached->data);
-    if (empty($offsets)) {
-      $offsets = array('dst' => 0);
-      $zones = timezone_abbreviations_list();
-      foreach ($zones as $key => $abbr) {
-        foreach ($abbr as $zone) {
-          if ($zone['timezone_id'] == $date->timezone && $zone['dst'] == 1 && !isset($offsets['dst_offset'])) {
-            $offsets['dst_offset'] = $zone['offset'];
-            $offsets['dst'] = 1;
-          }
-          elseif ($zone['timezone_id'] == $date->timezone && $zone['dst'] != 1 && !isset($offsets['offset'])) {
-            $offsets['offset'] = $zone['offset'];
-          }
-        }
-      }
-      cache_set('date_timezone_offsets:'. $timezone, 'cache', serialize($offsets));
-    }
-    if ($offsets['dst'] == 1) {
-      include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
-      if (date_is_dst($timezone_map[$date->timezone]['dst_region'], $date->timestamp)) {
-        return $offsets['dst_offset'];
-      }
-    }
-    return $offsets['offset'];
+    return timezone_offset_get(timezone_open($date->timezone), $date);
   }
 }
 
@@ -599,19 +568,24 @@ function date_datetime2timestamp($datetime) {
 
 /**
  * Check if time is in Daylight Savings Time
- *
- * @param $region
- *   A dst region code, as stored in the $timezone_map array
+ *   Uses dst region code, as stored in the $timezone_map array
  *   from date_php4_tz_map.inc
+ *
+ * @param $timezone name
  * @param $timestamp
- *   A GMT timestamp
  * @return
  *   0 or 1
  */
-function date_is_dst($region, $timestamp) {
+function date_is_dst($timestamp, $timezone = NULL) {
   if ($timestamp < 86400) {
-    //return FALSE;
+    return FALSE;
   }
+  if (empty($timezone)) {
+    $timezone = date_default_timezone_name();
+  }
+  include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
+  $region = $timezone_map[$timezone]['dst_region'];
+      
   $year = date_gmdate('Y', $timestamp);
   // Information on Daylight Saving time was obtained from http://webexhibits.org/daylightsaving/g.html
   switch ($region) {
@@ -812,40 +786,20 @@ function date_is_dst($region, $timestamp) {
  *
  * @param $timestamp
  *   A unix timestamp.
- * @param $is_gmt
- *   Whether the timestamp is a GMT date that should not have
- *   a timezone conversion applied.
- * @param $test
- *   Whether the date functions are being tested, used to force the
- *   low level function even for current dates.
+ * @param $timezone name
+ *   Use 'UTC' to avoid timezone conversion.
  */
-function date_getdate($timestamp = false, $is_gmt = false, $test = true) {
-  if ($timestamp === false) return getdate();
-  // Check if test or number in 32-bit signed range
-  // Below PHP 5.2 in windows, must be positive integer
-  if (!$test && abs($timestamp) <= 0x7FFFFFFF) {
-    if ($timestamp >= 0) {
-      $array = (array) @getdate($timestamp);
-      // Make the array match our custom granularity array.
-      $array['month_name'] = $array['month'];
-      $array['month'] = $array['mon'];
-      $array['day'] = $array['mday'];
-      $array['hour'] = $array['hours'];
-      $array['minute'] = $array['minutes'];
-      $array['second'] = $array['seconds'];
-      unset($array['mon'], $array['mday'], $array['hours'], $array['minutes'], $array['seconds']);
-    }
-  }
+function date_getdate($timestamp = false, $timezone = false) {
   include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
-  return _date_getdate($timestamp, $is_gmt);
+  return _date_getdate($timestamp, $timezone);
 }
 
 /**
  * Like date_getdate with no GMT conversion.
  */
-function date_gmgetdate($timestamp = false, $test = true) {
+function date_gmgetdate($timestamp = false) {
   if (!$timestamp) return array();
-  $array    = date_getdate($timestamp, TRUE, $test);
+  $array    = date_getdate($timestamp, 'UTC');
   $array[0] = $timestamp;
   return $array;
 }
@@ -857,88 +811,97 @@ function date_gmgetdate($timestamp = false, $test = true) {
  *   the format to be used for the returned timestamp
  * @param $timestamp
  *   a unix timestamp
- * @param $is_gmt
- *   whether the timestamp is a GMT date that should not have
- *   a timezone conversion applied.
- * @param $test
- *   whether the date functions are being tested, used to force the
- *   low level function even for current dates.
-*/
-function date_date($format, $timestamp = false, $is_gmt = false, $test = true) {
+ * @param $timezone name
+ *   Use 'UTC' to avoid timezone conversion.
+ */
+function date_date($format, $timestamp = false, $timezone = false) {
   if ($timestamp === false) return ($is_gmt)? @gmdate($format): @date($format);
-  if (!$test && abs($timestamp) <= 0x7FFFFFFF) {
+  if ($timezone === FALSE) {
+    $timezone = date_default_timezone_name();
+  }
+  $is_gmt = $timezone == 'UTC' ? TRUE : FALSE;
+  if (abs($timestamp) <= 0x7FFFFFFF) {
     // Below PHP 5.2 in windows, must be positive integer
     if ($timestamp >= 0) {
       return ($is_gmt)? @gmdate($format, $timestamp): @date($format, $timestamp);
     }
   }
   include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
-  return _date_date($format, $timestamp, $is_gmt);
+  return _date_date($format, $timestamp, $timezone);
 }
 
 /**
  * Like date_date with no GMT conversion.
  */
 function date_gmdate($format, $timestamp = false, $test = false) {
-  return date_date($format, $timestamp, true, $test);
+  return date_date($format, $timestamp, 'UTC', $test);
 }
 
 /**
- *  Return a timestamp given a local time. Originally by jackbbs.
+ * Return a timestamp given a local time.
+ * 
+ * @param $timezone name
+ *   Use 'UTC' to avoid timezone conversion.
  *
- * @param $is_gmt
- *   whether the timestamp is a GMT date that should not have
- *   a timezone conversion applied.
- * @param $test
- *   whether the date functions are being tested, used to force the
- *   low level function even for current dates.
-*/
-function date_mktime($hr, $min, $sec, $mon = false, $day = false,
-  $year = false, $is_gmt = false, $test = true) {
+ * Force anything that will require timezone conversion to use
+ * lower level functions to make sure we adjust to the right timezone
+ * (native 'date' functions use the server timezone).
+ */
+function date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false, $timezone = false) {
+  if ($timezone === FALSE) {
+    $timezone = date_default_timezone_name();
+  }
+  $is_gmt = $timezone == 'UTC' ? TRUE : FALSE;
   $hr = intval($hr);
   $min = intval($min);
   $sec = intval($sec);
-  if (!$test) {
-    if ($mon === false) {
-      return $is_gmt? @gmmktime($hr, $min, $sec): @mktime($hr, $min, $sec);
-    }
-    $mon = intval($mon) > 0 ? intval($mon) : 1;
-    $day = intval($day) > 0 ? intval($day) : 1;
-    $year = intval($year);
-    // Below PHP 5.2 for windows, we don't check 1970 because with timezone
-    // differences, 1 Jan 1970 could generate negative timestamp
-    if (variable_get('date_php_min_year', 1970) < $year && $year < 2038) {
-      return $is_gmt ?
-        @gmmktime($hr, $min, $sec, $mon, $day, $year, 0):
-        @mktime($hr, $min, $sec, $mon, $day, $year, 0);
-    }
+  if ($mon === false && $is_gmt) {
+    return @gmmktime($hr, $min, $sec);
   }
-  $mon = intval($mon) > 0 ? intval($mon) : 1;
-  $day = intval($day) > 0 ? intval($day) : 1;
-  $year = intval($year);
+  $mon = intval($mon) > 0 ? intval($mon) : date('n');
+  $day = intval($day) > 0 ? intval($day) : date('j');
+  $year = intval($year) > 0 ? intval($year) : date('Y');
+  
+  // Don't use native handling for any values that could create negative
+  // timestamp, Windows does not support them at all in PHP 4, and
+  // the adodb date library notes that since RedHat 7.3, negative 
+  // timestamps are not supported in glibc either.
+  // Step in one year on either side of allowable 1970-2038 window
+  // to be sure timezone adjustments and month and day additions
+  // won't push our date outside this window.
+  if (1971 < $year && $year < 2037 && $is_gmt) {
+    return @gmmktime($hr, $min, $sec, $mon, $day, $year, 0);
+  }
+  
   include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
-  return _date_mktime($hr, $min, $sec, $mon, $day, $year, $is_gmt);
+  return _date_mktime($hr, $min, $sec, $mon, $day, $year, $timezone);
 }
 
 /**
  * Like date_mktime with no GMT conversion.
 */
-function date_gmmktime($hr, $min, $sec, $mon = false, $day = false,
-  $year = false, $test = true) {
-  return date_mktime($hr, $min, $sec, $mon, $day, $year, true, $test);
+function date_gmmktime($hr, $min, $sec, $mon = false, $day = false, $year = false) {
+  return date_mktime($hr, $min, $sec, $mon, $day, $year, 'UTC');
 }
 
 /**
  * Get local time zone offset from GMT.
- *
+ * 
  * @return timezone offset in seconds
  */
-function date_get_gmt_diff() {
-static $TZ;
-	if (isset($TZ)) return $TZ;
-	$TZ = mktime(0, 0, 0, 1, 2, 1970, 0) - gmmktime(0, 0, 0, 1, 2, 1970, 0);
-	return $TZ;
+function date_get_gmt_diff_ts($timestamp, $timezone = NULL) {
+  if ($timezone == 'UTC') {
+    return 0;
+  }
+  elseif (empty($timezone)) {
+    $timezone = date_default_timezone_name();
+  }
+  $date = new StdClass();
+  $date->timestamp = $timestamp;
+  $date->timezone = $timezone;
+  return date_offset_get($date);
 }
+
 
 /**
  * Fix 2-digit years. Works for any century. Assumes that if 2-digit is
