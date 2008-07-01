@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.12 2008/06/30 21:58:25 karens Exp $
+//$Id: date.theme,v 1.2.2.13 2008/07/01 22:01:13 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -51,10 +51,11 @@ function theme_date_display_combination($field, $item, $dates, $node = NULL) {
   $timezone = $dates['value']['formatted'];
   $timezone = str_replace($dates['value']['formatted_date'], '', $timezone);
   $timezone = str_replace($dates['value']['formatted_time'], '', $timezone);
+  $timezone = trim($timezone);
   
-  $date1 = str_replace($timezone, '', $date1);
-  $date2 = str_replace($timezone, '', $date2);
-      
+  $date1 = str_replace(trim($timezone), '', $date1);
+  $date2 = str_replace(trim($timezone), '', $date2);
+
   // No date values, display nothing.
   $output = '';
   if (empty($date1) && empty($date2)) {
