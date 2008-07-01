@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.36 2008/07/01 19:11:15 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.37 2008/07/01 21:35:23 karens Exp $
 Date Module 5.2
 =================
 
@@ -40,6 +40,7 @@ Timezone handling
 
 Other
 
+- If there's no offset field, don't try to add it to view.
 - #272523 Fix error in PHP4 wrapper code that kept date_modify from working reliably.
 - #273344 Make sure incomplete Date Popup values get converted into complete dates.
 - #276544 Rework system for handling timezone in date theme.

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.21 2008/06/30 21:25:58 karens Exp $
+// $Id: date_views.inc,v 1.26.2.22 2008/07/01 21:35:24 karens Exp $
 
 /**
  * Views field filters
@@ -344,7 +344,6 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
 
     case 'filter':
       $range = date_views_date_range($arg, $field);
-            
       $query->ensure_table($table);
       $query->add_field($value, $table);
       if ($field['tz_handling'] == 'date') {
@@ -611,7 +610,9 @@ function _date_views_query_alter(&$query, &$view) {
       if ($range  = date_views_date_range($arg)) {
         $date_handler = new date_sql_handler();
         $date_handler->construct($field['type']);
-        $date_handler->offset_field = "$table.". $db_info['columns']['offset']['column'];
+        if (isset($db_info['columns']['offset'])) {
+          $date_handler->offset_field = "$table.". $db_info['columns']['offset']['column'];
+        }
         $query->ensure_table($table);
         $query->add_field('nid', 'node');
         $query->add_field($value, $table);
