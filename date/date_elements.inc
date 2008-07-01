@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.27 2008/06/24 13:59:04 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.28 2008/07/01 18:05:13 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -212,7 +212,12 @@ function date_local_date($delta, $item, $timezone, $field, $part = 'value') {
       return NULL;
     }
     elseif ($part == 'value2' && $default_value == 'same') {
-      $date = date_make_date($item['value'], $timezone);
+      if ($field['widget']['default_value'] == 'blank') {
+        return NULL;
+      }
+      else {
+        $date = date_make_date($item['value'], $timezone);
+      }
     }
     // Special case for 'now' when using dates with no timezone,
     // make sure 'now' isn't adjusted to UTC value of 'now'.
