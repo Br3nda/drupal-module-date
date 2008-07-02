@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.5.2.6 2008/06/20 01:32:30 karens Exp $
+// $Id: date_repeat_form.inc,v 1.5.2.7 2008/07/02 18:08:15 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -56,6 +56,10 @@ function _date_repeat_rrule_process($element) {
   $element['#description'] = t('Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat.');
   $element['#collapsible'] = TRUE;
   $element['#collapsed'] = !empty($element['#repeat_collapsed']) ? $element['#repeat_collapsed'] : 0;
+  
+  // Make sure we don't get floating parts where we don't want them.
+  $element['#prefix'] = '<div class="date-clear">';
+  $element['#suffix'] = '</div>';
 
   $element['INTERVAL'] = array(
     '#type' => 'select',
@@ -85,6 +89,8 @@ function _date_repeat_rrule_process($element) {
   }
   $element['UNTIL'] = array(
     '#tree' => TRUE,
+    '#prefix' => '<div class="date-clear">',
+    '#suffix' => '</div>',
     'datetime' => array(
       '#type' => module_exists('date_popup') ? 'date_popup' : 'date_select',
       '#title' => t('Until'),
@@ -93,7 +99,7 @@ function _date_repeat_rrule_process($element) {
       '#date_timezone' => $element['#date_timezone'],
       '#date_format' => 'Y-m-d',
       '#date_label_position' => 'within',
-      ),
+    ),
     'tz' => array('#type' => 'hidden', '#value' => $element['#date_timezone']),
     'all_day' => array('#type' => 'hidden', '#value' => 1),
     'granularity' => array('#type' => 'hidden', '#value' => serialize(array('year', 'month', 'day'))),
@@ -106,6 +112,8 @@ function _date_repeat_rrule_process($element) {
   }
 	// start the advanced fieldset
   $element['advanced'] = array(
+    '#prefix' => '<div class="date-clear">',
+    '#suffix' => '</div>',
     '#type' => 'fieldset',
     '#title' => t('Advanced'),
     '#collapsible' => TRUE,

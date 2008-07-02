@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.21 2008/06/22 12:34:48 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.22 2008/07/02 18:08:14 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -137,10 +137,21 @@ function date_text_process($element, $edit = NULL) {
   // Don't overwrite values already added to $element['date'] in case
   // using something like jscalendar that needs to set custom values.
   $element['#tree'] = TRUE;
+
+  // Pass date-clear in as another class to keep multiple date elements 
+  // from floating together on the same line. 
+  if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
+    $element['#attributes']['class'] .= ' container-inline-date';
+  }
+  else {
+    $element['#attributes'] = array('class' => 'container-inline-date');
+  }
+  
   $element['date']['#type'] = 'textfield';
   $element['date']['#weight'] = !empty($element['date']['#weight']) ? $element['date']['#weight'] : $element['#weight'];
   $element['date']['#default_value'] = is_object($date) ? date_format($date , $element['#date_format']) : '';
   $element['date']['#attributes']['class'] = $element['date']['#attributes']['class'] .' date-date';
+  
   // Keep the system from creating an error message for the sub-element.
   // We'll set our own message on the parent element.
   //$element['date']['#required'] = $element['#required'];
@@ -183,6 +194,15 @@ function date_select_process($element, $edit = NULL) {
   $element['#tree'] = TRUE;
   date_increment_round($date, $element['#date_increment']);
   $element += (array) date_parts_element($element, $date, $element['#date_format']);
+
+  // Pass date-clear in as another class to keep multiple date elements 
+  // from floating together on the same line. 
+  if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
+    $element['#attributes']['class'] .= ' container-inline-date';
+  }
+  else {
+    $element['#attributes'] = array('class' => 'container-inline-date');
+  }
   
   // Store a hidden value for all date parts not in the current display.
   $granularity = date_format_order($element['#date_format']);
@@ -610,7 +630,7 @@ function theme_date_timezone($element) {
  *   A themed HTML string representing the date selection boxes.
  */
 function theme_date_select($element) {
-  return '<div class="container-inline-date date-clear-block">'. theme('form_element', $element, $element['#children']) .'</div>';
+  return '<div '. drupal_attributes($element['#attributes']) .'>'. theme('form_element', $element, $element['#children']) .'</div>';
 }
 
 /**
@@ -623,6 +643,7 @@ function theme_date_select($element) {
  *   A themed HTML string representing the date selection boxes.
  */
 function theme_date_text($element) {
+  return '<div '. drupal_attributes($element['#attributes']) .'>'. theme('form_element', $element, $element['#children']) .'</div>';
   return theme('form_element', $element, $element['#children']);
 }
 
@@ -631,12 +652,12 @@ function theme_date_text($element) {
  */
 function theme_date_select_element($element) {
   $part = array_pop($element['#parents']);
-  return '<div class="date-'. $part .'">'. theme('select', $element, $element['#children']) .'</div>';
+  return '<div class="date-part date-'. $part .'">'. theme('select', $element, $element['#children']) .'</div>';
 }
 
 function theme_date_textfield_element($element) {
   $part = array_pop($element['#parents']);
-  return '<div class="date-'. $part .'">'. theme('textfield', $element, $element['#children']) .'</div>';
+  return '<div class="date-part date-'. $part .'">'. theme('textfield', $element, $element['#children']) .'</div>';
 }
 
 /**
