@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.38 2008/07/02 11:16:56 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.39 2008/07/02 11:49:53 karens Exp $
 Date Module 5.2
 =================
 
@@ -39,6 +39,8 @@ Timezone handling
 - #234360 fix date_server_zone_adj() function.
 
 Other
+
+- #275490 Remove orphaned punctuation at beginning of string in date_limit_format().
 - #277549 Make sure no repeats are created if no start date was set.
 - If there's no offset field, don't try to add it to view.
 - #272523 Fix error in PHP4 wrapper code that kept date_modify from working reliably.
