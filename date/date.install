@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.24 2008/06/26 21:46:55 karens Exp $
+// $Id: date.install,v 1.21.2.25 2008/07/02 11:25:05 karens Exp $
 function date_install_clear() {
   cache_clear_all('date_', 'cache', '*');
   if (db_table_exists('cache_views')) {
@@ -331,7 +331,6 @@ function date_update_5104() {
  * Version 5.2 updates.
  */
 function date_update_5200() {
-  date_install_load();
   $ret = array();
   module_enable(array('date_timezone'));
 
