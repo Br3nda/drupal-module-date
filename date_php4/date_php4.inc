@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.10 2008/07/01 19:11:15 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.11 2008/07/04 11:14:37 karens Exp $
 
 /**
  * @file
@@ -64,7 +64,7 @@ if (!function_exists('date_create')) {
   function date_create($date_in = NULL, $timezone = NULL) {
     if (empty($date_in) || strtolower($date_in) == 'now') {
       // Create a current date for an empty value or 'now'.
-      $date_out = date_date('Y-m-d H:i:s', time());
+      $date_out = date_date('Y-m-d H:i:s', (time() - date('Z')));
     }
     elseif (substr($date_in, 0, 1) == '@' && is_numeric(substr($date_in, 1))) {
       // An number prefixed with '@' is interpreted as a timestamp.
@@ -119,7 +119,7 @@ if (!function_exists('date_format')) {
     $max = strlen($format);
     for ($i = 0; $i < $max; $i++) {
       $c = $format[$i];
-      if (date_part_extract($date->value, 'year') > variable_get('date_php_min_year', 1970)
+      if ($date->timezone == 'UTC' && date_part_extract($date->value, 'year') > variable_get('date_php_min_year', 1970)
         && !in_array($c, $php5_formats)) {
         $date_string .= gmdate($c, $timestamp);
       }
@@ -184,7 +184,7 @@ if (!function_exists('date_format')) {
             break;
           default:
             if (strpos('AaeDFlMTBcdGgHhIijLmNnOoPrSstUuWwYyZz', $c) !== FALSE) {
-              $date_string .= date_gmdate($c, $timestamp);
+              $date_string .= date_date($c, $timestamp, $date->timezone);
             }
             else {
               $date_string .= $c;

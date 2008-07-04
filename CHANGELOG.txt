@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.40 2008/07/02 18:08:14 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.41 2008/07/04 11:14:37 karens Exp $
 Date Module 5.2
 =================
 
@@ -16,6 +16,7 @@ New Features
 
 Timezone handling
 
+- #269834 Add timezone adjustment to PHP4 date_format() wrapper.
 - Rework PHP4 date handling to avoid any use of date() or mktime(), which may inject an incorrect timezone offset.
 - Get rid of the adodb method of computing the gmt offset for PHP4 and use the date_offset_get() computation.
 - Fix use of wrong value for timezone in repeating dates.
