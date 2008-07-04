@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.33 2008/07/04 11:47:47 karens Exp $
+// $Id: date_api.module,v 1.44.2.34 2008/07/04 13:59:10 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -889,7 +889,6 @@ function date_week($date) {
 
   // if it's before the starting day, it's the previous week
   if (intval(date_format($date, 'N')) < $iso_first_day) $week--;
-
   // if the year starts before, it's an extra week at the beginning
   if (intval(date_format($year_date, 'N')) < $iso_first_day) $week++;
 
