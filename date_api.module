@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.31 2008/07/02 11:49:53 karens Exp $
+// $Id: date_api.module,v 1.44.2.32 2008/07/04 11:40:22 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -273,7 +273,7 @@ function date_hours($format = 'H', $required = FALSE) {
     $max = 23;
   }
   for ($i = $min; $i <= $max; $i++) {
-    $hours[$i] = $i < 10 && $format == 'H' || $format == 'h' ? "0$i" : $i;
+    $hours[$i] = $i < 10 && ($format == 'H' || $format == 'h') ? "0$i" : $i;
   }
   $none = array('' => '');
   return !$required ? $none + $hours : $hours;

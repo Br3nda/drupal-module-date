@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.41 2008/07/04 11:14:37 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.42 2008/07/04 11:40:22 karens Exp $
 Date Module 5.2
 =================
 
@@ -41,6 +41,7 @@ Timezone handling
 
 Other
 
+- #274403 Fix typo in date_hours().
 - #272110 Alter css so that from/to dates can float next to each other.
 - #275490 Remove orphaned punctuation at beginning of string in date_limit_format().
 - #277549 Make sure no repeats are created if no start date was set.
