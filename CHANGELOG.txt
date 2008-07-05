@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.44 2008/07/04 13:59:10 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.45 2008/07/05 13:55:47 karens Exp $
 Date Module 5.2
 =================
 
@@ -15,7 +15,7 @@ New Features
 - Trigger js timezone detection on user edit form and registration form.
 
 Timezone handling
-
+- Fix PHP4 handler for date_timezone_set() which was incorrectly altering the timestamp value.
 - #269834 Add timezone adjustment to PHP4 date_format() wrapper.
 - Rework PHP4 date handling to avoid any use of date() or mktime(), which may inject an incorrect timezone offset.
 - Get rid of the adodb method of computing the gmt offset for PHP4 and use the date_offset_get() computation.
