@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.29 2008/07/02 18:08:14 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.30 2008/07/07 16:46:44 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -392,7 +392,6 @@ function date_combo_validate($element) {
     else {
       $item[$to_field] = $item[$from_field];
     }
-
     if ($item[$from_field] > $item[$to_field]) {
       form_set_error(implode('][', $element['#parents']), t('The To date must be greater than the From date.'));
     }

@@ -1,5 +1,23 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.22 2008/07/01 21:35:24 karens Exp $
+// $Id: date_views.inc,v 1.26.2.23 2008/07/07 16:46:44 karens Exp $
+
+/**
+ * Implementation of hook_views_style_plugins()
+ */
+function _date_views_style_plugins() {
+
+  $items = array();
+  $items['date_views_browser'] = array(
+    'name' => t('Date: Date Browser'),
+    'theme' => 'date_views_browser_full_view',
+    'summary_theme' => 'date_views_browser_summary_view',
+    'needs_fields' => true,
+    'needs_table_header' => true,
+    'validate' => 'date_browser_validate',
+    'even_empty' => true,
+  );
+  return $items;
+}
 
 /**
  * Views field filters
@@ -87,6 +105,26 @@ function _date_views_filters($field) {
       $filters += $filters2;
     }
     return $filters;
+}
+
+/**
+ * Views arguments for Date fields.
+ */
+function _date_views_arguments($field) {
+  $field_types = _content_field_types();
+  $arguments = array();
+  $argument = array();
+  $argument['name'] = $field_types[$field['type']]['label'] . ($field['todate'] ? t(': From ') : ': ') . t($field['widget']['label']) .' ('. $field['field_name'] .')';
+  $argument['handler'] = $field['type'] == 'date' ? 'date_views_argument_range_handler' : 'date_views_timestamp_argument_range_handler';
+  $argument['help'] = t("Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples.", array('!link' => l(t('help'), 'admin/help/date')));
+  $argument['option'] = 'date_range_arg_options';
+  $arguments['content: '. $field['field_name']] = $argument;
+
+  if ($field['todate']) {
+    $argument['name'] = $field_types[$field['type']]['label'] . t(': To ') . t($field['widget']['label']) .' ('. $field['field_name'] .')';
+    $arguments['content: to|'. $field['field_name']] = $argument;
+  }
+  return $arguments;
 }
 
 /**
@@ -207,56 +245,8 @@ function _date_views_handler_filter_date_value_form($field) {
 }
 
 /**
- * Views arguments for Date fields.
- */
-function _date_views_arguments($field) {
-  $field_types = _content_field_types();
-  $arguments = array();
-  $argument = array();
-  $argument['name'] = $field_types[$field['type']]['label'] . ($field['todate'] ? t(': From ') : ': ') . t($field['widget']['label']) .' ('. $field['field_name'] .')';
-  $argument['handler'] = $field['type'] == 'date' ? 'date_views_argument_range_handler' : 'date_views_timestamp_argument_range_handler';
-  $argument['help'] = t("Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples.", array('!link' => l(t('help'), 'admin/help/date')));
-  $argument['option'] = 'date_range_arg_options';
-  $arguments['content: '. $field['field_name']] = $argument;
-
-  if ($field['todate']) {
-    $argument['name'] = $field_types[$field['type']]['label'] . t(': To ') . t($field['widget']['label']) .' ('. $field['field_name'] .')';
-    $arguments['content: to|'. $field['field_name']] = $argument;
-  }
-  return $arguments;
-}
-
-/**
  *
  * Flexible date range argument handler
- *
- * Argument is based on ISO 8601 date duration and time interval standards
- *
- * See http://en.wikipedia.org/wiki/ISO_8601#Week_dates for definitions of ISO weeks
- * See http://en.wikipedia.org/wiki/ISO_8601#Duration for definitions of ISO duration and time interval
- *
- * Argument expects a value like 2006-01-01--2006-01-15, or 2006-W24, or @P1W
- * Separate from and to dates or date and period with a double hyphen (--)
- *
- * From and to dates in argument are ISO dates, but can be shortened and missing parts will be added
- * Omitted parts of ISO dates will be assumed to be the first possible (for the from date)
- * or the last possible (for the to date) value in that time period
- *
- * The 'to' portion of the argument can be eliminated if it is the same as the 'from' portion
- * Use @ instead of a date to substitute in the current date and time.
- *
- * Use periods (P1H, P1D, P1W, P1M, P1Y) to get next hour/day/week/month/year from now
- * Use date before P sign to get next hour/day/week/month/year from that date
- *
- * This module does not currently handle the option of using a period with an end date,
- * only a start date followed by a period.
- *
- * The groupby selector values are used only if a summary view of the argument is requested
- * possible values are by year, by month, by week, by day, and by hour
- *
- * if summaries are used, navigating to the view with no argument will display subtotals for the query,
- * grouped by the selected range, with a link to the complete query for each range
- *
  */
 function _date_views_timestamp_argument_range_handler($op, &$query, $argtype, $arg = '') {
   // this is just a wrapper function that sets the date type
@@ -281,6 +271,7 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
   $db_info    = content_database_info($field);
   $value      = $db_info['columns'][$value]['column'];
   $timezone   = $db_info['columns']['timezone']['column'];
+  $offset     = $db_info['columns']['offset']['column'];
   $table      = 'node_data_'. $field['field_name'];
   $sql_field = "$table.$value";
   
@@ -288,31 +279,27 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
   $date_handler->construct($field['type']);
   if ($field['tz_handling'] == 'date') {
     $date_handler->local_timezone_field = "$table.$timezone";
+    $date_handler->local_offset_field = "$table.$offset";
+  }
+  if (!empty($arg)) {
+    $granularity = $date_handler->arg_granularity($arg);
+    $format = $date_handler->views_formats($granularity, 'display');
+    $sql_format = $date_handler->views_formats($granularity, 'sql');
+    $range = $date_handler->arg_range($arg);
+    $query->min_date = $range[0];
+    $query->max_date = $range[1];
+    date_views_set_timezone($date_handler, $query, $field);
+    $query->date_handler = $date_handler;
+  }
+  else {
+    $granularity = $date_handler->arg_granularity($query);
+    $format = $date_handler->views_formats($granularity, 'display');
+    $sql_format = $date_handler->views_formats($granularity, 'sql');
+    $range = $date_handler->arg_range($query);
   }
   
   switch ($op) {
     case 'summary':
-      switch ($arg) {
-        case('year'):
-          $format = 'Y';
-          $sql_format = 'Y';
-          break;
-        case('month'):
-          $format = 'F Y';
-          $sql_format = 'Y-m';
-          break;
-        case('day'):
-          $format = 'F j Y';
-          $sql_format = 'Y-m-d';
-          break;
-        case('hour'):
-          $format = 'F j Y - H';
-          $sql_format = 'Y-m-d H';
-          break;
-        case('week'):
-          $format = 'F j Y (W)';
-          break;
-      }
       $fieldinfo['field'] = $date_handler->sql_format($sql_format, $date_handler->sql_field($sql_field));
       $fieldinfo['fieldname'] = 'range';
       
@@ -343,161 +330,18 @@ function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $
       break;
 
     case 'filter':
-      $range = date_views_date_range($arg, $field);
       $query->ensure_table($table);
       $query->add_field($value, $table);
       if ($field['tz_handling'] == 'date') {
         $query->add_field($timezone, $table);
       }
-      $query->add_where($date_handler->sql_where_date('DATE', $sql_field, ">=", $range[0]));
-      $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", $range[1]));
+      $query->add_where($date_handler->sql_where_date('DATE', $sql_field, '>=', date_format($date_handler->min_date, DATE_FORMAT_DATETIME)));
+      $query->add_where($date_handler->sql_where_date('DATE', $sql_field, '<=', date_format($date_handler->max_date, DATE_FORMAT_DATETIME)));
       break;
 
     case 'title':
-      $value = explode('P', $query);
-      $item = array(key($db_info['columns']) => date_range_value($value[0]));
-      return content_format($field, $item, 'default');
+      return date_format($range[0], $format);
   }
-}
-
-function date_views_date_range($arg, $field = NULL) {
-  if (stristr($arg, 'P')) {
-    // for a date plus value, get the min and max values
-    $range = date_plus_period_range($arg);
-    $min_date = $range[0];
-    $max_date = $range[1];
-  }
-  elseif (stristr($arg, '-W') && !stristr($arg, '--')) {
-    // for a specified week, get the min and max values
-    $range = date_iso_week_range($arg);
-    $min_date = $range[0];
-    $max_date = $range[1];
-  }
-  else {
-    // for all other get the date range from the supplied argument
-    $range = (array) explode('--', $arg);
-    $min_date = date_range_value($range[0], 'min');
-    $max_date = date_range_value(($range[1] ? $range[1] : $range[0]), 'max');
-  }
-  if (!empty($field)) {
-    $min_date = date_limit_value($min_date, date_granularity($field), $field['type']);
-    $max_date = date_limit_value($max_date, date_granularity($field), $field['type']);
-  }
-  return array($min_date, $max_date);
-}
-/**
- *  Validate and pad date range argument element
- *
- *  @param $value - a full or partial ISO date from an argument
- *  @param $value_type - min or max, whether it is the from or the to part of the range
- *  @return complete, validated ISO date
- */
-function date_range_value($value, $value_type = 'min') {
-  $now   = date_format(date_now(), DATE_FORMAT_ISO);
-  if (trim($value) == '@' || trim($value) == '') return $now;
-
-  switch (strlen($value)) {
-  case(4):
-    $return = ($value_type == 'min' ? $value .'-01-01T00:00:00' : $value .'-12-31T23:59:59');
-    break;
-  case(7):
-    $return = ($value_type == 'min' ? $value .'-01T00:00:00' : $value .'-31T23:59:59');
-    break;
-  case(10):
-    $return = ($value_type == 'min' ? $value .'T00:00:00' : $value .'T23:59:59');
-    break;
-  case(13):
-    $return = ($value_type == 'min' ? $value .':00:00' : $value .':59:59');
-    break;
-  case(16):
-    $return = ($value_type == 'min' ? $value .':00' : $value .':59');
-    break;
-  case(19):
-    $return = $value;
-    break;
-  default:
-    $return = $now;
-  }
-  // use regex to test for validity of constructed date
-  return (preg_match(DATE_REGEX_ISO, $return) ? $return : $now);
-}
-
-/**
- *  Compute min and max dates for a week
- *
- *  based on ISO weeks, which start counting on the first Monday in a week that
- *  has at least 4 days in the current year
- *
- *  January 4 is always in the first ISO week of the year. Move ahead by the
- *  number of ISO weeks to find a date in the ISO week. Find the Monday of the
- *  ISO week for the first second of the week, move ahead 1 week and back
- *  1 second to find last second of the week.
- *
- *  @value - an argument in the format 2006-W20 (year + -W + week number)
- *  @return an array of ISO dates representing the first and last day in the week
- */
-function date_iso_week_range($value) {
-  $parts = explode('-W', $value);
-  $year = $parts[0];
-  $week = $parts[1];
-  $date = date_make_date($year .'-01-04 00:00:00', 'UTC');
-  date_modify($date, '+'. $week .' weeks');
-  date_modify($date, '-1 Monday');
-  $min_date = date_format($date, DATE_FORMAT_ISO);
-  date_modify($date, '+1 week');
-  date_modify($date, '-1 second');
-  $max_date = date_format($date, DATE_FORMAT_ISO);
-  return array($min_date, $max_date);
-}
-
-/**
- *  Compute min and max dates for a P value
- *
- *  Min date is whatever is to the left of the period sign, defaults to
- *  current date. Use ical module to parse the period. Set end date to
- *  1 second before the end of the period, since we use <= operator.
- *
- *  @value = an argument in the format (start date)P#(period type)
- *     where (period type) can be Y (year), M (month), D (day), W (week), H (hour)
- *     i.e. P1Y or P90D or P1Y3M2D4H
- *  @return an array of ISO dates representing the first and last day in the range
- */
-function date_plus_period_range($value) {
-  include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
-  $value = str_replace('--P', 'P', $value);
-  $range = explode('P', $value);
-
-  $period = substr($range[1], -1);
-  switch ($period) {
-    case 'Y':
-      $granularity = array('year');
-      break;
-    case 'M':
-      $granularity = array('year', 'month');
-      break;
-    case 'D':
-      $granularity = array('year', 'month', 'day');
-      break;
-    case 'W':
-      $granularity = array('year');
-      break;
-    case 'H':
-      $granularity = array('year', 'month', 'day', 'hour');
-  }
-
-  $min_date = date_range_value($range[0], 'min');
-  $parsed = array('DURATION' => array(
-    'DATA' => 'P'. $range[1]),
-    'DTSTART' => array(
-      'datetime' => date_convert($min_date, DATE_ISO, DATE_DATETIME),
-      'tz' => 'UTC',
-      'granularity' => $granularity,
-      ),
-    );
-  date_ical_parse_duration($parsed);
-
-  $max_date = date_convert($parsed['DTEND']['datetime'], DATE_DATETIME, DATE_ISO);
-  return array($min_date, $max_date);
 }
 
 /**
@@ -511,35 +355,6 @@ function date_range_arg_options() {
     'week'  => t('summarize by week'),
     'hour'  => t('summarize by hour')
     );
-}
-
-//============================== Date Browser ================================//
-
-/**
- * Works only with views that use the date range argument
- * Adds this/next period navigation links to a date argument range view
- * Adds 'week of XXX', 'month of XXX' headings to views and blocks
- * Defaults blocks and views w/out arguments to current period to start paging
- * Choose period increments by selecting the option value of date range argument
- *  (year, month, week, day, hour)
- */
-
-/**
- * Implementation of hook_views_style_plugins()
- */
-function _date_views_style_plugins() {
-
-  $items = array();
-  $items['date_views_browser'] = array(
-    'name' => t('Date: Date Browser'),
-    'theme' => 'date_views_browser_full_view',
-    'summary_theme' => 'date_views_browser_summary_view',
-    'needs_fields' => true,
-    'needs_table_header' => true,
-    'validate' => 'date_browser_validate',
-    'even_empty' => true,
-  );
-  return $items;
 }
 
 /**
@@ -578,18 +393,22 @@ function _date_views_query_alter(&$query, &$view) {
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
   $date_views_browser_views = date_views_browser_get_views();
   if (in_array($view->name, array_keys($date_views_browser_views))) {
+    
     $name       = explode(':', $view->argument[0]['type']);
     $tofield_name = trim($name[1]);
     $field_name = drupal_substr($tofield_name, 0, 3) == 'to|' ? drupal_substr($tofield_name, 3) : $tofield_name;
-    if ($field_name == $tofield_name) {
-      $value = 'value';
-    }
-    else {
-      $value = 'value2';
-    }
+    $value = $field_name != $tofield_name ? 'value2' : 'value';
     $field      = content_fields($field_name);
     $db_info    = content_database_info($field);
     $table      = 'node_data_'. $field['field_name'];
+    
+    $date_handler = new date_sql_handler();
+    $date_handler->construct($field['type']);
+    if ($field['tz_handling'] == 'date') {
+      $date_handler->local_timezone_field = "$table.$timezone";
+      $date_handler->local_offset_field = "$table.$offset";
+    }
+    $view->date_handler = $date_handler;
 
     // Add a combo FROM|TO date field to the query
     $value      = $db_info['columns']['value']['column'];
@@ -604,21 +423,20 @@ function _date_views_query_alter(&$query, &$view) {
     else {
       $arg = arg($pos);
     }
+    
+    // If no argument is specified, the argument handling won't get executed.
+    // Add the current date range to the query.
     if ($arg == NULL) {
-      // if no argument specified, add the current date range to the query
-      $arg  = date_views_browser_period_arg($arg, $view->argument[0]['options']);
-      if ($range  = date_views_date_range($arg)) {
-        $date_handler = new date_sql_handler();
-        $date_handler->construct($field['type']);
-        if (isset($db_info['columns']['offset'])) {
-          $date_handler->offset_field = "$table.". $db_info['columns']['offset']['column'];
-        }
+      $period = $view->argument[0]['options'];
+      $format = $date_handler->views_formats($period, 'sql');
+      $arg = date_format_date(date_now(), 'custom', $format) . date_views_browser_period($period);
+      if ($range  = $view->date_handler->arg_range($arg)) {
         $query->ensure_table($table);
         $query->add_field('nid', 'node');
         $query->add_field($value, $table);
         $sql_field = "$table.$value";
-        $query->add_where($date_handler->sql_where_date('DATE', $sql_field, ">=", $range[0]), $offset);
-        $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", $range[1]), $offset);
+        $query->add_where($date_handler->sql_where_date('DATE', $sql_field, ">=", date_format($range[0], DATE_FORMAT_DATETIME)), $offset);
+        $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", date_format($range[1], DATE_FORMAT_DATETIME)), $offset);
       }
     }
   }
@@ -680,77 +498,86 @@ function date_views_browser_period($period = 'month') {
   }
 }
 
-function date_views_browser_period_format($period) {
-    switch ($period) {
-    case 'year':
-      $format = 'Y';
-      break;
-    case 'month':
-      $format = 'Y-m';
-      break;
-    case 'week':
-      $format = 'Y-W';
-      break;
-    case 'day':
-      $format = 'Y-m-d';
-      break;
-    case 'hour':
-      $format = 'Y-m-d\TH';
-      break;
-  }
-  return $format;
-}
-
-/**
- *  Format an argument for the date range
- */
-function date_views_browser_period_arg($arg = NULL, $period = 'month') {
-  if (empty($arg)) {
-    $now = date_now();
-    $arg = date_format($now, date_views_browser_period_format($period));
-  }
-  $range = date_views_date_range($arg);
-  $date = date_make_date($range[0], 'UTC');
-  return date_format_date($date, 'custom', date_views_browser_period_format($period)) .
-    date_views_browser_period($period);
-}
-
-/**
- *  Return label for current date range
- */
-function date_views_browser_period_label($arg = NULL, $period = 'month') {
-  $range = date_views_date_range($arg);
-  $date = date_make_date($range[0], 'UTC');
-  return theme('date_views_browser_period_label', $period, $date);
-}
-
 /**
  *  Navigation links for the full view
  */
 function date_views_browser_navigation($view, $period) {
-  $path = explode('/', $view->url);
-  $pos = sizeof($path);
-  if (arg($pos) == '') {
-    $arg = NULL;
+  $arg = NULL;
+  foreach ($view->argument as $pos => $argument) {
+    if ($argument['options'] == $period) {
+      $arg = $view->args[$pos];
+    }
   }
-  else {
-    $arg = arg($pos);
-  }
+  
   // Create a date object for the beginning of the current range.
-  $range = date_views_date_range($arg);
-  $date = date_make_date($range[0], 'UTC');
+  $range = $view->date_handler->arg_range($arg);
+  $format = $view->date_handler->views_formats($period, 'sql');
+  $date = drupal_clone($range[0]);
+    
   // Move backwards 1 period and create a link to that date.
   date_modify($date, '-1'. $period);
-  $prev = $view->url .'/'.
-    date_format_date($date, 'custom', date_views_browser_period_format($period)) .
-    date_views_browser_period($period);
+  $prev = $view->url .'/'. date_format_date($date, 'custom', $format) . date_views_browser_period($period);
   // Move forward 2 periods (back to the current period and to the next period)
   // and create a link to that date.
   date_modify($date, '+2 '. $period);
-  $next = $view->url .'/'.
-    date_format_date($date, 'custom', date_views_browser_period_format($period)) .
-    date_views_browser_period($period);
+  $next = $view->url .'/'. date_format_date($date, 'custom', $format) . date_views_browser_period($period);
 
-  $label = date_views_browser_period_label($arg, $period);
+  $label = theme('date_views_browser_period_label', $period, $range[0]);
   return theme('date_views_browser_navigation', $label, $period, $prev, $next, $view);
+}
+
+/**
+ * Central function for setting up the right timezone values
+ * in the SQL date handler.
+ * 
+ * Min and max date are always available or important, but the
+ * timezone is.
+ */
+function date_views_set_timezone(&$date_handler, &$view, $field) {
+  $min_date = NULL;
+  $max_date = NULL;
+  $min_utc = NULL;
+  $max_utc = NULL;
+  if (isset($view->min_date) && isset($view->max_date)) {
+    $min_date = $view->min_date;
+    $max_date = $view->max_date;
+    if (empty($view->min_utc)) {
+      $view->min_utc = drupal_clone($min_date);
+      date_timezone_set($view->min_utc, timezone_open('UTC'));
+    }
+    if (empty($view->max_utc)) {
+      $view->max_utc = drupal_clone($max_date);
+      date_timezone_set($view->max_utc, timezone_open('UTC'));   
+    }
+    $min_utc = $view->min_utc;
+    $max_utc = $view->max_utc;
+  }
+  $tz_handling  = $field['tz_handling'];
+  switch ($tz_handling) {
+    case 'date' :
+      $date_handler->db_timezone = 'UTC';
+      $date_handler->local_timezone_field = $field['timezone_field'];
+      $date_handler->local_offset_field = $field['offset_field'];
+      $date_handler->min_date = $min_date;
+      $date_handler->max_date = $max_date;
+      break;
+    case 'none':
+      $date_handler->db_timezone = date_default_timezone_name();
+      $date_handler->local_timezone = date_default_timezone_name();
+      $date_handler->min_date = $min_date;
+      $date_handler->max_date = $max_date;
+      break;
+    case 'utc':
+      $date_handler->db_timezone = 'UTC';
+      $date_handler->local_timezone = 'UTC';
+      $date_handler->min_date = $min_utc;
+      $date_handler->max_date = $max_utc;
+      break;
+    default :
+      $date_handler->db_timezone = 'UTC';
+      $date_handler->local_timezone = 'UTC';
+      $date_handler->min_date = $min_utc;
+      $date_handler->max_date = $max_utc;
+      break;
+  }
 }
