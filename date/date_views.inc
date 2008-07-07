@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.23 2008/07/07 16:46:44 karens Exp $
+// $Id: date_views.inc,v 1.26.2.24 2008/07/07 19:54:20 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -147,21 +147,24 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   $sql_field = "$table.". $db_info['columns'][$column]['column'];
 
   $timezone   = $db_info['columns']['timezone']['column'];
+  $offset     = $db_info['columns']['offset']['column'];
   $table      = 'node_data_'. $field['field_name'];
   
   $date_handler = new date_sql_handler();
   $date_handler->construct($field['type']);
   if ($field['tz_handling'] == 'date') {
     $date_handler->local_timezone_field = "$table.$timezone";
+    $date_handler->local_offset_field = "$table.$offset";
   }
   else {
     $timezone = date_default_timezone_name();
   }
-
+  date_views_set_timezone($date_handler, $query, $field);
+    
   $sql = '';  
   $adjustment = trim(str_replace('now', '', $filter['options']));
   $adj_seconds = strtotime($adjustment, 0);
-          
+
   // Comparing to NOW.
   if (empty($filter['value']) && !empty($filter['options'])) {
     switch ($filterinfo['type']) {
@@ -204,7 +207,6 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
       $input = $filter['value'];
     }
     if (!empty($input)) {
-      $input = date_fuzzy_datetime($input);
       if (date_is_valid($input, DATE_DATETIME)) {
         $date = date_make_date($input, date_default_timezone_name(), DATE_DATETIME);
         if (!empty($adjustment)) {
@@ -408,6 +410,7 @@ function _date_views_query_alter(&$query, &$view) {
       $date_handler->local_timezone_field = "$table.$timezone";
       $date_handler->local_offset_field = "$table.$offset";
     }
+    date_views_set_timezone($date_handler, $query, $field);
     $view->date_handler = $date_handler;
 
     // Add a combo FROM|TO date field to the query
