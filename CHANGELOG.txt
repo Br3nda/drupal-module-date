@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.49 2008/07/07 19:54:20 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.50 2008/07/07 20:06:13 karens Exp $
 Date Module 5.2
 =================
 
@@ -46,6 +46,7 @@ Timezone handling
 
 Other
 
+- #277420 Add test to Views filter so it won't try to process a 5.1 style filter value, which would break.
 - Simplify Views handling by using new date_sql_hander() function that was backported from D6.
 - Add week handling and granularity tests to date_sql_handler().
 - Set date prefix on date navigation css classes.
