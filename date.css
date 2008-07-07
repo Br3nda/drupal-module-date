@@ -71,6 +71,26 @@ span.date-display-separator {
   border:none;
 }
 
+.date-nav {
+  width:100%;
+  display:relative;
+}
+.date-nav div.date-prev {
+  text-align: left;
+  width:24%;
+  float:left;
+}
+.date-nav div.date-next {
+  text-align: right;
+  width:24%;
+  float:right;
+}
+.date-nav div.date-heading {
+  text-align:center;
+  width:50%;
+  float:left;
+}
+
 .date-clear {
   clear:both;
   display:block;

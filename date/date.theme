@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.13 2008/07/01 22:01:13 karens Exp $
+//$Id: date.theme,v 1.2.2.14 2008/07/07 15:07:28 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -147,6 +147,7 @@ function theme_date_views_browser_period_label($period, $date) {
     case 'month':
       $format = 'F Y';
       break;
+    case 'week':
     case 'day':
       // Use just the year/month/day part of the short date format.
       $format = date_limit_format(variable_get('date_format_short', 'm/d/Y - H:i'), array('month', 'day', 'year'));
@@ -154,23 +155,24 @@ function theme_date_views_browser_period_label($period, $date) {
     case 'hour':
       // Use just the year/month/day/hour part of the short date format.
       $format = date_limit_format(variable_get('date_format_short', 'm/d/Y - H:i'), array('month', 'day', 'year', 'hour'));
+      break;
   }
   return t('%period of %date', array('%period' => ucwords($period), '%date' => date_format_date($date, 'custom', $format)));
 }
 /**
  *  Theme for page navigation
  */
-function theme_date_views_browser_navigation($label, $period, $prev, $next, $view) {
-    drupal_add_css(drupal_get_path('module', 'date_api') .'/date.css');
-    $output  = '<div class="book-navigation date-browser-navigation clear-block">';
-    $output .= '<div class="page-links">';
-    $output .= l(t('‹ prev !period  ', array('!period' => $period)), $prev, array('class' => 'page-previous'));
-    $output .= '<h3 class="date-browser-label"><span class="page-up">'. $label .'</span></h3>';
-    $output .= l(t('  next !period  ›', array('!period' => $period)), $next, array('class' => 'page-next'));
-    $output .= '</div></div>';
-    return $output;
+function theme_date_views_browser_navigation($heading, $period, $prev_url, $next_url, $view) {
+  $output  = '<div class="date-nav clear-block">';
+  $output .= '<div class="date-prev">';
+  $output .= l(t('‹ prev !period  ', array('!period' => $period)), $prev_url);
+  $output .= '</div><div class="date-heading"><h3>'. $heading .'</h3></div>';
+  $output .= '<div class="date-next">';
+  $output .= l(t('  next !period  ›', array('!period' => $period)), $next_url);
+  $output .= '</div></div>';
   return $output;
 }
+
 /**
  * Display a summary version of a view.
  */
