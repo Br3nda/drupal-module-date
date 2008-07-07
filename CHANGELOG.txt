@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.46 2008/07/07 15:07:28 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.47 2008/07/07 15:08:30 karens Exp $
 Date Module 5.2
 =================
 
@@ -41,6 +41,7 @@ Timezone handling
 
 Other
 
+- Add week handling and granularity tests to date_sql_handler().
 - Set date prefix on date navigation css classes.
 - Fix computation of 'N' in PHP4 date_format() wrapper to get date_week() working right in PHP4.
 - #275213 Wrong year value in date_week_range().
