@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.26 2008/07/08 02:17:31 karens Exp $
+// $Id: date_views.inc,v 1.26.2.27 2008/07/08 23:55:53 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -164,40 +164,34 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
     $timezone = date_default_timezone_name();
   }
   date_views_set_timezone($date_handler, $query, $field);
-    
+  
+  // We're comparing to a local time, 
+  // so make sure the date_hander knows that.
+  if ($date_handler->db_timezone == 'UTC' && empty($date_handler->local_timezone_field)) {
+    $date_handler->local_timezone = date_default_timezone_name();
+  }
+      
   $sql = '';  
   $adjustment = trim(str_replace('now', '', $filter['options']));
-  $adj_seconds = strtotime($adjustment, 0);
 
   // Comparing to NOW.
   if (empty($filter['value']) && !empty($filter['options'])) {
+    $date = date_now();
+    if (!empty($adjustment)){
+      date_modify($date, $adjustment);
+    }
     switch ($filterinfo['type']) {
       case 'YEAR':
       case 'MONTH':
       case 'DAY':
         $formats = array('YEAR' => 'Y', 'MONTH' => 'n', 'DAY' => 'j');
-        $date = date_now();
-        date_time_set($date, 0, 0, 0);
-        if (!empty($adjustment)){
-          date_modify($date, $adjustment);
-        }
-        // If we're comparing this local value to a UTC date, adjust it.
-        if ($date->handler->db_timezone == 'UTC') {
-          date_set_timezone($date, timezone_open('UTC'));
-        }
         $value = date_format($date, $formats[$filterinfo['type']]);
         $sql = $date_handler->sql_where_extract($filterinfo['type'], $sql_field, $filter['operator'], $value, FALSE);
         break;
       default:
-        $date = date_now();
-        // If we're comparing this local value to a UTC date, adjust it.
-        if ($date->handler->db_timezone == 'UTC') {
-          date_set_timezone($date, timezone_open('UTC'));
-        }
-        $start = date_format($date, 'U');
-        date_time_set($date, 0, 0, 0);
-        $adj_seconds -= $start - date_format($date, 'U');
-        $sql = $date_handler->sql_where_date('DATE', $sql_field, $filter['operator'], 'NOW', $adj_seconds);
+        $granularity = array_pop($field['granularity']);
+        $format = $date_handler->views_formats($granularity, 'sql');
+        $sql = $date_handler->sql_where_format($format, $sql_field, $filter['operator'], date_format($date, $format));
         break;
     }
   }
