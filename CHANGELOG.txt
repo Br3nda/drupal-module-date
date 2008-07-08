@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.50 2008/07/07 20:06:13 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.51 2008/07/08 02:17:31 karens Exp $
 Date Module 5.2
 =================
 
@@ -19,6 +19,7 @@ New Features
 
 Timezone handling
 
+- #279051 Fix postgres timezone test.
 - Centralize method of setting timezone adjustments for filters and arguments.
 - Fix PHP4 handler for date_timezone_set() which was incorrectly altering the timestamp value.
 - #269834 Add timezone adjustment to PHP4 date_format() wrapper.
