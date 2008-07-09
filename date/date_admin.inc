@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.21 2008/06/24 12:54:49 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.22 2008/07/09 00:09:01 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -288,7 +288,7 @@ function date_columns($field) {
     $db_columns['value'] = array('type' => 'varchar', 'length' => 20, 'not null' => FALSE, 'sortable' => TRUE);
   }
   elseif ($field['type'] == 'datestamp') {
-    $db_columns['value'] = array('type' => 'integer', 'length' => 11, 'not null' => FALSE, 'sortable' => TRUE);
+    $db_columns['value'] = array('type' => 'integer', 'not null' => FALSE, 'sortable' => TRUE);
   }
   // If a second date is needed for 'To date', just make a copy of the first one.
   if ($field['todate']) {
@@ -297,8 +297,8 @@ function date_columns($field) {
   // timezone and offset columns are used only if date-specific dates are chosen.
   if ($field['tz_handling'] == 'date') {
     $db_columns['timezone'] = array('type' => 'varchar', 'length' => 50, 'not null' => FALSE, 'sortable' => TRUE);
-    $db_columns['offset'] = array('type' => 'integer', 'length' => 10, 'not null' => FALSE, 'sortable' => TRUE);
-    if ($field['todate']) $db_columns['offset2'] = array('type' => 'integer', 'length' => 10, 'not null' => FALSE, 'sortable' => TRUE);
+    $db_columns['offset'] = array('type' => 'integer', 'not null' => FALSE, 'sortable' => TRUE);
+    if ($field['todate']) $db_columns['offset2'] = array('type' => 'integer', 'not null' => FALSE, 'sortable' => TRUE);
   }
   if ($field['repeat']) {
     $db_columns['rrule'] = array('type' => 'text', 'not null' => FALSE, 'sortable' => FALSE);
