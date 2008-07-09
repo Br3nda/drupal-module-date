@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.55 2008/07/09 11:23:17 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.56 2008/07/09 12:14:56 karens Exp $
 Date Module 5.2
 =================
 
@@ -48,6 +48,7 @@ Timezone handling
 
 Other
 
+- Fix Date Browser week navigation.
 - #277420 Add missing format information for minutes and seconds to date_sql_handler.
 - Make sure the timezone always goes on its own line now that date elements float.
 - #279932 Remove length from integer rows so they don't create errors in postgres.
