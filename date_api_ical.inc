@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.12 2008/04/17 12:06:38 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.13 2008/07/09 12:20:37 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -507,7 +507,7 @@ function date_ical_date($ical_date, $to_tz = FALSE) {
   }
   $date = date_make_date($ical_date['datetime'], $from_tz);
   if ($to_tz && $ical_date['tz'] != '' && $to_tz != $ical_date['tz']) {
-    $date = date_timezone_set($date, timezone_open($to_tz));
+    date_timezone_set($date, timezone_open($to_tz));
   }
   return $date;
 }

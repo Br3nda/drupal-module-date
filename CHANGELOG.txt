@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.56 2008/07/09 12:14:56 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.57 2008/07/09 12:20:37 karens Exp $
 Date Module 5.2
 =================
 
@@ -48,6 +48,7 @@ Timezone handling
 
 Other
 
+- #264749 Fix typo in date_ical_date which unset the date.
 - Fix Date Browser week navigation.
 - #277420 Add missing format information for minutes and seconds to date_sql_handler.
 - Make sure the timezone always goes on its own line now that date elements float.
