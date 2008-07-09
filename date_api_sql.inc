@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.18 2008/07/09 11:23:17 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.19 2008/07/09 18:54:38 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -705,7 +705,7 @@ class date_sql_handler {
   function arg_range($arg) {
     // Parse the argument to get its parts
     $parts = $this->arg_parts($arg);
-
+    
     // Intercept invalid info and fall back to the current date.
     if (empty($parts[0]) || empty($parts[0]['date']) && empty($parts[0]['period'])) {
       $now = date_now();

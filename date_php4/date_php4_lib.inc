@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_lib.inc,v 1.3.2.2 2008/06/30 17:12:36 karens Exp $
+// $Id: date_php4_lib.inc,v 1.3.2.3 2008/07/09 18:54:38 karens Exp $
 
 /**
  * Date Library, extended date functions.
@@ -69,7 +69,7 @@ function _date_getdate($timestamp = false, $timezone = false) {
   }
 
   $timestamp_in = $timestamp;
-  $timestamp =  $timestamp - date_get_gmt_diff_ts($timestamp, $timezone);
+  $timestamp =  $timestamp + date_get_gmt_diff_ts($timestamp, $timezone);
   $_day_power = 86400;
   $_hour_power = 3600;
   $_min_power = 60;
@@ -221,7 +221,7 @@ function _date_date($format, $timestamp = false, $timezone = false) {
   if ($timezone === FALSE) {
     $timezone = date_default_timezone_name();
   }
-
+      
   $_day_power = 86400;
   $arr = _date_getdate($timestamp, $timezone);
   $year = $arr['year'];
