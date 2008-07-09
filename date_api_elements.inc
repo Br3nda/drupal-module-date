@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.22 2008/07/02 18:08:14 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.23 2008/07/09 11:20:29 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -617,7 +617,7 @@ function date_convert_from_custom($date, $format) {
  *   A themed HTML string representing the date selection boxes.
  */
 function theme_date_timezone($element) {
-  return theme('form_element', $element, $element['#children']);
+  return '<div class="date-clear">'. theme('form_element', $element, $element['#children']) .'</div>';
 }
 
 /**

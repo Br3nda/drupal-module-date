@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.53 2008/07/09 00:09:01 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.54 2008/07/09 11:20:29 karens Exp $
 Date Module 5.2
 =================
 
@@ -48,6 +48,7 @@ Timezone handling
 
 Other
 
+- Make sure the timezone always goes on its own line now that date elements float.
 - #279932 Remove length from integer rows so they don't create errors in postgres.
 - #277420 Add test to Views filter so it won't try to process a 5.1 style filter value, which would break.
 - Simplify Views handling by using new date_sql_hander() function that was backported from D6.
