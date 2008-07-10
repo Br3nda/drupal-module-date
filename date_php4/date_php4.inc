@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.15 2008/07/09 18:54:38 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.16 2008/07/10 08:49:15 karens Exp $
 
 /**
  * @file
@@ -313,31 +313,35 @@ if (!function_exists('timezone_offset_get')) {
  *    the offset in seconds for the supplied date object.
  */
   function timezone_offset_get($timezone, $date) {
-    $cached = cache_get('date_timezone_offsets:'. $timezone);
-    $offsets = isset($cached->data) ? unserialize($cached->data) : array();
-    if (empty($offsets)) {
-      $offsets = array('dst' => 0);
-      $zones = timezone_abbreviations_list();
-      foreach ($zones as $key => $abbr) {
-        foreach ($abbr as $zone) {
-          if ($zone['timezone_id'] == $timezone && $zone['dst'] == 1 && !isset($offsets['dst_offset'])) {
-            $offsets['dst_offset'] = $zone['offset'];
-            $offsets['dst'] = 1;
-          }
-          elseif ($zone['timezone_id'] == $timezone && $zone['dst'] != 1 && !isset($offsets['offset'])) {
-            $offsets['offset'] = $zone['offset'];
+    static $zones = array(), $offsets = array();
+    if (!in_array($timezone, $zones)) {
+      $cached = cache_get('date_timezone_offsets:'. $timezone);
+      $offsets[$timezone] = isset($cached->data) ? unserialize($cached->data) : array();
+      $zones[] = $timezone;
+      if (empty($offsets[$timezone])) {
+        $offsets[$timezone] = array('dst' => 0);
+        $zones = timezone_abbreviations_list();
+        foreach ($zones as $key => $abbr) {
+          foreach ($abbr as $zone) {
+            if ($zone['timezone_id'] == $timezone && $zone['dst'] == 1 && !isset($offsets[$timezone]['dst_offset'])) {
+              $offsets[$timezone]['dst_offset'] = $zone['offset'];
+              $offsets[$timezone]['dst'] = 1;
+            }
+            elseif ($zone['timezone_id'] == $timezone && $zone['dst'] != 1 && !isset($offsets[$timezone]['offset'])) {
+              $offsets[$timezone]['offset'] = $zone['offset'];
+            }
           }
         }
+        cache_set('date_timezone_offsets:'. $timezone, 'cache', serialize($offsets[$timezone]));
       }
-      cache_set('date_timezone_offsets:'. $timezone, 'cache', serialize($offsets));
     }
     $timestamp = $date->timestamp;
-    if ($offsets['dst'] == 1) {
+    if ($offsets[$timezone]['dst'] == 1) {
       if (date_is_dst($timestamp, $timezone)) {
-        return $offsets['dst_offset'];
+        return $offsets[$timezone]['dst_offset'];
       }
     }
-    return $offsets['offset'];
+    return $offsets[$timezone]['offset'];
   }
 }
 
