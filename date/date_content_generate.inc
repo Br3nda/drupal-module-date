@@ -21,7 +21,8 @@ function _date_content_generate($node, $field) {
 	$start = date_make_date($year .'-01-01 00:00:00', 'UTC');
 	$leap = date_format($start, 'L');
 	$max_days = $leap ? 366 : 365;
-	date_modify($start, '+'. rand(0, ($max_days * 86400)) .' seconds');
+	$seconds = rand(0, ($max_days * 86400));
+	date_modify($start, "+$seconds seconds");
 
 	// Modify To date by 1 hour to 1 day.
 	$start2 = drupal_clone($start);
