@@ -73,7 +73,6 @@ span.date-display-separator {
 
 .date-nav {
   width:100%;
-  display:relative;
 }
 .date-nav div.date-prev {
   text-align: left;
