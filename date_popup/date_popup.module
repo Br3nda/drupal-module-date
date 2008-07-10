@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.18 2008/07/02 18:08:15 karens Exp $
+// $Id: date_popup.module,v 1.27.2.19 2008/07/10 18:00:45 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -329,23 +329,16 @@ function date_popup_input_value($element, $auto_complete = FALSE) {
   date_popup_load();
   $granularity = date_format_order($element['#date_format']);
   $format = date_limit_format($element['#date_format'], $granularity);
-  $input = $element['#value']['date'];
   $value = '';
-  if (!empty($element['#value']['time'])) {
-    $input .= ' '. $element['#value']['time'];
-    $value = date_convert_from_custom($input, $format);
-  }
-  elseif (!empty($input)) {
-    $value = date_convert(date_fuzzy_datetime($input), DATE_ISO, DATE_DATETIME);
+  if (is_array($element['#value']) && !empty($element['#value']['date'])) {
+    $input = $element['#value']['date'] .' '. $element['#value']['time'];
+    $value = date_convert_from_custom(trim($input), $format);
   }
   if (date_is_valid($value, DATE_DATETIME)) {
     $date = date_make_date($value, $element['#date_timezone'], DATE_DATETIME);
     $value = date_convert($date, DATE_OBJECT, DATE_DATETIME);
     return $value;
   }
-  
-  
-  
   return NULL;
 }
 

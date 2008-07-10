@@ -1,11 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.64 2008/07/10 16:59:20 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.65 2008/07/10 18:00:44 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
-- Rework date_content_generate() a bit so it creates unique dates.
+- #280899, #273344 Make sure Date Popup doesn't inject the current date into empty fields.
 - Fix computation of year range in date_content_generate.
 
 Version 5.2-rc2
