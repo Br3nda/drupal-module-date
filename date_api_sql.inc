@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.19 2008/07/09 18:54:38 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.20 2008/07/10 07:52:34 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -147,7 +147,7 @@ class date_sql_handler {
         }
         break;
       case 'pgsql':
-        switch ($date_type) {
+        switch ($this->date_type) {
           case DATE_UNIX:
             $field = "$field::ABSTIME";
             break;

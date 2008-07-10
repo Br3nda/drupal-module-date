@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.58 2008/07/10 01:01:42 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.59 2008/07/10 07:52:34 karens Exp $
 Date Module 5.2
 =================
 
@@ -48,6 +48,7 @@ Timezone handling
 
 Other
 
+- #280041 Fix typo in postgres switch code in date_api_sql.inc.
 - Make sure Date filter dates from both the Date Popup and a regular textfield get treated the same.
 - #264749 Fix typo in date_ical_date which unset the date.
 - Fix Date Browser week navigation.
