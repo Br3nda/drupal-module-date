@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.16 2008/07/10 08:49:15 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.17 2008/07/10 09:02:46 karens Exp $
 
 /**
  * @file
@@ -28,14 +28,13 @@
  *   date_timezone_set()
  *   date_offset_get()
  *   date_timezone_get()
+ *   timezone_offset_get()
  *   timezone_name_get()
  *   timezone_open()
  *   timezone_abbreviations_list()
  *   timezone_identifiers_list()
  *
  * Not supported:
- *   timezone_offset_get()
- *    - same results as date_offset_get(), but more complex
  *   timezone_ transitions_ get()
  *    - we just don't have all those historical transitions available in PHP 4
  */
