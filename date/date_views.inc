@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.28 2008/07/09 12:14:56 karens Exp $
+// $Id: date_views.inc,v 1.26.2.29 2008/07/10 01:01:43 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -135,11 +135,28 @@ function _date_views_timestamp_filter_handler($op, $filter, $filterinfo, &$query
   return _date_views_filter_handler($op, $filter, $filterinfo, $query, DATE_UNIX);
  }
 function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = DATE_ISO) {
-  // Filter out 5.1 version values that won't work in 5.2.
-  if (isset($filter['value']['date']) && !preg_match(DATE_REGEX_LOOSE, $filter['value']['date'])) {
-    $filter['value'] = '';
+  
+  // $filter['value'] could either be an array of 'date' and 'time' or a single value,
+  // depending on whether the Date Popup widget was used or not. Normalize the
+  // values before analyzing them.
+  if (is_array($filter['value']) && array_key_exists('date', $filter['value'])) {
+    $value = $filter['value']['date'];
+    if (!empty($filter['value']['time'])) {
+      $value .= ' '. $filter['value']['time'] .':00';
+    }
+    elseif (!empty($value)) {
+      $value .= ' 00:00:00';
+    }
   }
-  if (empty($filter['value']) && empty($filter['options'])) {
+  else {
+    $value = $filter['value'];
+  }
+    
+  // Filter out 5.1 version values that won't work in 5.2.
+  if (!preg_match(DATE_REGEX_LOOSE, $value)) {
+    $value = '';
+  }
+  if (empty($value) && empty($filter['options'])) {
     return;
   }
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
@@ -173,9 +190,9 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
       
   $sql = '';  
   $adjustment = trim(str_replace('now', '', $filter['options']));
-
+      
   // Comparing to NOW.
-  if (empty($filter['value']) && !empty($filter['options'])) {
+  if (empty($value) && !empty($filter['options'])) {
     $date = date_now();
     if (!empty($adjustment)){
       date_modify($date, $adjustment);
@@ -197,24 +214,9 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   }
   // Comparing to an input date.
   elseif ($filterinfo['type'] == 'DATE') {
-    // If the date_popup or date_textfield elements are used as a exposed filters, their
-    // #validation functions will never get called, so validate and
-    // reconstruct them here.
-    if (is_array($filter['value'])) {
-      $input = $filter['value']['date'];
-      if (!empty($filter['value']['time'])) {
-        $input .= ' '. $filter['value']['time'] .':00';
-      }
-      elseif (!empty($input)) {
-        $input .= ' 00:00:00';
-      }
-    }
-    else {
-      $input = $filter['value'];
-    }
-    if (!empty($input)) {
-      if (date_is_valid($input, DATE_DATETIME)) {
-        $date = date_make_date($input, date_default_timezone_name(), DATE_DATETIME);
+    if (!empty($value)) {
+      if (date_is_valid($value, DATE_DATETIME)) {
+        $date = date_make_date($value, date_default_timezone_name(), DATE_DATETIME);
         if (!empty($adjustment)) {
           date_modify($date, $adjustment);
         }
@@ -229,7 +231,6 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   }
   // Comparing to a YEAR, MONTH, or DAY.
   else {
-    $value = $filter['value'];
     $sql = $date_handler->sql_where_extract($filterinfo['type'], $sql_field, $filter['operator'], $value);
   }
   if (!empty($sql)) {
