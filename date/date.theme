@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.15 2008/07/11 00:18:45 karens Exp $
+//$Id: date.theme,v 1.2.2.16 2008/07/11 10:26:52 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -112,9 +112,9 @@ function theme_date_format_interval($field, $item, $dates, $node = NULL) {
     //return t('Started !time ago', array('!time' => $dates['value']['interval']));
     return t('ongoing');
   }
-  // 3) Date is in the past
+  // 3) Date is in the past (format_interval added 'ago' to the value).
   else {
-    return t('!time ago', array('!time' => $dates['value']['interval']));
+    return $dates['value']['interval'];
   }
 }
 
