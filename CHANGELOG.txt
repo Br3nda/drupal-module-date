@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.65 2008/07/10 18:00:44 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.66 2008/07/11 00:18:45 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Need a space between the date and the timezone name in the Date theme.
 - #280899, #273344 Make sure Date Popup doesn't inject the current date into empty fields.
 - Fix computation of year range in date_content_generate.
 
