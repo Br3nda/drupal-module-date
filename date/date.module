@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.25 2008/07/10 10:04:53 karens Exp $
+// $Id: date.module,v 1.39.2.26 2008/07/13 13:40:15 karens Exp $
 
 /**
  * @file
@@ -334,7 +334,7 @@ function date_views_timestamp_filter_handler($op, $filter, $filterinfo, &$query)
   include_once(drupal_get_path('module', 'date') .'/date_views.inc');
   return _date_views_timestamp_filter_handler($op, $filter, $filterinfo, $query);
 }
-function date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = 'iso') {
+function date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = DATE_ISO) {
   include_once(drupal_get_path('module', 'date') .'/date_views.inc');
   return _date_views_filter_handler($op, $filter, $filterinfo, $query, $field_type);
 }
@@ -346,7 +346,7 @@ function date_views_timestamp_argument_range_handler($op, &$query, $argtype, $ar
   include_once(drupal_get_path('module', 'date') .'/date_views.inc');
   return _date_views_timestamp_argument_range_handler($op, $query, $argtype, $arg);
 }
-function date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $field_type = 'iso') {
+function date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $field_type = DATE_ISO) {
   include_once(drupal_get_path('module', 'date') .'/date_views.inc');
   return _date_views_argument_range_handler($op, $query, $argtype, $arg, $field_type);
 }
