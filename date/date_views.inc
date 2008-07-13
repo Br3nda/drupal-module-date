@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.29 2008/07/10 01:01:43 karens Exp $
+// $Id: date_views.inc,v 1.26.2.30 2008/07/13 11:13:51 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -206,7 +206,8 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
         $sql = $date_handler->sql_where_extract($filterinfo['type'], $sql_field, $filter['operator'], $value, FALSE);
         break;
       default:
-        $granularity = array_pop($field['granularity']);
+        $granularity = drupal_clone($field['granularity']);
+        $granularity = array_pop(array_filter($granularity));
         $format = $date_handler->views_formats($granularity, 'sql');
         $sql = $date_handler->sql_where_format($format, $sql_field, $filter['operator'], date_format($date, $format));
         break;
