@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.33 2008/07/14 19:03:37 karens Exp $
+// $Id: date_views.inc,v 1.26.2.34 2008/07/14 19:36:56 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -366,7 +366,8 @@ function _date_views_argument_summary(&$query, $argtype, $arg, $field_type) {
 function _date_views_argument_sort(&$query, $argtype, $arg, $field_type) {
   // There's not enough info provided by views to identify the field,
   // we have to add it to the $query in the previous step.
-  $query->add_orderby(NULL, $query->date_handler->sql_field($query->date_handler->sql_field_name), $argtype, 'name');
+  $field = explode('.', $query->date_handler->sql_field_name);
+  $query->add_orderby($field[0], $field[1], $argtype);
   return;
 }
 
