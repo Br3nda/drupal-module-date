@@ -9,7 +9,6 @@
 
 /* Force from/to dates to float using inline-block, where it works, otherwise inline. */
 .container-inline-date {
-  display: inline;
   display: inline-block;
   vertical-align:top;
   margin-right: 0.5em;
@@ -24,7 +23,7 @@
   text-indent: 0;
 }
 
-.container-inline-date .date-timezone .form-item {
+.date-clear-block .form-item {
   float:none;
   width:auto;
   clear:both;

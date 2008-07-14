@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.20 2008/07/14 14:42:07 karens Exp $
+// $Id: date_popup.module,v 1.27.2.21 2008/07/14 23:47:06 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -167,6 +167,18 @@ function date_popup_process($element, $edit = NULL) {
   $element['#tree'] = TRUE;
   $element['date'] = date_popup_process_date($element, $edit, $date);
   $element['time'] = date_popup_process_time($element, $edit, $date);
+
+  // Add #date_float to allow date parts to float together on the same line. 
+  $class = 'container-inline-date';
+  if (empty($element['#date_float'])) {
+    $class .= ' date-clear-block';
+  }
+  if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
+    $element['#attributes']['class'] .= ' '. $class;
+  }
+  else {
+    $element['#attributes'] = array('class' => $class);
+  }
   return $element;
 }
 
@@ -439,5 +451,5 @@ function date_popup_popup_to_format($format) {
  * Use a class that will float date and time next to each other.
  */
 function theme_date_popup($element) {
-  return '<div class="container-inline-date">'. theme('form_element', $element, $element['#children']) .'</div>';
+  return '<div '. drupal_attributes($element['#attributes']) .'>'. theme('form_element', $element, $element['#children']) .'</div>';
 }

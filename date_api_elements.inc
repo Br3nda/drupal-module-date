@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.23 2008/07/09 11:20:29 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.24 2008/07/14 23:47:05 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -98,7 +98,7 @@ function date_timezone_process($element, $edit = NULL) {
     '#options' => date_timezone_names($element['#required']),
     '#weight' => $element['#weight'],
     '#required' => $element['#required'],
-    '#attributes' => array('class' => 'date-timezone'),
+    '#attributes' => array('class' => 'date-timezone date-clear'),
     '#theme' => 'date_select_element',
   );
   return $element;
@@ -138,13 +138,16 @@ function date_text_process($element, $edit = NULL) {
   // using something like jscalendar that needs to set custom values.
   $element['#tree'] = TRUE;
 
-  // Pass date-clear in as another class to keep multiple date elements 
-  // from floating together on the same line. 
+  // Add #date_float to allow date parts to float together on the same line. 
+  $class = 'container-inline-date';
+  if (empty($element['#date_float'])) {
+    $class .= ' date-clear-block';
+  }
   if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
-    $element['#attributes']['class'] .= ' container-inline-date';
+    $element['#attributes']['class'] .= ' '. $class;
   }
   else {
-    $element['#attributes'] = array('class' => 'container-inline-date');
+    $element['#attributes'] = array('class' => $class);
   }
   
   $element['date']['#type'] = 'textfield';
@@ -195,13 +198,16 @@ function date_select_process($element, $edit = NULL) {
   date_increment_round($date, $element['#date_increment']);
   $element += (array) date_parts_element($element, $date, $element['#date_format']);
 
-  // Pass date-clear in as another class to keep multiple date elements 
-  // from floating together on the same line. 
+  // Add #date_float to allow date parts to float together on the same line. 
+  $class = 'container-inline-date';
+  if (empty($element['#date_float'])) {
+    $class .= ' date-clear-block';
+  }
   if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
-    $element['#attributes']['class'] .= ' container-inline-date';
+    $element['#attributes']['class'] .= ' '. $class;
   }
   else {
-    $element['#attributes'] = array('class' => 'container-inline-date');
+    $element['#attributes'] = array('class' => $class);
   }
   
   // Store a hidden value for all date parts not in the current display.

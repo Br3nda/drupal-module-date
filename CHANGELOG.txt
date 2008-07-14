@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.73 2008/07/14 19:36:56 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.74 2008/07/14 23:47:05 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #282408 Make sure dates only float when there are two of them by adding #date_float parameter.
 - Add sort to argument handler.
 - #281623 Switch old jscalendar widgets to use date_text instead of date_popup since date_popup may not be available.
 - Make sure empty time does not get value on submit.
