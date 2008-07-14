@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.19 2008/07/10 18:00:45 karens Exp $
+// $Id: date_popup.module,v 1.27.2.20 2008/07/14 14:42:07 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -226,7 +226,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
   $class = date_popup_js_settings_class('jquery-calendar', 'calendar', $settings);
   $sub_element = array(
     '#type' => 'textfield',
-    '#default_value' => is_object($date) ? date_format($date, $date_format) : '',
+    '#default_value' => !empty($element['#value']['date']) && is_object($date) ? date_format($date, $date_format) : '',
     '#attributes' => array('class' => $class),
     '#size' => 20,
     '#maxlength' => 20,
@@ -261,7 +261,7 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
   // Create a unique class for each set of custom settings.
   $class = date_popup_js_settings_class('jquery-timeentry', 'timeEntry', $settings);  $sub_element = array(
     '#type' => 'textfield',
-    '#default_value' => is_object($date) ? date_format($date, $time_format) : '',
+    '#default_value' => !empty($element['#value']['time']) && is_object($date) ? date_format($date, $time_format) : '',
     '#attributes' => array('class' => $class),
     '#size' => 10,
     '#maxlength' => 10,
