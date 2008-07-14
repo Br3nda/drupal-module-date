@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.32 2008/07/14 11:28:02 karens Exp $
+// $Id: date_views.inc,v 1.26.2.33 2008/07/14 19:03:37 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -181,7 +181,6 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   // Comparing to NOW.
   if (empty($value) && !empty($filter['options'])) {
     $date = date_now();
-    date_timezone_set($date, timezone_open($timezone));
     if (!empty($adjustment)){
       date_modify($date, $adjustment);
     }
