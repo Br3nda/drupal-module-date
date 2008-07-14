@@ -1,10 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.68 2008/07/13 11:13:51 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.69 2008/07/14 11:28:02 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Use same date widget for Views filter as the field uses.
+- Rework argument handling and break out each op as a separate handler to simplify maintenance.
 - #277420 Change logic for setting granularity of view format to use drupal_clone to prevent problem where format got set to year in PHP4.
 - #277420 Another fix to make sure official release of Views does not wipe out %%d.
 - Format interval theme added 'ago' twice to past events.
