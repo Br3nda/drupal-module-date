@@ -1,9 +1,13 @@
-//$Id: CHANGELOG.txt,v 1.1.6.74 2008/07/14 23:47:05 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.75 2008/07/15 13:56:20 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
+- Make sure partial dates, like year-only, get the right range computed for them.
+
+Version 5.2-rc3
+===============
 
 - #282408 Make sure dates only float when there are two of them by adding #date_float parameter.
 - Add sort to argument handler.
