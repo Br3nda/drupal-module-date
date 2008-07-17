@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.24 2008/07/14 23:47:05 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.25 2008/07/17 15:37:01 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -69,16 +69,13 @@ function _date_api_elements() {
     );
   $type['date_select'] = array_merge($date_base, array(
     '#process' => array('date_select_process' => array()),
-    '#validate' => array('date_select_validate' => array()),
     ));
   $type['date_text'] = array_merge($date_base, array(
     '#process' => array('date_text_process' => array()),
-    '#validate' => array('date_text_validate' => array()),
     ));
   $type['date_timezone'] = array(
     '#input' => TRUE, '#tree' => TRUE,
     '#process' => array('date_timezone_process' => array()),
-    '#validate' => array('date_timezone_validate' => array()),
     );
   return $type;
 }
@@ -101,6 +98,7 @@ function date_timezone_process($element, $edit = NULL) {
     '#attributes' => array('class' => 'date-timezone date-clear'),
     '#theme' => 'date_select_element',
   );
+  $element['#validate'] = array('date_timezone_validate' => array());
   return $element;
 }
 
@@ -111,12 +109,18 @@ function date_timezone_process($element, $edit = NULL) {
  *
  * The exact parts displayed in the field are those in #date_granularity.
  * The display of each part comes from #date_format.
+ * 
+ * In regular FAPI processing $element['#value'] will contain a string
+ * value before the form is submitted, and an array during submission.
+ * 
+ * In regular FAPI processing $edit is empty until the form is submitted
+ * when it will contain an array.
+ * 
+ * When used as a Views widget, $edit is always empty, and the validation
+ * step is bypassed. $element['#value'] is the only available value,
+ * but it is a string before submission and an array afterward.
  */
 function date_text_process($element, $edit = NULL) {
-  // There are some cases, like when using this as a Views form element,
-  // where $edit is empty and $element['#value'] holds an array of input values.
-  // This happens when the processing bypasses the element validation step
-  // that resets the value from the date and time subparts.
   $date = NULL;
   if (!empty($edit) || is_array($element['#value'])) {
     if (empty($edit)) {
@@ -160,6 +164,8 @@ function date_text_process($element, $edit = NULL) {
   //$element['date']['#required'] = $element['#required'];
   $element['date']['#theme'] = 'date_textfield_element';
   $element['date']['#description'] .= ' '. t('Format: @date', array('@date' => date($element['#date_format'], time())));
+  
+  $element['#validate'] = array('date_text_validate' => array());
   return $element;
 }
 
@@ -172,13 +178,19 @@ function date_text_process($element, $edit = NULL) {
  *
  * The exact parts displayed in the field are those in #date_granularity.
  * The display of each part comes from ['#date_settings']['format'].
+ * 
+ * In regular FAPI processing $element['#value'] will contain a string
+ * value before the form is submitted, and an array during submission.
+ * 
+ * In regular FAPI processing $edit is empty until the form is submitted
+ * when it will contain an array.
+ * 
+ * When used as a Views widget, $edit is always empty, and the validation
+ * step is bypassed. $element['#value'] is the only available value,
+ * but it is a string before submission and an array afterward.
  */
 function date_select_process($element, $edit = NULL) {
-  // There are some cases, like when using this as a Views form element,
-  // where $edit is empty and $element['#value'] holds an array of input values.
-  // This happens when the processing bypasses the element validation step
-  // that resets the value from the date and time
-  // subparts.
+
   $date = NULL;
   if (!empty($edit) || is_array($element['#value'])) {
     if (empty($edit)) {
@@ -220,6 +232,7 @@ function date_select_process($element, $edit = NULL) {
         '#value' => is_object($date) ? intval(date_format($date, $formats[$field])) : 0);
     }
   }
+  $element['#validate'] = array('date_select_validate' => array());
   return $element;
 }
 

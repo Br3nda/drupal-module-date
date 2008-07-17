@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.35 2008/07/06 13:20:19 karens Exp $
+// $Id: date_api.module,v 1.44.2.36 2008/07/17 15:37:01 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1107,9 +1107,10 @@ function date_is_valid($date, $type = DATE_DATETIME) {
   if ($type == DATE_ARRAY and !is_array($date)) return FALSE;
   
   // If checkdate works, no need for further tests.
-  $year = date_part_extract($date, 'year', $type);
-  $month = date_part_extract($date, 'month', $type);
-  $day = date_part_extract($date, 'day', $type);
+  // Make sure integer values are sent to checkdate.
+  $year = intval(date_part_extract($date, 'year', $type));
+  $month = intval(date_part_extract($date, 'month', $type));
+  $day = intval(date_part_extract($date, 'day', $type));
   if (!checkdate($month, $day, $year)) {
     // ISO dates and arrays can have empty date parts
     if ($type == DATE_ISO || $type == DATE_ARRAY) {

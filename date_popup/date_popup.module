@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.21 2008/07/14 23:47:06 karens Exp $
+// $Id: date_popup.module,v 1.27.2.22 2008/07/17 15:37:01 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -135,16 +135,22 @@ function date_popup_elements() {
 /**
  * Javascript popup element processing.
  * Add popup attributes to $element.
+ * 
+ * In regular FAPI processing $element['#value'] will contain a string
+ * value before the form is submitted, and an array during submission.
+ * 
+ * In regular FAPI processing $edit is empty until the form is submitted
+ * when it will contain an array.
+ * 
+ * When used as a Views widget, $edit is always empty, and the validation
+ * step is bypassed. $element['#value'] is the only available value,
+ * but it is a string before submission and an array afterward.
+ * 
  */
 function date_popup_process($element, $edit = NULL) {
   date_popup_load();
   include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
 
-  // There are some cases, like when using this as a Views form element,
-  // where $edit is empty and $element['#value'] holds an array of input values.
-  // This happens when the processing bypasses the element validation step
-  // that resets the value from the date and time
-  // subparts.
   $date = NULL;
   if (!empty($edit) || is_array($element['#value'])) {
     if (empty($edit)) {
@@ -179,6 +185,7 @@ function date_popup_process($element, $edit = NULL) {
   else {
     $element['#attributes'] = array('class' => $class);
   }
+  $element['#validate'] = array('date_popup_validate' => array());
   return $element;
 }
 
