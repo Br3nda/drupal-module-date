@@ -1,10 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.77 2008/07/17 15:37:01 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.78 2008/07/18 10:52:41 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Remove code previously commented out that forced required value to current date, seems to be working right.
+- Move #validate parameters to element processing step instead of hook_element() to help ensure they don't get wiped out.
 - Add PHP documentation about difference between Views widgets and regular FAPI element processing values.
 - #282408 Fix mistake in css float that caused all date parts to move to new line.
 - Make sure partial dates, like year-only, get the right range computed for them.

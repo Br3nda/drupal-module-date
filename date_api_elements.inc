@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.25 2008/07/17 15:37:01 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.26 2008/07/18 10:52:41 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -132,11 +132,6 @@ function date_text_process($element, $edit = NULL) {
   elseif (!empty($element['#value'])) {
     $date = date_make_date($element['#value'], $element['#date_timezone']);
   }
-  // TODO keep an eye on this, commented out so it is possible to provide
-  // blank initial value for required date.
-  //elseif ($element['#required']) {
-  //  $date = date_now($element['#date_timezone']);
-  //}
 
   // Don't overwrite values already added to $element['date'] in case
   // using something like jscalendar that needs to set custom values.
@@ -201,11 +196,7 @@ function date_select_process($element, $edit = NULL) {
   elseif (!empty($element['#value'])) {
     $date = date_make_date($element['#value'], $element['#date_timezone']);
   }
-  // TODO keep an eye on this, commented out so it is possible to provide
-  // blank initial value for required date.
-  //elseif ($element['#required']) {
-  //  $date = date_now($element['#date_timezone']);
-  //}
+
   $element['#tree'] = TRUE;
   date_increment_round($date, $element['#date_increment']);
   $element += (array) date_parts_element($element, $date, $element['#date_format']);
