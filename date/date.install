@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.27 2008/07/14 15:09:54 karens Exp $
+// $Id: date.install,v 1.21.2.28 2008/07/21 00:31:16 karens Exp $
 function date_install_clear() {
   cache_clear_all('date_', 'cache', '*');
   if (db_table_exists('cache_views')) {
@@ -370,10 +370,10 @@ function date_update_5200() {
 function date_update_5201() {
   include_once(drupal_get_path('module', 'content') .'/content.module');
   $ret = array();
-  if (db_result(db_query("SELECT COUNT(*) FROM {". content_instance_tablename() ."} WHERE widget_type = 'date_js'"))) {
-    $result = db_query("SELECT field_name, widget_type, widget_settings from {". content_instance_tablename() ."} where widget_type = 'date_js'");
+  if (db_result(db_query("SELECT COUNT(*) FROM {node_field_instance} WHERE widget_type = 'date_js'"))) {
+    $result = db_query("SELECT field_name, widget_type, widget_settings from {node_field_instance} where widget_type = 'date_js'");
     while ($widget = db_fetch_array($result)) {
-      db_query("UPDATE {". content_instance_tablename() ."} SET widget_type = 'date_text' WHERE field_name = '%s'", serialize($widget_settings), $widget['field_name']);
+      db_query("UPDATE {node_field_instance} SET widget_type = 'date_text' WHERE field_name = '%s'", serialize($widget_settings), $widget['field_name']);
     }
   }
   date_install_clear();
