@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.23 2008/07/15 14:13:25 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.24 2008/07/22 11:20:46 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -506,6 +506,9 @@ class date_sql_handler {
    * and the current values if type = 'now'.
    */
   function complete_date($selected, $type = 'now') {
+    if (empty($selected)) {
+      return '';
+    }
     // Special case for weeks.
     if (array_key_exists('week', $selected)) {
       $dates = date_week_range($selected['week'], $selected['year']);
@@ -647,8 +650,12 @@ class date_sql_handler {
    *
    */
   function arg_parts($argument) {
-    $fromto = explode('--', $argument);
     $values = array();
+    // Keep mal-formed arguments from creating errors.
+    if (empty($argument) || is_array($argument)) {
+      return array('date' => array(), 'period' => array());
+    }
+    $fromto = explode('--', $argument);
     foreach ($fromto as $arg) {
       $parts = array();
       if ($arg == '@') {
