@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.79 2008/07/21 00:31:16 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.80 2008/07/22 10:59:16 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Move the class configuration to the theme so it is easier for themers.
 - #284455 Fix copy/paste error in date.install that used D6 function content_instance_tablename.
 - Remove code previously commented out that forced required value to current date, seems to be working right.
 - Move #validate parameters to element processing step instead of hook_element() to help ensure they don't get wiped out.

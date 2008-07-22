@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.26 2008/07/18 10:52:41 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.27 2008/07/22 10:59:16 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -60,7 +60,7 @@
  */
 function _date_api_elements() {
   $date_base = array(
-    '#input' => TRUE, '#tree' => TRUE, '#date' => NULL,
+    '#input' => TRUE, '#tree' => TRUE,
     '#date_timezone' => date_default_timezone_name(),
     '#date_format' => variable_get('date_format_short', 'm/d/Y - H:i'),
     '#date_text_parts' => array(),
@@ -137,18 +137,6 @@ function date_text_process($element, $edit = NULL) {
   // using something like jscalendar that needs to set custom values.
   $element['#tree'] = TRUE;
 
-  // Add #date_float to allow date parts to float together on the same line. 
-  $class = 'container-inline-date';
-  if (empty($element['#date_float'])) {
-    $class .= ' date-clear-block';
-  }
-  if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
-    $element['#attributes']['class'] .= ' '. $class;
-  }
-  else {
-    $element['#attributes'] = array('class' => $class);
-  }
-  
   $element['date']['#type'] = 'textfield';
   $element['date']['#weight'] = !empty($element['date']['#weight']) ? $element['date']['#weight'] : $element['#weight'];
   $element['date']['#default_value'] = is_object($date) ? date_format($date , $element['#date_format']) : '';
@@ -185,7 +173,6 @@ function date_text_process($element, $edit = NULL) {
  * but it is a string before submission and an array afterward.
  */
 function date_select_process($element, $edit = NULL) {
-
   $date = NULL;
   if (!empty($edit) || is_array($element['#value'])) {
     if (empty($edit)) {
@@ -201,18 +188,6 @@ function date_select_process($element, $edit = NULL) {
   date_increment_round($date, $element['#date_increment']);
   $element += (array) date_parts_element($element, $date, $element['#date_format']);
 
-  // Add #date_float to allow date parts to float together on the same line. 
-  $class = 'container-inline-date';
-  if (empty($element['#date_float'])) {
-    $class .= ' date-clear-block';
-  }
-  if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
-    $element['#attributes']['class'] .= ' '. $class;
-  }
-  else {
-    $element['#attributes'] = array('class' => $class);
-  }
-  
   // Store a hidden value for all date parts not in the current display.
   $granularity = date_format_order($element['#date_format']);
   $formats = array('year' => 'Y', 'month' => 'n', 'day' => 'j', 'hour' => 'H', 'minute' => 'i', 'second' => 's');
@@ -640,7 +615,16 @@ function theme_date_timezone($element) {
  *   A themed HTML string representing the date selection boxes.
  */
 function theme_date_select($element) {
-  return '<div '. drupal_attributes($element['#attributes']) .'>'. theme('form_element', $element, $element['#children']) .'</div>';
+  $output = '';
+  $class = 'container-inline-date';
+  // Add #date_float to allow date parts to float together on the same line. 
+  if (empty($element['#date_float'])) {
+    $class .= ' date-clear-block';
+  }
+  if (isset($element['#children'])) {
+    $output = $element['#children'];
+  }
+  return '<div class="'. $class .'">'. theme('form_element', $element, $output) .'</div>';
 }
 
 /**
@@ -653,8 +637,16 @@ function theme_date_select($element) {
  *   A themed HTML string representing the date selection boxes.
  */
 function theme_date_text($element) {
-  return '<div '. drupal_attributes($element['#attributes']) .'>'. theme('form_element', $element, $element['#children']) .'</div>';
-  return theme('form_element', $element, $element['#children']);
+  $output = '';
+  $class = 'container-inline-date';
+  // Add #date_float to allow date parts to float together on the same line. 
+  if (empty($element['#date_float'])) {
+    $class .= ' date-clear-block';
+  }
+  if (isset($element['#children'])) {
+    $output = $element['#children'];
+  }
+  return '<div class="'. $class .'">'. theme('form_element', $element, $output) .'</div>';
 }
 
 /**
