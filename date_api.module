@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.36 2008/07/17 15:37:01 karens Exp $
+// $Id: date_api.module,v 1.44.2.37 2008/07/24 17:34:22 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -942,8 +942,9 @@ function date_convert($date, $from_type, $to_type) {
     case DATE_DATETIME:
     case DATE_ISO:
       if (!preg_match(DATE_REGEX_LOOSE, $date)) return NULL;
+      $date = date_fuzzy_datetime($date);
       $date = str_replace('T', ' ', $date);
-      $obj = date_make_date(date_fuzzy_datetime($date), 'UTC');
+      $obj = date_create($date, timezone_open('UTC'));
       break;
     case DATE_ICAL:
       if (!preg_match(DATE_REGEX_LOOSE, $date)) return NULL;

@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.82 2008/07/23 21:34:51 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.83 2008/07/24 17:34:22 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Don't use date_make_date() in date_convert() to avoid cyclical references.
 - Set a warning message for invalid non-required Date popup values instead of silently setting to NULL.
 - Check for invalid inputs to the date handler argument handling.
 - Move the class configuration to the theme so it is easier for themers.
