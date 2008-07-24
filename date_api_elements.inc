@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.28 2008/07/24 17:58:08 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.29 2008/07/24 21:25:05 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -462,12 +462,12 @@ function date_text_input_value($element) {
   if (date_is_valid($value)) {
     return $value;
   }
-  // If that didn't work, try strtotime().
   else {
-   $date = strtotime($input, 0);
-   if (date_is_valid($date, DATE_UNIX)) {
-     return date_convert($date, DATE_UNIX, DATE_DATETIME);
-   }
+    // A wrapped strtotime, that respects desired timezone (and handles lots of input formats)
+    $date = date_make_date($value, $element['#date_timezone']);
+    if (date_is_valid($date, DATE_OBJECT)) {   
+      return date_format($date, DATE_FORMAT_DATETIME);
+    }
   }
   return NULL;
 }
