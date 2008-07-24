@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_lib.inc,v 1.3.2.3 2008/07/09 18:54:38 karens Exp $
+// $Id: date_php4_lib.inc,v 1.3.2.4 2008/07/24 18:01:22 karens Exp $
 
 /**
  * Date Library, extended date functions.
@@ -401,7 +401,6 @@ function _date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false
     $_total_date +=$day-1;
     $ret = $_total_date * $_day_power + $hr * $_hour_power + $min * $_min_power + $sec;
     $ret -= date_get_gmt_diff_ts($ret, $timezone);
-    
   }
   else {
     for ($a = 1969 ; $a >= $year; $a--) {

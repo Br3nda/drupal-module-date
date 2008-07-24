@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.84 2008/07/24 17:58:08 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.85 2008/07/24 18:01:21 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Fix computation of 'now' in PHP4 date_create() function.
 - Fix some inconsistencies in the expectation of whether date_fuzzy_datetime returns a datetime or ISO value.
 - Don't use date_make_date() in date_convert() to avoid cyclical references.
 - Set a warning message for invalid non-required Date popup values instead of silently setting to NULL.
