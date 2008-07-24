@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.37 2008/07/24 17:34:22 karens Exp $
+// $Id: date_api.module,v 1.44.2.38 2008/07/24 17:58:08 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -943,7 +943,6 @@ function date_convert($date, $from_type, $to_type) {
     case DATE_ISO:
       if (!preg_match(DATE_REGEX_LOOSE, $date)) return NULL;
       $date = date_fuzzy_datetime($date);
-      $date = str_replace('T', ' ', $date);
       $obj = date_create($date, timezone_open('UTC'));
       break;
     case DATE_ICAL:
@@ -1008,7 +1007,7 @@ function date_fuzzy_datetime($date) {
     $date['day'] = 1;
   }
   $value = date_pad($date['year'], 4) .'-'. date_pad($date['month']) .'-'. 
-    date_pad($date['day']) .'T'. date_pad($date['hour']) .':'. 
+    date_pad($date['day']) .' '. date_pad($date['hour']) .':'. 
     date_pad($date['minute']) .':'. date_pad($date['second']);
   return $value;
 }

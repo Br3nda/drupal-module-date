@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.27 2008/07/22 10:59:16 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.28 2008/07/24 17:58:08 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -455,7 +455,7 @@ function date_text_input_value($element) {
   $granularity = date_format_order($element['#date_format']);
   $non_granularity = date_nongranularity($granularity);
   if (array_intersect($non_granularity, array('year', 'month', 'day'))) {
-    $value = date_fuzzy_datetime(str_replace(' ', 'T', $value));
+    $value = date_fuzzy_datetime($value);
   }
   
   // If it creates a valid date, use it.
