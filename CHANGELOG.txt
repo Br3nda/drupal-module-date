@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.85 2008/07/24 18:01:21 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.86 2008/07/24 20:43:31 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #277771 Fix date_gmmktime() computation in PHP4 date handling to avoid erratic daylight savings time problem.
 - Fix computation of 'now' in PHP4 date_create() function.
 - Fix some inconsistencies in the expectation of whether date_fuzzy_datetime returns a datetime or ISO value.
 - Don't use date_make_date() in date_convert() to avoid cyclical references.

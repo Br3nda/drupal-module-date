@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_lib.inc,v 1.3.2.4 2008/07/24 18:01:22 karens Exp $
+// $Id: date_php4_lib.inc,v 1.3.2.5 2008/07/24 20:43:32 karens Exp $
 
 /**
  * Date Library, extended date functions.
@@ -349,7 +349,7 @@ function _date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false
   if ($timezone === FALSE) {
     $timezone = date_default_timezone_name();
   }
-
+  
   /*
   # disabled because some people place large values in $sec.
   # however we need it for $mon because we use an array...
@@ -399,7 +399,7 @@ function _date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false
       }
     }
     $_total_date +=$day-1;
-    $ret = $_total_date * $_day_power + $hr * $_hour_power + $min * $_min_power + $sec;
+    $ret = ($_total_date * $_day_power) + ($hr * $_hour_power) + ($min * $_min_power) + $sec;
     $ret -= date_get_gmt_diff_ts($ret, $timezone);
   }
   else {
