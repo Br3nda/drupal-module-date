@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.87 2008/07/24 21:25:05 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.88 2008/07/25 12:18:23 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Fix undefined index in PHP4 date_datetime2timestamp() function.
 - #265076 Avoid use of strtotime and use date_create instead as date_text validator.
 - #277771 Fix date_gmmktime() computation in PHP4 date handling to avoid erratic daylight savings time problem.
 - Fix computation of 'now' in PHP4 date_create() function.

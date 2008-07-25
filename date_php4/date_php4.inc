@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.19 2008/07/24 20:43:32 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.20 2008/07/25 12:18:23 karens Exp $
 
 /**
  * @file
@@ -568,8 +568,7 @@ if (!function_exists('timezone_abbreviations_list')) {
  */
 function date_datetime2timestamp($datetime, $timezone) {
   preg_match(DATE_REGEX_LOOSE, $datetime, $regs);
-  return date_mktime($regs[5], $regs[6], $regs[7], $regs[2], $regs[3], $regs[1], $timezone);
-}
+  return date_mktime((isset($regs[5]) ? $regs[5] : 0), (isset($regs[6]) ? $regs[6] : 0), (isset($regs[7]) ? $regs[7] : 0), (isset($regs[2]) ? $regs[2] : 0), (isset($regs[3]) ? $regs[3] : 0), (isset($regs[1]) ? $regs[1] : 0), $timezone);}
 
 /**
  * Check if time is in Daylight Savings Time
