@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.29 2008/07/24 21:25:05 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.30 2008/07/25 14:40:11 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -95,7 +95,6 @@ function date_timezone_process($element, $edit = NULL) {
     '#options' => date_timezone_names($element['#required']),
     '#weight' => $element['#weight'],
     '#required' => $element['#required'],
-    '#attributes' => array('class' => 'date-timezone date-clear'),
     '#theme' => 'date_select_element',
   );
   $element['#validate'] = array('date_timezone_validate' => array());
@@ -477,8 +476,9 @@ function date_text_input_value($element) {
  *
  *  Move the timezone value from the nested field back to the original field.
  */
-function  date_timezone_validate($element) {
-  form_set_value($element, $element['#value']['timezone']);
+function date_timezone_validate($element) {
+  array_pop($element['#parents']);
+  form_set_value($element, $element['#value']);
 }
 
 
