@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.13 2008/07/09 12:20:37 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.14 2008/07/26 13:04:54 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -395,6 +395,10 @@ function date_ical_parse_rrule($field, $data) {
   $rrule = explode(';', $data);
   foreach ($rrule as $key => $value) {
     $param = explode('=', $value);
+    // Must be some kind of invalid data.
+    if (count($param) != 2) {
+      continue;
+    }
     if ($param[0] == 'UNTIL') {
       $values = date_ical_parse_date('', $param[1]);
     }
@@ -635,30 +639,30 @@ function date_ical_escape_text($text) {
  */
 function date_api_ical_build_rrule($form_values) {
   //grab the RRULE data and put them into iCal RRULE format
-  $RRULE = 'RRULE:FREQ='. $form_values['FREQ'];
-  $RRULE .= ';INTERVAL='. $form_values['INTERVAL'];
+  $RRULE = 'RRULE:FREQ='. !array_key_exists('FREQ', $form_values) ? 1 : $form_values['FREQ'];
+  $RRULE .= ';INTERVAL='. !array_key_exists('INTERVAL', $form_values) ? 1 : $form_values['INTERVAL'];
 
   // Unset the empty 'All' values.
-  unset($form_values['BYDAY']['']);
-  unset($form_values['BYMONTH']['']);
-  unset($form_values['BYMONTHDAY']['']);
+  if (array_key_exists('BYDAY', $form_values)) unset($form_values['BYDAY']['']);
+  if (array_key_exists('BYMONTH', $form_values)) unset($form_values['BYMONTH']['']);
+  if (array_key_exists('BYMONTHDAY', $form_values)) unset($form_values['BYMONTHDAY']['']);
 
-  if ($form_values['BYDAY']) {
+  if (array_key_exists('BYDAY', $form_values)) {
     $RRULE .= ';BYDAY='. implode(",", $form_values['BYDAY']);
   }
-  if ($form_values['BYMONTH']) {
+  if (array_key_exists('BYMONTH', $form_values)) {
     $RRULE .= ';BYMONTH='. implode(",", $form_values['BYMONTH']);
   }
-  if ($form_values['BYMONTHDAY']) {
+  if (array_key_exists('BYMONTHDAY', $form_values)) {
     $RRULE .= ';BYMONTHDAY='. implode(",", $form_values['BYMONTHDAY']);
   }
-  if ($form_values['UNTIL']['datetime']) {
+  if (array_key_exists('UNTIL', $form_values) && array_key_exists('datetime', $form_values['UNTIL'])) {
     $RRULE .= ';UNTIL='. date_convert($form_values['UNTIL']['datetime'], DATE_DATETIME, DATE_ICAL);
   }
 
   // iCal rules presume the week starts on Monday unless otherwise specified,
   // so we'll specify it.
-  if (isset($form_values['WKST'])) {
+  if (array_key_exists('WKST', $form_values)) {
     $RRULE .= ';WKST='. $form_values['WKST'];
   }
   else {
