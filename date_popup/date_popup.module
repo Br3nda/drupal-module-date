@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.27 2008/07/26 12:32:15 karens Exp $
+// $Id: date_popup.module,v 1.27.2.28 2008/07/26 15:29:13 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -344,7 +344,9 @@ function date_popup_validate($element) {
 function date_popup_input_value($element, $auto_complete = FALSE) {
   date_popup_load();
   $granularity = date_format_order($element['#date_format']);
-  $format = date_limit_format($element['#date_format'], $granularity);
+  $format = $element['#date_format'];
+  $format = strtr($format, timepicker_format_replacements());
+  $format = date_limit_format($format, $granularity);
   $value = '';
   if (is_array($element['#value']) && !empty($element['#value']['date'])) {
     $input = $element['#value']['date'] .' '. $element['#value']['time'];
@@ -428,11 +430,17 @@ function date_popup_format_to_popup_time($format) {
   if (empty($format)) {
     $format = 'H:i';
   }
-  $format = str_replace(array('G'), 'H', $format);
-  $format = str_replace(array('g'), 'h', $format);
-  $format = str_replace(array('a'), 'A', $format);
-  $format = str_replace(array(' ', '/', '-', '.', 'l', 'z', 'w', 'W', 'd', 'j', 'm', 'n', 'y', 'Y'), '', $format);
+  $format = strtr($format, timepicker_format_replacements());
+  $format = str_replace(array(' ', '/', '-', '.', ',', 'F', 'M', 'l', 'z', 'w', 'W', 'd', 'j', 'm', 'n', 'y', 'Y'), '', $format);
   return $format;
+}
+
+function timepicker_format_replacements() {
+  return array(
+    'G' => 'H',
+    'g' => 'h',
+    'a' => 'A',
+    );
 }
 
 /**
