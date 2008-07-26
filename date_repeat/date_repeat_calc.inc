@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.4.2.3 2008/06/20 13:31:18 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.4.2.4 2008/07/26 17:37:49 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -180,7 +180,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
 
     // Find the right first day of the week to use, iCal rules say Monday
     // should be used if none is specified.
-    $week_start_rule = !empty($rrule['WKST']) ? $rrule['WKST'] : 'MO';
+    $week_start_rule = !empty($rrule['WKST']) ? trim($rrule['WKST']) : 'MO';
     $week_start_day = $day_names[$week_start_rule];
 
     // Make sure the week days array is sorted into week order,
@@ -192,7 +192,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
     $ordered_keys = array_flip($ordered);
 
     foreach ($rrule['BYDAY'] as $day) {
-      ereg("(-)?([1-5])?([SU|MO|TU|WE|TH|FR|SA]{2})", $day, $regs);
+      ereg("(-)?([1-5])?([SU|MO|TU|WE|TH|FR|SA]{2})", trim($day), $regs);
       if (!empty($regs[2])) {
         // Convert parameters into full day name, count, and direction.
         $direction_days[] = array(
