@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.14 2008/07/26 13:04:54 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.15 2008/07/26 13:22:36 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -639,7 +639,7 @@ function date_ical_escape_text($text) {
  */
 function date_api_ical_build_rrule($form_values) {
   //grab the RRULE data and put them into iCal RRULE format
-  $RRULE = 'RRULE:FREQ='. !array_key_exists('FREQ', $form_values) ? 1 : $form_values['FREQ'];
+  $RRULE = 'RRULE:FREQ='. !array_key_exists('FREQ', $form_values) ? 'DAILY' : $form_values['FREQ'];
   $RRULE .= ';INTERVAL='. !array_key_exists('INTERVAL', $form_values) ? 1 : $form_values['INTERVAL'];
 
   // Unset the empty 'All' values.
@@ -647,13 +647,13 @@ function date_api_ical_build_rrule($form_values) {
   if (array_key_exists('BYMONTH', $form_values)) unset($form_values['BYMONTH']['']);
   if (array_key_exists('BYMONTHDAY', $form_values)) unset($form_values['BYMONTHDAY']['']);
 
-  if (array_key_exists('BYDAY', $form_values)) {
+  if (array_key_exists('BYDAY', $form_values) && !empty($form_values['BYDAY'])) {
     $RRULE .= ';BYDAY='. implode(",", $form_values['BYDAY']);
   }
-  if (array_key_exists('BYMONTH', $form_values)) {
+  if (array_key_exists('BYMONTH', $form_values) && !empty($form_values['BYMONTH'])) {
     $RRULE .= ';BYMONTH='. implode(",", $form_values['BYMONTH']);
   }
-  if (array_key_exists('BYMONTHDAY', $form_values)) {
+  if (array_key_exists('BYMONTHDAY', $form_values) && !empty($form_values['BYMONTHDAY'])) {
     $RRULE .= ';BYMONTHDAY='. implode(",", $form_values['BYMONTHDAY']);
   }
   if (array_key_exists('UNTIL', $form_values) && array_key_exists('datetime', $form_values['UNTIL'])) {
