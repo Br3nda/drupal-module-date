@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.24 2008/07/22 11:20:46 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.25 2008/07/26 11:46:01 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -24,14 +24,14 @@ function date_sql_concat($array) {
  */
 class date_sql_handler {
   var $db_type = 'mysql';
-  var $date_type = DATE_UNIX;
+  var $date_type = DATE_DATETIME;
   var $db_timezone = 'UTC'; // A string timezone name.
   var $local_timezone = NULL; // A string timezone name.
   var $db_timezone_field = NULL; // Use if the db timezone is stored in a field.
   var $local_timezone_field = NULL; // Use if the local timezone is stored in a field.
   var $offset_field = NULL; // Use if the offset is stored in a field.
   
-  function construct($date_type = DATE_UNIX, $local_timezone = NULL) {
+  function construct($date_type = DATE_DATETIME, $local_timezone = NULL) {
     $this->db_type = $GLOBALS['db_type'];
     $this->date_type = $date_type;
     $this->db_timezone = 'UTC';
