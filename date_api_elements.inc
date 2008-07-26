@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.30 2008/07/25 14:40:11 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.31 2008/07/26 16:09:27 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -584,12 +584,9 @@ function date_convert_from_custom($date, $format) {
   elseif ($ampm == 'am' && $final_date['hour'] == 12) {
     $final_date['hour'] -= 12;
   }
-  if (date_is_valid($final_date, DATE_ARRAY)) {
-    return date_convert($final_date, DATE_ARRAY, DATE_DATETIME);
-  }
-  else {
-    return NULL;
-  }
+  // Don't test for valid date, we might use this to extract
+  // incomplete date part info from user input.
+  return date_convert($final_date, DATE_ARRAY, DATE_DATETIME);
 }
 
 /**
