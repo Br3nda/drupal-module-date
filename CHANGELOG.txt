@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.93 2008/07/26 12:32:15 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.94 2008/07/26 14:33:47 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Exception dates were getting lost when parsing the RRULE.
 - Increase size of Date Popup input box to accept longer formats that the new datepicker allows.
 - #287325 Change the default date type in the date handler to DATE_DATETIME.
 - Hide image div in Date Popup timeentry css to keep FF from displaying a 'helpful' dropdown.
