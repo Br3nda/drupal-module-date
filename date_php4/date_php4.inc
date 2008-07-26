@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.20 2008/07/25 12:18:23 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.21 2008/07/26 17:07:28 karens Exp $
 
 /**
  * @file
@@ -70,8 +70,13 @@ if (!function_exists('date_create')) {
       $date_out = date_date('Y-m-d H:i', substr($date_in, 1), $timezone);
     }
     elseif (preg_match(DATE_REGEX_LOOSE, $date_in, $regs)) {
-      $date_out = date_pad($regs[1], 4) .'-'. date_pad($regs[2]) .'-'. date_pad($regs[3]) .
-        ' '. date_pad($regs[5]) .':'. date_pad($regs[6]) .':'. date_pad($regs[7]);
+      $year = date_pad(isset($regs[1]) ? $regs[1] : 0, 4);
+      $month = date_pad(isset($regs[2]) ? $regs[2] : 0);
+      $day = date_pad(isset($regs[3]) ? $regs[3] : 0);
+      $hour = date_pad(isset($regs[5]) ? $regs[5] : 0);
+      $minute = date_pad(isset($regs[6]) ? $regs[6] : 0);
+      $second = date_pad(isset($regs[7]) ? $regs[7] : 0);
+      $date_out = "$year-$month-$day $hour:$minute:$second";
     }
     else {
       // Try to use strtotime, will only work on post-1970 dates.
@@ -312,6 +317,9 @@ if (!function_exists('timezone_offset_get')) {
  *    the offset in seconds for the supplied date object.
  */
   function timezone_offset_get($timezone, $date) {
+    if (empty($timezone) || $timezone == 'UTC') {
+      return 0;
+    }
     static $zones = array(), $offsets = array();
     if (!in_array($timezone, $zones)) {
       $cached = cache_get('date_timezone_offsets:'. $timezone);
