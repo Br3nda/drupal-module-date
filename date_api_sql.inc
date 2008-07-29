@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.25 2008/07/26 11:46:01 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.26 2008/07/29 12:25:59 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -254,12 +254,13 @@ class date_sql_handler {
           'd' => '%%d', 'j' => '%e',
           'H' => '%H',
           'i' => '%i',
-          's' => '%s',
+          's' => '%%s',
           );
         $format = strtr($format, $replace);
         // Fix Views bug that does double replacement of %%d.
         // TODO remove once the bug fix gets into an official Views release.
         $format = str_replace('%%d', '***SQLD***', $format);
+        $format = str_replace('%%s', '***SQLS***', $format);
         return "DATE_FORMAT($field, '$format')";
       case 'pgsql':
         $replace = array(

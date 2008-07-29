@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.40 2008/07/26 17:51:02 karens Exp $
+// $Id: date_api.module,v 1.44.2.41 2008/07/29 12:25:59 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1378,7 +1378,7 @@ function date_api_json($var = NULL) {
  * be removed.
  */
 function date_api_views_query_substitutions($view) {
-  return array('***SQLD***' => '%%d');  
+  return array('***SQLD***' => '%%d', '***SQLS***' => '%%s');  
 }
 
 /**
