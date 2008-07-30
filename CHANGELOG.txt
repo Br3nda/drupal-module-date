@@ -1,9 +1,14 @@
-//$Id: CHANGELOG.txt,v 1.1.6.99 2008/07/29 12:25:59 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.100 2008/07/30 15:38:33 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
+
+- Make sure PHP4 wrapper code doesn't try to use date() on values outside the 32 bit signed range.
+
+Version 5.2-rc4
+===============
 
 - #286454 Add fix for Views substitutions error handling %%s to work like the fix for %%d.
 - #286864 Fix wrong RRULE value being passed to validator and add trim() to get repeating dates working again.

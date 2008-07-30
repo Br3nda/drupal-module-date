@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.21 2008/07/26 17:07:28 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.22 2008/07/30 15:38:33 karens Exp $
 
 /**
  * @file
@@ -589,7 +589,7 @@ function date_datetime2timestamp($datetime, $timezone) {
  *   0 or 1
  */
 function date_is_dst($timestamp, $timezone = NULL) {
-  if ($timestamp < 86400) {
+  if (abs($timestamp) > 0x7FFFFFFF) {
     return FALSE;
   }
   if (empty($timezone)) {
