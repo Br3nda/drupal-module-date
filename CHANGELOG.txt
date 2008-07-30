@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.100 2008/07/30 15:38:33 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.101 2008/07/30 16:00:43 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Make sure we don't use mktime() in compare_date() function, won't work reliably in PHP4.
 - Make sure PHP4 wrapper code doesn't try to use date() on values outside the 32 bit signed range.
 
 Version 5.2-rc4
