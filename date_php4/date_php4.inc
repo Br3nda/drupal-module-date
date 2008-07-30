@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.22 2008/07/30 15:38:33 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.23 2008/07/30 15:43:30 karens Exp $
 
 /**
  * @file
@@ -124,8 +124,7 @@ if (!function_exists('date_format')) {
     $max = strlen($format);
     for ($i = 0; $i < $max; $i++) {
       $c = $format[$i];
-      if ($date->timezone == 'UTC' && date_part_extract($date->value, 'year') > variable_get('date_php_min_year', 1970)
-        && !in_array($c, $php5_formats)) {
+      if ($date->timezone == 'UTC' && abs($timestamp) <= 0x7FFFFFFF && !in_array($c, $php5_formats)) {
         $date_string .= gmdate($c, $timestamp);
       }
       else{
