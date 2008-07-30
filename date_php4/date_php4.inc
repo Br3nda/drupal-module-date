@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.23 2008/07/30 15:43:30 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.24 2008/07/30 16:57:47 karens Exp $
 
 /**
  * @file
@@ -406,10 +406,10 @@ if (!function_exists('date_modify')) {
       include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_calc.inc');
       $days = date_week_days_untranslated();
       $dows = array_flip($days);
-      preg_match('/([+|-])([0-9]{1,32}).([day(s)?|week(s)?|month(s)?|year(s)?|hour(s)?|minute(s)?|second(s)?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday]{1,10})/', $change, $results);
+      preg_match('/([+|-])([0-9]{1,32})(\s)?([day(s)?|week(s)?|month(s)?|year(s)?|hour(s)?|minute(s)?|second(s)?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday]{1,10})/', $change, $results);
       $direction = $results[1];
       $count = $results[2];
-      $item = $results[3];
+      $item = $results[4];
       if (empty($results) || empty($item)) {
         return;
       }
