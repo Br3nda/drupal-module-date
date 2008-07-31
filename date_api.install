@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.install,v 1.5.2.14 2008/06/26 21:46:55 karens Exp $
+// $Id: date_api.install,v 1.5.2.15 2008/07/31 15:56:15 karens Exp $
 function date_api_set_variables() {
   /**
    * Set absolute minimum and maximum year for dates on this site.
@@ -8,22 +8,39 @@ function date_api_set_variables() {
    * a year less than 0 would result in negative ISO and DATETIME dates,
    * like -1250-01-01T00:00:00, which probably won't make sense or work
    * correctly anywhere.
+   * 
+   * The odd construct of using variable_get() instead of variable_set()
+   * is so we don't accidentally write over an existing value. If
+   * no value is set, variable_get() will set it.
    */
-  variable_set('date_max_year', 4000);
-  variable_set('date_min_year', 1);
-  variable_set('date_php_min_year', 1901);
+  variable_get('date_max_year', 4000);
+  variable_get('date_min_year', 1);
+  variable_get('date_php_min_year', 1901);
 
   /**
    * Set an API version in a way that other modules can test for compatibility.
    */
   variable_set('date_api_version', '5.2');
  
+  if (version_compare(PHP_VERSION, '5.2', '<') && !module_exists('date_php4')) {
+    module_enable(array('date_php4'));
+  }
+  // The timezone module was originally going to be optional
+  // but too many things break without it.
+  if (!module_exists('date_timezone')) {
+    module_enable(array('date_timezone'));
+  }
+
   /**
    * NULL is used for the default setting of date_default_timezone_name
    * to have a way to tell that no site timezone name has been implemented.
    * Otherwise, many functions would use 'UTC' incorrectly and
    * produce unreliable and odd results. This way functions can test for a
    * value and not use this if it is empty.
+   * 
+   * The odd construct of using variable_get() instead of variable_set()
+   * is so we don't accidentally write over an existing value. If
+   * no value is set, variable_get() will set it to NULL.
    */
   variable_get('date_default_timezone_name', NULL);
 }
@@ -34,18 +51,12 @@ function date_api_set_variables() {
 function date_api_install() {
   $ret = array();
   date_api_set_variables();
-  if (version_compare(PHP_VERSION, '5.2', '<')) {
-    module_enable(array('date_php4'));
-  }
   $ret = db_query("ALTER TABLE {users} ADD timezone_name varchar(50) NOT NULL default ''");
   return $ret;
 }
 
 function date_api_enable() {
   date_api_set_variables();
-  if (version_compare(PHP_VERSION, '5.2', '<')) {
-    module_enable(array('date_php4'));
-  }
 }
 
 /**
@@ -114,10 +125,15 @@ function date_api_update_5000() {
  */
 function date_api_update_5200() {
   $ret = array();
-  module_enable(array('date_api'));
-  if (version_compare(PHP_VERSION, '5.2', '<')) {
-    module_enable(array('date_php4'));
-  }
-  module_enable(array('date_timezone'));
+  return $ret;
+}
+
+/**
+ * Make sure all the appropriate modules get enabled.
+ * Repeated again just to be sure they are set.
+ */
+function date_api_update_5201() {
+  $ret = array();
+  date_api_set_variables();
   return $ret;
 }

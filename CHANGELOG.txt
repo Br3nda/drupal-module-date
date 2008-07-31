@@ -1,10 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.102 2008/07/30 16:57:47 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.103 2008/07/31 15:56:15 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Rework the install file so variables can be corrected and dependent modules enabled by disabling and re-enabling Date API.
+- #280863 Make sure Date Timezone and Date PHP4 can be uninstalled by keeping module_enable() in the install.
 - Make sure PHP4 date_modify() does not care if there is a space between the number and the date part.
 - Make sure we don't use mktime() in compare_date() function, won't work reliably in PHP4.
 - Make sure PHP4 wrapper code doesn't try to use date() on values outside the 32 bit signed range.
