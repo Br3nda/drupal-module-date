@@ -1,10 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.103 2008/07/31 15:56:15 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.104 2008/08/06 18:50:01 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Add 'All day' themes for use in nodes and calendar psuedo nodes.
+- Add new DATE_FORMAT_DATE for date-only format that is used throughout the calendar.
 - Rework the install file so variables can be corrected and dependent modules enabled by disabling and re-enabling Date API.
 - #280863 Make sure Date Timezone and Date PHP4 can be uninstalled by keeping module_enable() in the install.
 - Make sure PHP4 date_modify() does not care if there is a space between the number and the date part.
