@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.35 2008/07/15 13:56:20 karens Exp $
+// $Id: date_views.inc,v 1.26.2.36 2008/08/06 21:14:26 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -292,7 +292,6 @@ function _date_views_argument_filter(&$query, $argtype, $arg, $field_type) {
   $date_handler->granularity = $date_handler->arg_granularity($arg);
   date_views_set_timezone($date_handler, $field);
   $query->date_handler = $date_handler;
-
   $query->ensure_table($table);
   $query->add_field($value, $table);
   if ($field['tz_handling'] == 'date') {
@@ -300,7 +299,8 @@ function _date_views_argument_filter(&$query, $argtype, $arg, $field_type) {
     $query->add_field($db_info['columns']['offset']['column'], $table);
   }
   $format = $date_handler->views_formats($date_handler->granularity, 'sql');
-  $query->add_where($date_handler->sql_where_format($format, $sql_field, '=', date_format($range[0], $format)));
+  $query->add_where($date_handler->sql_where_format($format, $sql_field, '>=', date_format($range[0], $format)));
+  $query->add_where($date_handler->sql_where_format($format, $sql_field, '<=', date_format($range[1], $format)));
 }
 
 /**
@@ -313,11 +313,17 @@ function _date_views_argument_filter(&$query, $argtype, $arg, $field_type) {
 function _date_views_argument_title($query, $argtype, $arg, $field_type) {
   $date_handler = new date_sql_handler();
   $date_handler->construct($field_type);
-  $argtype_parts = explode('_', $argtype);
-  $granularity = array_pop($argtype_parts);
+  $granularity = $date_handler->arg_granularity($query);
   $format = $date_handler->views_formats($granularity, 'display');
   $range = $date_handler->arg_range($query);
-  return date_format_date($range[0], 'custom', $format);
+  $formatted = date_format_date($range[0], 'custom', $format);
+  $formatted2 = date_format_date($range[1], 'custom', $format);
+  if ($formatted != $formatted2) {
+    return $formatted .'-'. $formatted2;
+  }
+  else {
+    return $formatted;
+  }
 }
 
 /**
@@ -348,11 +354,6 @@ function _date_views_argument_summary(&$query, $argtype, $arg, $field_type) {
   $fieldinfo['fieldname'] = 'range';
   
   $query->ensure_table($table);
-  $query->add_field($value, $table);
-  if ($field['tz_handling'] == 'date') {
-    $query->add_field($db_info['columns']['timezone']['column'], $table);
-    $query->add_field($db_info['columns']['offset']['column'], $table);
-  }
   return $fieldinfo;
 }
 
@@ -364,10 +365,8 @@ function _date_views_argument_summary(&$query, $argtype, $arg, $field_type) {
  *   $arg = <empty>
  */
 function _date_views_argument_sort(&$query, $argtype, $arg, $field_type) {
-  // There's not enough info provided by views to identify the field,
-  // we have to add it to the $query in the previous step.
-  $field = explode('.', $query->date_handler->sql_field_name);
-  $query->add_orderby($field[0], $field[1], $argtype);
+  // Add no sorting or we will get a groupby for the sort field
+  // which will keep the summary totals from working right.
   return;
 }
 
@@ -379,14 +378,23 @@ function _date_views_argument_sort(&$query, $argtype, $arg, $field_type) {
  *   $arg = url
  */
 function _date_views_argument_link(&$query, $argtype, $arg, $field_type) {
+  if (empty($query->range)) {
+    return t('N/A');
+  }
   $field_name = _date_views_arg_field_name($argtype);
   $value = $field_name .'_'. (substr($field_name, -1) == 2 ? 'value2' : 'value');
   $date_handler = new date_sql_handler();
-  $argtype_parts = explode('_', $argtype);
-  $granularity = array_pop($argtype_parts);
+  $granularity = $date_handler->arg_granularity($query->range);
   $format = $date_handler->views_formats($granularity, 'display');
   $range = $date_handler->arg_range($query->$value);
-  return l(date_format_date($range[0], 'custom', $format), $arg .'/'. $query->range);
+  $formatted = date_format_date($range[0], 'custom', $format);
+  $formatted2 = date_format_date($range[1], 'custom', $format);
+  if ($formatted != $formatted2) {
+    return l($formatted .'-'. $formatted2, $arg .'/'. $query->range);
+  }
+  else {
+    return l($formatted, $arg .'/'. $query->range);
+  }
 }
 
 /**

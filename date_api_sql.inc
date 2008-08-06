@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.27 2008/07/30 16:00:43 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.28 2008/08/06 21:14:26 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -589,6 +589,10 @@ class date_sql_handler {
     // Start with the site long date format and add seconds to it
     $long = str_replace(':i', ':i:s', variable_get('date_format_long',  'l, F j, Y - H:i'));
     switch ($granularity) {
+      case('date'):
+        $formats['display'] = $long;
+        $formats['sql'] = 'Y-m-d H:i:s';
+        break;
       case('year'):
         $formats['display'] = 'Y';
         $formats['sql'] = 'Y';
