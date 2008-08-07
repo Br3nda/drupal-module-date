@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.105 2008/08/06 21:14:26 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.106 2008/08/07 10:33:00 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Check for date values before using new all day theme.
 - #291683 Make sure that date range arguments will create the proper queries, titles, and links.
 - Add 'All day' themes for use in nodes and calendar psuedo nodes.
 - Add new DATE_FORMAT_DATE for date-only format that is used throughout the calendar.
