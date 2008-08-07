@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.36 2008/08/06 21:14:26 karens Exp $
+// $Id: date_views.inc,v 1.26.2.37 2008/08/07 11:18:22 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -146,18 +146,20 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   $column    = $filterinfo['extra']['column'];
   $db_info   = $filterinfo['content_db_info'];
   
+  // A submitted date_select will be an array of date parts.
   if (is_array($filter['value']) && array_key_exists('year', $filter['value'])) {
     $value = date_convert($filter['value'], DATE_ARRAY, DATE_DATETIME);
   }
-  else {
-    if (is_array($filter['value']) && array_key_exists('date', $filter['value'])) {
-      $value = $filter['value']['date'] .' '. $filter['value']['time'];
-    }
-    else {
-      $value = $filter['value'];
-    }
+  // A submitted date_popup will be an array of separate date and time.
+  // A submitted date_text will be an array with a single complete date.
+  elseif (is_array($filter['value']) && array_key_exists('date', $filter['value'])) {
+    $value = trim($filter['value']['date'] .' '. $filter['value']['time']);
     $format = !empty($field['widget']['input_format_custom']) ? $field['widget']['input_format_custom'] : $field['widget']['input_format'];
     $value = date_convert_from_custom($value, date_limit_format($format, date_granularity($field)));
+  }
+  // The default value is already in the datetime format.
+  else {
+    $value = $filter['value'];
   }
       
   // Filter out 5.1 version values that won't work in 5.2.
