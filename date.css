@@ -66,10 +66,6 @@ span.date-display-separator {
   float:none;
 }
 
-.date-browser-navigation h3 {
-  border:none;
-}
-
 .date-nav {
   width:100%;
 }
@@ -88,7 +84,10 @@ span.date-display-separator {
   width:50%;
   float:left;
 }
-
+.date-nav div.date-heading h3 {
+  margin:0;
+  padding:0;
+}
 .date-clear {
   clear:both;
   display:block;
