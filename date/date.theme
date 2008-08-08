@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.19 2008/08/07 19:17:25 karens Exp $
+//$Id: date.theme,v 1.2.2.20 2008/08/08 00:08:21 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -283,7 +283,7 @@ function theme_date_all_day($which, $date1, $date2, $format, $node, $view = NULL
       $max_comp = date_format($date2, 'H') == '23';
       break;
     default:
-      $max_comp = TRUE;
+      $max_comp = FALSE;
   }
   // Time runs from midnight to the maximum time -- call it 'All day'.
   if (date_format($date1, 'H:i:s') == '00:00:00' && $max_comp) {
