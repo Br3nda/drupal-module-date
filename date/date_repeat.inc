@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.9.2.13 2008/07/26 17:37:49 karens Exp $
+//$Id: date_repeat.inc,v 1.9.2.14 2008/08/08 15:12:33 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -31,7 +31,6 @@
 function _date_repeat_widget(&$element, &$node, $field, &$items) {
   $element[$field['field_name']]['rrule'] = array(
     '#type' => 'date_repeat_rrule',
-    '#weight' => ($field['widget']['weight'] + .3),
     '#default_value' => $items[0]['rrule'],
     '#date_timezone' => $element[$field['field_name']][0]['#date_timezone'],
     '#prev_value' => $items[0]['value'],
