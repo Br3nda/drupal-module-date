@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.114 2008/08/12 19:29:53 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.115 2008/08/12 20:01:45 karens Exp $
 Date Module 5.2
 =================
 
@@ -8,6 +8,7 @@ Version 5.2-dev
 Version 5.2-rc6
 ===============
 
+- #292945 See if there is an existing validation array before adding validation.
 - #272110 Fix select lists in FF3 so they line up instead of stacking. Hopefully this will fix Safari, too.
 - #272551 Remove weight for repeat element, it isn't needed and doesn't work right when weight is negative.
 - #283392 Make sure widget description shows up with or without 'to' date.

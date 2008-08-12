@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.29 2008/07/26 16:09:28 karens Exp $
+// $Id: date_popup.module,v 1.27.2.30 2008/08/12 20:01:45 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -179,7 +179,12 @@ function date_popup_process($element, $edit = NULL) {
   else {
     $element['#attributes'] = array('class' => $class);
   }
-  $element['#validate'] = array('date_popup_validate' => array());
+  if (isset($element['#validate'])) {
+    array_push($element['#validate'], array('date_popup_validate' => array()));
+  }
+  else {
+    $element['#validate'] = array('date_popup_validate' => array());
+  }
   return $element;
 }
 

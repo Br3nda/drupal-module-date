@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.32 2008/07/26 17:05:32 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.33 2008/08/12 20:01:45 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -98,7 +98,12 @@ function date_timezone_process($element, $edit = NULL) {
     '#required' => $element['#required'],
     '#theme' => 'date_select_element',
   );
-  $element['#validate'] = array('date_timezone_validate' => array());
+  if (isset($element['#validate'])) {
+    array_push($element['#validate'], array('date_timezone_validate' => array()));
+  }
+  else {
+    $element['#validate'] = array('date_timezone_validate' => array());
+  }
   return $element;
 }
 
@@ -148,7 +153,12 @@ function date_text_process($element, $edit = NULL) {
   $element['date']['#theme'] = 'date_textfield_element';
   $element['date']['#description'] .= ' '. t('Format: @date', array('@date' => date($element['#date_format'], time())));
   
-  $element['#validate'] = array('date_text_validate' => array());
+  if (isset($element['#validate'])) {
+    array_push($element['#validate'], array('date_text_validate' => array()));
+  }
+  else {
+    $element['#validate'] = array('date_text_validate' => array());
+  }
   return $element;
 }
 
@@ -198,7 +208,13 @@ function date_select_process($element, $edit = NULL) {
         '#value' => is_object($date) ? intval(date_format($date, $formats[$field])) : 0);
     }
   }
-  $element['#validate'] = array('date_select_validate' => array());
+  
+  if (isset($element['#validate'])) {
+    array_push($element['#validate'], array('date_select_validate' => array()));
+  }
+  else {
+    $element['#validate'] = array('date_select_validate' => array());
+  }
   return $element;
 }
 
