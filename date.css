@@ -1,18 +1,33 @@
-.container-inline-date {width:auto; clear:both;padding:0;}
-.container-inline-date .form-item {float:left; padding:0; margin:0}
-.container-inline-date .form-item, .container-inline-date .form-item input {width:auto;}
-.container-inline-date .description {clear: both;}
-
-.container-inline-date .form-item input,
-.container-inline-date .form-item select,
-.container-inline-date .form-item option {margin-right:.5em;}
-
-/* Force from/to dates to float using inline-block, where it works, otherwise inline. */
 .container-inline-date {
+  width:auto; 
+  clear:both;
+  padding:0;
   display: inline-block;
   vertical-align:top;
   margin-right: 0.5em;
- }
+}
+
+.container-inline-date .form-item {
+  float:none;
+  padding:0;
+  margin:0;
+}
+.container-inline-date .form-item .form-item {
+  float:left;
+}
+.container-inline-date .form-item, 
+.container-inline-date .form-item input {
+  width:auto;
+}
+.container-inline-date .description {
+  clear: both;
+}
+
+.container-inline-date .form-item input,
+.container-inline-date .form-item select,
+.container-inline-date .form-item option {
+  margin-right:.5em;
+}
 
 .container-inline-date .date-spacer {
   margin-left:-.5em;
@@ -34,7 +49,11 @@
   margin:0;
   padding:0;
 }
-#calendar_div, .calendar_control, .calendar_links, .calendar_header, .calendar {
+#calendar_div, 
+.calendar_control, 
+.calendar_links, 
+.calendar_header, 
+.calendar {
   width: 185px;
   border-collapse: separate;
   margin: 0;

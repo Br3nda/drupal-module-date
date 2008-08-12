@@ -1,10 +1,14 @@
-//$Id: CHANGELOG.txt,v 1.1.6.113 2008/08/08 15:12:33 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.114 2008/08/12 19:29:53 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+Version 5.2-rc6
+===============
+
+- #272110 Fix select lists in FF3 so they line up instead of stacking. Hopefully this will fix Safari, too.
 - #272551 Remove weight for repeat element, it isn't needed and doesn't work right when weight is negative.
 - #283392 Make sure widget description shows up with or without 'to' date.
 - #292680 Make sure themes don't add padding to navigation h3 causing misalignment.
