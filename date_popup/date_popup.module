@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.31 2008/08/13 13:02:28 karens Exp $
+// $Id: date_popup.module,v 1.27.2.32 2008/08/13 15:06:55 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -296,16 +296,16 @@ function date_popup_validate($element) {
   include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
   date_popup_load();
   
-  $valid_value = date_popup_input_value($element);
-  if (empty($valid_value) && !$element['#required']) {
+  $value = date_popup_input_value($element);
+  // If the field is empty and not required, set it to empty and return.
+  if (empty($value) && !$element['#required']) {
     if (!$input = !empty($element['#value']['date']) ? $element['#value']['date'] : '') {
-      // If the field is empty and not required, set it to empty and return.
       form_set_value($element, NULL);
       return;
     }
   }
-  if (!empty($valid_value)) {
-    form_set_value($element, $valid_value);
+  if (!empty($value)) {
+    form_set_value($element, $value);
     return;
   }
   $error_field = implode('][', $element['#parents']);

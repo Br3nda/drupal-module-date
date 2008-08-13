@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.34 2008/08/13 14:14:21 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.35 2008/08/13 15:06:55 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -378,8 +378,9 @@ function date_increment_round(&$date, $increment) {
  */
 function date_select_validate($element) {
   $value = date_select_input_value($element);
+  // If the field is empty and not required, set it to empty and return.
   if (empty($value) && !$element['#required']) {
-    form_set_value($element, $valid_value);
+    form_set_value($element, NULL);
     return;
   }
  
@@ -447,8 +448,9 @@ function date_select_input_value($element) {
  */
 function date_text_validate($element) {
   $value = date_text_input_value($element);
+  // If the field is empty and not required, set it to empty and return.
   if (empty($value) && !$element['#required']) {
-    form_set_value($element, $valid_value);
+    form_set_value($element, NULL);
     return;
   }
 
