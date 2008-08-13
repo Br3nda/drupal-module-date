@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.32 2008/08/13 15:06:55 karens Exp $
+// $Id: date_popup.module,v 1.27.2.33 2008/08/13 16:25:30 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -151,6 +151,9 @@ function date_popup_process($element, $edit = NULL) {
   date_popup_load();
   include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
 
+  if (empty($edit)) {
+    $edit = date_views_filter_value($element);
+  }
   $date = NULL;
   if (!empty($edit) || is_array($element['#value'])) {
     if (empty($edit)) {
@@ -244,7 +247,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
   $class = date_popup_js_settings_class('jquery-calendar', 'calendar', $settings);
   $sub_element = array(
     '#type' => 'textfield',
-    '#default_value' => !empty($element['#value']['date']) && is_object($date) ? date_format($date, $date_format) : '',
+    '#default_value' => (!empty($element['#value']['date']) || !empty($edit['date'])) && is_object($date) ? date_format($date, $date_format) : '',
     '#attributes' => array('class' => $class),
     '#size' => !empty($element['#size']) ? $element['#size'] : 20,
     '#maxlength' => !empty($element['#maxlength']) ? $element['#maxlength'] : 30,
@@ -279,7 +282,7 @@ function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
   // Create a unique class for each set of custom settings.
   $class = date_popup_js_settings_class('jquery-timeentry', 'timeEntry', $settings);  $sub_element = array(
     '#type' => 'textfield',
-    '#default_value' => !empty($element['#value']['time']) && is_object($date) ? date_format($date, $time_format) : '',
+    '#default_value' => (!empty($element['#value']['time']) || !empty($edit['time'])) && is_object($date) ? date_format($date, $time_format) : '',
     '#attributes' => array('class' => $class),
     '#size' => 10,
     '#maxlength' => 10,

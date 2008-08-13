@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.37 2008/08/07 11:18:22 karens Exp $
+// $Id: date_views.inc,v 1.26.2.38 2008/08/13 16:25:30 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -186,6 +186,7 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
     if (!empty($adjustment)){
       date_modify($date, $adjustment);
     }
+    
     switch ($filterinfo['type']) {
       case 'YEAR':
       case 'MONTH':
@@ -247,8 +248,46 @@ function _date_views_handler_filter_date_value_form($field) {
     '#date_increment' => $field['widget']['increment'],
     '#date_year_range' => $field['widget']['year_range'],
     '#date_label_position' => $field['widget']['label_position'],
+    '#views_filter' => TRUE,
   );
   return $form;
+}
+
+/**
+ * Create a default value for an exposed filter form.
+ * 
+ * Hacky solution, but seems to be the only way to get the
+ * exposed filter to display the right values.
+ */
+function _date_views_filter_value($element) {
+  if (!empty($element['#views_filter'])) {
+    $name = $element['#name'];
+    if (empty($_GET[$name])) {
+      $view = $GLOBALS['current_view'];
+      // Don't inject a date value if we're in the Views UI.
+      $current_path = explode('/', $_GET['q']);
+      if (array_pop($current_path) == 'edit') {
+        return;
+      }
+      $delta = trim(str_replace('filter', '', $name));
+      $adjustment = $view->filter[$delta]['options'];
+      $now = date_now();
+      if (!empty($adjustment)) {
+        date_modify($now, $adjustment);
+      }
+      switch ($element['#type']) {
+        case 'date_select':
+          return date_convert($now, DATE_OBJECT, DATE_ARRAY);
+        case 'date_popup':
+          return array(
+            'date' => date_format($now, date_limit_format($element['#date_format'], array('year', 'month', 'day'))),
+            'time' => date_format($now, date_limit_format($element['#date_format'], array('hour', 'minute', 'second'))),
+            );
+        default:
+          return date_format($now, $element['#date_format']);   
+      }
+    }
+  }  
 }
 
 /**

@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.35 2008/08/13 15:06:55 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.36 2008/08/13 16:25:30 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -126,6 +126,9 @@ function date_timezone_process($element, $edit = NULL) {
  * but it is a string before submission and an array afterward.
  */
 function date_text_process($element, $edit = NULL) {
+  if (empty($edit)) {
+    $edit = date_views_filter_value($element);
+  }
   $date = NULL;
   if (!empty($edit) || is_array($element['#value'])) {
     if (empty($edit)) {
@@ -182,7 +185,10 @@ function date_text_process($element, $edit = NULL) {
  * step is bypassed. $element['#value'] is the only available value,
  * but it is a string before submission and an array afterward.
  */
-function date_select_process($element, $edit = NULL) {
+function date_select_process(&$element, $edit = NULL) {
+  if (empty($edit)) {
+    $edit = date_views_filter_value($element);
+  }
   $date = NULL;
   if (!empty($edit) || is_array($element['#value'])) {
     if (empty($edit)) {
