@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api.views_default.inc,v 1.2 2008/06/20 13:36:13 karens Exp $
+//$Id: date_api.views_default.inc,v 1.3 2008/08/13 18:35:35 karens Exp $
 function date_api_views_default_views() {
  
 $view = new view;
