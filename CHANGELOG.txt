@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.117 2008/08/13 13:02:28 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.118 2008/08/13 14:14:21 karens Exp $
 Date Module 5.2
 =================
 
@@ -8,6 +8,7 @@ Version 5.2-dev
 Version 5.2-rc6
 ===============
 
+- #294316 Views sends empty value to validation when date filter is added, need to bail out of validation gracefully.
 - #289215 Shorten the size of Date Popup date box and allow the API to control the size.
 - #291882 Do some tweaking of the Date Popup css to be sure backgrounds are hidden and values are overridden.
 - #292945 See if there is an existing validation array before adding validation.

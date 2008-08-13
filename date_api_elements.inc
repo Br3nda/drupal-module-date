@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.33 2008/08/12 20:01:45 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.34 2008/08/13 14:14:21 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -377,6 +377,12 @@ function date_increment_round(&$date, $increment) {
  *  Validation function for date selector.
  */
 function date_select_validate($element) {
+  $value = date_select_input_value($element);
+  if (empty($value) && !$element['#required']) {
+    form_set_value($element, $valid_value);
+    return;
+  }
+ 
   $error_field = implode('][', $element['#parents']);
   $granularity = array_values(date_format_order($element['#date_format']));
 
@@ -410,7 +416,6 @@ function date_select_validate($element) {
   }
   if (!form_get_errors()) {
     // If it creates a valid date, set it.
-    $value = date_select_input_value($element);
     if (!empty($value)) {
       form_set_value($element, $value);
     }
@@ -441,17 +446,17 @@ function date_select_input_value($element) {
  *  Validation for text input.
  */
 function date_text_validate($element) {
-  $form_values = $element['#value'];
   $value = date_text_input_value($element);
-  $error_field = implode('][', $element['#parents']);
-    
-  if (!$element['#required'] && empty($value)) {
-    form_set_value($element, NULL);
+  if (empty($value) && !$element['#required']) {
+    form_set_value($element, $valid_value);
+    return;
   }
-  elseif (!empty($value)) {
+
+  if (!empty($value)) {
     form_set_value($element, $value);
   }
   else {
+    $error_field = implode('][', $element['#parents']);
     form_set_error($error_field, t('A valid date is required for %title.', array('%title' => $element['#title']))); 
   }
 }
