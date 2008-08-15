@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.120 2008/08/15 15:38:43 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.121 2008/08/15 16:49:43 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #294950 Several things in the Date Browser view were broken, including a fatal error from a missing function.
 - #295753 Make sure exposed views filter does not use date if no default values are selected.
 
 Version 5.2-rc6

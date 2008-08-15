@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.39 2008/08/15 15:38:43 karens Exp $
+// $Id: date_views.inc,v 1.26.2.40 2008/08/15 16:49:44 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -314,7 +314,6 @@ function _date_views_timestamp_argument_range_handler($op, &$query, $argtype, $a
 }
 function _date_views_argument_range_handler($op, &$query, $argtype, $arg = '', $field_type = DATE_ISO) {
   include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
-  
   // Switch to the function that matches the requested $op.
   $function = '_date_views_argument_'.$op;
   return $function($query, $argtype, $arg, $field_type);
@@ -349,9 +348,15 @@ function _date_views_argument_filter(&$query, $argtype, $arg, $field_type) {
     $query->add_field($db_info['columns']['timezone']['column'], $table);
     $query->add_field($db_info['columns']['offset']['column'], $table);
   }
-  $format = $date_handler->views_formats($date_handler->granularity, 'sql');
-  $query->add_where($date_handler->sql_where_format($format, $sql_field, '>=', date_format($range[0], $format)));
-  $query->add_where($date_handler->sql_where_format($format, $sql_field, '<=', date_format($range[1], $format)));
+  if ($date_handler->granularity != 'week') {
+    $format = $date_handler->views_formats($date_handler->granularity, 'sql');
+    $query->add_where($date_handler->sql_where_format($format, $sql_field, '>=', date_format($range[0], $format)));
+    $query->add_where($date_handler->sql_where_format($format, $sql_field, '<=', date_format($range[1], $format)));
+  }
+  else {
+    $query->add_where($date_handler->sql_where_date('DATE', $sql_field, ">=", date_format($range[0], DATE_FORMAT_DATETIME)));
+    $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", date_format($range[1], DATE_FORMAT_DATETIME)));
+  }
 }
 
 /**
@@ -540,14 +545,14 @@ function _date_views_query_alter(&$query, &$view) {
     if ($arg == NULL) {
       $period = $view->argument[0]['options'];
       $format = $date_handler->views_formats($period, 'sql');
-      $arg = date_format_date(date_now(), 'custom', $format) . date_views_browser_period($period);
+      $arg = date_views_browser_period_arg(NULL, $view->argument[0]['options']);
       if ($range  = $view->date_handler->arg_range($arg)) {
         $query->ensure_table($table);
         $query->add_field('nid', 'node');
         $query->add_field($value, $table);
         $sql_field = "$table.$value";
-        $query->add_where($date_handler->sql_where_date('DATE', $sql_field, ">=", date_format($range[0], DATE_FORMAT_DATETIME)), $offset);
-        $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", date_format($range[1], DATE_FORMAT_DATETIME)), $offset);
+        $query->add_where($date_handler->sql_where_date('DATE', $sql_field, ">=", date_format($range[0], DATE_FORMAT_DATETIME)));
+        $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", date_format($range[1], DATE_FORMAT_DATETIME)));
       }
     }
   }
@@ -610,6 +615,27 @@ function date_views_browser_period($period = 'month') {
 }
 
 /**
+ *  Format an argument for the date range
+ */
+function date_views_browser_period_arg($arg = NULL, $period = 'month') {
+  $date_handler = new date_sql_handler();
+  $range = $date_handler->arg_range($arg);
+  $date = $range[0];
+  $format = $date_handler->views_formats($period, 'sql');
+  $period_date = $period == 'week' ? date_format($date, 'Y-\W') . date_week(date_format($date, 'Y-m-d')) : date_format($date, $format);
+  return  $period_date . date_views_browser_period($period);
+}
+
+/**
+ *  Return label for current date range
+ */
+function date_views_browser_period_label($arg = NULL, $period = 'month') {
+  $date_handler = new date_sql_handler();
+  $range = $date_handler->arg_range($arg);
+  return theme('date_views_browser_period_label', $period, $range[0]);
+}
+
+/**
  *  Navigation links for the full view
  */
 function date_views_browser_navigation($view, $period) {
@@ -618,6 +644,9 @@ function date_views_browser_navigation($view, $period) {
     if ($argument['options'] == $period) {
       $arg = $view->args[$pos];
     }
+  }
+  if (empty($arg)) {
+    $arg = date_views_browser_period_arg(NULL, $view->argument[0]['options']);
   }
   
   // Create a date object for the beginning of the current range.
@@ -633,7 +662,7 @@ function date_views_browser_navigation($view, $period) {
   date_modify($date, '+2 '. $period);
   $next = $period == 'week' ? date_format($date, 'Y-\W') . date_week(date_format($date, 'Y-m-d')) : date_format($date, $format);
   $next = $view->url .'/'. $next . date_views_browser_period($period);
-  $label = theme('date_views_browser_period_label', $period, $range[0]);
+  $label = date_views_browser_period_label($arg, $period);
   return theme('date_views_browser_navigation', $label, $period, $prev, $next, $view);
 }
 
