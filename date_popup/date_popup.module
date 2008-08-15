@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.33 2008/08/13 16:25:30 karens Exp $
+// $Id: date_popup.module,v 1.27.2.34 2008/08/15 15:38:43 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -261,6 +261,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
  * Process the time portion of the element.
  */
 function date_popup_process_time(&$element, $edit = NULL, $date = NULL) {
+  
   $granularity = date_format_order($element['#date_format']);
   $time_granularity = array_intersect($granularity, array('hour', 'minute', 'second'));
   $time_format = date_popup_format_to_popup_time(date_limit_format($element['#date_format'], $time_granularity));
