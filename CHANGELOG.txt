@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.122 2008/08/16 12:19:04 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.123 2008/08/16 20:25:22 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Clean up some invalid combinations like using 'DAILY' with an option like 'First Tuesday'.
 - #295095 Change the repeating dates theme to show only the start and rule on the node and move the list of repeating dates to a separate tab.
 - #294950 Several things in the Date Browser view were broken, including a fatal error from a missing function.
 - #295753 Make sure exposed views filter does not use date if no default values are selected.

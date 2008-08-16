@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.4.2.4 2008/07/26 17:37:49 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.4.2.5 2008/08/16 20:25:22 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -61,6 +61,14 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
     $rrule['FREQ'] = 'DAILY';
   }
 
+  // Make sure DAILY frequency isn't used in places it won't work;
+  if (!empty($rrule['BYMONTHDAY']) && !in_array($rrule['FREQ'], array('MONTHLY', 'YEARLY'))) {
+    $rrule['FREQ'] = 'MONTHLY';
+  }
+  if (!empty($rrule['BYDAY']) && !in_array($rrule['FREQ'], array('MONTHLY', 'WEEKLY', 'YEARLY'))) {
+    $rrule['FREQ'] = 'MONTHLY';
+  }
+
   // Find the time period to jump forward between dates.
   switch ($rrule['FREQ']) {
    case 'DAILY':
@@ -88,9 +96,6 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
   // This process is only valid when frequency is monthly or yearly.
 
   if (!empty($rrule['BYMONTHDAY'])) {
-    if (!in_array($rrule['FREQ'], array('MONTHLY', 'YEARLY'))) {
-      return $days;
-    }
     $finished = FALSE;
     $current_day = drupal_clone($start_date);
     $time = date_format($start_date, 'H:i:s');

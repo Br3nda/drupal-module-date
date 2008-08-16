@@ -1,11 +1,11 @@
 <?php
-// $Id: date_test.test,v 1.4.2.1 2008/06/30 17:12:36 karens Exp $
+// $Id: date_test.test,v 1.4.2.2 2008/08/16 20:25:22 karens Exp $
 /**
  * Test Date Library
  */
 class DatePHP4LibTest extends DrupalTestCase {
   function get_info() {
-    return array('name' => t('PHP 4 date library'), 'desc' => t('Test ability to create valid dates for years from 100 to 4000 with PHP 4 date library.') , 'group' => 'Date tests');
+    return array('name' => t('PHP 4 date library'), 'desc' => t('Test ability to create valid dates for years from 100 to 4000 with PHP 4 date library. Tests only provide meaningful results when run in PHP 4 environment.') , 'group' => 'Date tests');
   }
 
   function testPHP4DateLibrary() {
