@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.21 2008/08/15 16:49:44 karens Exp $
+//$Id: date.theme,v 1.2.2.22 2008/08/16 12:19:04 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -11,31 +11,49 @@
  * Formatter themes
  */
 /**
- *  Theme from/to date combination in the view.
+ * Theme from/to date combination in the view.
  *
- *  @param $field = the field settings
- *  @param $node = node information, this is not always available and not
- *     always the full node, it depends on what value was provided to the formatter.
- *     Only the nid is always guaranteed to be available.
- *  @param $dates - an array of date information, see explanation for date_field_object() for details.
+ * @param $field = the field settings
+ * @param $node = node information, this is not always available and not
+ *    always the full node, it depends on what value was provided to the formatter.
+ *    Only the nid is always guaranteed to be available.
+ * @param $dates - an array of date information, see explanation for date_field_object() for details.
  *
- *  Useful values:
- *    $field['type_name'] is the content type
- *    $field['type'] is the field type
+ * Useful values:
+ *   $field['type_name'] is the content type
+ *   $field['type'] is the field type
  *
- *    $node->nid is the node nid, get other node values using node_load($node->nid)
+ *   $node->nid is the node nid, get other node values using node_load($node->nid)
  *
- *    $dates['format'] - the format string used on these dates
- *    $dates['value']['local']['object'] - the local date object for the From date
- *    $dates['value2']['local']['object'] - the local date object for the To date
- *    $dates['value']['local']['datetime'] - the datetime value of the From date database (GMT) value
- *    $dates['value2']['local']['datetime'] - the datetime value of the To date database (GMT) value
- *    $dates['value']['formatted'] = formatted From date, i.e. 'February 15, 2007 2:00 pm';
- *    $dates['value']['formatted_date'] - only the date part of the formatted From date
- *    $dates['value']['formatted_time'] - only the time part of the formatted From date
- *    $dates['value2']['formatted'] = formatted To date, i.e. 'February 15, 2007 6:00 pm';
- *    $dates['value2']['formatted_date'] - only the date part of the formatted To date
- *    $dates['value2']['formatted_time'] - only the time part of the formatted To date
+ *   $node->date_id 
+ *     If set, this will show only an individual date on a field with 
+ *     multiple dates. The value should be a string that contains
+ *     the following values, separated with colons:
+ *     - module name of the module adding the item
+ *     - node nid
+ *     - field name
+ *     - delta value of the field to be displayed
+ *     - other information the module's custom theme might need
+ * 
+ *     Used by the calendar module and available for other uses.
+ *     example: 'date:217:field_date:3:test'
+ * 
+ *   $node->date_repeat_show
+ *     If true, tells the theme to show all the computed values
+ *     of a repeating date. If not true or not set, only the
+ *     start date and the repeat rule will be displayed.
+ * 
+ *   $dates['format'] - the format string used on these dates
+ *   $dates['value']['local']['object'] - the local date object for the From date
+ *   $dates['value2']['local']['object'] - the local date object for the To date
+ *   $dates['value']['local']['datetime'] - the datetime value of the From date database (GMT) value
+ *   $dates['value2']['local']['datetime'] - the datetime value of the To date database (GMT) value
+ *   $dates['value']['formatted'] = formatted From date, i.e. 'February 15, 2007 2:00 pm';
+ *   $dates['value']['formatted_date'] - only the date part of the formatted From date
+ *   $dates['value']['formatted_time'] - only the time part of the formatted From date
+ *   $dates['value2']['formatted'] = formatted To date, i.e. 'February 15, 2007 6:00 pm';
+ *   $dates['value2']['formatted_date'] - only the date part of the formatted To date
+ *   $dates['value2']['formatted_time'] - only the time part of the formatted To date
  */
 function theme_date_display_combination($field, $item, $dates, $node = NULL) {
   $date1 = $dates['value']['formatted'];
