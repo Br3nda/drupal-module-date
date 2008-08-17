@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.43 2008/08/02 11:45:32 karens Exp $
+// $Id: date_api.module,v 1.44.2.44 2008/08/17 12:11:48 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -618,20 +618,12 @@ function date_default_timezone($check_user = TRUE) {
 
 /**
  * Identify the number of days in a month for a date.
- *
- * @param mixed $date
- * @return integer
  */
-function date_days_in_month($date = NULL, $type = DATE_OBJECT) {
-  if (empty($date)) {
-    $date = date_now();
-    $type = DATE_OBJECT;
-  }
-  $date = date_convert($date, $type, DATE_OBJECT);
-  if (is_object($date)) {
-    return date_format($date, 't');
-  }
-  return NULL;
+function date_days_in_month($year, $month) {
+  // Pick a day in the middle of the month to avoid timezone shifts.
+  $datetime = date_pad($year, 4) .'-'. date_pad($month) .'-15 00:00:00';
+  $date = date_make_date($datetime);
+  return date_format($date, 't');
 }
 
 /**
