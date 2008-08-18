@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.124 2008/08/17 12:11:48 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.125 2008/08/18 16:41:27 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #240156 Update Event module timezone values if the Date module is handling the timezone form.
 - #296051 Fix error in computation of last day of calendar month.
 - Clean up some invalid combinations like using 'DAILY' with an option like 'First Tuesday'.
 - #295095 Change the repeating dates theme to show only the start and rule on the node and move the list of repeating dates to a separate tab.

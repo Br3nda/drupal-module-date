@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.8.2.10 2008/06/17 12:05:30 karens Exp $
+// $Id: date_timezone.module,v 1.8.2.11 2008/08/18 16:41:27 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -121,6 +121,10 @@ function date_timezone_update_site($element) {
     variable_set('date_default_timezone_name', $timezone);
     $date = date_make_date('now', $timezone);
     form_set_value($element, date_offset_get($date));
+    if (module_exists('event') && function_exists('event_zonelist_by_name')) {
+      $event_zone = event_zonelist_by_name(str_replace('_', ' ', $timezone));
+      variable_set('date_default_timezone_id', $event_zone['timezone']);
+    }
   }
 }
 
@@ -134,6 +138,10 @@ function date_timezone_update_user($element) {
     $date = date_make_date('now', $timezone);
     $offset = date_offset_get($date);
     form_set_value($element['timezone'], $offset);
+    if (module_exists('event') && function_exists('event_zonelist_by_name')) {
+      $event_zone = event_zonelist_by_name(str_replace('_', ' ', $timezone));
+      db_query('UPDATE {users} SET timezone_id=%d WHERE uid = %d', $event_zone['timezone'], arg(1));
+    }
   }
 }
 
