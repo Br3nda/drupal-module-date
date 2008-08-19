@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.9.2.14 2008/08/08 15:12:33 karens Exp $
+//$Id: date_repeat.inc,v 1.9.2.15 2008/08/19 13:38:38 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -33,10 +33,16 @@ function _date_repeat_widget(&$element, &$node, $field, &$items) {
     '#type' => 'date_repeat_rrule',
     '#default_value' => $items[0]['rrule'],
     '#date_timezone' => $element[$field['field_name']][0]['#date_timezone'],
+    '#date_format'      => date_limit_format(date_input_format($element, $field), $field['granularity']),
+    '#date_text_parts'  => (array) $field['widget']['text_parts'],
+    '#date_increment'   => $field['widget']['increment'],
+    '#date_year_range'  => $field['widget']['year_range'],
+    '#date_label_position' => $field['widget']['label_position'],
     '#prev_value' => $items[0]['value'],
     '#prev_value2' => $items[0]['value2'],
-    '#prev_rrule' => $items[0]['rrule'],
-    '#repeat_collapsed' => $field['repeat_collapsed'],
+    '#prev_rrule' => isset($items[0]['rrule']) ? $items[0]['rrule'] : '',
+    '#date_repeat_widget' => $field['widget']['type'],
+    '#date_repeat_collapsed' => $field['repeat_collapsed'],
     );
 }
 /**
@@ -50,7 +56,7 @@ function _date_repeat_widget_validate($element) {
 
   $field_name = $element['#parents'][0];
   $field = $element[0]['#field'];
-  $values = date_repeat_merge($element['#post'][$field_name]['rrule']);
+  $values = date_repeat_merge($element['#post'][$field_name]['rrule'], $element['rrule']);
   
   // If no start date was set, clean up the form and return.
   // If no repeats are set, clean up the form and return.

@@ -1,10 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.125 2008/08/18 16:41:27 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.126 2008/08/19 13:38:38 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #292617 Make sure the Date Repeat form works properly will all possible date widgets.
+- #273656 Make the Date Repeat form use the same widget the regular date form uses.
 - #240156 Update Event module timezone values if the Date module is handling the timezone form.
 - #296051 Fix error in computation of last day of calendar month.
 - Clean up some invalid combinations like using 'DAILY' with an option like 'First Tuesday'.
