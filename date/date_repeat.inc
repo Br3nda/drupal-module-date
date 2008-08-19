@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.9.2.15 2008/08/19 13:38:38 karens Exp $
+//$Id: date_repeat.inc,v 1.9.2.16 2008/08/19 15:36:10 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -29,6 +29,9 @@
  * to create the element delta values.
  */
 function _date_repeat_widget(&$element, &$node, $field, &$items) {
+  if (empty($element['#field'])) {
+    $element['#field'] = $field;
+  }
   $element[$field['field_name']]['rrule'] = array(
     '#type' => 'date_repeat_rrule',
     '#default_value' => $items[0]['rrule'],
