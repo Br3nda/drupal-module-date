@@ -1,9 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.128 2008/08/21 10:47:22 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.129 2008/08/21 17:35:49 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
+
+- #296409 Fix the hidden repeat date logic so repeating dates are only hidden on the node.
 
 Version 5.2-rc7
 ===============
