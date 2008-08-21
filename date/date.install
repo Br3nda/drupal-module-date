@@ -1,11 +1,11 @@
 <?php
-// $Id: date.install,v 1.21.2.28 2008/07/21 00:31:16 karens Exp $
+// $Id: date.install,v 1.21.2.29 2008/08/21 18:42:30 karens Exp $
 function date_install_clear() {
   cache_clear_all('date_', 'cache', '*');
   if (db_table_exists('cache_views')) {
     cache_clear_all('date_browser_views', 'cache_views');
   }
-  include_once(drupal_get_path('module', 'content') .'/content.module');
+  drupal_load('module', 'content');
   content_clear_type_cache();
 }
 
@@ -97,7 +97,7 @@ function date_update_3() {
   if (!db_table_exists('node_field_date_data')) {
     return $ret;
   }
-  include_once(drupal_get_path('module', 'content') .'/content.module');
+  drupal_load('module', 'content');
   content_clear_type_cache();
   $fields = content_fields();
 
@@ -136,7 +136,7 @@ function date_update_3() {
 
 function date_update_4() {
   $ret = array();
-  include_once(drupal_get_path('module', 'content') .'/content.module');
+  drupal_load('module', 'content');
   content_clear_type_cache();
   $fields = content_fields();
 
@@ -194,7 +194,7 @@ function date_update_7() {
  */
 function date_update_5100() {
   $ret = array();
-  include_once(drupal_get_path('module', 'content') .'/content.module');
+  drupal_load('module', 'content');
   $fields = content_fields();
   foreach ($fields as $field) {
     if (strstr($field['type'], 'date')) {
@@ -340,7 +340,7 @@ function date_update_5200() {
   // No longer using the cached formats.
   cache_clear_all('date_formats', 'cache', TRUE);
 
-  include_once(drupal_get_path('module', 'content') .'/content.module');
+  drupal_load('module', 'content');
   // Granularity names have been changed to conform with keys used in date arrays.
   $replace = array('Y' => 'year', 'M' => 'month', 'D' => 'day', 'H' => 'hour', 'N' => 'minute', 'S' => 'second');
   $fields = content_fields();
@@ -368,7 +368,7 @@ function date_update_5200() {
  * @return unknown
  */
 function date_update_5201() {
-  include_once(drupal_get_path('module', 'content') .'/content.module');
+  drupal_load('module', 'content');
   $ret = array();
   if (db_result(db_query("SELECT COUNT(*) FROM {node_field_instance} WHERE widget_type = 'date_js'"))) {
     $result = db_query("SELECT field_name, widget_type, widget_settings from {node_field_instance} where widget_type = 'date_js'");
@@ -403,7 +403,7 @@ function date_update_5203() {
  */
 function date_update_5204() {
   $ret = array();
-  include_once(drupal_get_path('module', 'content') .'/content.module');
+  drupal_load('module', 'content');
   $fields = content_fields();
   foreach ($fields as $field) {
     if (($field['type'] == 'date' || $field['type'] == 'datestamp') && $field['tz_handling'] == 'date') {
@@ -426,7 +426,7 @@ function date_update_5204() {
 
 function date_update_5205() {
   $ret = array();
-  include_once(drupal_get_path('module', 'content') .'/content.module');
+  drupal_load('module', 'content');
   $fields = content_fields();
   foreach ($fields as $field) {
     if (strstr($field['type'], 'date')) {
@@ -496,7 +496,7 @@ function date_column_exists($table, $column) {
 
 function date_db_integrity($name) {
   $ret = array();
-  include_once(drupal_get_path('module', 'content') .'/content.module');
+  drupal_load('module', 'content');
   include_once(drupal_get_path('module', 'content') .'/content_admin.inc');
   $fields = content_fields();
   foreach ($fields as $field) {
@@ -569,7 +569,7 @@ function date_data_integrity($name, $force_recalc = FALSE) {
   $debug = TRUE;
 
   $ret = array();
-  include_once(drupal_get_path('module', 'content') .'/content.module');
+  drupal_load('module', 'content');
   include_once(drupal_get_path('module', 'content') .'/content_admin.inc');
   // See if being called for the first time
   if (!isset($_SESSION[$update_name]) || empty($_SESSION[$update_name]['search'])) {
