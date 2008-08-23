@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.29 2008/08/21 18:42:30 karens Exp $
+// $Id: date.install,v 1.21.2.30 2008/08/23 21:11:43 karens Exp $
 function date_install_clear() {
   cache_clear_all('date_', 'cache', '*');
   if (db_table_exists('cache_views')) {
@@ -362,23 +362,12 @@ function date_update_5200() {
 }
 
 /**
- * Get rid of jscalendar popup widget.
- * Could switch to date_popup, but that may not be installed, so use date_select instead.
+ * The original code was not working right, repeat this in update_5207.
  *
  * @return unknown
  */
 function date_update_5201() {
-  drupal_load('module', 'content');
   $ret = array();
-  if (db_result(db_query("SELECT COUNT(*) FROM {node_field_instance} WHERE widget_type = 'date_js'"))) {
-    $result = db_query("SELECT field_name, widget_type, widget_settings from {node_field_instance} where widget_type = 'date_js'");
-    while ($widget = db_fetch_array($result)) {
-      db_query("UPDATE {node_field_instance} SET widget_type = 'date_text' WHERE field_name = '%s'", serialize($widget_settings), $widget['field_name']);
-    }
-  }
-  date_install_clear();
-  content_clear_type_cache();
-  drupal_set_message(t('All date fields using the jscalendar widget have been changed to use the text widget instead, since the jscalendar widget is no longer supported. Enable the Date Popup module to make a jQuery popup calendar available and edit the field settings to select it.'));
   return $ret;
 }
 
@@ -476,6 +465,25 @@ function date_update_5206() {
     db_query("UPDATE {node_field} SET global_settings = '%s' WHERE field_name = '%s'", serialize($field_settings), $field['field_name']);
   }
   date_install_clear();
+  return $ret;
+}
+
+/**
+ * Get rid of jscalendar popup widget.
+ * Originally update_5201, but that was broken.
+ */
+function date_update_5207() {
+  drupal_load('module', 'content');
+  $ret = array();
+  if (db_result(db_query("SELECT COUNT(*) FROM {". content_instance_tablename() ."} WHERE widget_type = 'date_js'"))) {
+    $replace = module_exists('date_popup') ? 'date_popup' : 'date_text';
+    $result = db_query("SELECT field_name, type_name, widget_type from {". content_instance_tablename() ."} where widget_type = 'date_js'");
+    while ($widget = db_fetch_array($result)) {
+      db_query("UPDATE {". content_instance_tablename() ."} SET widget_type = '$replace' WHERE field_name = '%s' AND type_name = '%s'", $widget['field_name'], $widget['type_name']);
+    }
+    drupal_set_message(t('All date fields using the jscalendar widget have been changed to use the text widget instead, since the jscalendar widget is no longer supported. Enable the Date Popup module to make a jQuery popup calendar available and edit the field settings to select it.'));
+    content_clear_type_cache();
+  }
   return $ret;
 }
 
