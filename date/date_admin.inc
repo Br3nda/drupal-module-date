@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.23 2008/07/26 11:12:38 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.24 2008/08/24 06:40:05 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -320,6 +320,7 @@ function date_field_settings_form($field) {
     $options += array(99 => t('Repeating'));
     $description .= t(' Repeating dates will allow the user to select when and how often the date will repeat.');
   }
+  $description .= date_data_loss_warning('Multiple');
   $form['repeat'] = array(
     '#type' => 'value',
     '#value' => $field['repeat'],
@@ -331,14 +332,15 @@ function date_field_settings_form($field) {
     '#default_value' => !empty($field['repeat']) ? 99 : $field['multiple'],
     '#description' => $description,
   );
-
+  $description = t("Display a matching second date field as a 'To date'. If marked 'Optional' field will be presented but not required. If marked 'Required' the 'To date' will be required if the 'From date' is required or filled in.");
+  $description .= date_data_loss_warning('To date');
   $form['input']['todate'] = array(
     '#type' => 'radios', '#title' => t('To Date'),
     '#options' => array('' => t('Never'), 'optional' => t('Optional'), 'required' => t('Required')),
-    '#description' => t("Display a matching second date field as a 'To date'. If marked 'Optional' field will be presented but not required. If marked 'Required' the 'To date' will be required if the 'From date' is required or filled in."),
+    '#description' => $description,
     '#default_value' => $field['todate'] ? $field['todate'] : '',
     );
-    
+  
   // Make sure granularity is in the right format and has no empty values.
   if (!empty($field['granularity']) && is_array($field['granularity'])) {
     $granularity = array_filter($field['granularity']);  
@@ -366,12 +368,14 @@ function date_field_settings_form($field) {
   for ($i = 1; $i <= 3; $i++) {
     $form['output']['advanced'][$i] = date_formatter_setup_form($field, $i);
   }
+  $description = t('Select the timezone handling method to be used for this date field.');
+  $description .= date_data_loss_warning('Time zone handling');
   $form['timezone']['tz_handling'] = array(
     '#type' => 'select',
     '#title' => t('Time zone handling'),
     '#default_value' => $tz_handling,
     '#options' => date_timezone_handling_options(),
-    '#description' => t('Select the timezone handling method to be used for this date field.'),
+    '#description' => $description,
   );
   // Force this value to hidden because we don't want to allow it to be changed right now,
   // but allow it to be a variable if needed.
@@ -391,6 +395,10 @@ function date_field_settings_form($field) {
   $form['#suffix'] = t('<div class="form-item"><div class="description">* The custom format, if provided, will override the selected display or input options. Define a php date format string like \'m-d-Y H:i\' (see !link for more details).</div></div>', array('!link' => l('http://php.net/date', 'http://php.net/date')));
 
   return $form;
+}
+
+function date_data_loss_warning($name) {
+  return t('<p class="error">Changing the %name setting after data has been created could result in the loss of data!</p>', array('%name' => $name));
 }
 
 /**
