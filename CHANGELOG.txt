@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.132 2008/08/24 06:40:05 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.133 2008/08/24 08:32:09 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #290212 Add test for empty value to To date with 'same' default value.
 - #298456 Add warnings to field settings page about changes that could result in loss of data.
 - #295860 Fix flawed updates that were not resetting jscalendar widgets correctly.
 - #298158 Change drupal_get_path() to drupal_load() to be sure content module gets included correctly in install file.

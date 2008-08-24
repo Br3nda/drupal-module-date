@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.32 2008/08/08 11:07:12 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.33 2008/08/24 08:32:09 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -212,7 +212,7 @@ function date_local_date($delta, $item, $timezone, $field, $part = 'value') {
       return NULL;
     }
     elseif ($part == 'value2' && $default_value == 'same') {
-      if ($field['widget']['default_value'] == 'blank') {
+      if ($field['widget']['default_value'] == 'blank' || empty($item['value'])) {
         return NULL;
       }
       else {
