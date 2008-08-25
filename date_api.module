@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.44 2008/08/17 12:11:48 karens Exp $
+// $Id: date_api.module,v 1.44.2.45 2008/08/25 14:52:51 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1240,6 +1240,11 @@ function date_limit_format($format, $granularity) {
     
     }
   }
+  // Remove empty parentheses, brackets, pipes.
+  $regex[] = '(\(\))';
+  $regex[] = '(\[\])';
+  $regex[] = '(\|\|)';
+  
   // Remove selected values from string.
   $format = trim(preg_replace($regex, array(), $format));
   // Remove orpaned punctuation at the beginning of the string.

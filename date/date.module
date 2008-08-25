@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.32 2008/08/21 17:35:49 karens Exp $
+// $Id: date.module,v 1.39.2.33 2008/08/25 14:52:51 karens Exp $
 
 /**
  * @file
@@ -228,6 +228,8 @@ function date_formatter_process($field, $item, $node, $formatter = 'default') {
           $dates[$processed]['formatted'] = date_format_date($date, 'custom', $format);
           $dates[$processed]['formatted_date'] = date_format_date($date, 'custom', date_limit_format($format, array('year', 'month', 'day')));
           $dates[$processed]['formatted_time'] = date_format_date($date, 'custom', date_limit_format($format, array('hour', 'minute', 'second')));
+          $dates[$processed]['formatted_timezone'] = date_format_date($date, 'custom', date_limit_format($format, array('timezone')));
+          
         }  
       }
     }
