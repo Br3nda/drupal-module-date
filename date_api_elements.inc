@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.37 2008/08/19 13:38:38 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.38 2008/08/25 09:21:44 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -242,6 +242,7 @@ function date_select_process(&$element, $edit = NULL) {
  */
 function date_parts_element($element, $date, $format) {
   $granularity = date_format_order($format);
+  $sub_element = array('#granularity' => $granularity);
   $order = array_flip($granularity);
 
   $hours_format  = strpos(strtolower($element['#date_format']), 'a') ? 'g': 'G';
@@ -273,29 +274,41 @@ function date_parts_element($element, $date, $format) {
           $max_year = max($value_year, $max_year);
         }
         $sub_element[$field]['#default_value'] = is_object($date) ? date_format($date, 'Y') : '';
-        $sub_element[$field]['#options'] = drupal_map_assoc(date_years($min_year, $max_year, $part_required));
+        if ($part_type == 'select') {
+          $sub_element[$field]['#options'] = drupal_map_assoc(date_years($min_year, $max_year, $part_required));
+        }
         break;
       case 'month':
         $sub_element[$field]['#default_value'] = is_object($date) ? date_format($date, 'n') : '';
-        $sub_element[$field]['#options'] = $month_function($part_required);
+        if ($part_type == 'select') {
+          $sub_element[$field]['#options'] = $month_function($part_required);
+        }
         break;
       case 'day':
         $sub_element[$field]['#default_value'] = is_object($date) ? date_format($date, 'j') : '';
-        $sub_element[$field]['#options'] = drupal_map_assoc(date_days($part_required));
+        if ($part_type == 'select') {
+          $sub_element[$field]['#options'] = drupal_map_assoc(date_days($part_required));
+        }
         break;
       case 'hour':
         $sub_element[$field]['#default_value'] = is_object($date) ? date_format($date, $hours_format) : '';
-        $sub_element[$field]['#options'] = drupal_map_assoc(date_hours($hours_format, $part_required));
+        if ($part_type == 'select') {
+          $sub_element[$field]['#options'] = drupal_map_assoc(date_hours($hours_format, $part_required));
+        }
         $sub_element[$field]['#prefix'] = theme('date_part_hour_prefix', $element);
         break;
       case 'minute':
         $sub_element[$field]['#default_value'] = is_object($date) ? date_format($date, 'i') : '';
-        $sub_element[$field]['#options'] = drupal_map_assoc(date_minutes('i', $part_required, $element['#date_increment']));
+        if ($part_type == 'select') {
+          $sub_element[$field]['#options'] = drupal_map_assoc(date_minutes('i', $part_required, $element['#date_increment']));
+        }
         $sub_element[$field]['#prefix'] = theme('date_part_minsec_prefix', $element);
         break;
       case 'second':
         $sub_element[$field]['#default_value'] = is_object($date) ? date_format($date, 's') : '';
-        $sub_element[$field]['#options'] = drupal_map_assoc(date_seconds('s', $part_required, $element['#date_increment']));
+        if ($part_type == 'select') {
+          $sub_element[$field]['#options'] = drupal_map_assoc(date_seconds('s', $part_required, $element['#date_increment']));
+        }
         $sub_element[$field]['#prefix'] = theme('date_part_minsec_prefix', $element);
         break;
     }
@@ -389,54 +402,79 @@ function date_select_validate($element) {
       $element['#value'][$field] = '';
     }
   }
-  $value = date_select_input_value($element);
-  
-  // If the field is empty and not required, set it to empty and return.
-  if (empty($value) && !$element['#required']) {
-    form_set_value($element, NULL);
-    return;
-  }
  
   $error_field = implode('][', $element['#parents']);
-  $granularity = array_values(date_format_order($element['#date_format']));
-
-  if ($element['#value']['ampm'] == 'pm' && $element['#value']['hour'] < 12) {
-    $element['#value']['hour'] += 12;
+  $errors = array();
+  
+  if (isset($element['#value']['ampm'])) {
+    if ($element['#value']['ampm'] == 'pm' && $element['#value']['hour'] < 12) {
+      $element['#value']['hour'] += 12;
+    }
+    elseif ($element['#value']['ampm'] == 'am' && $element['#value']['hour'] == 12) {
+      $element['#value']['hour'] -= 12;
+    }
   }
-  elseif ($element['#value']['ampm'] == 'am' && $element['#value']['hour'] == 12) {
-    $element['#value']['hour'] -= 12;
-  }
-  if ($element['#required'] || !empty($form_values['year'])) {
+  if (in_array('year', $element['#granularity']) && ($element['#required'] || !empty($element['#value']['year']))) {
     if ($element['#value']['year'] < variable_get('date_min_year', 1) || $element['#value']['year'] > variable_get('date_max_year', 4000)) {
-      form_set_error($error_field .'][year', t('year must be a number between %min and %max.', array(
-        '%min' => variable_get('date_min_year', 1), '%max' => variable_get('date_max_year', 4000))));
-    }
-  }
-  if (in_array('month', $granularity) && ($element['#required'] || !empty($element['#value']['month']))) {
-    if ($element['#value']['month'] < 1 || $element['#value']['month'] > 12) {
-      form_set_error($error_field .'][month', t('month must be a number between 1 and 12.'));
-    }
-  }
-  if (in_array('day', $granularity) && ($element['#required'] || !empty($element['#value']['day']))) {
-    if ($element['#value']['day'] < 1 || $element['#value']['day'] > 31) {
-      form_set_error($error_field .'][day', t('day must be a number between 1 and 31.'));
-    }
-  }
-  if (!form_get_errors()) {
-    // If it creates a valid date, set it.
-    if (!empty($value)) {
-      form_set_value($element, $value);
-    }
-    elseif ($element['#required']) {
-      form_set_error($error_field, t('A valid date cannot be constructed from %m-%d-%y.', array(
-        '%m' => $element['#value']['month'],
-        '%d' => $element['#value']['day'],
-        '%y' => $element['#value']['year'],
-        )));
+      $errors[] = t('The year must be a number between %min and %max.', array(
+        '%min' => variable_get('date_min_year', 1), '%max' => variable_get('date_max_year', 4000)));  
     }
     else {
-      form_set_value($element, NULL);
+      $year = $element['#value']['year'];
     }
+  }
+  if (in_array('month', $element['#granularity']) && ($element['#required'] || !empty($element['#value']['month']))) {
+    if ($element['#value']['month'] < 1 || $element['#value']['month'] > 12) {
+      $errors[] = t('The month must be a number between 1 and 12.');
+    }
+    else {
+      $month = $element['#value']['month'];
+    }
+  }
+  if (in_array('day', $element['#granularity']) && ($element['#required'] || !empty($element['#value']['day']))) {
+    $min = 1;
+    $max = isset($year) && isset($month) ? date_days_in_month($year, $month) : 31;
+    if ($element['#value']['day'] < $min || $element['#value']['day'] > $max) {
+      $errors[] = t('The day must be a number between !min and !max.', array('!min' => $min, '!max' => $max));
+    }
+  }
+  if (in_array('hour', $element['#granularity']) && ($element['#required'] || !empty($element['#value']['hour']))) {
+    $min = isset($element['#value']['ampm']) ? 1 : 0;
+    $max = isset($element['#value']['ampm']) ? 12 : 23;
+    if ($element['#value']['hour'] < $min || $element['#value']['hour'] > $max) {
+      $errors[] = t('The hour must be a number between !min and !max.', array('!min' => $min, '!max' => $max));
+    }
+  }
+  if (in_array('minute', $element['#granularity']) && ($element['#required'] || !empty($element['#value']['minute']))) {
+    $min = 0;
+    $max = 59;
+    if ($element['#value']['minute'] < $min || $element['#value']['minute'] > $max) {
+      $errors[] = t('The minute must be a number between !min and !max.', array('!min' => $min, '!max' => $max));
+    }
+  }
+  if (in_array('second', $element['#granularity']) && ($element['#required'] || !empty($element['#value']['second']))) {
+    $min = 0;
+    $max = 59;
+    if ($element['#value']['second'] < $min || $element['#value']['second'] > $max) {
+      $errors[] = t('The second must be a number between !min and !max.', array('!min' => $min, '!max' => $max));
+    }
+  }
+  if (empty($errors) && $element['#required']) {
+    $errors[] = t('A value is required.');
+  }
+  if (!empty($errors)) {
+    array_unshift($errors, t('%field has errors.', array('%field' => $element['#title'])));
+    form_set_error($error_field, implode(' ', $errors));
+  }
+  
+  $value = date_select_input_value($element);
+  
+  // If there are no errors and the value is valid, set it.
+  if (empty($errors) && !empty($value)) {
+    form_set_value($element, $value);
+  }
+  else {
+    form_set_value($element, NULL);
   }
 }
 

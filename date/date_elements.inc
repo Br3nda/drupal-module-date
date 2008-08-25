@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.33 2008/08/24 08:32:09 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.34 2008/08/25 09:21:45 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -324,9 +324,9 @@ function date_combo_process($element, $edit = NULL) {
 
   if (!empty($field['todate'])) {
     $element['#date_float'] = TRUE;
-    $element[$from_field]['#title']  = t('From date');
+    $element[$from_field]['#title']  = t($field['widget']['label']) .' '. t('From date');
     $element[$to_field] = $element[$from_field];
-    $element[$to_field]['#title'] = t('To date');
+    $element[$to_field]['#title'] = t($field['widget']['label']) .' '. t('To date');
     $element[$to_field]['#default_value'] = $element['#value'][$to_field];
     $element[$to_field]['#required'] = false;
     $element[$to_field]['#weight'] += .1;

@@ -1,10 +1,15 @@
-//$Id: CHANGELOG.txt,v 1.1.6.133 2008/08/24 08:32:09 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.134 2008/08/25 09:21:44 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #275919, #267195 Clean up date_select validation: 
+    add field name to from and to date so the name can be used in error messages, 
+    combine error messages for field parts into a single message, 
+    remove #options from text elements so we don't get meaningless core message about an invalid option,
+    set error on whole element so error fields will get outlined.
 - #290212 Add test for empty value to To date with 'same' default value.
 - #298456 Add warnings to field settings page about changes that could result in loss of data.
 - #295860 Fix flawed updates that were not resetting jscalendar widgets correctly.
