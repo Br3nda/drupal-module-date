@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.34 2008/08/25 09:21:45 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.35 2008/08/25 10:51:32 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -330,7 +330,9 @@ function date_combo_process($element, $edit = NULL) {
     $element[$to_field]['#default_value'] = $element['#value'][$to_field];
     $element[$to_field]['#required'] = false;
     $element[$to_field]['#weight'] += .1;
-    $description .= ' '. t('Empty \'To date\' values will use the \'From date\' values.');
+    if ($field['widget']['type'] == 'date_select') {
+      $description .= ' '. t('Empty \'To date\' values will use the \'From date\' values.');
+    }
     $element['#fieldset_description'] = $description;
   }
   else {
