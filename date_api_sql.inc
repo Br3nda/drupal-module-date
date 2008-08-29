@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.31 2008/08/29 13:19:27 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.32 2008/08/29 14:18:30 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -9,7 +9,6 @@
  */
 function date_sql_concat($array) {
   global $db_type;
-
   switch ($db_type) {
     case('mysql'):
     case('mysqli'):
@@ -17,6 +16,22 @@ function date_sql_concat($array) {
     case('pgsql'):
       return implode(" || ", $array);
   }
+}
+
+/**
+ * Helper function to do cross-database NULL replacements
+ *
+ * @param an array of values to test for NULL values
+ * @return SQL statement to return the first non-NULL value in the list.
+ */
+function date_sql_coalesce($array) {
+  global $db_type;
+  switch ($db_type) {
+    case('mysql'):
+    case('mysqli'):
+    case('pgsql'):
+      return "COALESCE(". implode(',', $array) .")";
+  }  
 }
 
 /**
