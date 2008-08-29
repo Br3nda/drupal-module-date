@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.32 2008/08/29 14:18:30 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.33 2008/08/29 21:33:45 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -159,6 +159,9 @@ class date_sql_handler {
           case DATE_ISO:
             if ($this->db_type == 'mysqli' && version_compare(db_version(), '4.1.1', '>=')) {
               $field = "STR_TO_DATE($field, '%Y-%m-%%dT%T')";
+            }
+            else {
+              $field = "REPLACE($field, 'T', ' ')";
             }
             break;
           case DATE_DATETIME:
