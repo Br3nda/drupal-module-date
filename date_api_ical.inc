@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.17 2008/08/19 13:12:03 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.18 2008/08/29 21:31:53 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -85,7 +85,7 @@ function date_ical_import($filename) {
     $icaldatafetch = drupal_http_request($filename);
     // Check the return result
     if ($icaldatafetch->error) {
-      drupal_set_message('Request Error: '. $icaldatafetch->error, 'error');
+      watchdog('date ical', t('Request Error importing !filename: !error', array('!filename' => $filename, '!error' => $icaldatafetch->error)));
       return false;
     }
     // Break the return result into one array entry per lines
@@ -94,7 +94,7 @@ function date_ical_import($filename) {
   else {
     $icaldatafolded = @file($filename, FILE_IGNORE_NEW_LINES);
     if ($icaldatafolded === FALSE) {
-      drupal_set_message('Failed to open file: '. $filename, 'error');
+      watchdog('date ical', t('Failed to open file: !filename', array('!filename' => $filename)));
       return false;
     }
   }
@@ -114,7 +114,7 @@ function date_ical_import($filename) {
 function date_ical_parse($icaldatafolded = array()) {
   // Verify this is iCal data
   if (trim($icaldatafolded[0]) != 'BEGIN:VCALENDAR') {
-    drupal_set_message('Invalid calendar file:'. $filename, 'error');
+    watchdog('date ical', t('Invalid calendar file: !filename', array('!filename' => $filename)));
     return false;
   }
 
