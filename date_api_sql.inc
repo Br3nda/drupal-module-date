@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.30 2008/08/29 13:12:18 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.31 2008/08/29 13:19:27 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -187,7 +187,7 @@ class date_sql_handler {
             return "DATE_ADD($field, INTERVAL $offset SECOND)";
           }
         case 'pgsql':
-          return "($field + 'INTERVAL $offset SECONDS')";;
+          return "($field + INTERVAL '$offset SECONDS')";;
       }
     }
     return $field;
