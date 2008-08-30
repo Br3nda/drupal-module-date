@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.142 2008/08/29 21:31:53 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.143 2008/08/30 11:16:24 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Make sure date_week() trims input value so you can use it with a regular datetime value.
 - Change error messages for ical imports to watchdog messages.
 - #294185 Add test for non-NULL values when concating the from/to date values, using COALESCE.
 - #300319 Move apostrophe in PostgreSQL offset code.
