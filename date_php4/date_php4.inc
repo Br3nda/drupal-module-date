@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.24 2008/07/30 16:57:47 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.25 2008/08/30 13:58:14 karens Exp $
 
 /**
  * @file
@@ -128,7 +128,7 @@ if (!function_exists('date_format')) {
         $date_string .= gmdate($c, $timestamp);
       }
       else{
-        include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_calc.inc');
+        require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_calc.inc');
         switch ($c) {
           case 'U':
             $date_string .= $timestamp;
@@ -403,7 +403,7 @@ if (!function_exists('date_modify')) {
       $date->value = substr_replace(date_date(DATE_FORMAT_DATETIME, $cdate, $date->timezone), $time, 11);
     }
     else {
-      include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_calc.inc');
+      require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_calc.inc');
       $days = date_week_days_untranslated();
       $dows = array_flip($days);
       preg_match('/([+|-])([0-9]{1,32})(\s)?([day(s)?|week(s)?|month(s)?|year(s)?|hour(s)?|minute(s)?|second(s)?|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday]{1,10})/', $change, $results);
@@ -806,7 +806,7 @@ function date_is_dst($timestamp, $timezone = NULL) {
  *   Use 'UTC' to avoid timezone conversion.
  */
 function date_getdate($timestamp = false, $timezone = false) {
-  include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
+  require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
   return _date_getdate($timestamp, $timezone);
 }
 
@@ -848,7 +848,7 @@ function date_date($format, $timestamp = false, $timezone = false) {
       return @gmdate($format, $timestamp);
     }
   }
-  include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
+  require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
   return _date_date($format, $timestamp, $timezone);
 }
 
@@ -895,7 +895,7 @@ function date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false,
     return @gmmktime($hr, $min, $sec, $mon, $day, $year);
   }
   
-  include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
+  require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
   return _date_mktime($hr, $min, $sec, $mon, $day, $year, $timezone);
 }
 

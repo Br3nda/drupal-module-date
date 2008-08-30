@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.146 2008/08/30 12:55:10 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.147 2008/08/30 13:58:12 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Replace all include_once() with require_once().
 - #276270 Add missing break in date_convert() switch for ICAL.
 - #301385 Change hook_requirements() to only set message in runtime to avoid install profile errors.
 - #299112 Adjust date_convert() to adapt to am/pm when data source is an array.

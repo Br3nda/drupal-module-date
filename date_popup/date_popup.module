@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.35 2008/08/25 10:40:02 karens Exp $
+// $Id: date_popup.module,v 1.27.2.36 2008/08/30 13:58:14 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -149,7 +149,7 @@ function date_popup_elements() {
  */
 function date_popup_process($element, $edit = NULL) {
   date_popup_load();
-  include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
+  require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
 
   if (empty($edit)) {
     $edit = date_views_filter_value($element);
@@ -321,7 +321,7 @@ function date_popup_validate($element) {
     return;
   }
 
-  include_once(drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
+  require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
   date_popup_load();
   $value = date_popup_input_value($element);
   

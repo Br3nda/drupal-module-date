@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.31 2008/08/26 14:05:41 karens Exp $
+// $Id: date.install,v 1.21.2.32 2008/08/30 13:58:12 karens Exp $
 function date_install_clear() {
   cache_clear_all('date_', 'cache', '*');
   if (db_table_exists('cache_views')) {
@@ -505,7 +505,7 @@ function date_column_exists($table, $column) {
 function date_db_integrity($name) {
   $ret = array();
   drupal_load('module', 'content');
-  include_once(drupal_get_path('module', 'content') .'/content_admin.inc');
+  require_once('./'. drupal_get_path('module', 'content') .'/content_admin.inc');
   $fields = content_fields();
   foreach ($fields as $field) {
     $db_info = content_database_info($field);
@@ -578,7 +578,7 @@ function date_data_integrity($name, $force_recalc = FALSE) {
 
   $ret = array();
   drupal_load('module', 'content');
-  include_once(drupal_get_path('module', 'content') .'/content_admin.inc');
+  require_once('./'. drupal_get_path('module', 'content') .'/content_admin.inc');
   // See if being called for the first time
   if (!isset($_SESSION[$update_name]) || empty($_SESSION[$update_name]['search'])) {
     // Find all nids that have date fields and store them in an array.

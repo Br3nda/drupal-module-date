@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.39 2008/08/30 11:52:01 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.40 2008/08/30 13:58:12 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -476,7 +476,7 @@ function date_select_validate($element) {
     }
   }
   $value = date_select_input_value($element);
-  
+    
   // If there are no errors and the value is valid, set it.
   if (empty($errors) && !empty($value)) {
     form_set_value($element, $value);

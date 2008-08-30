@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_calc.inc,v 1.3.2.2 2008/06/17 14:30:30 karens Exp $
+// $Id: date_php4_calc.inc,v 1.3.2.3 2008/08/30 13:58:14 karens Exp $
 /**
  * Calculates and manipulates dates with no reliance on 32-bit system
  * timestamps, to work on dates before 1970 and after 2038.
@@ -33,7 +33,7 @@ define('DATE_CALC_FORMAT', '%Y-%m-%d');
 
 // Some functions from the low level library are needed here, make sure
 // they are available.
-include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
+require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');
 
 /**
  * The default value for each method's $format parameter

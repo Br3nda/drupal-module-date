@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.23.2.2 2008/02/15 14:08:57 karens Exp $
+// $Id: date_repeat.module,v 1.23.2.3 2008/08/30 13:58:14 karens Exp $
 /**
  * @file
  *
@@ -150,8 +150,8 @@ function date_repeat_days_ordered($week_start_day) {
  * Constructs a human-readable description of the rule.
  */
 function date_repeat_rrule_description($rrule, $start_date, $format = 'D M d Y') {
-  include_once(drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
-  include_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_calc.inc');
+  require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
+  require_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_calc.inc');
 
   $parts = date_repeat_split_rrule($rrule);
   $exceptions = $parts[1];
@@ -248,7 +248,7 @@ function date_repeat_split_rrule($rrule) {
  * Analyze a RRULE and return dates that match it.
  */
 function date_repeat_calc($rrule, $start, $end, $exceptions = array()) {
-  include_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_calc.inc');
+  require_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_calc.inc');
   return _date_repeat_calc($rrule, $start, $end, $exceptions);
 }
 
@@ -256,6 +256,6 @@ function date_repeat_calc($rrule, $start, $end, $exceptions = array()) {
  * Generate the repeat rule setting form.
  */
 function date_repeat_rrule_process($element, $edit = NULL) {
-  include_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_form.inc');
+  require_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_form.inc');
   return _date_repeat_rrule_process($element, $edit = NULL);
 }

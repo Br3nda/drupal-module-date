@@ -1,5 +1,5 @@
 <?php
-// $Id: date_copy.module,v 1.9.2.6 2008/05/10 13:10:30 karens Exp $
+// $Id: date_copy.module,v 1.9.2.7 2008/08/30 13:58:13 karens Exp $
 /**
  * Date Copy
  *
@@ -334,7 +334,7 @@ function date_copy_import_ical_form_submit($form_id, $form_values) {
   if ($step < 2) {
     return;
   }
-  include_once(drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
+  require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
   $imported_values = date_ical_import($source_file);
   if (empty($imported_values)) {
     drupal_set_message(t('This is an invalid file.'));
@@ -516,7 +516,7 @@ function date_copy_import_event_form_submit($form_id, $form_values) {
 
   // The array that maps event timezone zids to timezone names is in
   // date_php4_tz_map.inc, need to reverse it so the zid is the key.
-  include_once(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
+  require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
   $timezones = array('' => '');
   $map = $timezone_map;
   foreach ($map as $zone => $values) {
@@ -561,7 +561,7 @@ function date_copy_convert_events( $source_type, $target_type, $date_field, $des
 
   // Check which version of the Event module this database was built in.
   $event_version = 1;
-  include_once(drupal_get_path('module', 'date') .'/date.install');
+  require_once('./'. drupal_get_path('module', 'date') .'/date.install');
   if (date_column_exists('event', 'has_time')) {
     $event_version = 2;
   }

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.8.2.11 2008/08/18 16:41:27 karens Exp $
+// $Id: date_timezone.module,v 1.8.2.12 2008/08/30 13:58:14 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -208,6 +208,6 @@ function user_timezone($abbreviation = '', $offset = -1, $is_daylight_saving_tim
  * Create replacement values for deprecated timezone names.
  */
 function date_timezone_replacement($old) {
-  include_once(drupal_get_path('module', 'date_timezone') .'/date_timezone.install');
+  require_once('./'. drupal_get_path('module', 'date_timezone') .'/date_timezone.install');
   return _date_timezone_replacement($old);
 }
