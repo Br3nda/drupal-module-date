@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.38 2008/08/25 09:21:44 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.39 2008/08/30 11:52:01 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -467,6 +467,14 @@ function date_select_validate($element) {
     form_set_error($error_field, implode(' ', $errors));
   }
   
+  if (isset($element['#value']['ampm'])) {
+    if ($element['#value']['ampm'] == 'pm' && $element['#value']['hour'] < 12) {
+      $element['#value']['hour'] += 12;
+    }
+    elseif ($element['#value']['ampm'] == 'am' && $element['#value']['hour'] == 12) {
+      $element['#value']['hour'] -= 12;
+    }
+  }
   $value = date_select_input_value($element);
   
   // If there are no errors and the value is valid, set it.

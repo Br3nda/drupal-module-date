@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.46 2008/08/30 11:16:24 karens Exp $
+// $Id: date_api.module,v 1.44.2.47 2008/08/30 11:52:01 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -901,6 +901,10 @@ function date_convert($date, $from_type, $to_type) {
   switch ($from_type) {
     case DATE_ARRAY:
       if (!is_array($date)) return NULL;
+      if (isset($date['ampm'])) {
+        if ($date['ampm'] == 'pm' && $date['hour'] < 12) $date['hour'] += 12;
+        if ($date['ampm'] == 'am' && $date['hour'] == 12) $date['hour'] -= 12;
+      }
       $datetime = date_pad(intval($date['year']), 4) .'-'. date_pad(intval($date['month'])) .
             '-'. date_pad(intval($date['day'])) .' '. date_pad(intval($date['hour'])) .
             ':'. date_pad(intval($date['minute'])) .':'. date_pad(intval($date['second']));

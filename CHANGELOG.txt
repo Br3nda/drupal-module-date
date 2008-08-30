@@ -1,10 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.143 2008/08/30 11:16:24 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.144 2008/08/30 11:52:01 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #299112 Adjust date_convert() to adapt to am/pm when data source is an array.
+- #299112 Don't change 12 hour time to 24 hour time until after validation.
 - Make sure date_week() trims input value so you can use it with a regular datetime value.
 - Change error messages for ical imports to watchdog messages.
 - #294185 Add test for non-NULL values when concating the from/to date values, using COALESCE.
