@@ -1,5 +1,5 @@
 <?php
-//$Id: date_token.inc,v 1.1.2.5 2008/09/01 11:39:42 karens Exp $
+//$Id: date_token.inc,v 1.1.2.6 2008/09/01 12:04:57 karens Exp $
 /**
  * @file
  * Token module integration.
@@ -38,9 +38,9 @@ function _date_token_values($type, $object = NULL) {
     $item['value'] = trim($item['value']);
     $item_type = isset($item['date_type']) ? $item['date_type'] : (is_numeric($item['value']) ? DATE_UNIX : DATE_ISO);
     $timezone = !empty($item['timezone']) ? $item['timezone'] : date_default_timezone_name();
-    $db_timezone = !empty($item['db_timezone']) ? $item['db_timezone'] : 'UTC';
-    $date = date_make_date($item['value'], $db_timezone, $item_type);
-    if ($db_timezone != $timezone) {
+    $timezone_db = !empty($item['timezone_db']) ? $item['timezone_db'] : 'UTC';
+    $date = date_make_date($item['value'], $timezone_db, $item_type);
+    if ($timezone_db != $timezone) {
       date_timezone_set($date, timezone_open($timezone));
     }
     
@@ -63,8 +63,8 @@ function _date_token_values($type, $object = NULL) {
     if (!empty($item['value2'])) {
 
       $item['value2'] = trim($item['value2']);
-      $date = date_make_date($item['value2'], $db_timezone, $item_type);
-      if ($db_timezone != $timezone) {
+      $date = date_make_date($item['value2'], $timezone_db, $item_type);
+      if ($timezone_db != $timezone) {
         date_timezone_set($date, timezone_open($timezone));
       }
  

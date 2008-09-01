@@ -1,5 +1,5 @@
 <?php
-// $Id: date_copy.module,v 1.9.2.7 2008/08/30 13:58:13 karens Exp $
+// $Id: date_copy.module,v 1.9.2.8 2008/09/01 12:04:57 karens Exp $
 /**
  * Date Copy
  *
@@ -597,8 +597,18 @@ function date_copy_convert_events( $source_type, $target_type, $date_field, $des
       unset($target_node->body);
     }
 
+    // Set the date timezone value.
     $timezone = !empty($event->timezone) && $tz_handling == 'date' && $event_tz_handling == 'event' ? $timezones[$event->timezone] : date_default_timezone_name();
 
+    // If this is a deprecated timezone, replace it.
+    require_once(drupal_get_path('module', 'date_timezone') .'/date_timezone.install');
+    $timezone = _date_timezone_replacement($timezone);
+
+    // Find the original timezone value (might not be the same as the date timezone).
+    $event_timezone = !empty($event->timezone) ? $timezones[$event->timezone] : date_default_timezone_name();
+    // If this is a deprecated timezone, replace it.
+    $event_timezone = _date_timezone_replacement($event_timezone);
+    
     if ($event_version == 1) {
       // Version 1 stores the UTC value in the database as a timestamp.
       $date = array(0 => array());
@@ -627,9 +637,15 @@ function date_copy_convert_events( $source_type, $target_type, $date_field, $des
       // Version 2 stores the local value in the database as a datetime field.
       $date = array(0 => array());
       $data[0]['timezone'] = $timezone;
-      $start = date_make_date($event->event_start, $timezone, DATE_DATETIME);
+      $start = date_make_date($event->event_start, $event_timezone, DATE_DATETIME);
+      if ($event_timezone != $timezone) {
+        date_timezone_set($start, timezone_open($timezone));
+      }
       $data[0]['offset'] = date_offset_get($start);
-      $end = date_make_date($event->event_end, $timezone, DATE_DATETIME);
+      $end = date_make_date($event->event_end, $event_timezone, DATE_DATETIME);
+      if ($event_timezone != $timezone) {
+        date_timezone_set($end, timezone_open($timezone));
+      }
       $data[0]['offset2'] = date_offset_get($end);
 
       date_timezone_set($start, timezone_open('UTC'));
@@ -676,4 +692,93 @@ function date_copy_convert_events( $source_type, $target_type, $date_field, $des
       $new_field[0]['value2']);
   }
   return $rows;
+}
+
+function date_copy_event_field() {
+$content[type]  = array (
+  'name' => 'Event',
+  'type' => 'event',
+  'description' => 'Events have a start date and an optional end date as well as a teaser and a body. They can be extended by other modules, too.',
+  'title_label' => 'Title',
+  'body_label' => 'Body',
+  'min_word_count' => '0',
+  'help' => '',
+  'node_options' => 
+  array (
+    'status' => true,
+    'promote' => true,
+    'sticky' => false,
+    'revision' => false,
+  ),
+  'comment' => 2,
+  'old_type' => 'event',
+  'orig_type' => 'event',
+  'module' => 'node',
+  'custom' => '1',
+  'modified' => '1',
+  'locked' => '0',
+);
+$content[fields]  = array (
+  0 => 
+  array (
+    'widget_type' => 'date_select',
+    'label' => 'Event date',
+    'weight' => 0,
+    'default_value' => 'now',
+    'default_value_code' => '',
+    'default_value2' => 'blank',
+    'default_value_code2' => '',
+    'input_format' => "'". variable_get('date_format_short', 'm/d/Y - H:i') ."'",
+    'input_format_custom' => '',
+    'year_range' => '-3:+3',
+    'increment' => '15',
+    'advanced' => 
+    array (
+      'label_position' => 'above',
+      'text_parts' => 
+      array (
+        'year' => 0,
+        'month' => 0,
+        'day' => 0,
+        'hour' => 0,
+        'minute' => 0,
+        'second' => 0,
+      ),
+    ),
+    'description' => '',
+    'group' => false,
+    'required' => 0,
+    'multiple' => '0',
+    'repeat' => 0,
+    'todate' => 'optional',
+    'granularity' => 
+    array (
+      'year' => 'year',
+      'month' => 'month',
+      'day' => 'day',
+      'hour' => 'hour',
+      'minute' => 'minute',
+    ),
+    'output_format_date' => "'". variable_get('date_format_medium',  'D, m/d/Y - H:i') ."'",
+    'output_format_custom' => '',
+    'output_format_date_long' => "'". variable_get('date_format_long',  'l, F j, Y - H:i') ."'",
+    'output_format_custom_long' => '',
+    'output_format_date_medium' => "'". variable_get('date_format_medium',  'D, m/d/Y - H:i') ."'",
+    'output_format_custom_medium' => '',
+    'output_format_date_short' => "'". variable_get('date_format_short', 'm/d/Y - H:i') ."'",
+    'output_format_custom_short' => '',
+    'tz_handling' => 'date',
+    'timezone_db' => 'UTC',
+    'repeat_collapsed' => '0',
+    'field_name' => 'field_event_date',
+    'field_type' => 'date',
+    'module' => 'date',
+    'label_position' => 'above',
+    'text_parts' => 
+    array (
+    ),
+  ),
+);
+  $macro = "\$content  = ". var_export((array) $content, TRUE) .";\n";
+  return $macro;
 }
