@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.34 2008/08/30 13:58:12 karens Exp $
+// $Id: date.module,v 1.39.2.35 2008/09/01 11:39:42 karens Exp $
 
 /**
  * @file
@@ -265,7 +265,7 @@ function date_granularity($field) {
 }
 
 /**
- *  Function to figure out which timezone applies to a date and select it
+ *  Function to figure out which local timezone applies to a date and select it
  */
 function date_get_timezone($handling, $timezone = '') {
   switch ($handling) {
@@ -279,6 +279,21 @@ function date_get_timezone($handling, $timezone = '') {
       $timezone = date_default_timezone_name();
   }
   return $timezone > '' ? $timezone : date_default_timezone_name();
+}
+
+/**
+ *  Function to figure out which db timezone applies to a date and select it
+ */
+function date_get_db_timezone($handling, $timezone = '') {
+  switch ($handling) {
+    case('none'):
+      $timezone = date_default_timezone_name();
+      break;
+    default:
+      $timezone = 'UTC';
+      break;
+  }
+  return $timezone > '' ? $timezone : 'UTC';
 }
 
 /**
@@ -349,6 +364,16 @@ function date_form_alter($form_id, &$form) {
  */
 function date_field($op, &$node, $field, &$items, $teaser, $page) {
   switch ($op) {
+    case 'load':
+      foreach ($items as $delta => $item) {
+        $timezone = $item['timezone'];
+        $items[$delta]['timezone'] = date_get_timezone($field['tz_handling'], $timezone);
+        $items[$delta]['db_timezone'] = date_get_db_timezone($field['tz_handling']);
+        $items[$delta]['date_type'] = $field['type'];
+      }
+      return $items;
+      break;
+      
     case 'validate':
       require_once('./'. drupal_get_path('module', 'date') .'/date_elements.inc');
       return _date_field_validate($op, $node, $field, $items, $teaser, $page);

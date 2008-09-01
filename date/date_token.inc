@@ -1,5 +1,5 @@
 <?php
-//$Id: date_token.inc,v 1.1.2.4 2008/06/18 12:08:39 karens Exp $
+//$Id: date_token.inc,v 1.1.2.5 2008/09/01 11:39:42 karens Exp $
 /**
  * @file
  * Token module integration.
@@ -31,15 +31,19 @@ function _date_token_list($type = 'all') {
   }
 }
 
-function _date_token_values($type, $object = NULL, $options = array()) {
+function _date_token_values($type, $object = NULL) {
   if ($type == 'field') {
     $item = $object[0];
     
     $item['value'] = trim($item['value']);
-    $item_type = (is_numeric($item['value']) ? DATE_UNIX : DATE_ISO);
+    $item_type = isset($item['date_type']) ? $item['date_type'] : (is_numeric($item['value']) ? DATE_UNIX : DATE_ISO);
     $timezone = !empty($item['timezone']) ? $item['timezone'] : date_default_timezone_name();
-    $date = date_make_date($item['value'], $timezone, $item_type);
-
+    $db_timezone = !empty($item['db_timezone']) ? $item['db_timezone'] : 'UTC';
+    $date = date_make_date($item['value'], $db_timezone, $item_type);
+    if ($db_timezone != $timezone) {
+      date_timezone_set($date, timezone_open($timezone));
+    }
+    
     $tokens['value']          = $item['value'];
     $tokens['view']           = $item['view'];
     $tokens['timestamp']      = date_format_date($date, 'custom', 'U');
@@ -59,9 +63,11 @@ function _date_token_values($type, $object = NULL, $options = array()) {
     if (!empty($item['value2'])) {
 
       $item['value2'] = trim($item['value2']);
-      $item_type = (is_numeric($item['value2']) ? DATE_UNIX : DATE_ISO);
-      $date = date_make_date($item['value2'], $timezone, $item_type);
-
+      $date = date_make_date($item['value2'], $db_timezone, $item_type);
+      if ($db_timezone != $timezone) {
+        date_timezone_set($date, timezone_open($timezone));
+      }
+ 
       $tokens['to-value']          = $item['value2'];
       $tokens['to-view']           = $item['view2'];
       $tokens['to-timestamp']      = date_format_date($date, 'custom', 'U');
