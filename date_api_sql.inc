@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.33 2008/08/29 21:33:45 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.34 2008/09/02 19:53:13 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -68,7 +68,7 @@ class date_sql_handler {
       switch ($this->db_type) {
         case 'mysql':
         case 'mysqli':
-          if ($this->db_type == 'mysqli' && version_compare(db_version(), '4.1.3', '>=')) {
+          if (version_compare(db_version(), '4.1.3', '>=')) {
             $test = db_result(db_query("SELECT CONVERT_TZ('2008-02-15 12:00:00', 'UTC', 'US/Central')"));
             if ($test == '2008-02-15 06:00:00') {
               $has_support = TRUE;
@@ -157,7 +157,7 @@ class date_sql_handler {
             $field = "FROM_UNIXTIME($field)";
             break;
           case DATE_ISO:
-            if ($this->db_type == 'mysqli' && version_compare(db_version(), '4.1.1', '>=')) {
+            if (version_compare(db_version(), '4.1.1', '>=')) {
               $field = "STR_TO_DATE($field, '%Y-%m-%%dT%T')";
             }
             else {
@@ -198,7 +198,7 @@ class date_sql_handler {
       switch ($this->db_type) {
         case 'mysql':
         case 'mysqli':
-          if ($this->db_type == 'mysqli' && version_compare(db_version(), '4.1.1', '>=')) {
+          if (version_compare(db_version(), '4.1.1', '>=')) {
             return "ADDTIME($field, SEC_TO_TIME($offset))";
           }
           else {
