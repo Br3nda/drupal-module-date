@@ -1,5 +1,5 @@
 <?php
-// $Id: date_copy.module,v 1.9.2.8 2008/09/01 12:04:57 karens Exp $
+// $Id: date_copy.module,v 1.9.2.9 2008/09/02 17:34:07 karens Exp $
 /**
  * Date Copy
  *
@@ -97,6 +97,7 @@ function date_copy_type_form($target = TRUE) {
       $type_options[$field['type_name']] = $node_types[$field['type_name']];
     }
   }
+  
   if (sizeof($type_options) < 1) {
     drupal_set_message(t('There are no date fields in this database to import the data into. Please add a date field to the desired node types and be sure to indicate it uses both a "from" and a "to" date.'));
     return $form;
@@ -107,8 +108,23 @@ function date_copy_type_form($target = TRUE) {
     '#type' => 'select',
     '#options' => $type_options,
     '#title' => $label,
+    '#description' => t('Only content types with date fields appear in this list as possible target types.'),
     '#default_value' => '',
     );
+  // If Content Copy is enabled, offer an import link.
+  if (module_exists('content_copy')) {
+    $form['macro'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Add'),
+      '#description' => t('If your desired target type does not already have a date field, follow this link and select a content type to add a date field to that type.'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+    $form['macro']['link'] = array(
+      '#type' => 'markup',
+      '#value' => l(t('Add new date field'), 'admin/content/types/import', array(), 'macro_file='. drupal_get_path('module', 'date_copy') .'/date_field.php'),
+    );
+  }
   return $form;
 }
 
@@ -448,7 +464,7 @@ function date_copy_import_event_form($form_values = NULL) {
     drupal_set_message(t('There is no event table in this database. No event import options are available.'));
     return array();
   }
-
+  
   $step = intval($form_values['step'] + 1);
   $form['step'] = array(
     '#type' => 'hidden',
@@ -692,93 +708,4 @@ function date_copy_convert_events( $source_type, $target_type, $date_field, $des
       $new_field[0]['value2']);
   }
   return $rows;
-}
-
-function date_copy_event_field() {
-$content[type]  = array (
-  'name' => 'Event',
-  'type' => 'event',
-  'description' => 'Events have a start date and an optional end date as well as a teaser and a body. They can be extended by other modules, too.',
-  'title_label' => 'Title',
-  'body_label' => 'Body',
-  'min_word_count' => '0',
-  'help' => '',
-  'node_options' => 
-  array (
-    'status' => true,
-    'promote' => true,
-    'sticky' => false,
-    'revision' => false,
-  ),
-  'comment' => 2,
-  'old_type' => 'event',
-  'orig_type' => 'event',
-  'module' => 'node',
-  'custom' => '1',
-  'modified' => '1',
-  'locked' => '0',
-);
-$content[fields]  = array (
-  0 => 
-  array (
-    'widget_type' => 'date_select',
-    'label' => 'Event date',
-    'weight' => 0,
-    'default_value' => 'now',
-    'default_value_code' => '',
-    'default_value2' => 'blank',
-    'default_value_code2' => '',
-    'input_format' => "'". variable_get('date_format_short', 'm/d/Y - H:i') ."'",
-    'input_format_custom' => '',
-    'year_range' => '-3:+3',
-    'increment' => '15',
-    'advanced' => 
-    array (
-      'label_position' => 'above',
-      'text_parts' => 
-      array (
-        'year' => 0,
-        'month' => 0,
-        'day' => 0,
-        'hour' => 0,
-        'minute' => 0,
-        'second' => 0,
-      ),
-    ),
-    'description' => '',
-    'group' => false,
-    'required' => 0,
-    'multiple' => '0',
-    'repeat' => 0,
-    'todate' => 'optional',
-    'granularity' => 
-    array (
-      'year' => 'year',
-      'month' => 'month',
-      'day' => 'day',
-      'hour' => 'hour',
-      'minute' => 'minute',
-    ),
-    'output_format_date' => "'". variable_get('date_format_medium',  'D, m/d/Y - H:i') ."'",
-    'output_format_custom' => '',
-    'output_format_date_long' => "'". variable_get('date_format_long',  'l, F j, Y - H:i') ."'",
-    'output_format_custom_long' => '',
-    'output_format_date_medium' => "'". variable_get('date_format_medium',  'D, m/d/Y - H:i') ."'",
-    'output_format_custom_medium' => '',
-    'output_format_date_short' => "'". variable_get('date_format_short', 'm/d/Y - H:i') ."'",
-    'output_format_custom_short' => '',
-    'tz_handling' => 'date',
-    'timezone_db' => 'UTC',
-    'repeat_collapsed' => '0',
-    'field_name' => 'field_event_date',
-    'field_type' => 'date',
-    'module' => 'date',
-    'label_position' => 'above',
-    'text_parts' => 
-    array (
-    ),
-  ),
-);
-  $macro = "\$content  = ". var_export((array) $content, TRUE) .";\n";
-  return $macro;
 }

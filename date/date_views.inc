@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.44 2008/09/02 15:19:22 karens Exp $
+// $Id: date_views.inc,v 1.26.2.45 2008/09/02 17:34:07 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -137,6 +137,22 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
   require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
 
+  // There's no simple way to do this, figure out if this filter has an
+  // exposed value, and if so, ignore options like 'now'. Need to do 
+  // this so we don't adjust to 'now' when the date is deliberately
+  // set to be empty in an exposed filter, while still using 'now'
+  // as the default value when nothing has been submitted in the exposed
+  // filter.
+  $view = $GLOBALS['current_view'];
+  foreach ((array) $view->exposed_filter as $delta => $exposed_filter) {
+    if ($exposed_filter['field'] == $filter['field']) {
+      // This is an exposed filter that has been submitted.
+      if (isset($_GET['filter'. $delta])) {
+        $filter['options'] = '';
+      }
+    }
+  }
+        
   // $filter['value'] could either be an array of 'date' and 'time',
   // or an array of date parts, or a single value, depending on which 
   // widget was used. Normalize the values before analyzing them.
@@ -264,9 +280,15 @@ function _date_views_filter_value($element) {
     $name = $element['#name'];
     if (empty($_GET[$name])) {
       $view = $GLOBALS['current_view'];
-      $delta = trim(str_replace('filter', '', $name));
-      $adjustment = $view->filter[$delta]['options'];
-      $value = $view->filter[$delta]['value'];
+      $exposed_delta = trim(str_replace('filter', '', $name));
+      $exposed_field = $view->exposed_filter[$exposed_delta]['field'];
+      foreach ((array) $view->filter as $delta => $filter) {
+        if ($filter['field'] == $exposed_field) {
+          $adjustment = $filter['options'];
+          $value = $filter['value'];
+          $op = $filter['operator'];
+        }
+      }
       
       // Don't inject a date value if there is no default set.
       if (empty($value) && empty($adjustment)) {
@@ -287,15 +309,19 @@ function _date_views_filter_value($element) {
       
       switch ($element['#type']) {
         case 'date_select':
-          return date_convert($now, DATE_OBJECT, DATE_ARRAY);
+          $form_value = date_convert($now, DATE_OBJECT, DATE_ARRAY);
+          break;
         case 'date_popup':
-          return array(
+          $form_value = array(
             'date' => date_format($now, date_limit_format($element['#date_format'], array('year', 'month', 'day'))),
             'time' => date_format($now, date_limit_format($element['#date_format'], array('hour', 'minute', 'second'))),
             );
+          break;  
         default:
-          return date_format($now, $element['#date_format']);   
+          $form_value = date_format($now, $element['#date_format']);   
+          break;
       }
+      return $form_value;
     }
   }  
 }

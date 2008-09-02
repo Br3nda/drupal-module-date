@@ -1,10 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.149 2008/09/02 15:19:22 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.150 2008/09/02 17:34:07 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #295753 When using a date form in an exposed filter, make sure 'now' is only applied if the filter is not submitted.
+- #295753 When using a date form in an exposed filter, get the exposed filter delta, not the filter delta.
 - #297021 Fix summary link title for date argument views.
 - #302351 Add timezone info to node_load() and adjust tokens to set the right timezone.
 - Replace all include_once() with require_once().
