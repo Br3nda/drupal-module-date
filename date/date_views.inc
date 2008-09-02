@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.43 2008/08/30 13:58:13 karens Exp $
+// $Id: date_views.inc,v 1.26.2.44 2008/09/02 15:19:22 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -437,12 +437,10 @@ function _date_views_argument_link(&$query, $argtype, $arg, $field_type) {
   if (empty($query->range)) {
     return t('N/A');
   }
-  $field_name = _date_views_arg_field_name($argtype);
-  $value = $field_name .'_'. (substr($field_name, -1) == 2 ? 'value2' : 'value');
   $date_handler = new date_sql_handler();
   $granularity = $date_handler->arg_granularity($query->range);
   $format = $date_handler->views_formats($granularity, 'display');
-  $range = $date_handler->arg_range($query->$value);
+  $range = $date_handler->arg_range($query->range);
   $formatted = date_format_date($range[0], 'custom', $format);
   $formatted2 = date_format_date($range[1], 'custom', $format);
   if ($formatted != $formatted2) {
