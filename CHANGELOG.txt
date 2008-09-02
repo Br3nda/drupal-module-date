@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.151 2008/09/02 19:56:06 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.152 2008/09/02 20:04:00 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #196468 Add link to add a date field to a content type in Date Copy, uses new CCK feature to import from file.
 - The timezone translation names in the install file must use underscores instead of spaces.
 - #295753 When using a date form in an exposed filter, make sure 'now' is only applied if the filter is not submitted.
 - #295753 When using a date form in an exposed filter, get the exposed filter delta, not the filter delta.
