@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.152 2008/09/02 20:04:00 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.153 2008/09/03 14:20:53 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Rework the date_id formatting to use the new #delta value being passed from CCK.
 - #196468 Add link to add a date field to a content type in Date Copy, uses new CCK feature to import from file.
 - The timezone translation names in the install file must use underscores instead of spaces.
 - #295753 When using a date form in an exposed filter, make sure 'now' is only applied if the filter is not submitted.
