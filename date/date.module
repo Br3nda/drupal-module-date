@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.36 2008/09/01 12:04:57 karens Exp $
+// $Id: date.module,v 1.39.2.37 2008/09/03 12:35:25 karens Exp $
 
 /**
  * @file
@@ -365,13 +365,14 @@ function date_form_alter($form_id, &$form) {
 function date_field($op, &$node, $field, &$items, $teaser, $page) {
   switch ($op) {
     case 'load':
-      foreach ($items as $delta => $item) {
+     $additions[$field['field_name']] = $items;
+     foreach ($items as $delta => $item) {
         $timezone = $item['timezone'];
-        $items[$delta]['timezone'] = date_get_timezone($field['tz_handling'], $timezone);
-        $items[$delta]['timezone_db'] = date_get_timezone_db($field['tz_handling']);
-        $items[$delta]['date_type'] = $field['type'];
+        $additions[$field['field_name']][$delta]['timezone'] = date_get_timezone($field['tz_handling'], $timezone);
+        $additions[$field['field_name']][$delta]['timezone_db'] = date_get_timezone_db($field['tz_handling']);
+        $additions[$field['field_name']][$delta]['date_type'] = $field['type'];
       }
-      return $items;
+      return $additions;
       break;
       
     case 'validate':
