@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.49 2008/08/30 13:58:12 karens Exp $
+// $Id: date_api.module,v 1.44.2.50 2008/09/04 14:55:59 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1351,6 +1351,38 @@ function date_api_set_db_timezone($offset = '+00:00') {
   require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
   $handler = new date_sql_handler();
   return $handler->set_db_timezone($offset);
+}
+
+/**
+ *  Function to figure out which local timezone applies to a date and select it
+ */
+function date_get_timezone($handling, $timezone = '') {
+  switch ($handling) {
+    case('date'):
+      $timezone = !empty($timezone) ? $timezone : date_default_timezone_name();
+      break;
+    case('utc'):
+      $timezone = 'UTC';
+      break;
+    default:
+      $timezone = date_default_timezone_name();
+  }
+  return $timezone > '' ? $timezone : date_default_timezone_name();
+}
+
+/**
+ *  Function to figure out which db timezone applies to a date and select it
+ */
+function date_get_timezone_db($handling, $timezone = '') {
+  switch ($handling) {
+    case('none'):
+      $timezone = date_default_timezone_name();
+      break;
+    default:
+      $timezone = 'UTC';
+      break;
+  }
+  return $timezone > '' ? $timezone : 'UTC';
 }
 
 /**

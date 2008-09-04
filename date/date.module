@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.38 2008/09/03 14:20:53 karens Exp $
+// $Id: date.module,v 1.39.2.39 2008/09/04 14:55:59 karens Exp $
 
 /**
  * @file
@@ -260,38 +260,6 @@ function date_granularity($field) {
     $field['granularity'] = drupal_map_assoc(array('year', 'month', 'day'));
   }
   return array_values(array_filter($field['granularity']));
-}
-
-/**
- *  Function to figure out which local timezone applies to a date and select it
- */
-function date_get_timezone($handling, $timezone = '') {
-  switch ($handling) {
-    case('date'):
-      $timezone = !empty($timezone) ? $timezone : date_default_timezone_name();
-      break;
-    case('utc'):
-      $timezone = 'UTC';
-      break;
-    default:
-      $timezone = date_default_timezone_name();
-  }
-  return $timezone > '' ? $timezone : date_default_timezone_name();
-}
-
-/**
- *  Function to figure out which db timezone applies to a date and select it
- */
-function date_get_timezone_db($handling, $timezone = '') {
-  switch ($handling) {
-    case('none'):
-      $timezone = date_default_timezone_name();
-      break;
-    default:
-      $timezone = 'UTC';
-      break;
-  }
-  return $timezone > '' ? $timezone : 'UTC';
 }
 
 /**
