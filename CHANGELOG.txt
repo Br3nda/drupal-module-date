@@ -1,10 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.154 2008/09/04 14:55:59 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.155 2008/09/05 12:28:51 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+Version 5.2.1
+===============
 - Move timezone handling logic to Date API so we can use it in Calendar, too.
 - Rework the date_id formatting to use the new #delta value being passed from CCK.
 - #196468 Add link to add a date field to a content type in Date Copy, uses new CCK feature to import from file.
@@ -38,8 +40,8 @@ Version 5.2-dev
 - #298158 Change drupal_get_path() to drupal_load() to be sure content module gets included correctly in install file.
 - #296409 Fix the hidden repeat date logic so repeating dates are only hidden on the node.
 
-Version 5.2-rc7
-===============
+Version 5.2.0-rc7
+=================
 
 - Make sure the field values get passed to the Repeat widget.
 - #292617 Make sure the Date Repeat form works properly with all possible date widgets.
@@ -51,8 +53,8 @@ Version 5.2-rc7
 - #294950 Several things in the Date Browser view were broken, including a fatal error from a missing function.
 - #295753 Make sure exposed views filter does not use date if no default values are selected.
 
-Version 5.2-rc6
-===============
+Version 5.2.0-rc6
+=================
 
 - Fix Date Popup process that was ignoring $edit values.
 - Get exposed date filters to display the correct default date values.
@@ -67,8 +69,8 @@ Version 5.2-rc6
 - #292602 Make sure dates without times do not get 'All day' added.
 - #292436 Fix critical typo in new date_all_day function and add test to date_formatter_process() to keep empty value from wiping out a good one.
 
-Version 5.2-rc5
-===============
+Version 5.2.0-rc5
+=================
 
 - #291044 Default date filter value will already be a valid datetime, don't try to adjust it.
 - Check for date values before using new all day theme.
@@ -81,8 +83,8 @@ Version 5.2-rc5
 - Make sure we don't use mktime() in compare_date() function, won't work reliably in PHP4.
 - Make sure PHP4 wrapper code doesn't try to use date() on values outside the 32 bit signed range.
 
-Version 5.2-rc4
-===============
+Version 5.2.0-rc4
+=================
 
 - #286454 Add fix for Views substitutions error handling %%s to work like the fix for %%d.
 - #286864 Fix wrong RRULE value being passed to validator and add trim() to get repeating dates working again.
@@ -111,8 +113,8 @@ Version 5.2-rc4
 - #282408 Fix mistake in css float that caused all date parts to move to new line.
 - Make sure partial dates, like year-only, get the right range computed for them.
 
-Version 5.2-rc3
-===============
+Version 5.2.0-rc3
+=================
 
 - #282408 Make sure dates only float when there are two of them by adding #date_float parameter.
 - Add sort to argument handler.
@@ -127,8 +129,8 @@ Version 5.2-rc3
 - #280899, #273344 Make sure Date Popup doesn't inject the current date into empty fields.
 - Fix computation of year range in date_content_generate.
 
-Version 5.2-rc2
-===============
+Version 5.2.0-rc2
+=================
 
 New Features
 
@@ -255,8 +257,8 @@ Other
 - #225738 Add special case handling for year only or year and month only ISO dates.
 - #244025 make the jquery calendar code more efficient.
 
-Version 5.2-rc
-==============
+Version 5.2.0-rc
+================
 NOTE! The new version has several new files and is completely re-organized. Empty the module folder completely before adding the contents of the new version. If you don't do that, Drupal may try to use some of the invalid, older files and things will not work correctly. After updating the files on your system, visit the modules page and look for the new Date/Time section and enable the new modules. Then visit update.php to update your database and make sure your site timezone name is correctly set at admin/settings/date-time.
 
 If you use the Token module, be sure to use the latest version of it, too, currently that is the development version. The older version was using the older Date API.
