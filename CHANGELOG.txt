@@ -1,9 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.155 2008/09/05 12:28:51 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.156 2008/09/06 13:10:16 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
+
+- #304762 Add missing folders for translations.
 
 Version 5.2.1
 ===============

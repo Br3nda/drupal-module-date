@@ -1,0 +1,1426 @@
+# $Id: date.pot,v 1.1.4.2 2008/09/06 13:10:16 karens Exp $
+#
+# LANGUAGE translation of Drupal (general)
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+# Generated from files:
+#  date_api_elements.inc,v 1.27.2.41 2008/09/02 21:07:19 karens
+#  date_api_sql.inc,v 1.4.2.34 2008/09/02 19:53:13 karens
+#  date_api.module,v 1.44.2.50 2008/09/04 14:55:59 karens
+#  date_views.inc,v 1.26.2.45 2008/09/02 17:34:07 karens
+#  date_repeat_form.inc,v 1.5.2.10 2008/08/30 13:58:14 karens
+#  date_repeat.module,v 1.23.2.3 2008/08/30 13:58:14 karens
+#  date_api_ical.inc,v 1.21.2.18 2008/08/29 21:31:53 karens
+#  date_admin.inc,v 1.21.2.25 2008/08/30 13:58:12 karens
+#  date_api.install,v 1.5.2.16 2008/08/30 12:03:45 karens
+#  date_api.info,v 1.5 2007/12/03 16:27:17 karens
+#  date.info,v 1.2 2007/12/03 16:27:17 karens
+#  date_all_day.info,v 1.0 2008/06/15 22:13:00 mcneelycorp
+#  date_copy.info,v 1.1 2007/08/31 13:37:36 karens
+#  date_php4.info,v 1.2 2008/01/03 11:41:24 karens
+#  date_popup/date_popup.info: n/a
+#  date_repeat.info,v 1.4 2008/01/07 19:42:23 karens
+#  date_timezone.info,v 1.2.2.1 2008/06/26 21:46:56 karens
+#  date_popup.module,v 1.27.2.36 2008/08/30 13:58:14 karens
+#  date.module,v 1.39.2.39 2008/09/04 14:55:59 karens
+#  date_elements.inc,v 1.22.2.36 2008/08/30 13:58:13 karens
+#  date_repeat.inc,v 1.9.2.16 2008/08/19 15:36:10 karens
+#  date_token.inc,v 1.1.2.6 2008/09/01 12:04:57 karens
+#  date.theme,v 1.2.2.24 2008/08/30 13:58:12 karens
+#  date_copy.module,v 1.9.2.9 2008/09/02 17:34:07 karens
+#  date.install,v 1.21.2.32 2008/08/30 13:58:12 karens
+#  date_all_day/date_all_day.module: n/a
+#  date_php4.module,v 1.4.2.1 2008/08/30 13:58:14 karens
+#  date_popup.install,v 1.5 2007/09/29 16:30:16 karens
+#  date_timezone.module,v 1.8.2.12 2008/08/30 13:58:14 karens
+#  date_timezone.install,v 1.1.2.13 2008/09/02 19:56:06 karens
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2008-09-06 08:08-0500\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Last-Translator: NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+
+#: date_api_elements.inc:157
+msgid "Format: @date"
+msgstr ""
+
+#: date_api_elements.inc:411
+msgid "The year must be a number between %min and %max."
+msgstr ""
+
+#: date_api_elements.inc:420
+msgid "The month must be a number between 1 and 12."
+msgstr ""
+
+#: date_api_elements.inc:430
+msgid "The day must be a number between !min and !max."
+msgstr ""
+
+#: date_api_elements.inc:437
+msgid "The hour must be a number between !min and !max."
+msgstr ""
+
+#: date_api_elements.inc:444
+msgid "The minute must be a number between !min and !max."
+msgstr ""
+
+#: date_api_elements.inc:451
+msgid "The second must be a number between !min and !max."
+msgstr ""
+
+#: date_api_elements.inc:455
+msgid "A value is required."
+msgstr ""
+
+#: date_api_elements.inc:458
+msgid "%field has errors."
+msgstr ""
+
+#: date_api_elements.inc:507
+msgid "A valid date is required for %title."
+msgstr ""
+
+#: date_api_elements.inc:758 date_api_sql.inc:467 date_api.module:393 date/date_views.inc:70
+msgid "Year"
+msgstr ""
+
+#: date_api_elements.inc:761 date_api_sql.inc:467 date_api.module:393 date/date_views.inc:75 date_repeat/date_repeat_form.inc:128
+msgid "Month"
+msgstr ""
+
+#: date_api_elements.inc:764 date_api_sql.inc:467 date_api.module:393 date/date_views.inc:82
+msgid "Day"
+msgstr ""
+
+#: date_api_elements.inc:767 date_api_sql.inc:468 date_api.module:394
+msgid "Hour"
+msgstr ""
+
+#: date_api_elements.inc:770 date_api_sql.inc:468 date_api.module:394
+msgid "Minute"
+msgstr ""
+
+#: date_api_elements.inc:773 date_api_sql.inc:468 date_api.module:394 date_repeat/date_repeat.module:90
+msgid "Second"
+msgstr ""
+
+#: date_api_elements.inc:776
+msgid "am/pm"
+msgstr ""
+
+#: date_api_elements.inc:779
+msgid "Timezone"
+msgstr ""
+
+#: date_api_ical.inc:88
+msgid "Request Error importing !filename: !error"
+msgstr ""
+
+#: date_api_ical.inc:97
+msgid "Failed to open file: !filename"
+msgstr ""
+
+#: date_api_ical.inc:117
+msgid "Invalid calendar file: !filename"
+msgstr ""
+
+#: date_api_ical.inc:88;97;117
+msgid "date ical"
+msgstr ""
+
+#: date_api_sql.inc:658 date/date_admin.inc:352
+msgid "Granularity"
+msgstr ""
+
+#: date_api.module:320
+msgid "am"
+msgstr ""
+
+#: date_api.module:320
+msgid "pm"
+msgstr ""
+
+#: date_api.module:488
+msgid "!time ago"
+msgstr ""
+
+#: date_api.module:0
+msgid "date_api"
+msgstr ""
+
+#: (duplicate) date_api.install:97 
+msgid "The Date API module requires the !link for PHP versions less than 5.2."
+msgstr ""
+
+#: (duplicate) date_api.install:97 
+msgid "Date PHP4 module"
+msgstr ""
+
+#: (duplicate) date_api.install:101 
+msgid "Date API requirements"
+msgstr ""
+
+#: date_api.info:0
+msgid "Date API"
+msgstr ""
+
+#: date_api.info:0
+msgid "A Date API that can be used by other modules."
+msgstr ""
+
+#: date_api.info:0 date/date.info:0 date_all_day/date_all_day.info:0 date_copy/date_copy.info:0 date_php4/date_php4.info:0 date_popup/date_popup.info:0 date_repeat/date_repeat.info:0 date_timezone/date_timezone.info:0
+msgid "Date/Time"
+msgstr ""
+
+#: date/date_admin.inc:25
+msgid "The Strtotime default value is invalid."
+msgstr ""
+
+#: date/date_admin.inc:31
+msgid "The Strtotime default value for the To Date is invalid."
+msgstr ""
+
+#: date/date_admin.inc:35
+msgid "Years back and forward must be in the format -9:+9."
+msgstr ""
+
+#: date/date_admin.inc:47
+msgid "The Date Popup widget will not work unless granularity includes year, month, and day."
+msgstr ""
+
+#: date/date_admin.inc:66
+msgid "Default value"
+msgstr ""
+
+#: date/date_admin.inc:68;86
+msgid "Blank"
+msgstr ""
+
+#: date/date_admin.inc:68;86 date_popup/date_popup.module:271
+msgid "Now"
+msgstr ""
+
+#: date/date_admin.inc:68;86
+msgid "Relative"
+msgstr ""
+
+#: date/date_admin.inc:69;87
+msgid "A default value to use for this field. If you select 'Relative', add details below."
+msgstr ""
+
+#: date/date_admin.inc:73
+msgid "Customize Default Value"
+msgstr ""
+
+#: date/date_admin.inc:74
+msgid "<p>The custom value for a Relative default should be something that describes a time by reference to the current day using strtotime, like '+90 days' (90 days from the day the field is created) or '+1 Saturday' (the next Saturday). See !strtotime for more details.</p>"
+msgstr ""
+
+#: date/date_admin.inc:74
+msgid "strtotime"
+msgstr ""
+
+#: date/date_admin.inc:79
+msgid "Custom value for From date"
+msgstr ""
+
+#: date/date_admin.inc:84
+msgid "Default value for To date"
+msgstr ""
+
+#: date/date_admin.inc:86
+msgid "Same as From date"
+msgstr ""
+
+#: date/date_admin.inc:90
+msgid "Custom value for To date"
+msgstr ""
+
+#: date/date_admin.inc:108
+msgid "Input format"
+msgstr ""
+
+#: date/date_admin.inc:111
+msgid "Set the order and format for the date parts in the input form. The format will be adapted to remove values not in the granularity for this field."
+msgstr ""
+
+#: date/date_admin.inc:116
+msgid "*Custom input format"
+msgstr ""
+
+#: date/date_admin.inc:118
+msgid "The custom format, if provided, will override the input format selected above. See more about custom date formats below."
+msgstr ""
+
+#: date/date_admin.inc:130
+msgid "Years back and forward"
+msgstr ""
+
+#: date/date_admin.inc:134
+msgid "Number of years to go back and forward in the year selection list, default is -3:+3."
+msgstr ""
+
+#: date/date_admin.inc:137
+msgid "Time increment"
+msgstr ""
+
+#: date/date_admin.inc:140
+msgid "Increment the minute and second fields by this amount."
+msgstr ""
+
+#: date/date_admin.inc:157
+msgid "Customize Date Parts"
+msgstr ""
+
+#: date/date_admin.inc:163
+msgid "Above"
+msgstr ""
+
+#: date/date_admin.inc:163
+msgid "Within"
+msgstr ""
+
+#: date/date_admin.inc:163
+msgid "None"
+msgstr ""
+
+#: date/date_admin.inc:165
+msgid "Position of date part labels"
+msgstr ""
+
+#: date/date_admin.inc:166
+msgid "The location of date part labels, like 'Year', 'Month', or 'Day'. 'Above' will display them as titles above each date part. 'Within' will insert the label as the first option in the select list and in blank textfields. 'None' will not label any of the date parts. The exact text in the label is controlled by themes like 'date_part_label_year' and 'date_part_label_month'."
+msgstr ""
+
+#: date/date_admin.inc:208
+msgid "Input Type"
+msgstr ""
+
+#: date/date_admin.inc:208
+msgid "Select list"
+msgstr ""
+
+#: date/date_admin.inc:208
+msgid "Text field"
+msgstr ""
+
+#: date/date_admin.inc:223
+msgid "Granularity must include a year."
+msgstr ""
+
+#: date/date_admin.inc:226
+msgid "Dates without hours granularity must not use any timezone handling."
+msgstr ""
+
+#: date/date_admin.inc:316;339
+msgid "Never"
+msgstr ""
+
+#: date/date_admin.inc:316
+msgid "Unlimited"
+msgstr ""
+
+#: date/date_admin.inc:317
+msgid "Choose an option for handling multiple values. Unlimited will allow the user to manually create unlimited multiple dates one date at a time."
+msgstr ""
+
+#: date/date_admin.inc:320
+msgid "Repeating"
+msgstr ""
+
+#: date/date_admin.inc:321
+msgid " Repeating dates will allow the user to select when and how often the date will repeat."
+msgstr ""
+
+#: date/date_admin.inc:330
+msgid "Multiple"
+msgstr ""
+
+#: date/date_admin.inc:335
+msgid "Display a matching second date field as a 'To date'. If marked 'Optional' field will be presented but not required. If marked 'Required' the 'To date' will be required if the 'From date' is required or filled in."
+msgstr ""
+
+#: date/date_admin.inc:338 date/date_views.inc:93
+msgid "To Date"
+msgstr ""
+
+#: date/date_admin.inc:339
+msgid "Optional"
+msgstr ""
+
+#: date/date_admin.inc:339
+msgid "Required"
+msgstr ""
+
+#: date/date_admin.inc:356
+msgid "Set the date elements to be stored (at least a year is required)."
+msgstr ""
+
+#: date/date_admin.inc:360
+msgid "Default Display"
+msgstr ""
+
+#: date/date_admin.inc:363
+msgid "Additional Display Settings"
+msgstr ""
+
+#: date/date_admin.inc:366
+msgid "Define alternate formatting for the date display. Options other than the default are made available to views and themes. Possible formats are default, long, medium, and short."
+msgstr ""
+
+#: date/date_admin.inc:371
+msgid "Select the timezone handling method to be used for this date field."
+msgstr ""
+
+#: date/date_admin.inc:375
+msgid "Time zone handling"
+msgstr ""
+
+#: date/date_admin.inc:390
+msgid "Expanded"
+msgstr ""
+
+#: date/date_admin.inc:390
+msgid "Collapsed"
+msgstr ""
+
+#: date/date_admin.inc:391
+msgid "Repeat display"
+msgstr ""
+
+#: date/date_admin.inc:392
+msgid "If set to use repeating dates, should the repeat options form start out expanded or collapsed? Set to 'Collapsed' to make those options less obtrusive."
+msgstr ""
+
+#: date/date_admin.inc:395
+msgid "<div class=\"form-item\"><div class=\"description\">* The custom format, if provided, will override the selected display or input options. Define a php date format string like 'm-d-Y H:i' (see !link for more details).</div></div>"
+msgstr ""
+
+#: date/date_admin.inc:401
+msgid "<p class=\"error\">Changing the %name setting after data has been created could result in the loss of data!</p>"
+msgstr ""
+
+#: date/date_admin.inc:412 date/date.module:110
+msgid "Long"
+msgstr ""
+
+#: date/date_admin.inc:417 date/date.module:112
+msgid "Medium"
+msgstr ""
+
+#: date/date_admin.inc:422 date/date.module:114
+msgid "Short"
+msgstr ""
+
+#: date/date_admin.inc:427 date/date.module:108
+msgid "Default"
+msgstr ""
+
+#: date/date_admin.inc:436
+msgid "Date display"
+msgstr ""
+
+#: date/date_admin.inc:442
+msgid "*Custom display format"
+msgstr ""
+
+#: date/date_admin.inc:458
+msgid "Site's time zone"
+msgstr ""
+
+#: date/date_admin.inc:459
+msgid "Date's time zone"
+msgstr ""
+
+#: date/date_admin.inc:460
+msgid "User's time zone"
+msgstr ""
+
+#: date/date_admin.inc:462
+msgid "No time zone conversion"
+msgstr ""
+
+#: date/date_elements.inc:28
+msgid "A 'From date' date is required for %field %delta"
+msgstr ""
+
+#: date/date_elements.inc:34
+msgid "A 'To date' is required for %field %delta"
+msgstr ""
+
+#: date/date_elements.inc:327
+msgid "From date"
+msgstr ""
+
+#: date/date_elements.inc:329
+msgid "To date"
+msgstr ""
+
+#: date/date_elements.inc:334
+msgid "Empty 'To date' values will use the 'From date' values."
+msgstr ""
+
+#: date/date_elements.inc:399
+msgid "The To date must be greater than the From date."
+msgstr ""
+
+#: date/date_repeat.inc:77
+msgid "The UNTIL value is required for repeating dates."
+msgstr ""
+
+#: date/date_token.inc:12
+msgid "The raw date value."
+msgstr ""
+
+#: date/date_token.inc:13
+msgid "The formatted date."
+msgstr ""
+
+#: date/date_token.inc:14
+msgid "The raw date timestamp."
+msgstr ""
+
+#: date/date_token.inc:15
+msgid "Date year (four digit)"
+msgstr ""
+
+#: date/date_token.inc:16
+msgid "Date year (two digit)"
+msgstr ""
+
+#: date/date_token.inc:17
+msgid "Date month (full word)"
+msgstr ""
+
+#: date/date_token.inc:18
+msgid "Date month (abbreviated)"
+msgstr ""
+
+#: date/date_token.inc:19
+msgid "Date month (two digit, zero padded)"
+msgstr ""
+
+#: date/date_token.inc:20
+msgid "Date month (one or two digit)"
+msgstr ""
+
+#: date/date_token.inc:21
+msgid "Date week (two digit)"
+msgstr ""
+
+#: date/date_token.inc:22
+msgid "Date date (day of month)"
+msgstr ""
+
+#: date/date_token.inc:23
+msgid "Date day (full word)"
+msgstr ""
+
+#: date/date_token.inc:24
+msgid "Date day (abbreviation)"
+msgstr ""
+
+#: date/date_token.inc:25
+msgid "Date day (two digit, zero-padded)"
+msgstr ""
+
+#: date/date_token.inc:26
+msgid "Date day (one or two digit)"
+msgstr ""
+
+#: date/date_token.inc:28
+msgid "If the field has a to-date defined, the same tokens exist in the form: [to-????], where ???? is the normal token."
+msgstr ""
+
+#: date/date_views.inc:10
+msgid "Date: Date Browser"
+msgstr ""
+
+#: date/date_views.inc:42
+msgid "<all>"
+msgstr ""
+
+#: date/date_views.inc:42
+msgid "now"
+msgstr ""
+
+#: date/date_views.inc:47
+msgid "is equal to"
+msgstr ""
+
+#: date/date_views.inc:48
+msgid "is not equal to"
+msgstr ""
+
+#: date/date_views.inc:49
+msgid "greater than"
+msgstr ""
+
+#: date/date_views.inc:50
+msgid "greater than or equal to"
+msgstr ""
+
+#: date/date_views.inc:51
+msgid "less than"
+msgstr ""
+
+#: date/date_views.inc:52
+msgid "less than or equal to"
+msgstr ""
+
+#: date/date_views.inc:64 date/date.info:0
+msgid "Date"
+msgstr ""
+
+#: date/date_views.inc:67 date/date.module:0 date/date.theme:0
+msgid "date"
+msgstr ""
+
+#: date/date_views.inc:72
+msgid "year"
+msgstr ""
+
+#: date/date_views.inc:79
+msgid "month"
+msgstr ""
+
+#: date/date_views.inc:86
+msgid "day"
+msgstr ""
+
+#: date/date_views.inc:96
+msgid "To Year"
+msgstr ""
+
+#: date/date_views.inc:99
+msgid "To Month"
+msgstr ""
+
+#: date/date_views.inc:102
+msgid "To Day"
+msgstr ""
+
+#: date/date_views.inc:116
+msgid ": From "
+msgstr ""
+
+#: date/date_views.inc:118
+msgid "Defines an argument to filter for dates within a range, in the format 'YYYY-MM-DD--YYYY-MM-DD'. Many other options can be used in arguments. See !link for other examples."
+msgstr ""
+
+#: date/date_views.inc:118
+msgid "help"
+msgstr ""
+
+#: date/date_views.inc:123
+msgid ": To "
+msgstr ""
+
+#: date/date_views.inc:235
+msgid "That is not a valid date."
+msgstr ""
+
+#: date/date_views.inc:464
+msgid "N/A"
+msgstr ""
+
+#: date/date_views.inc:494
+msgid "summarize by year"
+msgstr ""
+
+#: date/date_views.inc:495
+msgid "summarize by month"
+msgstr ""
+
+#: date/date_views.inc:496
+msgid "summarize by day"
+msgstr ""
+
+#: date/date_views.inc:497
+msgid "summarize by week"
+msgstr ""
+
+#: date/date_views.inc:498
+msgid "summarize by hour"
+msgstr ""
+
+#: date/date_views.inc:511
+msgid "The Date Browser requires at least one field."
+msgstr ""
+
+#: date/date_views.inc:521
+msgid "Date Browser arguments must be set to 'Display All Values'."
+msgstr ""
+
+#: date/date_views.inc:526
+msgid "A date argument must be added to a Date Browser view."
+msgstr ""
+
+#: date/date.module:29
+msgid "Repeats"
+msgstr ""
+
+#: date/date.module:88
+msgid "Select List"
+msgstr ""
+
+#: date/date.module:91
+msgid "Text Field with custom input format"
+msgstr ""
+
+#: date/date.module:96
+msgid "Text Field with jquery pop-up calendar"
+msgstr ""
+
+#: date/date.module:116
+msgid "ISO"
+msgstr ""
+
+#: date/date.module:118
+msgid "Timestamp"
+msgstr ""
+
+#: date/date.module:120
+msgid "Feed"
+msgstr ""
+
+#: date/date.module:122 date_copy/date_copy.module:57
+msgid "iCal"
+msgstr ""
+
+#: date/date.module:124
+msgid "As Time Ago"
+msgstr ""
+
+#: date/date.module:310
+msgid "<p>Complete documentation for the Date and Date API modules is available at !link.</p>"
+msgstr ""
+
+#: date/date.theme:130
+msgid "!time from now"
+msgstr ""
+
+#: date/date.theme:135
+msgid "ongoing"
+msgstr ""
+
+#: date/date.theme:182
+msgid "%period of %date"
+msgstr ""
+
+#: date/date.theme:190
+msgid "‹ prev !period  "
+msgstr ""
+
+#: date/date.theme:193
+msgid "  next !period  ›"
+msgstr ""
+
+#: date/date.theme:330
+msgid "(All day)"
+msgstr ""
+
+#: date/date.install:484
+msgid "All date fields using the jscalendar widget have been changed to use the text widget instead, since the jscalendar widget is no longer supported. Enable the Date Popup module to make a jQuery popup calendar available and edit the field settings to select it."
+msgstr ""
+
+#: date/date.install:695
+msgid "All nodes with date fields have been checked."
+msgstr ""
+
+#: date/date.info:0
+msgid "Defines CCK date/time fields and widgets."
+msgstr ""
+
+#: date_all_day/date_all_day.module:23
+msgid "All day"
+msgstr ""
+
+#: date_all_day/date_all_day.module:0
+msgid "date_all_day"
+msgstr ""
+
+#: date_all_day/date_all_day.info:0
+msgid "Date All Day"
+msgstr ""
+
+#: date_all_day/date_all_day.info:0
+msgid "Adds - All Day - option to CCK date/time fields."
+msgstr ""
+
+#: date_copy/date_copy.module:17
+msgid "Copy data in and out of Date module."
+msgstr ""
+
+#: date_copy/date_copy.module:30
+msgid "Date Import/Export"
+msgstr ""
+
+#: date_copy/date_copy.module:31
+msgid "Import and export date data."
+msgstr ""
+
+#: date_copy/date_copy.module:39
+msgid "Import"
+msgstr ""
+
+#: date_copy/date_copy.module:48
+msgid "Export"
+msgstr ""
+
+#: date_copy/date_copy.module:66
+msgid "Events"
+msgstr ""
+
+#: date_copy/date_copy.module:75
+msgid "CSV"
+msgstr ""
+
+#: date_copy/date_copy.module:102;163
+msgid "There are no date fields in this database to import the data into. Please add a date field to the desired node types and be sure to indicate it uses both a \"from\" and a \"to\" date."
+msgstr ""
+
+#: date_copy/date_copy.module:106
+msgid "Target type"
+msgstr ""
+
+#: date_copy/date_copy.module:106;492
+msgid "Source type"
+msgstr ""
+
+#: date_copy/date_copy.module:111
+msgid "Only content types with date fields appear in this list as possible target types."
+msgstr ""
+
+#: date_copy/date_copy.module:118
+msgid "Add"
+msgstr ""
+
+#: date_copy/date_copy.module:119
+msgid "If your desired target type does not already have a date field, follow this link and select a content type to add a date field to that type."
+msgstr ""
+
+#: date_copy/date_copy.module:125
+msgid "Add new date field"
+msgstr ""
+
+#: date_copy/date_copy.module:161
+msgid "body"
+msgstr ""
+
+#: date_copy/date_copy.module:169
+msgid "Date field"
+msgstr ""
+
+#: date_copy/date_copy.module:171
+msgid "The field which will contain the source dates in target content type."
+msgstr ""
+
+#: date_copy/date_copy.module:176
+msgid "Description field"
+msgstr ""
+
+#: date_copy/date_copy.module:178
+msgid "The text or body field which will contain the source description in the target content type."
+msgstr ""
+
+#: date_copy/date_copy.module:184
+msgid "Url field"
+msgstr ""
+
+#: date_copy/date_copy.module:186
+msgid "The text or link field which will contain the source url in the target content type."
+msgstr ""
+
+#: date_copy/date_copy.module:191
+msgid "Location field"
+msgstr ""
+
+#: date_copy/date_copy.module:193
+msgid "The text field which will contain the source location text in the target content type."
+msgstr ""
+
+#: date_copy/date_copy.module:198
+msgid "Uid field"
+msgstr ""
+
+#: date_copy/date_copy.module:200
+msgid "The text field which will contain the source uid in the target content type."
+msgstr ""
+
+#: date_copy/date_copy.module:227
+msgid "Categories"
+msgstr ""
+
+#: date_copy/date_copy.module:228
+msgid "Select the categories that should be used for the imported nodes."
+msgstr ""
+
+#: date_copy/date_copy.module:237
+msgid "Authored by"
+msgstr ""
+
+#: date_copy/date_copy.module:240
+msgid "Leave blank for %anonymous."
+msgstr ""
+
+#: date_copy/date_copy.module:241
+msgid "Anonymous"
+msgstr ""
+
+#: date_copy/date_copy.module:243
+msgid "Published"
+msgstr ""
+
+#: date_copy/date_copy.module:246
+msgid "Promoted to front page"
+msgstr ""
+
+#: date_copy/date_copy.module:249
+msgid "Sticky at top of lists"
+msgstr ""
+
+#: date_copy/date_copy.module:252
+msgid "Create new revision"
+msgstr ""
+
+#: date_copy/date_copy.module:282
+msgid "Import dates into CCK from various sources."
+msgstr ""
+
+#: date_copy/date_copy.module:287
+msgid "This feature is not yet functional."
+msgstr ""
+
+#: date_copy/date_copy.module:292
+msgid "Importing dates into CCK from a comma separated file can be done using the !link."
+msgstr ""
+
+#: date_copy/date_copy.module:314
+msgid "<p>Create a new CCK content type to import your events into. Make sure it has a date field that can allows a To date so it can accept the From date and To date of the iCal feed. If you are importing dates that have their own timezones, make sure you set the timezone handling of the date to 'date'. Test the new type by trying to create a node manually and make sure all the right options are available in the form before attempting an import.</p><p><strong>The import will create new nodes and trigger all related hooks, so you may want to turn off automatic email messaging for this node type while performing the import!</strong></p>"
+msgstr ""
+
+#: date_copy/date_copy.module:317
+msgid "Source file"
+msgstr ""
+
+#: date_copy/date_copy.module:321;342;496;518
+msgid "Submit"
+msgstr ""
+
+#: date_copy/date_copy.module:337;511
+msgid "!type Fields"
+msgstr ""
+
+#: date_copy/date_copy.module:356
+msgid "This is an invalid file."
+msgstr ""
+
+#: date_copy/date_copy.module:428;685
+msgid "!type: created %title."
+msgstr ""
+
+#: date_copy/date_copy.module:432;689;699
+msgid "view"
+msgstr ""
+
+#: date_copy/date_copy.module:448
+msgid "%limit ical events have been added."
+msgstr ""
+
+#: date_copy/date_copy.module:449;559
+msgid "Title"
+msgstr ""
+
+#: date_copy/date_copy.module:449
+msgid "Id"
+msgstr ""
+
+#: date_copy/date_copy.module:449;559
+msgid "Start"
+msgstr ""
+
+#: date_copy/date_copy.module:449;559
+msgid "End"
+msgstr ""
+
+#: date_copy/date_copy.module:452
+msgid "No ical events have been added."
+msgstr ""
+
+#: date_copy/date_copy.module:464
+msgid "There is no event table in this database. No event import options are available."
+msgstr ""
+
+#: date_copy/date_copy.module:479
+msgid "<p>Create a new CCK content type to import your events into, or, if you do not want to create new nodes for your events, add a date field to the existing event type. Make sure the target content type has a date field that has an optional or required To date so it can accept the From date and To date of the event. If your source event has its own timezone field, make sure you set the target date timezone handling to 'date'. Test the target type by trying to create a node manually and make sure all the right options are available in the form before attempting an import. </p><p><strong>The import will create new nodes and trigger all related hooks, so you may want to turn off automatic email messaging for this node type while performing the import!</strong></p>"
+msgstr ""
+
+#: date_copy/date_copy.module:486
+msgid "There are no event nodes in this database. No event import options are available."
+msgstr ""
+
+#: date_copy/date_copy.module:515
+msgid "Yes"
+msgstr ""
+
+#: date_copy/date_copy.module:515
+msgid "No"
+msgstr ""
+
+#: date_copy/date_copy.module:515
+msgid "Delete original event?"
+msgstr ""
+
+#: date_copy/date_copy.module:515
+msgid "Should the original entry be deleted once it has been copied to the new content type? If so, be sure to back up your database first."
+msgstr ""
+
+#: date_copy/date_copy.module:516
+msgid "Limit"
+msgstr ""
+
+#: date_copy/date_copy.module:516
+msgid "The maximum number of nodes to convert in this pass."
+msgstr ""
+
+#: date_copy/date_copy.module:517
+msgid "Starting nid"
+msgstr ""
+
+#: date_copy/date_copy.module:517
+msgid "Convert nodes with nids greater than or equal to this number."
+msgstr ""
+
+#: date_copy/date_copy.module:558
+msgid "%limit events have been converted."
+msgstr ""
+
+#: date_copy/date_copy.module:559
+msgid "Source Id"
+msgstr ""
+
+#: date_copy/date_copy.module:559
+msgid "Target Id"
+msgstr ""
+
+#: date_copy/date_copy.module:562
+msgid "No events have been converted."
+msgstr ""
+
+#: date_copy/date_copy.module:695
+msgid "!type: updated %title."
+msgstr ""
+
+#: date_copy/date_copy.module:428;685;695;0
+msgid "date_copy"
+msgstr ""
+
+#: date_copy/date_copy.info:0
+msgid "Date Copy"
+msgstr ""
+
+#: date_copy/date_copy.info:0
+msgid "Import and export CCK date data."
+msgstr ""
+
+#: date_php4/date_php4.module:0
+msgid "date_php4"
+msgstr ""
+
+#: date_php4/date_php4.info:0
+msgid "Date PHP4"
+msgstr ""
+
+#: date_php4/date_php4.info:0
+msgid "Emulate PHP 5.2 date functions in PHP 4.x, PHP 5.0, and PHP 5.1. Required when using the Date API with PHP versions less than PHP 5.2."
+msgstr ""
+
+#: date_popup/date_popup.module:222
+msgid "Next"
+msgstr ""
+
+#: date_popup/date_popup.module:223
+msgid "Today"
+msgstr ""
+
+#: date_popup/date_popup.module:224
+msgid "Clear"
+msgstr ""
+
+#: date_popup/date_popup.module:225
+msgid "Close"
+msgstr ""
+
+#: date_popup/date_popup.module:258
+msgid " Format: @date"
+msgstr ""
+
+#: date_popup/date_popup.module:271
+msgid "Previous field"
+msgstr ""
+
+#: date_popup/date_popup.module:271
+msgid "Next field"
+msgstr ""
+
+#: date_popup/date_popup.module:271
+msgid "Increment"
+msgstr ""
+
+#: date_popup/date_popup.module:271
+msgid "Decrement"
+msgstr ""
+
+#: date_popup/date_popup.module:293
+msgid "  @date"
+msgstr ""
+
+#: date_popup/date_popup.module:311
+msgid "%field is required."
+msgstr ""
+
+#: date_popup/date_popup.module:335
+msgid "%field is invalid."
+msgstr ""
+
+#: date_popup/date_popup.module:0
+msgid "date_popup"
+msgstr ""
+
+#: date_popup/date_popup.install:14
+msgid "<p>Download jquery.timeentry.pack.js and jquery.timeentry.css from the jquery-timeentry home page at !link and install them in the /lib/ folder of the Date Popup module.</p>"
+msgstr ""
+
+#: (duplicate) date_popup/date_popup.install:18 
+msgid "Date Popup requirements"
+msgstr ""
+
+#: date_popup/date_popup.info:0
+msgid "Date Popup"
+msgstr ""
+
+#: date_popup/date_popup.info:0
+msgid "Enables jquery popup calendars and time entry widgets for selecting dates and times."
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:59
+msgid "Repeat"
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:60
+msgid "Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat."
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:96
+msgid "Until"
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:97
+msgid "Date to stop repeating this item. The 'Until' date will NOT be included in the results."
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:120
+msgid "Advanced"
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:123
+msgid "If no advanced options are selected, the date will repeat on the day of week of the start date for weekly repeats, otherwise on the month and day of the start date. Use the options below to override that behavior to select specific months and days to repeat on. Use the 'Except' box to input dates that should be omitted from the results. "
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:130;141;152
+msgid "-- Any"
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:139
+msgid "Day of Month"
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:150
+msgid "Day of Week"
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:164
+msgid "Except"
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:165
+msgid "Dates to omit from the list of repeating dates."
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:193
+msgid "Help"
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:196
+msgid "<p>Dates will match any selection within the same box [January OR June]. When more than one box has criteria selected, all of them are combined to create repeats [[January OR June] AND [Day 1 OR Day 15]]. Positive numbers count from the beginning of the period. Negative numbers count from the end of the period, i.e. -1 is the last, -2 is the next to last, etc.</p><ul><li>If you select 'Every Year' above, and 'March' from 'Month' and '1' and '15' from 'Day of Month' in the Advanced options you will be selecting the 1st and 15th days of March of every year.</li><li>If you select 'Every other Month' above, and 'Second Tuesday' in the Advanced options you will be selecting the second Tuesday of every other month.</li><li>If you select 'Every Year' above, and 'Second Tuesday' in the Advanced options you will be selecting the second Tuesday of every year.</li><li>If you select 'Every Month' above, and 'January' and 'June' and 'First Saturday' in the Advanced options, you will be selecting the first Saturday in January or June.</li><li>If you select 'Every Month' above, and '-1' from 'Day of Month' in the Advanced options you will be selecting the last day of every month.</li></ul>"
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:263
+msgid "Delete"
+msgstr ""
+
+#: date_repeat/date_repeat_form.inc:263
+msgid "Current Exceptions"
+msgstr ""
+
+#: date_repeat/date_repeat.module:34
+msgid "-- Period"
+msgstr ""
+
+#: date_repeat/date_repeat.module:35
+msgid "Day(s)"
+msgstr ""
+
+#: date_repeat/date_repeat.module:36
+msgid "Week(s)"
+msgstr ""
+
+#: date_repeat/date_repeat.module:37
+msgid "Month(s)"
+msgstr ""
+
+#: date_repeat/date_repeat.module:38
+msgid "Year(s)"
+msgstr ""
+
+#: date_repeat/date_repeat.module:44
+msgid "-- Frequency"
+msgstr ""
+
+#: date_repeat/date_repeat.module:45;88
+msgid "Every"
+msgstr ""
+
+#: date_repeat/date_repeat.module:48
+msgid "Every @number"
+msgstr ""
+
+#: date_repeat/date_repeat.module:62
+msgid "Sunday"
+msgstr ""
+
+#: date_repeat/date_repeat.module:63
+msgid "Monday"
+msgstr ""
+
+#: date_repeat/date_repeat.module:64
+msgid "Tuesday"
+msgstr ""
+
+#: date_repeat/date_repeat.module:65
+msgid "Wednesday"
+msgstr ""
+
+#: date_repeat/date_repeat.module:66
+msgid "Thursday"
+msgstr ""
+
+#: date_repeat/date_repeat.module:67
+msgid "Friday"
+msgstr ""
+
+#: date_repeat/date_repeat.module:68
+msgid "Saturday"
+msgstr ""
+
+#: date_repeat/date_repeat.module:89
+msgid "First"
+msgstr ""
+
+#: date_repeat/date_repeat.module:91
+msgid "Third"
+msgstr ""
+
+#: date_repeat/date_repeat.module:92
+msgid "Fourth"
+msgstr ""
+
+#: date_repeat/date_repeat.module:93
+msgid "Fifth"
+msgstr ""
+
+#: date_repeat/date_repeat.module:94
+msgid "Last"
+msgstr ""
+
+#: date_repeat/date_repeat.module:95
+msgid "Next to last"
+msgstr ""
+
+#: date_repeat/date_repeat.module:96
+msgid "Second from last"
+msgstr ""
+
+#: date_repeat/date_repeat.module:97
+msgid "Third from last"
+msgstr ""
+
+#: date_repeat/date_repeat.module:98
+msgid "Fourth from last"
+msgstr ""
+
+#: date_repeat/date_repeat.module:159
+msgid "Repeats "
+msgstr ""
+
+#: date_repeat/date_repeat.module:168
+msgid "the !count !day "
+msgstr ""
+
+#: date_repeat/date_repeat.module:171
+msgid "every !day "
+msgstr ""
+
+#: date_repeat/date_repeat.module:174
+msgid "!days"
+msgstr ""
+
+#: date_repeat/date_repeat.module:174
+msgid " and "
+msgstr ""
+
+#: date_repeat/date_repeat.module:177
+msgid "day @number"
+msgstr ""
+
+#: date_repeat/date_repeat.module:195
+msgid "every week "
+msgstr ""
+
+#: date_repeat/date_repeat.module:195
+msgid "every @count weeks "
+msgstr ""
+
+#: date_repeat/date_repeat.module:198
+msgid "every month "
+msgstr ""
+
+#: date_repeat/date_repeat.module:198
+msgid "every @count months "
+msgstr ""
+
+#: date_repeat/date_repeat.module:201
+msgid "every year "
+msgstr ""
+
+#: date_repeat/date_repeat.module:201
+msgid "every @count years "
+msgstr ""
+
+#: date_repeat/date_repeat.module:204
+msgid "every day "
+msgstr ""
+
+#: date_repeat/date_repeat.module:204
+msgid "every @count days "
+msgstr ""
+
+#: date_repeat/date_repeat.module:208
+msgid "for !times occurences "
+msgstr ""
+
+#: date_repeat/date_repeat.module:212
+msgid "until !until "
+msgstr ""
+
+#: date_repeat/date_repeat.module:219
+msgid "except !dates "
+msgstr ""
+
+#: date_repeat/date_repeat.module:0
+msgid "date_repeat"
+msgstr ""
+
+#: date_repeat/date_repeat.info:0
+msgid "Date Repeat API"
+msgstr ""
+
+#: date_repeat/date_repeat.info:0
+msgid "A Date Repeat API to calculate repeating dates and times from iCal rules."
+msgstr ""
+
+#: (duplicate) date_timezone/date_timezone.module:22 date_timezone/date_timezone.install:45 
+msgid "The Date Timezone module requires you to !link."
+msgstr ""
+
+#: (duplicate) date_timezone/date_timezone.module:22 date_timezone/date_timezone.install:45 
+msgid "set the site timezone name"
+msgstr ""
+
+#: date_timezone/date_timezone.module:58;93
+msgid "Default time zone"
+msgstr ""
+
+#: date_timezone/date_timezone.module:61
+msgid "Select the default site time zone. If in doubt, choose the timezone that is closest to your location which has the same rules for daylight saving time."
+msgstr ""
+
+#: date_timezone/date_timezone.module:96
+msgid "Select your current local time.  If in doubt, choose the timezone that is closest to your location which has the same rules for daylight saving time. Dates and times throughout this site will be displayed using this time zone."
+msgstr ""
+
+#: date_timezone/date_timezone.module:203
+msgid "Detected time zone: %timezone; client date: %date; abbreviation: %abbreviation; offset: %offset; daylight saving time: %is_daylight_saving_time."
+msgstr ""
+
+#: date_timezone/date_timezone.module:203
+msgid "timezone"
+msgstr ""
+
+#: date_timezone/date_timezone.module:0
+msgid "date_timezone"
+msgstr ""
+
+#: (duplicate) date_timezone/date_timezone.install:51 
+msgid "The !link may not be correct."
+msgstr ""
+
+#: (duplicate) date_timezone/date_timezone.install:51 
+msgid "site timezone name"
+msgstr ""
+
+#: (duplicate) date_timezone/date_timezone.install:58 
+msgid "Date Timezone requirements"
+msgstr ""
+
+#: date_timezone/date_timezone.info:0
+msgid "Date Timezone"
+msgstr ""
+
+#: date_timezone/date_timezone.info:0
+msgid "Needed when using Date API. Overrides site and user timezone handling to set timezone names instead of offsets."
+msgstr ""
+
+<div class="dev-query">Executed <em>19</em> queries in <em>23.29</em> milliseconds. Queries taking longer than <em>5</em> ms and queries executed more than once, are <span class="marker">highlighted</span>. Page execution time was <em>2284.53</em> ms.<table>
+ <thead><tr><th>ms</th><th>#</th><th>where</th><th>query</th> </tr></thead>
+<tbody>
+ <tr class="odd"><td>0.47</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/drupal_lookup_path">drupal_lookup_path</a></td><td>SELECT COUNT(pid) FROM url_alias</td> </tr>
+ <tr class="even"><td>0.31</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/drupal_lookup_path">drupal_lookup_path</a></td><td>SELECT src FROM url_alias WHERE dst = &#039;admin/settings/locale/potx&#039;</td> </tr>
+ <tr class="odd"><td>0.97</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/module_list">module_list</a></td><td>SELECT name, filename, throttle FROM system WHERE type = &#039;module&#039; AND status = 1 ORDER BY weight ASC, filename ASC</td> </tr>
+ <tr class="even"><td>0.39</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/locale_supported_languages">locale_supported_languages</a></td><td>SELECT locale, name, formula, enabled FROM locales_meta ORDER BY isdefault DESC, enabled DESC, name ASC</td> </tr>
+ <tr class="odd"><td>0.39</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/user_load">user_load</a></td><td>SELECT * FROM users u WHERE uid = 1</td> </tr>
+ <tr class="even"><td>0.23</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/user_load">user_load</a></td><td>SELECT r.rid, r.name FROM role r INNER JOIN users_roles ur ON ur.rid = r.rid WHERE ur.uid = 1</td> </tr>
+ <tr class="odd"><td>0.57</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/_node_types_build">_node_types_build</a></td><td>SELECT nt.type, nt.* FROM node_type nt ORDER BY nt.type ASC</td> </tr>
+ <tr class="even"><td>1.24</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/og_get_subscriptions">og_get_subscriptions</a></td><td>SELECT n.title, n.type, n.status, ou.* FROM og_uid ou INNER JOIN node n ON ou.nid = n.nid WHERE ou.uid = 1 AND ou.is_active &gt;= 1 AND n.type IN (&#039;group&#039;) ORDER BY n.title</td> </tr>
+ <tr class="odd"><td>0.2</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/og_user">og_user</a></td><td>SELECT og_email FROM og_uid_global WHERE uid = 1</td> </tr>
+ <tr class="even"><td>1.19</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/cache_get">cache_get</a></td><td>SELECT data, created, headers, expire FROM cache_menu WHERE cid = &#039;1:en&#039;</td> </tr>
+ <tr class="odd"><td>0.44</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/cache_get">cache_get</a></td><td>SELECT data, created, headers, expire FROM cache_views WHERE cid = &#039;calendar_views&#039;</td> </tr>
+ <tr class="even"><td>0.26</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/panels_page_load_all">panels_page_load_all</a></td><td>SELECT * FROM panels_page</td> </tr>
+ <tr class="odd"><td>0.31</td><td class="marker">2</td><td><a href="http://api.drupal.org/api/HEAD/function/cache_get">cache_get</a></td><td>SELECT data, created, headers, expire FROM cache_views WHERE cid = &#039;views_urls&#039;</td> </tr>
+ <tr class="even"><td>0.32</td><td class="marker">2</td><td><a href="http://api.drupal.org/api/HEAD/function/cache_get">cache_get</a></td><td>SELECT data, created, headers, expire FROM cache_views WHERE cid = &#039;views_urls&#039;</td> </tr>
+ <tr class="odd"><td>0.67</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/system_get_files_database">system_get_files_database</a></td><td>SELECT filename, name, type, status, throttle, schema_version FROM system WHERE type = &#039;module&#039;</td> </tr>
+ <tr class="even"><td>0.31</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/list_themes">list_themes</a></td><td>SELECT * FROM system WHERE type = &#039;theme&#039;</td> </tr>
+ <tr class="odd"><td>0.39</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/sess_write">sess_write</a></td><td>SELECT sid FROM sessions WHERE sid = &#039;618fae481ffc4c4472bc8ced01429cf7&#039;</td> </tr>
+ <tr class="even"><td class="marker">14.32</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/sess_write">sess_write</a></td><td>UPDATE sessions SET uid = 1, cache = 0, hostname = &#039;127.0.0.1&#039;, session = &#039;og_last|N;form|a:2:{s:32:\&quot;24d843099f0e42bf5c5abaa83f96a1ef\&quot;;a:2:{s:9:\&quot;timestamp\&quot;;i:1220706305;s:4:\&quot;args\&quot;;a:1:{i:0;s:14:\&quot;system_modules\&quot;;}}s:32:\&quot;1d74aa3fe0ddfd5084e243f60dc3c51a\&quot;;a:2:{s:9:\&quot;timestamp\&quot;;i:1220706346;s:4:\&quot;args\&quot;;a:1:{i:0;s:14:\&quot;system_modules\&quot;;}}}messages|a:1:{s:5:\&quot;error\&quot;;a:33:{i:0;s:95:\&quot;Invalid marker content in &lt;em&gt;date_api.module&lt;/em&gt;:&lt;em&gt;102&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$month)&lt;/em&gt;\n\n\&quot;;i:1;s:114:\&quot;Invalid marker content in &lt;em&gt;date_api.module&lt;/em&gt;:&lt;em&gt;122&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;drupal_substr($month,0,3))&lt;/em&gt;\n\n\&quot;;i:2;s:93:\&quot;Invalid marker content in &lt;em&gt;date_api.module&lt;/em&gt;:&lt;em&gt;161&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$day)&lt;/em&gt;\n\n\&quot;;i:3;s:94:\&quot;Invalid marker content in &lt;em&gt;date_api.module&lt;/em&gt;:&lt;em&gt;420&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$zone)&lt;/em&gt;\n\n\&quot;;i:4;s:95:\&quot;Invalid marker content in &lt;em&gt;date_api.module&lt;/em&gt;:&lt;em&gt;467&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$month)&lt;/em&gt;\n\n\&quot;;i:5;s:114:\&quot;Invalid marker content in &lt;em&gt;date_api.module&lt;/em&gt;:&lt;em&gt;468&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;drupal_substr($month,0,3))&lt;/em&gt;\n\n\&quot;;i:6;s:93:\&quot;Invalid marker content in &lt;em&gt;date_api.module&lt;/em&gt;:&lt;em&gt;471&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$day)&lt;/em&gt;\n\n\&quot;;i:7;s:112:\&quot;Invalid marker content in &lt;em&gt;date_api.module&lt;/em&gt;:&lt;em&gt;472&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;drupal_substr($day,0,3))&lt;/em&gt;\n\n\&quot;;i:8;s:140:\&quot;Invalid marker content in &lt;em&gt;date/date_elements.inc&lt;/em&gt;:&lt;em&gt;28&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;])&lt;/em&gt;\n\n\&quot;;i:9;s:140:\&quot;Invalid marker content in &lt;em&gt;date/date_elements.inc&lt;/em&gt;:&lt;em&gt;34&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;])&lt;/em&gt;\n\n\&quot;;i:10;s:141:\&quot;Invalid marker content in &lt;em&gt;date/date_elements.inc&lt;/em&gt;:&lt;em&gt;285&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;])&lt;/em&gt;\n\n\&quot;;i:11;s:147:\&quot;Invalid marker content in &lt;em&gt;date/date_elements.inc&lt;/em&gt;:&lt;em&gt;299&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;description&amp;#039;])&lt;/em&gt;\n\n\&quot;;i:12;s:141:\&quot;Invalid marker content in &lt;em&gt;date/date_elements.inc&lt;/em&gt;:&lt;em&gt;327&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;])&lt;/em&gt;\n\n\&quot;;i:13;s:141:\&quot;Invalid marker content in &lt;em&gt;date/date_elements.inc&lt;/em&gt;:&lt;em&gt;329&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;])&lt;/em&gt;\n\n\&quot;;i:14;s:160:\&quot;Invalid marker content in &lt;em&gt;date/date_pathauto.inc&lt;/em&gt;:&lt;em&gt;17&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;].&amp;#039; - year&amp;#039;)&lt;/em&gt;\n\n\&quot;;i:15;s:161:\&quot;Invalid marker content in &lt;em&gt;date/date_pathauto.inc&lt;/em&gt;:&lt;em&gt;20&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;].&amp;#039; - month&amp;#039;)&lt;/em&gt;\n\n\&quot;;i:16;s:159:\&quot;Invalid marker content in &lt;em&gt;date/date_pathauto.inc&lt;/em&gt;:&lt;em&gt;23&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;].&amp;#039; - day&amp;#039;)&lt;/em&gt;\n\n\&quot;;i:17;s:161:\&quot;Invalid marker content in &lt;em&gt;date/date_pathauto.inc&lt;/em&gt;:&lt;em&gt;26&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;].&amp;#039; - hours&amp;#039;)&lt;/em&gt;\n\n\&quot;;i:18;s:163:\&quot;Invalid marker content in &lt;em&gt;date/date_pathauto.inc&lt;/em&gt;:&lt;em&gt;29&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;].&amp;#039; - minutes&amp;#039;)&lt;/em&gt;\n\n\&quot;;i:19;s:163:\&quot;Invalid marker content in &lt;em&gt;date/date_pathauto.inc&lt;/em&gt;:&lt;em&gt;32&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;].&amp;#039; - seconds&amp;#039;)&lt;/em&gt;\n\n\&quot;;i:20;s:155:\&quot;Invalid marker content in &lt;em&gt;date/date_views.inc&lt;/em&gt;:&lt;em&gt;67&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$description,array(&amp;#039;%option&amp;#039;=&amp;gt;t(&amp;#039;date&amp;#039;)))&lt;/em&gt;\n\n\&quot;;i:21;s:155:\&quot;Invalid marker content in &lt;em&gt;date/date_views.inc&lt;/em&gt;:&lt;em&gt;72&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$description,array(&amp;#039;%option&amp;#039;=&amp;gt;t(&amp;#039;year&amp;#039;)))&lt;/em&gt;\n\n\&quot;;i:22;s:156:\&quot;Invalid marker content in &lt;em&gt;date/date_views.inc&lt;/em&gt;:&lt;em&gt;79&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$description,array(&amp;#039;%option&amp;#039;=&amp;gt;t(&amp;#039;month&amp;#039;)))&lt;/em&gt;\n\n\&quot;;i:23;s:154:\&quot;Invalid marker content in &lt;em&gt;date/date_views.inc&lt;/em&gt;:&lt;em&gt;86&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$description,array(&amp;#039;%option&amp;#039;=&amp;gt;t(&amp;#039;day&amp;#039;)))&lt;/em&gt;\n\n\&quot;;i:24;s:138:\&quot;Invalid marker content in &lt;em&gt;date/date_views.inc&lt;/em&gt;:&lt;em&gt;116&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;])&lt;/em&gt;\n\n\&quot;;i:25;s:138:\&quot;Invalid marker content in &lt;em&gt;date/date_views.inc&lt;/em&gt;:&lt;em&gt;123&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$field[&amp;#039;widget&amp;#039;][&amp;#039;label&amp;#039;])&lt;/em&gt;\n\n\&quot;;i:26;s:112:\&quot;Invalid marker content in &lt;em&gt;date_copy/date_copy.module&lt;/em&gt;:&lt;em&gt;429&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$target_type)&lt;/em&gt;\n\n\&quot;;i:27;s:112:\&quot;Invalid marker content in &lt;em&gt;date_copy/date_copy.module&lt;/em&gt;:&lt;em&gt;686&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$target_type)&lt;/em&gt;\n\n\&quot;;i:28;s:112:\&quot;Invalid marker content in &lt;em&gt;date_copy/date_copy.module&lt;/em&gt;:&lt;em&gt;696&lt;/em&gt;\n* &lt;em&gt;t&lt;/em&gt;(&lt;em&gt;$target_type)&lt;/em&gt;\n\n\&quot;;i:29;s:206:\&quot;Invalid marker content in &lt;em&gt;date_repeat/date_repeat.module&lt;/em&gt;:&lt;em&gt;195&lt;/em&gt;\n* &lt;em&gt;format_plural&lt;/em&gt;(&lt;em&gt;$rrule[&amp;#039;INTERVAL&amp;#039;],t(&amp;#039;every week &amp;#039;),t(&amp;#039;every @count weeks &amp;#039;))&lt;/em&gt;\n\n\&quot;;i:30;s:208:\&quot;Invalid marker content in &lt;em&gt;date_repeat/date_repeat.module&lt;/em&gt;:&lt;em&gt;198&lt;/em&gt;\n* &lt;em&gt;format_plural&lt;/em&gt;(&lt;em&gt;$rrule[&amp;#039;INTERVAL&amp;#039;],t(&amp;#039;every month &amp;#039;),t(&amp;#039;every @count months &amp;#039;))&lt;/em&gt;\n\n\&quot;;i:31;s:206:\&quot;Invalid marker content in &lt;em&gt;date_repeat/date_repeat.module&lt;/em&gt;:&lt;em&gt;201&lt;/em&gt;\n* &lt;em&gt;format_plural&lt;/em&gt;(&lt;em&gt;$rrule[&amp;#039;INTERVAL&amp;#039;],t(&amp;#039;every year &amp;#039;),t(&amp;#039;every @count years &amp;#039;))&lt;/em&gt;\n\n\&quot;;i:32;s:204:\&quot;Invalid marker content in &lt;em&gt;date_repeat/date_repeat.module&lt;/em&gt;:&lt;em&gt;204&lt;/em&gt;\n* &lt;em&gt;format_plural&lt;/em&gt;(&lt;em&gt;$rrule[&amp;#039;INTERVAL&amp;#039;],t(&amp;#039;every day &amp;#039;),t(&amp;#039;every @count days &amp;#039;))&lt;/em&gt;\n\n\&quot;;}}&#039;, timestamp = 1220706524 WHERE sid = &#039;618fae481ffc4c4472bc8ced01429cf7&#039;</td> </tr>
+ <tr class="odd"><td>0.31</td><td>1</td><td><a href="http://api.drupal.org/api/HEAD/function/sess_write">sess_write</a></td><td>UPDATE users SET access = 1220706524 WHERE uid = 1</td> </tr>
+</tbody>
+</table>
+</div><div class="dev-memory-usage"><h3>Memory usage:</h3><div class="item-list"><ul><li>Memory used at <em>devel_init()</em>: <em>13.48</em> MB</li><li>Memory used at <em>devel_shutdown()</em>: <em>15.97</em> MB</li></ul></div></div>
