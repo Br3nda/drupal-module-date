@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.41 2008/09/02 21:07:19 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.42 2008/09/06 20:29:12 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -451,14 +451,6 @@ function date_select_validate($element) {
       $errors[] = t('The second must be a number between !min and !max.', array('!min' => $min, '!max' => $max));
     }
   }
-  if (empty($errors) && $element['#required']) {
-    $errors[] = t('A value is required.');
-  }
-  if (!empty($errors)) {
-    array_unshift($errors, t('%field has errors.', array('%field' => $element['#title'])));
-    form_set_error($error_field, implode(' ', $errors));
-  }
-  
   if (isset($element['#value']['ampm'])) {
     if ($element['#value']['ampm'] == 'pm' && $element['#value']['hour'] < 12) {
       $element['#value']['hour'] += 12;
@@ -468,7 +460,14 @@ function date_select_validate($element) {
     }
   }
   $value = date_select_input_value($element);
-    
+  if (empty($value) && empty($errors) && $element['#required']) {
+    $errors[] = t('A valid value is required.');
+  }
+  if (!empty($errors)) {
+    array_unshift($errors, t('%field has errors.', array('%field' => $element['#title'])));
+    form_set_error($error_field, implode(' ', $errors));
+  }
+     
   // If there are no errors and the value is valid, set it.
   if (empty($errors) && !empty($value)) {
     form_set_value($element, $value);
