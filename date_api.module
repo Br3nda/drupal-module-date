@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.50 2008/09/04 14:55:59 karens Exp $
+// $Id: date_api.module,v 1.44.2.51 2008/09/06 14:07:47 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -89,6 +89,26 @@ function date_month_names_untranslated() {
 /**
  * A translated array of month names
  *
+ * Needed for css, translation functions, strtotime(), and other places
+ * that use the English versions of these words.
+ *
+ * @return
+ *   an array of month names
+ */
+function date_month_names_translated() {
+  static $month_names;
+  if (empty($month_names)) {
+    $month_names = array(1 => t('January'), 2 => t('February'), 3 => t('March'),
+      4 => t('April'), 5 => t('May'), 6 => t('June'), 7 => t('July'),
+      8 => t('August'), 9 => t('September'), 10 => t('October'),
+      11 => t('November'), 12 => t('December'));
+  }
+  return $month_names;
+}
+
+/**
+ * A translated array of month names
+ *
  * @param $required
  *   If not required, will include a blank value at the beginning of the list.
  * @return
@@ -98,8 +118,8 @@ function date_month_names($required = FALSE) {
   static $month_names;
   if (empty($month_names)) {
     $month_names = array();
-    foreach (date_month_names_untranslated() as $key => $month) {
-      $month_names[$key] = t($month);
+    foreach (date_month_names_translated() as $key => $month) {
+      $month_names[$key] = $month_name;
     }
   }
   $none = array('' => '');
@@ -118,8 +138,8 @@ function date_month_names_abbr($required = FALSE) {
   static $month_names;
   if (empty($month_names)) {
     $month_names = array();
-    foreach (date_month_names_untranslated() as $key => $month) {
-      $month_names[$key] = t(drupal_substr($month, 0, 3));
+    foreach (date_month_names_translated() as $key => $month) {
+      $month_names[$key] = drupal_substr($month, 0, 3);
     }
   }
   $none = array('' => '');
@@ -148,6 +168,25 @@ function date_week_days_untranslated($refresh = TRUE) {
 /**
  * A translated array of week days
  *
+ * Needed for css, translation functions, strtotime(), and other places
+ * that use the English versions of these words.
+ *
+ * @return
+ *   an array of week day names
+ */
+function date_week_days_translated($refresh = TRUE) {
+  static $weekdays;
+  if ($refresh || empty($weekdays)) {
+    $weekdays = array(0 => t('Sunday'), 1 => t('Monday'), 2 => t('Tuesday'),
+      3 => t('Wednesday'), 4 => t('Thursday'), 5 => t('Friday'),
+      6 => t('Saturday'));
+  }
+  return $weekdays;
+}
+
+/**
+ * A translated array of week days
+ *
  * @param $required
  *   If not required, will include a blank value at the beginning of the array.
  * @return
@@ -157,8 +196,8 @@ function date_week_days($required = FALSE, $refresh = TRUE) {
   static $weekdays;
   if ($refresh || empty($weekdays)) {
     $weekdays = array();
-    foreach (date_week_days_untranslated($refresh) as $key => $day) {
-      $weekdays[$key] = t($day);
+    foreach (date_week_days_translated($refresh) as $key => $day) {
+      $weekdays[$key] = $day;
     }
   }
   $none = array('' => '');
@@ -417,7 +456,7 @@ function date_timezone_names($required = FALSE, $refresh = FALSE) {
       // compatibility reasons and should not be used, the list is 
       // filtered by a regular expression.
       if (preg_match('!^((Africa|America|Antarctica|Arctic|Asia|Atlantic|Australia|Europe|Indian|Pacific)/|UTC$)!', $zone)) {
-        $zonenames[$zone] = t($zone);
+        $zonenames[$zone] = t('!timezone', array('!timezone' => $zone));
       }      
       else {
         unset($data[$delta]);
@@ -463,16 +502,18 @@ function date_t($string) {
   if (empty($replace)) {
     $replace = array();
     // Translate the whole name first, then look for abbreviations.
-    foreach (date_month_names_untranslated() as $month) {
-      $replace[$month] = t($month);
-      $replace[drupal_substr($month, 0, 3)] = t(drupal_substr($month, 0, 3));
+    $untranslated = date_month_names_untranslated();
+    foreach (date_month_names_translated() as $delta => $month) {
+      $replace[$untranslated[$delta]] = $month;
+      $replace[drupal_substr($untranslated[$delta], 0, 3)] = drupal_substr($month, 0, 3);
     }
-    foreach (date_week_days_untranslated() as $day) {
-      $replace[$day] = t($day);
-      $replace[drupal_substr($day, 0, 3)] = t(drupal_substr($day, 0, 3));
+    $untranslated = date_week_days_untranslated();
+    foreach (date_week_days_translated() as $delta => $day) {
+      $replace[$untranslated[$delta]] = $day;
+      $replace[drupal_substr($untranslated[$delta], 0, 3)] = drupal_substr($day, 0, 3);
     }
+    return strtr($string, $replace);
   }
-  return strtr($string, $replace);
 }
 
 /**
