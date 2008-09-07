@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.23.2.3 2008/08/30 13:58:14 karens Exp $
+// $Id: date_repeat.module,v 1.23.2.4 2008/09/07 20:58:05 karens Exp $
 /**
  * @file
  *
@@ -150,6 +150,10 @@ function date_repeat_days_ordered($week_start_day) {
  * Constructs a human-readable description of the rule.
  */
 function date_repeat_rrule_description($rrule, $start_date, $format = 'D M d Y') {
+  // Empty or invalid value.
+  if (empty($rrule) || !strstr($rrule, 'RRULE')) {
+    return;
+  }
   require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
   require_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_calc.inc');
 

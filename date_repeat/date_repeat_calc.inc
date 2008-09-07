@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.4.2.6 2008/08/30 13:58:14 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.4.2.7 2008/09/07 20:58:05 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -319,6 +319,10 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
  * See if the RRULE needs some imputed values added to it.
  */
 function date_repeat_adjust_rrule($rrule, $start_date) {
+  // If this is not a valid value, do nothing;
+  if (empty($rrule) || empty($rrule['FREQ'])) {
+    return array();
+  }
   // RFC 2445 says if no day or monthday is specified when creating repeats for
   // weeks, months, or years, impute the value from the start date.
 
