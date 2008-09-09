@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.51 2008/09/06 14:07:47 karens Exp $
+// $Id: date_api.module,v 1.44.2.52 2008/09/09 10:47:00 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -512,8 +512,8 @@ function date_t($string) {
       $replace[$untranslated[$delta]] = $day;
       $replace[drupal_substr($untranslated[$delta], 0, 3)] = drupal_substr($day, 0, 3);
     }
-    return strtr($string, $replace);
   }
+  return strtr($string, $replace);
 }
 
 /**
