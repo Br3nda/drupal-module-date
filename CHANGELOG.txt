@@ -1,10 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.162 2008/09/12 12:18:44 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.163 2008/09/12 12:41:35 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+Version 5.2.3
+===============
 - #307406 Remove debug cruft from Date Popup.
 - #306819, #307406 Month translated was using wrong variable name.
 
