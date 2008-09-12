@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.52 2008/09/09 10:47:00 karens Exp $
+// $Id: date_api.module,v 1.44.2.53 2008/09/12 12:15:30 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -119,7 +119,7 @@ function date_month_names($required = FALSE) {
   if (empty($month_names)) {
     $month_names = array();
     foreach (date_month_names_translated() as $key => $month) {
-      $month_names[$key] = $month_name;
+      $month_names[$key] = $month;
     }
   }
   $none = array('' => '');
