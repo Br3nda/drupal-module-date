@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.5.2.10 2008/08/30 13:58:14 karens Exp $
+// $Id: date_repeat_form.inc,v 1.5.2.11 2008/09/25 16:24:55 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -94,7 +94,7 @@ function _date_repeat_rrule_process($element) {
     'datetime' => array(
       '#type' => $element['#date_repeat_widget'],
       '#title' => t('Until'),
-      '#description' => t('Date to stop repeating this item. The \'Until\' date will NOT be included in the results.'),
+      '#description' => t('Date to stop repeating this item.'),
       '#default_value' => $UNTIL,
       '#date_timezone' => !empty($element['#date_timezone']) ? $element['#date_timezone'] : date_default_timezone_name(),
       '#date_format' => !empty($element['#date_format']) ? $element['#date_format'] : 'Y-m-d',
