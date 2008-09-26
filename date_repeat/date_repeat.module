@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.23.2.4 2008/09/07 20:58:05 karens Exp $
+// $Id: date_repeat.module,v 1.23.2.5 2008/09/26 11:48:45 karens Exp $
 /**
  * @file
  *
@@ -160,7 +160,7 @@ function date_repeat_rrule_description($rrule, $start_date, $format = 'D M d Y')
   $parts = date_repeat_split_rrule($rrule);
   $exceptions = $parts[1];
   $rrule = date_repeat_adjust_rrule($parts[0], $start_date);
-  $description = array(t('Repeats '));
+  $description = array(t('Repeats') .' ');
 
   if ($rrule['BYDAY']) {
     $days = date_repeat_dow_day_options();
@@ -169,13 +169,13 @@ function date_repeat_rrule_description($rrule, $start_date, $format = 'D M d Y')
     foreach ($rrule['BYDAY'] as $byday) {
       $day = substr($byday, -2);
       if ($count = intval(str_replace(' '. $day, '', $byday))) {
-        $results[] = t('the !count !day ', array('!count' => strtolower($counts[$count]), '!day' => $days[$day]));
+        $results[] = t('the !count !day', array('!count' => strtolower($counts[$count]), '!day' => $days[$day])) .' ';
       }
       else {
-        $results[] = t('every !day ', array('!day' => $days[$day]));
+        $results[] = t('every !day', array('!day' => $days[$day])) .' ';
       }
     }
-    $description[] = t('!days', array('!days' => implode(t(' and '), $results)));
+    $description[] = t('!days', array('!days' => implode(' '. t(' and ') .' ', $results)));
   }
   if ($rrule['BYMONTHDAY']) {
     $description[] = t('day @number', array('@number' => implode(', ', $rrule['BYMONTHDAY']))) .' ';
@@ -196,24 +196,24 @@ function date_repeat_rrule_description($rrule, $start_date, $format = 'D M d Y')
   $interval = INTERVAL_options();
   switch ($rrule['FREQ']) {
     case 'WEEKLY':
-      $description[] = format_plural($rrule['INTERVAL'], t('every week '), t('every @count weeks '));
+      $description[] = format_plural($rrule['INTERVAL'], 'every week', 'every @count weeks') .' ';
       break;
     case 'MONTHLY':
-      $description[] = format_plural($rrule['INTERVAL'], t('every month '), t('every @count months '));
+      $description[] = format_plural($rrule['INTERVAL'], 'every month', 'every @count months') .' ';
       break;
     case 'YEARLY':
-      $description[] = format_plural($rrule['INTERVAL'], t('every year '), t('every @count years '));
+      $description[] = format_plural($rrule['INTERVAL'], 'every year', 'every @count years') .' ';
       break;
     default:
-      $description[] = format_plural($rrule['INTERVAL'], t('every day '), t('every @count days '));
+      $description[] = format_plural($rrule['INTERVAL'], 'every day', 'every @count days') .' ';
       break;
   }
   if ($rrule['COUNT']) {
-    $description[] = t('for !times occurences ', array('!times' => $rrule['COUNT']));
+    $description[] = t('for !times occurences', array('!times' => $rrule['COUNT'])) .' ';
   }
   if ($rrule['UNTIL']) {
     $until = date_ical_date($rrule['UNTIL']);
-    $description[] = t('until !until ', array('!until' => date_format_date($until, 'custom', $format)));
+    $description[] = t('until !until', array('!until' => date_format_date($until, 'custom', $format))) .' ';
   }
   if ($exceptions) {
     $values = array();

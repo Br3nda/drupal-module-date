@@ -1,5 +1,5 @@
 <?php
-// $Id: date_copy.module,v 1.9.2.9 2008/09/02 17:34:07 karens Exp $
+// $Id: date_copy.module,v 1.9.2.10 2008/09/26 11:48:45 karens Exp $
 /**
  * Date Copy
  *
@@ -289,7 +289,7 @@ function date_copy_export_form() {
 
 function date_copy_import_csv_form() {
   // PLACEHOLDER
-  drupal_set_message(t('Importing dates into CCK from a comma separated file can be done using the !link.', array('!link' => l('Node Import module', 'http://drupal.org/project/node_import'))));
+  drupal_set_message(t('Importing dates into CCK from a comma separated file can be done using the <a href="@link">Node Import module</a>.', array('@link' => url('http://drupal.org/project/node_import'))));
 }
 
 /**
@@ -425,9 +425,9 @@ function date_copy_import_ical_form_submit($form_id, $form_values) {
       }
       $target_node->taxonomy = $taxonomy;
       node_save($target_node);
-      watchdog('date_copy', t('!type: created %title.', array(
+      watchdog('date_copy', '!type: created %title.', array(
         '!type' => t($target_type),
-        '%title' => $target_node->title)),
+        '%title' => $target_node->title),
         WATCHDOG_NOTICE,
         l(t('view'), 'node/'. $target_node->nid));
       $new_field = $target_node->$date_field;
@@ -682,9 +682,9 @@ function date_copy_convert_events( $source_type, $target_type, $date_field, $des
     node_save($target_node);
 
     if ($target_type != $source_type) {
-      watchdog('date_copy', t('!type: created %title.', array(
+      watchdog('date_copy', '!type: created %title.', array(
         '!type' => t($target_type),
-        '%title' => $target_node->title)),
+        '%title' => $target_node->title),
         WATCHDOG_NOTICE,
         l(t('view'), 'node/'. $target_node->nid));
       if ($delete_old) {
@@ -692,9 +692,9 @@ function date_copy_convert_events( $source_type, $target_type, $date_field, $des
       }
     }
     else {
-      watchdog('date_copy', t('!type: updated %title.', array(
+      watchdog('date_copy', '!type: updated %title.', array(
         '!type' => t($target_type),
-        '%title' => $target_node->title)),
+        '%title' => $target_node->title),
         WATCHDOG_NOTICE,
         l(t('view'), 'node/'. $target_node->nid));
     }
