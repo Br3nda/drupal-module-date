@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.171 2008/09/26 14:39:35 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.172 2008/10/02 16:05:43 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Add new repeat selection widgets to widgets that can set increments and date parts.
 - #307544 Get rid of extra line feed at end of ical description.
 - #304370 Fix typo in popup css.
 - #265076 Add some fallback handling for text input that can accept missing time.

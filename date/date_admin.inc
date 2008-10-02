@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.25 2008/08/30 13:58:12 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.26 2008/10/02 16:05:43 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -124,7 +124,7 @@ function date_widget_settings_form($widget) {
       '#value' => '',
       );
   }
-  if ($widget['type'] == 'date_select' || $widget['type'] == 'date_popup') {
+  if (in_array($widget['type'], array('date_select', 'date_popup', 'date_select_repeat', 'date_popup_repeat'))) {
     $form['input']['year_range'] = array(
       '#type' => 'textfield',
       '#title' => t('Years back and forward'),
