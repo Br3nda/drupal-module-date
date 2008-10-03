@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_lib.inc,v 1.3.2.5 2008/07/24 20:43:32 karens Exp $
+// $Id: date_php4_lib.inc,v 1.3.2.6 2008/10/03 17:17:51 karens Exp $
 
 /**
  * Date Library, extended date functions.
@@ -69,7 +69,7 @@ function _date_getdate($timestamp = false, $timezone = false) {
   }
 
   $timestamp_in = $timestamp;
-  $timestamp =  $timestamp + date_get_gmt_diff_ts($timestamp, $timezone);
+  
   $_day_power = 86400;
   $_hour_power = 3600;
   $_min_power = 60;
@@ -162,6 +162,22 @@ function _date_getdate($timestamp = false, $timezone = false) {
     $hour = floor($timestamp/$_hour_power);
   }
   else {
+    // Check yesterday's and tomorrow's offset in case dst happens this day.
+    $today_offset = date_get_gmt_diff_ts($timestamp, $timezone);
+    $yesterday_offset = date_get_gmt_diff_ts($timestamp - 86400, $timezone);
+    $tomorrow_offset = date_get_gmt_diff_ts($timestamp + 86400, $timezone);
+    
+    if ($yesterday_offset != $tomorrow_offset && $yesterday_offset < 0) {
+      $adj = $yesterday_offset;
+    }
+    elseif ($yesterday_offset != $tomorrow_offset && $tomorrow_offset > 0) {
+      $adj = $tomorrow_offset;
+    }
+    else {
+      $adj = $today_offset;
+    }
+    $timestamp =  $timestamp + $adj;
+
     for ($a = 1970 ;; $a++) {
       $lastd = $timestamp;
       if ($leap = date_is_leap_year($a)) $timestamp -= $d366;
@@ -232,6 +248,7 @@ function _date_date($format, $timestamp = false, $timezone = false) {
   $secs = $arr['second'];
   $max = strlen($format);
   $dates = '';
+  
   /*
     at this point, we have the following integer vars to manipulate:
     $year, $month, $day, $hour, $min, $secs

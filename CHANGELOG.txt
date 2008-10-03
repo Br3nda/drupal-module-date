@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.173 2008/10/03 13:54:11 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.174 2008/10/03 17:17:51 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #312598 Date PHP4 functions can be off by 1 hour during the day dst changes, add a fix for that.
 - Date PHP4: Add new settings area where you can choose whether to use the faster native timezone adjustments for current dates.
 - Add new repeat selection widgets to widgets that can set increments and date parts.
 - #307544 Get rid of extra line feed at end of ical description.
