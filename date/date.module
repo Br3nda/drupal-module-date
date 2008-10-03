@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.39 2008/09/04 14:55:59 karens Exp $
+// $Id: date.module,v 1.39.2.40 2008/10/03 19:44:23 karens Exp $
 
 /**
  * @file
@@ -132,8 +132,7 @@ function date_field_formatter_info() {
 function date_field_formatter($field, $item, $formatter, $node) {
   // Only display the start date for a repeating date
   // on the node itself unless we're showing all dates.
-  if (arg(0) == 'node' && arg(1) == $node->nid // Make sure we're looking at the node 
-    && empty($node->date_id) && empty($node->date_repeat_show) // Make sure no date was specifically requested
+  if (empty($node->date_id) && empty($node->date_repeat_show) // Make sure no date was specifically requested
     && module_exists('date_repeat') && $field['repeat'] == 1) {
     $node->date_id = 'date:'. $node->nid .':'. $field['field_name'] .':0:0';
   }
