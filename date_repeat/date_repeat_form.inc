@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.5.2.11 2008/09/25 16:24:55 karens Exp $
+// $Id: date_repeat_form.inc,v 1.5.2.12 2008/10/03 13:54:12 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -120,7 +120,7 @@ function _date_repeat_rrule_process($element) {
     '#title' => t('Advanced'),
     '#collapsible' => TRUE,
     '#collapsed' => $collapsed,
-    '#description' => t('If no advanced options are selected, the date will repeat on the day of week of the start date for weekly repeats, otherwise on the month and day of the start date. Use the options below to override that behavior to select specific months and days to repeat on. Use the \'Except\' box to input dates that should be omitted from the results. '),
+    '#description' => t("If no advanced options are selected, the date will repeat on the day of week of the start date for weekly repeats, otherwise on the month and day of the start date. Use the options below to override that behavior to select specific months and days to repeat on. Use the 'Except' box to input dates that should be omitted from the results.") .' ',
     );
 
   $element['advanced']['BYMONTH'] = array(

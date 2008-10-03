@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.25 2008/08/30 13:58:14 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.26 2008/10/03 13:54:12 karens Exp $
 
 /**
  * @file
@@ -846,6 +846,9 @@ function date_date($format, $timestamp = false, $timezone = false) {
     // Below PHP 5.2 in windows, must be positive integer
     if ($timestamp >= 0 && $is_gmt) {
       return @gmdate($format, $timestamp);
+    }
+    elseif ($timestamp >= 0 && variable_get('date_use_server_zone', TRUE)) {
+      return @date($format, $timestamp);
     }
   }
   require_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_lib.inc');

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.53 2008/09/12 12:15:30 karens Exp $
+// $Id: date_api.module,v 1.44.2.54 2008/10/03 13:54:11 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -898,7 +898,7 @@ function date_week($date) {
   $week = intval(date_format($date, 'W'));
   $year_week = intval(date_format($year_date, 'W'));
   $date_year = intval(date_format($date, 'o'));
-
+  
   // remove the leap week if it's present
   if ($date_year > intval($parts[0])) {
     $last_date = drupal_clone($date);
@@ -916,7 +916,7 @@ function date_week($date) {
   if (intval(date_format($date, 'N')) < $iso_first_day) $week--;
   // if the year starts before, it's an extra week at the beginning
   if (intval(date_format($year_date, 'N')) < $iso_first_day) $week++;
-
+  
   return $week;
 }
 
