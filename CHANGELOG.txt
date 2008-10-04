@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.177 2008/10/04 11:49:49 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.178 2008/10/04 12:12:00 karens Exp $
 Date Module 5.2
 =================
 
@@ -6,6 +6,7 @@ Version 5.2-dev
 =================
 
 - #312996 Break out of endless loop in date_repeat calculation.
+- #294851 Date PHP4: Make timezone_identifiers and timezone_abbreviations into statics variable to reduce execution time.
 - #294851 Date PHP4: Make timezone_map into a static variable to reduce execution time.
 - #314959 Keep repeating dates off the teaser as well as the node.
 - #312598 Date PHP4 functions can be off by 1 hour during the day dst changes, add a fix for that.
