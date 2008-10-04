@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.4.2.7 2008/09/07 20:58:05 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.4.2.8 2008/10/04 11:49:49 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -286,6 +286,11 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
             $period_finished = TRUE;
           }
         }
+        
+        if ($finished) {
+          continue;
+        }
+
         // Go back to the beginning of this period before we jump, to
         // ensure we jump to the first day of the next period. We've moved to
         // the next month or year, so it takes an extra jump back to get
