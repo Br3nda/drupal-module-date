@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.27 2008/10/03 17:17:51 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.28 2008/10/04 11:26:46 karens Exp $
 
 /**
  * @file
@@ -594,7 +594,11 @@ function date_is_dst($timestamp, $timezone = NULL) {
   if (empty($timezone)) {
     $timezone = date_default_timezone_name();
   }
-  include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
+
+  static $timezone_map = array();
+  if (empty($timezone_map)) {
+    include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
+  }
   $region = $timezone_map[$timezone]['dst_region'];
 
   // This should really be done with date_date() to get the right timezone
