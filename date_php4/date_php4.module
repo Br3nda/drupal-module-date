@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.module,v 1.4.2.2 2008/10/03 13:54:12 karens Exp $
+// $Id: date_php4.module,v 1.4.2.3 2008/10/05 17:05:07 karens Exp $
 
 /**
  * @file
@@ -48,7 +48,7 @@ function date_php4_settings_form() {
   $form['date_use_server_zone'] = array(
     '#type' => 'select',
     '#options' => array(TRUE, t('TRUE'), FALSE => t('FALSE')),
-    '#default_value' => variable_get('date_use_server_zone', TRUE),
+    '#default_value' => variable_get('date_use_server_zone', FALSE),
     '#title' => t('Use PHP default timezone'),
     '#description' => t('Getting date computations working correctly in PHP versions earlier than PHP 5.2 involves extra computations that add a lot of overhead. These computations are needed because the timezone PHP uses on date computations may not match the site or user timezone or other date-specific timezones. We can speed processing up if we assume that PHP is using the correct timezone, but need to do more time-intensive processing if it is not. If timezone adjustments do not seem to be working correctly in your setup, you can set this option to FALSE to force the system to use the more accurate, but slower, timezone computations.'),
     );

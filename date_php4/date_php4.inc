@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.29 2008/10/04 12:12:00 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.30 2008/10/05 17:05:07 karens Exp $
 
 /**
  * @file
@@ -857,7 +857,7 @@ function date_date($format, $timestamp = false, $timezone = false) {
     if ($timestamp >= 0 && $is_gmt) {
       return @gmdate($format, $timestamp);
     }
-    elseif ($timestamp >= 0 && variable_get('date_use_server_zone', TRUE)) {
+    elseif ($timestamp >= 0 && variable_get('date_use_server_zone', FALSE)) {
       return @date($format, $timestamp);
     }
   }
