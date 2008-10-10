@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.40 2008/10/03 19:44:23 karens Exp $
+// $Id: date.module,v 1.39.2.41 2008/10/10 15:05:39 karens Exp $
 
 /**
  * @file
@@ -38,9 +38,11 @@ function date_menu($may_cache) {
 
 function date_repeat_type($type_name) {
   $type = content_types($type_name);
-  foreach ($type['fields'] as $field_name => $field) {
-    if (in_array($field['type'], array('date', 'datestamp', 'datetime')) && $field['repeat']) {
-      return TRUE;
+  if (!empty($type['fields'])) {
+    foreach ($type['fields'] as $field_name => $field) {
+      if (in_array($field['type'], array('date', 'datestamp', 'datetime')) && $field['repeat']) {
+        return TRUE;
+      }
     }
   }
   return FALSE;
