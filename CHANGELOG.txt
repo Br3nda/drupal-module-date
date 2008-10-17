@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.179 2008/10/10 15:05:39 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.180 2008/10/17 21:19:40 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #322446 Avoid extra space in date theme when there is no timezone.
 - Don't try to find repeating fields on types without fields.
 - #312996 Break out of endless loop in date_repeat calculation.
 - #294851 Date PHP4: Make timezone_identifiers and timezone_abbreviations into statics variable to reduce execution time.
