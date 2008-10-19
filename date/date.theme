@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.26 2008/10/17 21:19:40 karens Exp $
+//$Id: date.theme,v 1.2.2.27 2008/10/19 14:29:21 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -191,10 +191,10 @@ function theme_date_views_browser_period_label($period, $date) {
 function theme_date_views_browser_navigation($heading, $period, $prev_url, $next_url, $view) {
   $output  = '<div class="date-nav clear-block">';
   $output .= '<div class="date-prev">';
-  $output .= l(t('‹ prev !period  ', array('!period' => $period)), $prev_url);
+  $output .= l(t('‹ prev !period  ', array('!period' => $period)), $prev_url, array('attributes' => array('rel' => 'nofollow')));
   $output .= '</div><div class="date-heading"><h3>'. $heading .'</h3></div>';
   $output .= '<div class="date-next">';
-  $output .= l(t('  next !period  ›', array('!period' => $period)), $next_url);
+  $output .= l(t('  next !period  ›', array('!period' => $period)), $next_url, array('attributes' => array('rel' => 'nofollow')));
   $output .= '</div></div>';
   return $output;
 }

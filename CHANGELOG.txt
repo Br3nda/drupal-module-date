@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.180 2008/10/17 21:19:40 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.181 2008/10/19 14:29:21 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #174580 Add rel=nofollow to back/next links.
 - #322446 Avoid extra space in date theme when there is no timezone.
 - Don't try to find repeating fields on types without fields.
 - #312996 Break out of endless loop in date_repeat calculation.
