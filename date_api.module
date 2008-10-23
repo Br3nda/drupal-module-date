@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.54 2008/10/03 13:54:11 karens Exp $
+// $Id: date_api.module,v 1.44.2.55 2008/10/23 11:12:44 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -445,7 +445,7 @@ function date_granularity_names() {
  */
 function date_timezone_names($required = FALSE, $refresh = FALSE) {
   static $zonenames;
-  if (empty($zonenames)) {
+  if (empty($zonenames) || $refresh) {
     $zonenames = array();
     $cached = cache_get('date_timezone_identifiers_list', 'cache');
     if ($refresh || !$data = unserialize($cached->data)) {
@@ -460,6 +460,20 @@ function date_timezone_names($required = FALSE, $refresh = FALSE) {
       }      
       else {
         unset($data[$delta]);
+      }
+    }
+    // If using Event, further filter the list down to only 
+    // zones that exist in the event module.
+    if (module_exists('event') && db_table_exists('event_timezones')) {
+      $result = db_query("SELECT name FROM {event_timezones} ORDER BY name");
+      $names = array();
+      while ($row = db_fetch_array($result)) {
+        $names[] = str_replace(' ', '_', $row['name']);
+      }
+      foreach ($zonenames as $name => $zone) {
+        if (!in_array($name, $names)) {
+          unset($zonenames[$name]);
+        }
       }
     }
     if (!empty($data)) {
