@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.57 2008/10/31 13:27:50 karens Exp $
+// $Id: date_api.module,v 1.44.2.58 2008/10/31 18:30:04 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -446,47 +446,49 @@ function date_granularity_names() {
 function date_timezone_names($required = FALSE, $refresh = FALSE) {
   static $zonenames;
   if (empty($zonenames) || $refresh) {
-    $zonenames = array();
     $cached = cache_get('date_timezone_identifiers_list', 'cache');
-    if ($refresh || !$data = unserialize($cached->data)) {
+    $zonenames = unserialize($cached->data);
+    if ($refresh || empty($cached) || empty($zonenames)) {
       $data = timezone_identifiers_list();
-    }
-    foreach ($data as $delta => $zone) {
-      // Because many time zones exist in PHP only for backward 
-      // compatibility reasons and should not be used, the list is 
-      // filtered by a regular expression.
-      if (preg_match('!^((Africa|America|Antarctica|Arctic|Asia|Atlantic|Australia|Europe|Indian|Pacific)/|UTC$)!', $zone)) {
-        $zonenames[$zone] = t('!timezone', array('!timezone' => $zone));
-      }      
-      else {
-        unset($data[$delta]);
+      foreach ($data as $delta => $zone) {
+        // Because many time zones exist in PHP only for backward 
+        // compatibility reasons and should not be used, the list is 
+        // filtered by a regular expression.
+        if (preg_match('!^((Africa|America|Antarctica|Arctic|Asia|Atlantic|Australia|Europe|Indian|Pacific)/|UTC$)!', $zone)) {
+          $zonenames[$zone] = $zone;
+        }      
       }
-    }
-    // If using PHP4, filter the list down to only the timezones
-    // the PHP4 wrapper has data for.
-    if (module_exists('date_php4')) {
-      include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_missing_data.inc');
-      foreach ($missing_timezone_data as $zone) {
-        unset($zonenames[$zone]);
-      }
-    }
-
-    // If using Event, further filter the list down to only 
-    // zones that exist in the event module.
-    if (module_exists('event') && db_table_exists('event_timezones')) {
-      $result = db_query("SELECT name FROM {event_timezones} ORDER BY name");
-      $names = array();
-      while ($row = db_fetch_array($result)) {
-        $names[] = str_replace(' ', '_', $row['name']);
-      }
-      foreach ($zonenames as $name => $zone) {
-        if (!in_array($name, $names)) {
-          unset($zonenames[$name]);
+      // If using PHP4, filter the list down to only the timezones
+      // the PHP4 wrapper has data for.
+      if (module_exists('date_php4')) {
+        include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_missing_data.inc');
+        foreach ($missing_timezone_data as $zone) {
+          unset($zonenames[$zone]);
         }
       }
+    
+      // If using Event, further filter the list down to only 
+      // zones that exist in the event module.
+      if (module_exists('event') && db_table_exists('event_timezones')) {
+        $result = db_query("SELECT name FROM {event_timezones} ORDER BY name");
+        $names = array();
+        while ($row = db_fetch_array($result)) {
+          $names[] = str_replace(' ', '_', $row['name']);
+        }
+        foreach ($zonenames as $name => $zone) {
+          if (!in_array($name, $names)) {
+            unset($zonenames[$name]);
+          }
+        }
+      }
+      if (!empty($zonenames)) {
+        cache_set('date_timezone_identifiers_list', 'cache', serialize($zonenames));
+      }
     }
-    if (!empty($data)) {
-      cache_set('date_timezone_identifiers_list', 'cache', serialize($data));
+    else {
+      foreach ($zonenames as $zone) {
+        $zonenames[$zone] = t('!timezone', array('!timezone' => $zone));
+      }
     }
   }
   $none = array('' => '');
