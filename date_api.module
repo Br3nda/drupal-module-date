@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.55 2008/10/23 11:12:44 karens Exp $
+// $Id: date_api.module,v 1.44.2.56 2008/10/31 10:16:31 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -615,7 +615,7 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME) {
   // Make sure some value is set for the date and timezone even if the
   // site timezone is not yet set up to avoid fatal installation
   // errors.
-  if (empty($timezone)) {
+  if (empty($timezone) || !date_timezone_is_valid($timezone)) {
     $timezone = date_default_timezone_name();
   }
   if (!date_is_valid($date, $type) || empty($date)) {
@@ -640,6 +640,17 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME) {
     }
   }
   return NULL;
+}
+
+function date_timezone_is_valid($timezone) {
+  static $timezone_names;
+  if (empty($timezone_names)) {
+    $timezone_names = array_keys(date_timezone_names(TRUE));
+  }
+  if (!in_array($timezone, $timezone_names)) {
+    return FALSE;
+  }
+  return TRUE;
 }
 
 /**

@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.20 2008/09/26 14:39:35 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.21 2008/10/31 10:16:31 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -366,6 +366,10 @@ function date_ical_parse_date($field, $data) {
     $tz = $properties['TZID'];
     // Fix commonly used alternatives like US-Eastern which should be US/Eastern.
     $tz = str_replace('-', '/', $tz);
+    // Unset invalid timezone names.
+    if (!date_timezone_is_valid($tz)) {
+      $tz = '';
+    }
   }
   // If declared as UTC with terminating 'Z', use that timezone
   else if (strpos($data, 'Z') !== false) {
