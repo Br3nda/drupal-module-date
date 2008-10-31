@@ -21,18 +21,24 @@ function _date_content_generate($node, $field) {
 	$start = date_make_date($year .'-01-01 00:00:00', 'UTC');
 	$leap = date_format($start, 'L');
 	$max_days = $leap ? 366 : 365;
-	$seconds = rand(0, ($max_days * 86400));
+	$seconds = mt_rand(0, ($max_days * 86400));
 	date_modify($start, "+$seconds seconds");
 
 	// Modify To date by 1 hour to 1 day.
 	$start2 = drupal_clone($start);
-  date_modify($start2, '+'. rand(60, 1440) .' minutes');  
+  date_modify($start2, '+'. mt_rand(60, 1440) .' minutes');  
     
   if ($field['tz_handling'] == 'date') {
     // Choose a random timezone.
-    // Choose a random timezone.
-    $timezones = date_timezone_names(TRUE);
+    // Not all keys exist, so we have to check.
+    $timezones = array_keys(date_timezone_names(TRUE));
     $key = mt_rand(0, count($timezones) - 1);
+    if (!array_key_exists($key, $timezones)) {
+      $timezone = date_default_timezone_name();
+    }
+    else {
+      $timezone = $timezones[$key];
+    }
     $timezone = $timezones[$key];
   }
     
