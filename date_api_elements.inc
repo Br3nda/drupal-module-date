@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.43 2008/09/26 12:33:43 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.44 2008/10/31 12:36:57 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -683,7 +683,7 @@ function theme_date_select($element) {
   $class = 'container-inline-date';
   // Add #date_float to allow date parts to float together on the same line. 
   if (empty($element['#date_float'])) {
-    $class .= ' date-clear-block';
+    $class .= ' date-clear';
   }
   if (isset($element['#children'])) {
     $output = $element['#children'];
@@ -705,7 +705,7 @@ function theme_date_text($element) {
   $class = 'container-inline-date';
   // Add #date_float to allow date parts to float together on the same line. 
   if (empty($element['#date_float'])) {
-    $class .= ' date-clear-block';
+    $class .= ' date-clear';
   }
   if (isset($element['#children'])) {
     $output = $element['#children'];

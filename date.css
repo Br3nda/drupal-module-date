@@ -38,12 +38,6 @@
   text-indent: 0;
 }
 
-.date-clear-block {
-  float:none;
-  width:auto;
-  clear:both;
-  }
-
 /* formatting for from/to dates in nodes and views */
 span.date-display-single {
 }
@@ -94,27 +88,3 @@ span.date-display-separator {
   display:block;
 }
 
-/*
-** Markup free clearing that fixes unwanted scrollbars
-** @see http://drupal.org/node/232959
-*/
-.date-clear-block:after {
-  content: " ";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-}
-
-.date-clear-block {
-  display: inline-block;
-}
-
-/* Hides from IE-mac \*/
-* html .date-clear-block {
-  height: 1%;
-}
-.date-clear-block {
-  display: block;
-}
-/* End hide from IE-mac */

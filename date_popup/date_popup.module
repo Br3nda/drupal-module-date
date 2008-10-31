@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.37 2008/09/12 12:18:44 karens Exp $
+// $Id: date_popup.module,v 1.27.2.38 2008/10/31 12:36:57 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -176,7 +176,7 @@ function date_popup_process($element, $edit = NULL) {
   // Add #date_float to allow date parts to float together on the same line. 
   $class = 'container-inline-date';
   if (empty($element['#date_float'])) {
-    $class .= ' date-clear-block';
+    $class .= ' date-clear';
   }
   if (isset($element['#attributes']) || isset($element['#attributes']['class'])) {
     $element['#attributes']['class'] .= ' '. $class;
@@ -483,7 +483,7 @@ function theme_date_popup($element) {
   $class = 'container-inline-date';
   // Add #date_float to allow date parts to float together on the same line. 
   if (empty($element['#date_float'])) {
-    $class .= ' date-clear-block';
+    $class .= ' date-clear';
   }
   $element['#attributes']['class'] .= $class;
   if (isset($element['#children'])) {
