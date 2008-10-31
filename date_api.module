@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.56 2008/10/31 10:16:31 karens Exp $
+// $Id: date_api.module,v 1.44.2.57 2008/10/31 13:27:50 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -462,6 +462,15 @@ function date_timezone_names($required = FALSE, $refresh = FALSE) {
         unset($data[$delta]);
       }
     }
+    // If using PHP4, filter the list down to only the timezones
+    // the PHP4 wrapper has data for.
+    if (module_exists('date_php4')) {
+      include_once('./'. drupal_get_path('module', 'date_php4') .'/date_php4_missing_data.inc');
+      foreach ($missing_timezone_data as $zone) {
+        unset($zonenames[$zone]);
+      }
+    }
+
     // If using Event, further filter the list down to only 
     // zones that exist in the event module.
     if (module_exists('event') && db_table_exists('event_timezones')) {

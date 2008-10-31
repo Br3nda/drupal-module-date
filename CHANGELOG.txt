@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.186 2008/10/31 12:47:17 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.187 2008/10/31 13:27:50 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Found some timezones that can't be used in PHP4 because we don't have offset information, so remove them from timezone lists.
 - Fix error in PHP4 dst switch date for North America.
 - Get rid of date-clear-block class in case it is affecting the sporatic problems with popups.
 - #327506 Detect and trap bad timezones in ical import so they don't create errors.
