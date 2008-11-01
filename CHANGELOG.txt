@@ -1,4 +1,4 @@
-//$Id: CHANGELOG.txt,v 1.1.6.189 2008/10/31 18:30:04 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.190 2008/11/01 11:27:47 karens Exp $
 Date Module 5.2
 =================
 
@@ -9,7 +9,6 @@ Version 5.2-dev
 - Found a better way to generate random timezones using mt_rand() instead of rand() to avoid getting lots of duplicates.
 - Found some timezones that can't be used in PHP4 because we don't have offset information, so remove them from timezone lists.
 - Fix error in PHP4 dst switch date for North America.
-- Get rid of date-clear-block class in case it is affecting the sporatic problems with popups.
 - #327506 Detect and trap bad timezones in ical import so they don't create errors.
 - Fix the way 'rel=nofollow' was added to the Date browser.
 - #240156 Workaround conflict between Event and Date by using #process on timezone forms to override Event module handling.
