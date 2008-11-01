@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.38 2008/11/01 11:29:06 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.39 2008/11/01 12:33:36 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -142,7 +142,7 @@ function _date_widget($op, &$node, $field, &$items) {
       $process = date_process_values($field);
       foreach ($items as $delta => $item) {
         foreach ($process as $processed) {
-          $date = date_local_date($delta, $item, $timezone, $field, $processed);
+          $date = date_local_date($node, $delta, $item, $timezone, $field, $processed);
           $items[$delta][$processed] = is_object($date) ? date_format($date, DATE_FORMAT_DATETIME) : '';
         }
       }
@@ -196,9 +196,12 @@ function _date_widget($op, &$node, $field, &$items) {
  * widget settings and item values, using field settings to
  * determine what to do with empty values.
  */
-function date_local_date($delta, $item, $timezone, $field, $part = 'value') {
-
-  if ($part == 'value') {
+function date_local_date($node, $delta, $item, $timezone, $field, $part = 'value') {
+  if (!empty($node->nid)) {
+    $default_value = '';
+    $default_value_code = '';
+  }
+  elseif ($part == 'value') {
     $default_value = $field['widget']['default_value'];
     $default_value_code = $field['widget']['default_value_code'];
   }
