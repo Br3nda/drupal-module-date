@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.31 2008/10/31 12:47:17 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.32 2008/11/01 11:35:06 karens Exp $
 
 /**
  * @file
@@ -316,7 +316,7 @@ if (!function_exists('timezone_offset_get')) {
  *    the offset in seconds for the supplied date object.
  */
   function timezone_offset_get($timezone, $date) {
-    if (empty($timezone) || $timezone == 'UTC') {
+    if (empty($timezone) || $timezone == 'UTC' || !date_timezone_is_valid($timezone)) {
       return 0;
     }
     static $zones = array(), $offsets = array();
@@ -605,7 +605,7 @@ function date_is_dst($timestamp, $timezone = NULL) {
   if (empty($timezone_map)) {
     include(drupal_get_path('module', 'date_php4') .'/date_php4_tz_map.inc');
   }
-  $region = $timezone_map[$timezone]['dst_region'];
+  $region = array_key_exists($timezone, $timezone_map) ? $timezone_map[$timezone]['dst_region'] : 0;
 
   // This should really be done with date_date() to get the right timezone
   // adjustment for the year, but that leads to circular code that won't
