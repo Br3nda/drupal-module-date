@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.37 2008/09/26 12:19:43 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.38 2008/11/01 11:29:06 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -400,14 +400,17 @@ function date_combo_validate($element) {
 
       // Call the right function to turn this altered user input into
       // a new value for the todate.
-      $function = $field['widget']['type'] .'_input_value';
-      $to_date = $function($element[$to_field]);
+      $to_date = date_input_value($field, $element[$to_field]);
       $item[$to_field] = $to_date;
     }
     else {
       $item[$to_field] = $item[$from_field];
     }
     if ($item[$from_field] > $item[$to_field]) {
+      $error_field = implode('][', $element['#parents']) .'][value2]['. array_shift(array_keys($merged_date));
+      $element[$to_field]['#value'] = $merged_date;
+      $to_date = date_input_value($field, $element[$to_field]);
+      form_set_value($element[$to_field], $to_date, $form_state);
       form_set_error(implode('][', $element['#parents']), t('The To date must be greater than the From date.'));
     }
     else {

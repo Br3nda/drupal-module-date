@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.42 2008/10/10 15:16:55 karens Exp $
+// $Id: date.module,v 1.39.2.43 2008/11/01 11:29:06 karens Exp $
 
 /**
  * @file
@@ -102,6 +102,20 @@ function date_widget_info() {
      );
   }
   return $info;
+}
+
+function date_input_value($field, $element) {
+  switch ($field['widget']['type']) {
+    case 'date_text':
+      $function = 'date_text_input_value';
+      break;
+    case 'date_popup':
+      $function = 'date_popup_input_value';
+      break;
+    default:
+      $function = 'date_select_input_value';
+  }
+  return $function($element);
 }
 
 /**
