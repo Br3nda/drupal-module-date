@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.193 2008/11/01 12:33:36 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.194 2008/11/02 14:04:25 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #329102 Fix mistake in README.txt.
 - #317057 Make sure existing optional date with empty value doesn't get reset to current date.
 - Add more checks in PHP4 functions to return usable values when we don't have complete timezone information in the PHP4 wrapper.
 - Add helper function to convert input values based on field type.
