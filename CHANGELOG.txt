@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.194 2008/11/02 14:04:25 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.195 2008/11/03 16:20:30 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Fix bug in PHP4 calculation of date_date_set() that was getting the day wrong.
 - #329102 Fix mistake in README.txt.
 - #317057 Make sure existing optional date with empty value doesn't get reset to current date.
 - Add more checks in PHP4 functions to return usable values when we don't have complete timezone information in the PHP4 wrapper.
