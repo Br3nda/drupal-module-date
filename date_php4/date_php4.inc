@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.33 2008/11/03 16:20:30 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.34 2008/11/03 18:10:54 karens Exp $
 
 /**
  * @file
@@ -476,11 +476,13 @@ if (!function_exists('date_modify')) {
             date_part_extract($cdate, 'month'),
             date_part_extract($cdate, 'year'));
         }
-        // Move to the right day of the week.
-        for ($i = 1; $i <= $dow; $i++) {
-          $cdate = date_calc_next_day(date_part_extract($cdate, 'day'),
-            date_part_extract($cdate, 'month'),
-            date_part_extract($cdate, 'year'));
+        // Move to the right day of the week, if we're not looking for the first day.
+        if ($dow != variable_get('date_first_day', 1)) {
+          for ($i = 1; $i <= $dow; $i++) {
+            $cdate = date_calc_next_day(date_part_extract($cdate, 'day'),
+              date_part_extract($cdate, 'month'),
+              date_part_extract($cdate, 'year'));
+          }
         }
         $date->value = $cdate .' '. $time;
       }
