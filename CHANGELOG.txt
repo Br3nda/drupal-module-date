@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.199 2008/11/04 16:17:57 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.200 2008/11/04 16:18:53 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Add repeating dates to hook_content_generate().
 - #296529 Update repeating date computations to properly adjust the UNTIL date to the right time and timezone so the end date gets picked up correctly.
 - Move repeating date computations into their own function so they can be used by hook_content_generate.
 - #326732 Fix local task to create Date repeats tab, check for valid node and add !may_cache.
