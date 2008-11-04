@@ -4,7 +4,7 @@
  *
  * Included only when needed.
  */
-function _date_content_generate($node, $field) {
+function _date_content_generate(&$node, $field) {
   $node_field = array();
   if (isset($field['widget']['year_range'])) {
     $split = explode(':', $field['widget']['year_range']);
@@ -24,9 +24,11 @@ function _date_content_generate($node, $field) {
 	$seconds = mt_rand(0, ($max_days * 86400));
 	date_modify($start, "+$seconds seconds");
 
-	// Modify To date by 1 hour to 1 day.
+	// Modify To date by 1 hour to 3 days, shorter for repeating dates
+	// longer for others.
 	$start2 = drupal_clone($start);
-  date_modify($start2, '+'. mt_rand(60, 1440) .' minutes');  
+	$max = !empty($field['repeat']) ? 720 : 4320;
+  date_modify($start2, '+'. mt_rand(60, $max) .' minutes');  
     
   if ($field['tz_handling'] == 'date') {
     // Choose a random timezone.
@@ -69,9 +71,68 @@ function _date_content_generate($node, $field) {
       }
     }
   }
-  if ($field['multiple'] == 99) {
-    // TODO
+  if (!empty($field['repeat'])) {
+    include_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_calc.inc');
+    include_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
+    include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
+  
     // Create a repeating date.
+    $duration = date_difference($start, $start2);
+    $form_values = array();
+    $which = rand(0, 2);
+    switch ($which) {
+      case 0:
+        $dows = array_keys(date_repeat_dow_options());
+        $day = date_content_generate_key($dows);
+        $dow = $dows[$day];
+        $options = array('MONTHLY', 'DAILY', 'WEEKLY');
+        $freq = date_content_generate_key($options);
+        $freq = $options[$freq];
+        $form_values['FREQ'] = $freq;
+        $form_values['BYDAY'] = array($dow);
+        break;
+      case 1:
+        $mo = rand(1, 28);
+        $options = array('YEARLY', 'MONTHLY');
+        $freq = date_content_generate_key($options);
+        $freq = $options[$freq];
+        $form_values['FREQ'] = $freq;
+        $form_values['BYMONTHDAY'] = array($mo);
+        break;
+      case 2:
+        $mo = rand(1, 12);
+        $options = array('YEARLY', 'MONTHLY');
+        $freq = date_content_generate_key($options);
+        $freq = $options[$freq];
+        $form_values['FREQ'] = $freq;
+        $form_values['BYMONTH'] = array($mo);
+        break;
+    }
+    
+    $intervals = array_keys(INTERVAL_options());
+    unset($intervals[0]);
+    $interval = $intervals[rand(1, 3)];
+    $form_values['INTERVAL'] = $interval;
+    
+    $period = str_replace('LY', '', $freq);
+    date_modify($start2, '+'. (mt_rand(2, 5) * $interval) .' '. strtolower($period));
+    $until = date_format($start2, 'Y-m-d H:i:s');
+    $form_values['UNTIL'] = array('datetime' => $until, 'tz' => 'UTC');
+    
+    $rrule = date_api_ical_build_rrule($form_values);
+    $values = date_repeat_build_dates($rrule, $form_values, $field, $node_field);
+    
+    $start = $node_field;
+    $node_field = array(0 => $start);
+    $node_field[0]['rrule'] = $rrule;
+    $node_field += $values;
   }
   return $node_field;
+}
+
+function date_content_generate_key($array) {
+  $keys = array_keys($array);
+  $min = array_shift($keys);
+  $max = array_pop($keys);
+  return mt_rand($min, $max);
 }
