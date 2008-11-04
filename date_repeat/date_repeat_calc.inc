@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.4.2.10 2008/11/03 20:53:19 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.4.2.11 2008/11/04 13:39:47 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -254,8 +254,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
       // middle of the possible week days, needed so we don't prematurely
       // jump to the next week. The date_repeat_add_dates() function will
       // keep dates outside the range from getting added.
-      $dow_days = date_repeat_dow_day_options(FALSE);
-      if ($dow_days[date_repeat_dow2day(date_format($current_day, 'w'))] != $week_start_day) {
+      if (date_format($current_day, 'l') != $day) {  
         date_modify($current_day, '-1 '. $week_start_day);
       }
       while (!$finished) {
@@ -267,9 +266,12 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
             // function is insufficient to test whether to include this date
             // if we are using a rule like 'every other month', so we must
             // explicitly test it here.
-            //if (date_format($current_day, 'l') != $day) {
+            
+            // If we're already on the right day, don't jump or we
+            // will prematurely move into the next week.
+            if (date_format($current_day, 'l') != $day) {
               date_modify($current_day, '+1 '. $day);
-            //}
+            }
             if ($rrule['FREQ'] == 'WEEKLY' || date_format($current_day, $format) == $current_period) {
               date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule);
             }
@@ -293,10 +295,11 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions) {
           continue;
         }
 
+        // We'll be at the end of a week, month, or year when 
+        // we get to this point in the code.
+        
         // Go back to the beginning of this period before we jump, to
-        // ensure we jump to the first day of the next period. We've moved to
-        // the next month or year, so it takes an extra jump back to get
-        // back to the first day of the current period.
+        // ensure we jump to the first day of the next period.
         switch ($rrule['FREQ']) {
           case 'WEEKLY':
             date_modify($current_day, '+1 '. $week_start_day);
