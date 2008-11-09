@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.21 2008/10/31 10:16:31 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.22 2008/11/09 11:58:39 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -319,6 +319,13 @@ function date_ical_parse($icaldatafolded = array()) {
  *   It will take more work to figure how to support that.
  */
 function date_ical_parse_date($field, $data) {
+  $items = array('datetime' => '', 'all_day' => '', 'tz' => '');
+  if (empty($data)) {
+    return $items;
+  }
+  // Make this a little more whitespace independent
+  $data = trim($data);
+
   // Turn the properties into a nice indexed array of
   // array(PROPERTYNAME => PROPERTYVALUE);
   $field_parts = preg_split('/[;:]/', $field);
@@ -521,72 +528,6 @@ function date_ical_date($ical_date, $to_tz = FALSE) {
 }
 
 /**
- * Turn an array of events into a valid iCalendar file
- *
- * @param $events
- *   An array of events where each event is an array keyed on the uid:
- *    'start'         => start date object,
- *    'end'           => end date object,
- *                         optional, omit for all day event.
- *    'summary'       => Title of event (Text)
- *    'description'   => Description of event (Text)
- *    'location'      => Location of event (Text)
- *    'uid'           => ID of the event for use by calendaring program.
- *                         Recommend the url of the node
- *    'url'           => URL of event information
- *
- * @param $calname
- *   Name of the calendar.  Will use site name if none is specified.
- *
- * @return
- *   Text of a date_icalendar file.
- *
- * @todo
- *   add folding and more ical elements
- */
-function date_ical_export($events, $calname = NULL) {
-  $output .= "BEGIN:VCALENDAR\nVERSION:2.0\n";
-  $output .= "METHOD:PUBLISH\n";
-  $output .= 'X-WR-CALNAME:'. date_ical_escape_text($calname ? $calname : variable_get('site_name', '')) ."\n";
-  $output .= "PRODID:-//Drupal iCal API//EN\n";
-  foreach ($events as $uid => $event) {
-    // Skip any items with empty dates.
-    if (!empty($event['start'])) {
-      $output .= "BEGIN:VEVENT\n";
-      $output .= "DTSTAMP;TZID=". date_default_timezone_name() .";VALUE=DATE-TIME:". date_format(date_now(), DATE_FORMAT_ICAL) ."\n";
-      $timezone = timezone_name_get(date_timezone_get($event['start']));
-      if (!empty($timezone)) {
-        $timezone = "TZID=$timezone;";
-      }
-      else {
-        $timezone = '';
-      }
-      if ($event['start'] && $event['end']) {
-        $output .= "DTSTART;". $timezone ."VALUE=DATE-TIME:". date_format($event['start'], DATE_FORMAT_ICAL) ."\n";
-        $output .= "DTEND;". $timezone ."VALUE=DATE-TIME:". date_format($event['end'], DATE_FORMAT_ICAL) ."\n";
-      }
-      else {
-        $output .= "DTSTART;". $timezone ."VALUE=DATE-TIME:". date_format($event['start'], DATE_FORMAT_ICAL) ."\n";
-      }
-      $output .= "UID:". ($event['uid'] ? $event['uid'] : $uid) ."\n";
-      if ($event['url']) {
-        $output .= "URL;VALUE=URI:". $event['url'] ."\n";
-      }
-      if ($event['location']) {
-        $output .= "LOCATION:". date_ical_escape_text($event['location']) ."\n";
-      }
-      $output .= "SUMMARY:". date_ical_escape_text($event['summary']) ."\n";
-      if ($event['description']) {
-        $output .= "DESCRIPTION:". date_ical_escape_text($event['description']) ."\n";
-      }
-      $output .= "END:VEVENT\n";
-    }
-  }
-  $output .= "END:VCALENDAR\n";
-  return $output;
-}
-
-/**
  * Escape #text elements for safe iCal use
  *
  * @param $text
@@ -660,8 +601,10 @@ function date_api_ical_build_rrule($form_values) {
   if (array_key_exists('BYMONTHDAY', $form_values) && $BYMONTHDAY = implode(",", $form_values['BYMONTHDAY'])) {
     $RRULE .= ';BYMONTHDAY='. $BYMONTHDAY;
   }
+  // The UNTIL date is supposed to always be expressed in UTC.
   if (array_key_exists('UNTIL', $form_values) && array_key_exists('datetime', $form_values['UNTIL'])) {
-    $RRULE .= ';UNTIL='. date_convert($form_values['UNTIL']['datetime'], DATE_DATETIME, DATE_ICAL);
+    $until = date_ical_date($form_values['UNTIL'], 'UTC');
+    $RRULE .= ';UNTIL='. date_format($until, DATE_FORMAT_ICAL) .'Z';
   }
 
   // iCal rules presume the week starts on Monday unless otherwise specified,
@@ -691,4 +634,70 @@ function date_api_ical_build_rrule($form_values) {
     $RRULE .= chr(13) . chr(10) .'EXDATE:'. $form_values['EXDATE'];
   }
   return $RRULE;
+}
+
+/**
+ * Turn an array of events into a valid iCalendar file
+ *
+ * @param $events
+ *   An array of events where each event is an array keyed on the uid:
+ *    'start'         => start date object,
+ *    'end'           => end date object,
+ *                         optional, omit for all day event.
+ *    'summary'       => Title of event (Text)
+ *    'description'   => Description of event (Text)
+ *    'location'      => Location of event (Text)
+ *    'uid'           => ID of the event for use by calendaring program.
+ *                         Recommend the url of the node
+ *    'url'           => URL of event information
+ *
+ * @param $calname
+ *   Name of the calendar.  Will use site name if none is specified.
+ *
+ * @return
+ *   Text of a date_icalendar file.
+ *
+ * @todo
+ *   add folding and more ical elements
+ */
+function date_ical_export($events, $calname = NULL) {
+  $output .= "BEGIN:VCALENDAR\nVERSION:2.0\n";
+  $output .= "METHOD:PUBLISH\n";
+  $output .= 'X-WR-CALNAME:'. date_ical_escape_text($calname ? $calname : variable_get('site_name', '')) ."\n";
+  $output .= "PRODID:-//Drupal iCal API//EN\n";
+  foreach ($events as $uid => $event) {
+    // Skip any items with empty dates.
+    if (!empty($event['start'])) {
+      $output .= "BEGIN:VEVENT\n";
+      $output .= "DTSTAMP;TZID=". date_default_timezone_name() .";VALUE=DATE-TIME:". date_format(date_now(), DATE_FORMAT_ICAL) ."\n";
+      $timezone = timezone_name_get(date_timezone_get($event['start']));
+      if (!empty($timezone)) {
+        $timezone = "TZID=$timezone;";
+      }
+      else {
+        $timezone = '';
+      }
+      if ($event['start'] && $event['end']) {
+        $output .= "DTSTART;". $timezone ."VALUE=DATE-TIME:". date_format($event['start'], DATE_FORMAT_ICAL) ."\n";
+        $output .= "DTEND;". $timezone ."VALUE=DATE-TIME:". date_format($event['end'], DATE_FORMAT_ICAL) ."\n";
+      }
+      else {
+        $output .= "DTSTART;". $timezone ."VALUE=DATE-TIME:". date_format($event['start'], DATE_FORMAT_ICAL) ."\n";
+      }
+      $output .= "UID:". ($event['uid'] ? $event['uid'] : $uid) ."\n";
+      if ($event['url']) {
+        $output .= "URL;VALUE=URI:". $event['url'] ."\n";
+      }
+      if ($event['location']) {
+        $output .= "LOCATION:". date_ical_escape_text($event['location']) ."\n";
+      }
+      $output .= "SUMMARY:". date_ical_escape_text($event['summary']) ."\n";
+      if ($event['description']) {
+        $output .= "DESCRIPTION:". date_ical_escape_text($event['description']) ."\n";
+      }
+      $output .= "END:VEVENT\n";
+    }
+  }
+  $output .= "END:VCALENDAR\n";
+  return $output;
 }

@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.9.2.18 2008/11/04 16:17:58 karens Exp $
+//$Id: date_repeat.inc,v 1.9.2.19 2008/11/09 11:58:39 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -150,18 +150,10 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
   $duration = date_difference($start, $end);
   $start_datetime = date_format($start, DATE_FORMAT_DATETIME);
     
-  // The UNTIL date has no time, set it to the same time as the
-  // start date to be sure the last day will be correctly included.
-  $end = date_ical_date($values['UNTIL'], $timezone);
-  $hour = intval(date_format($start, 'H'));
-  $minute = intval(date_format($start, 'i'));
-  $second = intval(date_format($start, 's'));
-  date_time_set($end, $hour, $minute, $second);
+  if (!empty($values['UNTIL']['datetime'])) {
+    $end = date_ical_date($values['UNTIL'], $timezone);
+  }
   $end_datetime = date_format($end, DATE_FORMAT_DATETIME);
-  $values['UNTIL']['datetime'] = $end_datetime;
-  
-  // Rebuild the RRULE with the times.
-  $rrule = date_api_ical_build_rrule($values);
     
   // Split the RRULE into RRULE and EXDATE parts.
   $parts = date_repeat_split_rrule($rrule);

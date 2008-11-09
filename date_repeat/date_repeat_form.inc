@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.5.2.12 2008/10/03 13:54:12 karens Exp $
+// $Id: date_repeat_form.inc,v 1.5.2.13 2008/11/09 11:58:39 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -39,7 +39,7 @@ function _date_repeat_rrule_process($element) {
   if (empty($element['#date_repeat_widget'])) {
     $element['#date_repeat_widget'] = module_exists('date_popup') ? 'date_popup' : 'date_select';
   }
-  $element['#date_format'] = date_limit_format($element['#date_format'], array('year', 'month', 'day'));
+  //$element['#date_format'] = date_limit_format($element['#date_format'], array('year', 'month', 'day'));
   if (is_array($element['#value'])) {
     $element['#value'] = date_repeat_merge($element['#value'], $element);
     $rrule = date_api_ical_build_rrule($element['#value']);
@@ -54,7 +54,16 @@ function _date_repeat_rrule_process($element) {
   $parts = date_repeat_split_rrule($rrule);
   $rrule = $parts[0];
   $exceptions = $parts[1];
-
+  $timezone = !empty($element['#date_timezone']) ? $element['#date_timezone'] : date_default_timezone_name();
+  $merged_values = date_repeat_merge($rrule, $element);
+  
+  $UNTIL = '';
+  if (!empty($merged_values['UNTIL']['datetime'])) {
+    $until_date = date_make_date($merged_values['UNTIL']['datetime'], $merged_values['UNTIL']['tz']);
+    date_timezone_set($until_date, timezone_open($timezone));
+    $UNTIL = date_format($until_date, DATE_FORMAT_DATETIME);
+  }
+  
   $element['#type'] = 'fieldset';
   $element['#title'] = t('Repeat');
   $element['#description'] = t('Choose a frequency and period to repeat this date. If nothing is selected, the date will not repeat.');
@@ -83,10 +92,6 @@ function _date_repeat_rrule_process($element) {
     '#suffix' => '</div>',
   );
 
-  $UNTIL = '';
-  if (!empty($rrule['UNTIL']['datetime'])) {
-    $UNTIL = $rrule['UNTIL']['datetime'];
-  }
   $element['UNTIL'] = array(
     '#tree' => TRUE,
     '#prefix' => '<div class="date-clear">',
@@ -96,7 +101,7 @@ function _date_repeat_rrule_process($element) {
       '#title' => t('Until'),
       '#description' => t('Date to stop repeating this item.'),
       '#default_value' => $UNTIL,
-      '#date_timezone' => !empty($element['#date_timezone']) ? $element['#date_timezone'] : date_default_timezone_name(),
+      '#date_timezone' => $timezone,
       '#date_format' => !empty($element['#date_format']) ? $element['#date_format'] : 'Y-m-d',
       '#date_text_parts'  => !empty($element['#date_text_parts']) ? $element['#date_text_parts'] : array(),
       '#date_year_range'  => !empty($element['#date_year_range']) ? $element['#date_year_range'] : '-3:+3',
@@ -108,7 +113,6 @@ function _date_repeat_rrule_process($element) {
     );
 
   $collapsed = TRUE;
-  $merged_values = date_repeat_merge($rrule, $element);
   if (!empty($merged_values['BYDAY']) || !empty($merged_values['BYMONTH'])) {
     $collapsed = FALSE;
   }
