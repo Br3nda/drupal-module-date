@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.44 2008/11/04 13:17:31 karens Exp $
+// $Id: date.module,v 1.39.2.45 2008/11/10 13:23:20 karens Exp $
 
 /**
  * @file
@@ -154,16 +154,17 @@ function date_field_formatter($field, $item, $formatter, $node) {
   // on the node itself unless we're showing all dates.
   if (empty($node->date_id) && empty($node->date_repeat_show) // Make sure no date was specifically requested
     && module_exists('date_repeat') && $field['repeat'] == 1) {
-    $node->date_id = 'date:'. $node->nid .':'. $field['field_name'] .':0:0';
+    $node->date_id = 'date:'. $node->nid .':'. $field['field_name'] .':'. $item['#delta'] .':0';
   }
   // If we're trying to display only a single date on a node, see if
   // this is the right one.
-  if (isset($node->date_id) && isset($item['#delta'])) {
+  if (!empty($node->date_id) && isset($item['#delta'])) {
     list($module, $nid, $field_name, $delta, $other) = explode(':', $node->date_id);
     if ($field_name != $field['field_name'] || $delta != $item['#delta']) {
       return;
     }
   }
+  
   // Call the right theme for this formatter.
   $dates = date_formatter_process($field, $item, $node, $formatter);
   if ($formatter != 'format_interval') {
