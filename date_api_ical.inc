@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.22 2008/11/09 11:58:39 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.23 2008/11/11 14:29:34 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -606,7 +606,11 @@ function date_api_ical_build_rrule($form_values) {
     $until = date_ical_date($form_values['UNTIL'], 'UTC');
     $RRULE .= ';UNTIL='. date_format($until, DATE_FORMAT_ICAL) .'Z';
   }
-
+  // Our form doesn't allow a value for COUNT, but it may be needed by
+  // modules using the API, so add it to the rule.
+  if (array_key_exists('COUNT', $form_values)) {
+    $RRULE .= ';COUNT='. $form_values['COUNT'];
+  }
   // iCal rules presume the week starts on Monday unless otherwise specified,
   // so we'll specify it.
   if (array_key_exists('WKST', $form_values)) {

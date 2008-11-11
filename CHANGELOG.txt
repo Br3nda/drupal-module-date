@@ -1,10 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.202 2008/11/10 13:23:19 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.203 2008/11/11 14:29:33 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Add 'UNTIL' to the RRULE creation function so it can be used by the API and date_content_generate.
+- Update date_content_generate to find more matches in a more limited period.
 - #322845 Make sure delta is passed to date theme so repeating dates display correctly in Views.
 - Make sure repeating date UNTIL date is properly adjusted for timezone.
 - Add repeating dates to hook_content_generate().

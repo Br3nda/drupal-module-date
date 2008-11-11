@@ -17,7 +17,7 @@ function _date_content_generate(&$node, $field) {
   }
   // Pick a random year within the time range,
   // and a random second within that year.
-	$year = date_format(date_now(), 'Y') - $back + rand(0, ($forward + $back));
+	$year = date_format(date_now(), 'Y') - $back + mt_rand(0, ($forward + $back));
 	$start = date_make_date($year .'-01-01 00:00:00', 'UTC');
 	$leap = date_format($start, 'L');
 	$max_days = $leap ? 366 : 365;
@@ -55,7 +55,7 @@ function _date_content_generate(&$node, $field) {
       $format = DATE_FORMAT_DATETIME;
       break;
   }
-  $count = $field['multiple'] > 0 && $field['multiple'] < 99  ? rand(1, 6) : 1;
+  $count = $field['multiple'] > 0 && $field['multiple'] < 99 && empty($field['repeat']) ? mt_rand(1, 6) : 1;
   for($i = 0; $i < $count; $i++) {
     $node_field[$i]['value'] = date_format($start, $format);
     if ($field['todate']) {
@@ -79,10 +79,29 @@ function _date_content_generate(&$node, $field) {
     // Create a repeating date.
     $duration = date_difference($start, $start2);
     $form_values = array();
-    $which = rand(0, 2);
+    
+    // Create the default case more frequently than case 1 or 2.
+    $which = mt_rand(0, 10);
+    $max_items = 10;
     switch ($which) {
-      case 0:
-        $dows = array_keys(date_repeat_dow_options());
+      case 1:
+        $mo = mt_rand(1, 28);
+        $options = array('YEARLY', 'MONTHLY');
+        $freq = date_content_generate_key($options);
+        $freq = $options[$freq];
+        $form_values['FREQ'] = $freq;
+        $form_values['BYMONTHDAY'] = array($mo);
+        break;
+      case 2:
+        $mo = mt_rand(1, 12);
+        $options = array('YEARLY', 'MONTHLY');
+        $freq = date_content_generate_key($options);
+        $freq = $options[$freq];
+        $form_values['FREQ'] = $freq;
+        $form_values['BYMONTH'] = array($mo);
+        break;
+      default:
+        $dows = array_keys(date_content_repeat_dow_options());
         $day = date_content_generate_key($dows);
         $dow = $dows[$day];
         $options = array('MONTHLY', 'DAILY', 'WEEKLY');
@@ -91,39 +110,36 @@ function _date_content_generate(&$node, $field) {
         $form_values['FREQ'] = $freq;
         $form_values['BYDAY'] = array($dow);
         break;
-      case 1:
-        $mo = rand(1, 28);
-        $options = array('YEARLY', 'MONTHLY');
-        $freq = date_content_generate_key($options);
-        $freq = $options[$freq];
-        $form_values['FREQ'] = $freq;
-        $form_values['BYMONTHDAY'] = array($mo);
-        break;
-      case 2:
-        $mo = rand(1, 12);
-        $options = array('YEARLY', 'MONTHLY');
-        $freq = date_content_generate_key($options);
-        $freq = $options[$freq];
-        $form_values['FREQ'] = $freq;
-        $form_values['BYMONTH'] = array($mo);
-        break;
     }
     
     $intervals = array_keys(INTERVAL_options());
     unset($intervals[0]);
-    $interval = $intervals[rand(1, 3)];
+    $interval = $intervals[mt_rand(1, 3)];
     $form_values['INTERVAL'] = $interval;
     
-    $period = str_replace('LY', '', $freq);
-    date_modify($start2, '+'. (mt_rand(2, 5) * $interval) .' '. strtolower($period));
+    switch ($freq) {
+      case 'YEARLY':
+        $period = 'year';
+        break;
+      case 'MONTHLY':
+        $period = 'month';
+        break;
+      case 'WEEKLY':
+        $period = 'week';
+        break;
+      default:
+        $period = 'day';
+        break;
+        
+    }
+    date_modify($start2, '+'. max(1, $forward) .' years');
     $until = date_format($start2, 'Y-m-d H:i:s');
     $form_values['UNTIL'] = array('datetime' => $until, 'tz' => 'UTC');
+    $form_values['COUNT'] = $max_items;
     
     $rrule = date_api_ical_build_rrule($form_values);
     $values = date_repeat_build_dates($rrule, $form_values, $field, $node_field);
     
-    $start = $node_field;
-    $node_field = array(0 => $start);
     $node_field[0]['rrule'] = $rrule;
     $node_field += $values;
   }
@@ -135,4 +151,22 @@ function date_content_generate_key($array) {
   $min = array_shift($keys);
   $max = array_pop($keys);
   return mt_rand($min, $max);
+}
+
+/**
+ * Helper function for BYDAY options.
+ *
+ * Creates options like -1SU and 2TU
+ * Omit options that won't find many matches, like 5th Sunday.
+ */
+function date_content_repeat_dow_options() {
+  $options = array();
+  foreach (date_repeat_dow_count_options() as $count_key => $count_value) {
+    foreach (date_repeat_dow_day_options() as $dow_key => $dow_value) {
+      if ($count_key != 5 && $count_key != -5) {
+        $options[$count_key . $dow_key] = $count_value .' '. $dow_value;
+      }
+    }
+  }
+  return $options;
 }
