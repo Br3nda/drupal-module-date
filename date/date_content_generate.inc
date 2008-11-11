@@ -88,6 +88,9 @@ function date_generate(&$node, $field, $repeat = FALSE) {
     // Create the default case more frequently than case 1 or 2.
     $which = mt_rand(0, 10);
     $max_items = 10;
+    $intervals = array_keys(INTERVAL_options());
+    unset($intervals[0]);
+    $interval = $intervals[mt_rand(1, 3)];
     switch ($which) {
       case 1:
         $mo = mt_rand(1, 28);
@@ -95,6 +98,10 @@ function date_generate(&$node, $field, $repeat = FALSE) {
         $freq = date_content_generate_key($options);
         $freq = $options[$freq];
         $form_values['FREQ'] = $freq;
+        // Make sure we'll find a match in our range.
+        if ($freq == 'YEARLY') {
+          $interval = 1;
+        }
         $form_values['BYMONTHDAY'] = array($mo);
         break;
       case 2:
@@ -103,6 +110,10 @@ function date_generate(&$node, $field, $repeat = FALSE) {
         $freq = date_content_generate_key($options);
         $freq = $options[$freq];
         $form_values['FREQ'] = $freq;
+        // Make sure we'll find a match in our range.
+        if ($freq == 'YEARLY') {
+          $interval = 1;
+        }
         $form_values['BYMONTH'] = array($mo);
         break;
       default:
@@ -117,9 +128,6 @@ function date_generate(&$node, $field, $repeat = FALSE) {
         break;
     }
     
-    $intervals = array_keys(INTERVAL_options());
-    unset($intervals[0]);
-    $interval = $intervals[mt_rand(1, 3)];
     $form_values['INTERVAL'] = $interval;
     
     switch ($freq) {
