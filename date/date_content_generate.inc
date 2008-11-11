@@ -4,8 +4,16 @@
  *
  * Included only when needed.
  */
-function _date_content_generate(&$node, $field) {
-  $node_field = array();
+function _date_content_generate($node, $field) {
+  if (empty($field['repeat'])) {
+    return content_devel_multiple('date_generate', $node, $field);
+  }
+  else {
+    return date_generate($node, $field, TRUE);
+  }
+}
+  
+function date_generate(&$node, $field, $repeat = FALSE) {
   if (isset($field['widget']['year_range'])) {
     $split = explode(':', $field['widget']['year_range']);
     $back = str_replace('-', '', $split[0]);
@@ -55,23 +63,20 @@ function _date_content_generate(&$node, $field) {
       $format = DATE_FORMAT_DATETIME;
       break;
   }
-  $count = $field['multiple'] > 0 && $field['multiple'] < 99 && empty($field['repeat']) ? mt_rand(1, 6) : 1;
-  for($i = 0; $i < $count; $i++) {
-    $node_field[$i]['value'] = date_format($start, $format);
+  $node_field['value'] = date_format($start, $format);
+  if ($field['todate']) {
+    $node_field['value2'] = date_format($start2, $format);
+  }
+  if ($field['tz_handling'] == 'date') {
+    date_timezone_set($start, timezone_open($timezone));
+    $node_field['timezone'] = $timezone;
+    $node_field['offset'] = date_offset_get($start);
     if ($field['todate']) {
-      $node_field[$i]['value2'] = date_format($start2, $format);
-    }
-    if ($field['tz_handling'] == 'date') {
-      date_timezone_set($start, timezone_open($timezone));
-      $node_field[$i]['timezone'] = $timezone;
-      $node_field[$i]['offset'] = date_offset_get($start);
-      if ($field['todate']) {
-        date_timezone_set($start2, timezone_open($timezone));
-        $node_field[$i]['offset2'] = date_offset_get($start2);     	 	
-      }
+      date_timezone_set($start2, timezone_open($timezone));
+      $node_field['offset2'] = date_offset_get($start2);     	 	
     }
   }
-  if (!empty($field['repeat'])) {
+  if ($repeat) {
     include_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_calc.inc');
     include_once('./'. drupal_get_path('module', 'date') .'/date_repeat.inc');
     include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
@@ -140,6 +145,8 @@ function _date_content_generate(&$node, $field) {
     $rrule = date_api_ical_build_rrule($form_values);
     $values = date_repeat_build_dates($rrule, $form_values, $field, $node_field);
     
+    $start = $node_field;
+    $node_field = array(0 => $start);
     $node_field[0]['rrule'] = $rrule;
     $node_field += $values;
   }
