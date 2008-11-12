@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.203 2008/11/11 14:29:33 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.204 2008/11/12 13:43:13 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Fix PHP4 timezone problem that didn't save timezone changes correctly in rare cases when refreshing zones using devel.
 - Add 'UNTIL' to the RRULE creation function so it can be used by the API and date_content_generate.
 - Update date_content_generate to find more matches in a more limited period.
 - #322845 Make sure delta is passed to date theme so repeating dates display correctly in Views.
