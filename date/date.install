@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.32 2008/08/30 13:58:12 karens Exp $
+// $Id: date.install,v 1.21.2.33 2008/11/12 14:19:00 karens Exp $
 function date_install_clear() {
   cache_clear_all('date_', 'cache', '*');
   if (db_table_exists('cache_views')) {
@@ -485,6 +485,53 @@ function date_update_5207() {
     content_clear_type_cache();
   }
   return $ret;
+}
+
+/**
+ * Swap out the generic Content field handlers for the new
+ * date field handlers.
+ */
+function date_update_5208() {
+  $ret = array();
+  if (!module_exists('views')) {
+    return $ret;
+  }
+  drupal_load('module', 'views');
+  views_load_cache();
+  $view_fields = _views_get_fields();
+  $date_types = array(DATE_ISO, DATE_UNIX);
+  foreach ($view_fields as $name => $view_field) {
+    if (isset($view_field['content_field']) && in_array($view_field['content_field']['type'], $date_types)) {
+      $bits = explode('.', $name);
+      $sql = "UPDATE {view_tablefield} SET handler = REPLACE(handler, 'content_views_field_handler_', 'date_views_field_handler_') WHERE tablename = '%s' AND field = '%s'";
+      db_query($sql, $bits[0], $bits[1]);
+    }
+  }
+  cache_clear_all('*', 'cache_views', true);
+  return $ret;    
+}
+
+/**
+ * Update all repeating date delta values with the RRULE
+ * so we can use that info in Views when we pull individual items
+ * out in a query.
+ */
+function date_update_5209() {
+  $ret = array();
+  drupal_load('module', 'content');
+  $fields = content_fields();
+  foreach ($fields as $field) {
+    if (strstr($field['type'], 'date') && !empty($field['repeat'])) {
+      $db_info = content_database_info($field);
+      $table = $db_info['table'];
+      $column = $field['field_name'] .'_rrule';
+      $result = db_query("SELECT DISTINCT nid, vid, $column FROM {". $table ."} WHERE $column <> ''");
+      while ($row = db_fetch_array($result)) {
+        $ret[] = update_sql("UPDATE {". $table ."} SET $column='". $row[$column] ."' WHERE nid=". $row['nid'] ." AND vid=". $row['vid']);
+      }
+    }    
+  }
+  return $ret;    
 }
 
 /**

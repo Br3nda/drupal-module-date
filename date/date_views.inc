@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.45 2008/09/02 17:34:07 karens Exp $
+// $Id: date_views.inc,v 1.26.2.46 2008/11/12 14:19:00 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -16,6 +16,97 @@ function _date_views_style_plugins() {
     'even_empty' => true,
   );
   return $items;
+}
+
+/**
+ * Switch out the regular CCK field handler to use a date version that
+ * can be smarter about how to handle grouped dates.
+ */
+function date_views_field_tables($field) {
+  $field_types = _content_field_types();
+  $tables = content_views_field_tables($field);
+  $key = 'node_data_'. $field['field_name'];
+
+  $db_info = content_database_info($field);
+  $columns = $db_info['columns'];
+  $main_column = array_shift($columns);
+  $tables[$key]['fields'][$main_column['column']]['handler'] = array(
+    'date_views_field_handler_group' => t('Group multiple values'),
+    'date_views_field_handler_ungroup' => t('Do not group multiple values'),
+    'date_views_field_handler_first' => t('Show first value only'),
+    'date_views_field_handler_last' => t('Show last value only'),
+  );
+  return $tables;
+}
+
+function date_views_field_handler_group($field_info, $field_data, $value, $data, $from = 0, $count = 'all', $order = 'ASC') {
+  $view = $GLOBALS['current_view'];
+  $handler = $field_data['handler'];
+  $field = $field_info['content_field'];
+  $items = array();
+  if ($field['multiple']) {
+    $table_alias = "node_data_$field[field_name]";
+    foreach ($field_info['content_db_info']['columns'] as $column => $attributes) {
+      $query_columns[] = "$table_alias.$attributes[column] AS $column";
+    }
+    $query_columns[] = "$table_alias.delta AS delta";
+    
+    // If the view has a minimum/maximum date, limited the grouped
+    // values to the date range.
+    $where = '';
+    if (!empty($view->date_handler) && !empty($view->min_date)) {
+      $date_handler = $view->date_handler;
+      $sql_field = $field_data['fullname'];
+      $replace = date_api_views_query_substitutions($view);
+      $sql1 = $date_handler->sql_where_date('DATE', $sql_field, ">=", date_format($view->min_date, DATE_FORMAT_DATETIME));
+      $sql2 = $date_handler->sql_where_date('DATE', $sql_field, "<=", date_format($view->max_date, DATE_FORMAT_DATETIME));
+      $where = strtr($sql1, $replace) .' AND '. strtr($sql2, $replace);
+    }
+    // Note : this query doesn't need to run through db_rewrite_sql, since the
+    // nids we retrieve have been selected by the views query, which already takes
+    // care of this.
+    $query = "SELECT ". implode(', ', $query_columns) .
+             " FROM {node} node".
+             " LEFT JOIN {". $field_info['content_db_info']['table'] ."} $table_alias ON node.vid = $table_alias.vid".
+             " WHERE node.nid = ". $data->nid . $where .
+             " ORDER BY $table_alias.delta $order";
+    // Select all deltas or only a subset.
+    // Currently only 'all' and first / last items are proposed to the user.
+    $result = ($count == 'all') ? db_query($query) : db_query_range($query, $from, $count);
+
+    while ($item = db_fetch_array($result)) {
+      $item['#delta'] = $item[delta];
+      unset($item['delta']);
+      if ($field['repeat'] && $handler == 'date_views_field_handler_group') {
+        $data->date_repeat_show = TRUE;
+      }
+      $items[] = content_format($field, $item, $field_data['options'], $data);
+      
+    }
+    return theme('content_view_multiple_field', $items, $field, $data);
+  }
+  else {
+    return date_views_field_handler_ungroup($field_info, $field_data, $value, $data);
+  }
+}
+
+function date_views_field_handler_first($field_info, $field_data, $value, $data) {
+  return date_views_field_handler_group($field_info, $field_data, $value, $data, 0, 1, 'ASC');
+}
+
+function date_views_field_handler_last($field_info, $field_data, $value, $data) {
+  return date_views_field_handler_group($field_info, $field_data, $value, $data, 0, 1, 'DESC');
+}
+
+function date_views_field_handler_ungroup($field_info, $field_data, $value, $data) {
+  $field = $field_info['content_field'];
+  $item = array();
+  foreach ($field_info['content_db_info']['columns'] as $column => $attributes) {
+    $view_column_name = $field_data['tablename'] .'_'. $attributes['column'];
+    $item[$column] = $data->$view_column_name;
+  }
+  $item['#delta'] = $data->{$field_data['tablename'] .'_delta'};
+  return content_format($field, $item, $field_data['options'], $data);
 }
 
 /**
@@ -581,6 +672,11 @@ function _date_views_query_alter(&$query, &$view) {
         $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", date_format($range[1], DATE_FORMAT_DATETIME)));
       }
     }
+    else {
+      $range  = $view->date_handler->arg_range($arg);
+    }
+    $view->min_date = $range[0];
+    $view->max_date = $range[1];
   }
 }
 
