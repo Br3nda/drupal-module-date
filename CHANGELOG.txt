@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.204 2008/11/12 13:43:13 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.205 2008/11/12 14:17:11 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Do a little more work on clarifying the repeat descriptions.
 - Fix PHP4 timezone problem that didn't save timezone changes correctly in rare cases when refreshing zones using devel.
 - Add 'UNTIL' to the RRULE creation function so it can be used by the API and date_content_generate.
 - Update date_content_generate to find more matches in a more limited period.
