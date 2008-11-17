@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.46 2008/11/12 14:19:00 karens Exp $
+// $Id: date_views.inc,v 1.26.2.47 2008/11/17 18:01:31 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -677,6 +677,10 @@ function _date_views_query_alter(&$query, &$view) {
     }
     $view->min_date = $range[0];
     $view->max_date = $range[1];
+    if (empty($view->date_fields)) {
+      $view->date_fields = array();
+    }
+    $view->date_fields[] = $field_name;
   }
 }
 

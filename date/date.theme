@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.29 2008/11/12 14:19:00 karens Exp $
+//$Id: date.theme,v 1.2.2.30 2008/11/17 18:01:31 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -231,7 +231,7 @@ function theme_date_views_browser_full_view($view, $nodes, $type) {
       break;
     default:
       $output  .= date_views_browser_navigation($view, $period);
-      $display = 'views_view_nodes';
+      $display = 'date_view_nodes';
       break;
   }
   $output .= theme($display, $view, $nodes, $type, $teasers, $links);
@@ -248,81 +248,16 @@ function theme_date_view_teasers($view, $nodes, $type) {
 /**
  * Display the nodes of a view as plain nodes.
  * 
- * An adaptation of views_view_nodes that sets an id
- * for the specific multiple value of the date in the view.
+ * Add the $view to the $node for use in themes.
  */
 function theme_date_view_nodes($view, $nodes, $type, $teasers = false, $links = true) {
-  foreach ($view->field as $field) {
-    if (substr($field['handler'], 0, '25') == 'date_views_field_handler_') {
-      $name = $field['field'];
-      $type = str_replace('date_views_field_handler_', '', $field['handler']);
-      if (substr($name, -7) == '_value2') {
-        $field_name = substr($name, 0, strlen($name) - 7);
-      }
-      elseif (substr($name, -6) == '_value') {
-        $field_name = substr($name, 0, strlen($name) - 6);
-      }
-      else {
-        $field_name = '';
-        $type = '';
-        continue; 
-      }
-      $delta_field = 'node_data_'. $field_name .'_delta';
-      break;
-    }
-  }
-  $fields = content_fields();
+  $output = '';
   foreach ($nodes as $n) {
     $node = node_load($n->nid);
-    if (!empty($field_name) && isset($node->$field_name)) {
-      switch ($type) {
-        case 'ungroup':
-          $delta = $n->$delta_field;
-          $id = 'date:'. $n->nid .':'. $field_name .':'. $delta .':0';
-          break;
-        case 'first':
-        case 'last':
-        case 'group':
-          if (!empty($view->date_handler) && !empty($view->min_date)) {
-            $field = $fields[$field_name];
-            $format = date_type_format($field['type']);
-            $timezone = date_get_timezone($field['tz_handling']);
-            $db_timezone = date_get_timezone_db($field['tz_handling']);
-            $min_date = $view->min_date;
-            $max_date = $view->max_date;
-            if ($db_timezone != date_default_timezone_name()) {
-              date_timezone_set($min_date, timezone_open($db_timezone));
-              date_timezone_set($max_date, timezone_open($db_timezone));
-            }
-            $min_date = date_format($min_date, $format);
-            $max_date = date_format($max_date, $format);
-            if (empty($item['value2'])) $item['value2'] = $item['value'];
-            $node_field = $node->$field_name;
-            foreach ($node_field as $delta => $item) {
-              if ($item['value'] < $min_date || $item['value2'] > $max_date) {
-                unset($node_field[$delta]);
-              }
-            }
-            $node->$field_name = $node_field;
-          }
-          switch ($type) {
-            case 'first':
-              $delta = min(array_keys($node->$field_name));
-              $id = 'date:'. $n->nid .':'. $field_name .':'. $delta .':0';
-              break;
-            case 'last':
-              $delta = max(array_keys($node->$field_name));
-              $id = 'date:'. $n->nid .':'. $field_name .':'. $delta .':0';
-              break;
-            case 'group':
-              $delta = min(array_keys($node->$field_name));
-              $id = 'date:'. $n->nid .':'. $field_name .':'. $delta .':0';
-              break;
-          }
-          $node->date_repeat_show = TRUE;
-          break;
-      }
-      $node->date_id = $id;
+    $node->view = $view;
+    // Add view field values to the node so the theme can use them.
+    foreach ($n as $key => $value) {
+      $node->$key = $value;
     }
     $output .= node_view($node, $teasers, false, $links);
   }

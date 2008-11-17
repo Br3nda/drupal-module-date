@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.45 2008/11/10 13:23:20 karens Exp $
+// $Id: date.module,v 1.39.2.46 2008/11/17 18:01:31 karens Exp $
 
 /**
  * @file
@@ -150,19 +150,28 @@ function date_field_formatter_info() {
  * Implementation of hook_field_formatter().
  */
 function date_field_formatter($field, $item, $formatter, $node) {
-  // Only display the start date for a repeating date
-  // on the node itself unless we're showing all dates.
-  if (empty($node->date_id) && empty($node->date_repeat_show) // Make sure no date was specifically requested
-    && module_exists('date_repeat') && $field['repeat'] == 1) {
-    $node->date_id = 'date:'. $node->nid .':'. $field['field_name'] .':'. $item['#delta'] .':0';
-  }
-  // If we're trying to display only a single date on a node, see if
-  // this is the right one.
-  if (!empty($node->date_id) && isset($item['#delta'])) {
-    list($module, $nid, $field_name, $delta, $other) = explode(':', $node->date_id);
-    if ($field_name != $field['field_name'] || $delta != $item['#delta']) {
+  // Prepare the node in case it is a view with multiple values 
+  // so it will display the right values.
+  date_prepare_node($node);
+  
+  // Set some default values.
+  $node->date_id = isset($node->date_id) ? (array) $node->date_id : array();
+  $node->date_repeat_show = isset($node->date_repeat_show) ? $node->date_repeat_show : FALSE;
+  
+  // There could be more than one date field in a view or on a node.
+  // If date_id is set for this field and the delta doesn't match, don't display it.
+  foreach ($node->date_id as $key => $id) {
+    list($module, $nid, $field_name, $delta, $other) = explode(':', $id);
+    if ($field_name == $field['field_name'] && isset($item['#delta']) && $delta != $item['#delta']) {
       return;
     }
+  }
+  
+  // Special test for repeating dates with no date id set.
+  // Only display the start date unless we're showing all dates.
+  if (empty($node->date_id) && empty($node->date_repeat_show) && !empty($field['repeat']) 
+  && isset($item['#delta']) && $item['#delta'] != 0) {
+    return;
   }
   
   // Call the right theme for this formatter.
@@ -526,3 +535,123 @@ function date_content_generate($node, $field) {
   require_once('./'. drupal_get_path('module', 'date') .'/date_content_generate.inc');
   return _date_content_generate($node, $field);
 }
+
+/**
+ * Helper function to adapt multiple date fields on a node to view parameters.
+ * 
+ * Called by date theme, needed when a date field is used in a view.
+ */
+function date_prepare_node(&$node) {
+  // Set some default values.
+  $node->date_id = isset($node->date_id) ? (array) $node->date_id : array();
+  $node->date_repeat_show = isset($node->date_repeat_show) ? $node->date_repeat_show : FALSE;
+
+  // Only nodes called from views need special processing.
+  if (empty($node->view)) {
+    return;
+  }
+  
+  // Process the node the first time we encounter it, otherwise return.
+  static $prepared = array();
+  $view = $node->view;
+  if (array_key_exists($view->name, $prepared)) {
+    if (in_array($node->nid, $prepared[$view->name])) {
+      return;
+    }
+  }
+  
+  // Adapt fields that use the CCK Date handler to the view's values.
+  $date_fields = date_handler_fields($view);
+  $fields = content_fields();
+  foreach ($date_fields as $field_name => $type) {
+    $field = $fields[$field_name];
+    if (!empty($field_name) && isset($node->$field_name) && !empty($field['multiple'])) {
+      switch ($type['type']) {
+        case 'ungroup':
+          $delta = $node->$type['delta_field'];
+          $id = 'date:'. $node->nid .':'. $field_name .':'. $delta .':0';
+          break;
+        case 'first':
+        case 'last':
+        case 'group':
+          // If we're working with a grouped value of a field used
+          // to limit the view's date range, limit the group to that range.
+          if (!empty($view->date_handler) && !empty($view->min_date) 
+          && in_array($field_name, $view->date_fields)) {
+            $field = $fields[$field_name];
+            $format = date_type_format($field['type']);
+            $timezone = date_get_timezone($field['tz_handling']);
+            $db_timezone = date_get_timezone_db($field['tz_handling']);
+            $min_date = $view->min_date;
+            $max_date = $view->max_date;
+            if ($db_timezone != date_default_timezone_name()) {
+              date_timezone_set($min_date, timezone_open($db_timezone));
+              date_timezone_set($max_date, timezone_open($db_timezone));
+            }
+            $min_date = date_format($min_date, $format);
+            $max_date = date_format($max_date, $format);
+            if (empty($item['value2'])) $item['value2'] = $item['value'];
+            $node_field = $node->$field_name;
+            foreach ($node_field as $node_delta => $item) {
+              if ($item['value'] < $min_date || $item['value2'] > $max_date) {
+                unset($node_field[$node_delta]);
+              }
+              else {
+                $delta = $node_delta;
+              }
+            }
+            $node->$field_name = $node_field;
+          }
+          switch ($type) {
+            case 'first':
+              $delta = min(array_keys($node->$field_name));
+              $id = 'date:'. $node->nid .':'. $field_name .':'. $delta .':0';
+              break;
+            case 'last':
+              $delta = max(array_keys($node->$field_name));
+              $id = 'date:'. $node->nid .':'. $field_name .':'. $delta .':0';
+              break;
+            case 'group':
+              $delta = min(array_keys($node->$field_name));
+              $id = '';
+              break;
+          }
+          // In a view showing grouped dates, we show repeating values.
+          $node->date_repeat_show = TRUE;
+          break;
+      }
+      $node->date_id[] = $id;
+    }
+  }
+  $prepared[$view->name][] = $node->nid;
+}
+
+/**
+ * Identify all fields in this view that use the CCK Date handler.
+ */
+function date_handler_fields($view) {
+  $field_names = array();
+  foreach ($view->field as $field) {
+    if (substr($field['handler'], 0, '25') == 'date_views_field_handler_') {
+      $name = $field['field'];
+      $type = str_replace('date_views_field_handler_', '', $field['handler']);
+      if (substr($name, -7) == '_value2') {
+        $field_name = substr($name, 0, strlen($name) - 7);
+      }
+      elseif (substr($name, -6) == '_value') {
+        $field_name = substr($name, 0, strlen($name) - 6);
+      }
+      else {
+        $field_name = '';
+        $type = '';
+        continue; 
+      }
+      if (in_array($field_name, $view->date_fields)) {
+        $delta_field = 'node_data_'. $field_name .'_delta';
+        $field_names[$field_name] = array('type' => $type, 'delta_field' => $delta_field);
+      }
+    }
+  }  
+  return $field_names;
+}
+

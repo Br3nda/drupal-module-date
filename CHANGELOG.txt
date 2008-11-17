@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.206 2008/11/12 14:19:00 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.207 2008/11/17 18:01:31 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Adapt processing to make sure only selected dates display in nodes, views, and calendars.
 - Add Views field handler for date that can be smarter about grouping date values in views.
 - Do a little more work on clarifying the repeat descriptions.
 - Fix PHP4 timezone problem that didn't save timezone changes correctly in rare cases when refreshing zones using devel.
