@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.208 2008/11/18 16:41:40 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.209 2008/11/18 16:56:56 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #313933 Don't query for date_browser views when there are no arguments.
 - #314012 Move date_views_filter_value() to date_api.module so it's available if Date module is disabled.
 - Adapt processing to make sure only selected dates display in nodes, views, and calendars.
 - Add Views field handler for date that can be smarter about grouping date values in views.
