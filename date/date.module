@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.46 2008/11/17 18:01:31 karens Exp $
+// $Id: date.module,v 1.39.2.47 2008/11/18 16:41:40 karens Exp $
 
 /**
  * @file
@@ -153,10 +153,6 @@ function date_field_formatter($field, $item, $formatter, $node) {
   // Prepare the node in case it is a view with multiple values 
   // so it will display the right values.
   date_prepare_node($node);
-  
-  // Set some default values.
-  $node->date_id = isset($node->date_id) ? (array) $node->date_id : array();
-  $node->date_repeat_show = isset($node->date_repeat_show) ? $node->date_repeat_show : FALSE;
   
   // There could be more than one date field in a view or on a node.
   // If date_id is set for this field and the delta doesn't match, don't display it.
@@ -437,10 +433,6 @@ function date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_ty
 function date_views_handler_filter_date_value_form($field) {
   require_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
   return _date_views_handler_filter_date_value_form($field);
-}
-function date_views_filter_value($element) {
-  require_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
-  return _date_views_filter_value($element);
 }
 function date_views_timestamp_argument_range_handler($op, &$query, $argtype, $arg = '') {
   require_once('./'. drupal_get_path('module', 'date') .'/date_views.inc');
