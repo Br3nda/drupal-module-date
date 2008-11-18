@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.61 2008/11/18 19:11:55 karens Exp $
+// $Id: date_api.module,v 1.44.2.62 2008/11/18 19:48:02 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -406,14 +406,19 @@ function date_long_formats() {
  *
  * @return array of date() format letters and their regex equivalents.
  */
-function date_format_patterns() {
+function date_format_patterns($strict = FALSE) {
   return array(
-    'd' => '\d{2}',    'j' => '\d{1,2}',    'N' => '\d',      'S' => '\w{2}',
-    'w' => '\d',       'z' => '\d{1,3}',    'W' => '\d{1,2}', 'm' => '\d{2}',
+    'd' => '\d{'. ($strict ? '2' : '1,2') .'}', 
+    'm' => '\d{'. ($strict ? '2' : '1,2') .'}', 
+    'h' => '\d{'. ($strict ? '2' : '1,2') .'}',      
+    'H' => '\d{'. ($strict ? '2' : '1,2') .'}',   
+    'i' => '\d{'. ($strict ? '2' : '1,2') .'}',
+    's' => '\d{'. ($strict ? '2' : '1,2') .'}',
+    'j' => '\d{1,2}',    'N' => '\d',      'S' => '\w{2}',
+    'w' => '\d',       'z' => '\d{1,3}',    'W' => '\d{1,2}',
     'n' => '\d{1,2}',  't' => '\d{2}',      'L' => '\d',      'o' => '\d{4}',
     'Y' => '\d{4}',    'y' => '\d{2}',      'B' => '\d{3}',   'g' => '\d{1,2}',
-    'G' => '\d{1,2}',  'h' => '\d{2}',      'H' => '\d{2}',   'i' => '\d{2}',
-    's' => '\d{2}',    'e' => '\w*',        'I' => '\d',      'T' => '\w*',
+    'G' => '\d{1,2}',  'e' => '\w*',        'I' => '\d',      'T' => '\w*',
     'U' => '\d*',      'z' => '[+-]?\d*',   'O' => '[+-]?\d{4}',
     //Using S instead of w and 3 as well as 4 to pick up non-ASCII chars like German umlaute
     'D' => '\S{3,4}',    'l' => '\S*', 'M' => '\S{3,4}', 'F' => '\S*',

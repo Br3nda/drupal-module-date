@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.210 2008/11/18 19:11:55 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.211 2008/11/18 19:48:02 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #303951 Relax requirements for text date input to allow single digit months and days.
 - #309617 Make DATE_REGEX_LOOSE a bit looser so the @ argument will work right for single digit months and days.
 - #313933 Don't query for date_browser views when there are no arguments.
 - #314012 Move date_views_filter_value() to date_api.module so it's available if Date module is disabled.

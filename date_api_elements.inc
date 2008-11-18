@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.45 2008/11/01 11:27:47 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.46 2008/11/18 19:48:02 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -492,6 +492,7 @@ function date_select_input_value($element) {
  */
 function date_text_validate($element) {
   $value = date_text_input_value($element);
+  
   // If the field is empty and not required, set it to empty and return.
   if (empty($value) && !$element['#required']) {
     form_set_value($element, NULL);
