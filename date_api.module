@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.62 2008/11/18 19:48:02 karens Exp $
+// $Id: date_api.module,v 1.44.2.63 2008/11/19 18:43:47 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1312,7 +1312,7 @@ function date_limit_format($format, $granularity) {
         $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[Yy])';
         break;
       case 'day':
-        $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[lDdj])';
+        $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[l|D|d|dS|j|jS]{1,2})';
         break;
       case 'month':
         $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[FMmn])';
