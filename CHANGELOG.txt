@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.211 2008/11/18 19:48:02 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.212 2008/11/19 01:42:35 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #265076, #324794 Revert attempt to use strtotime to 'guess' text input since it too often ends up silently turning into 'now'.
 - #303951 Relax requirements for text date input to allow single digit months and days.
 - #309617 Make DATE_REGEX_LOOSE a bit looser so the @ argument will work right for single digit months and days.
 - #313933 Don't query for date_browser views when there are no arguments.

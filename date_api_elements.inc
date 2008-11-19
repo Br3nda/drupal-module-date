@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.46 2008/11/18 19:48:02 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.47 2008/11/19 01:42:35 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -530,13 +530,11 @@ function date_text_input_value($element) {
   if (date_is_valid($value)) {
     return $value;
   }
-  else {
-    // A wrapped strtotime, that respects desired timezone (and handles lots of input formats)
-    $date = date_make_date($input, $element['#date_timezone']);
-    if (date_is_valid($date, DATE_OBJECT)) {   
-      return date_format($date, DATE_FORMAT_DATETIME);
-    }
-  }
+  // TODO come back and try to find a way to use strtotime to guess
+  // a valid value. Previous attempts to do it were too forgiving and
+  // invalid input was just silently converted to 'now'.
+  // See http://drupal.org/node/265076.
+  
   return NULL;
 }
 
