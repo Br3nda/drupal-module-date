@@ -1,9 +1,13 @@
-//$Id: CHANGELOG.txt,v 1.1.6.214 2008/11/21 16:27:55 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.215 2008/11/21 21:59:28 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
+
+
+Version 5.2.4
+===============
 
 - #309155 Get rid of all translation during date_repeat calculations, it was causing timeouts with locale module.
 - #336109 Add handling for ordinals to custom date formatting.
