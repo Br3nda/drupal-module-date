@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.4.2.13 2008/11/21 16:27:55 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.4.2.14 2008/11/21 21:09:19 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -260,6 +260,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
       while (!$finished) {
         $period_finished = FALSE;
         while (!$period_finished) {
+          $moved = FALSE;
           foreach ($week_days as $delta => $day) {
             // Find the next occurence of each day in this week, only add it
             // if we are still in the current month or year. The date_repeat_add_dates
@@ -271,12 +272,19 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
             // will prematurely move into the next week.
             if (date_format($current_day, 'l') != $day) {
               date_modify($current_day, '+1 '. $day);
+              $moved = TRUE;
             }
             if ($rrule['FREQ'] == 'WEEKLY' || date_format($current_day, $format) == $current_period) {
               date_repeat_add_dates($days, $current_day, $start_date, $end_date, $exceptions, $rrule);
             }
           }
           $finished = date_repeat_is_finished($current_day, $days, $count, $end_date);
+
+          // Make sure we don't get stuck in endless loop if the current
+          // day never got changed above.
+          if (!$moved) {
+            date_modify($current_day, '+1 day');
+          }
 
           // If this is a WEEKLY frequency, stop after each week,
           // otherwise, stop when we've moved outside the current period.
