@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.23.2.7 2008/11/12 14:17:11 karens Exp $
+// $Id: date_repeat.module,v 1.23.2.8 2008/11/21 16:27:55 karens Exp $
 /**
  * @file
  *
@@ -123,7 +123,7 @@ function date_repeat_dow_options() {
  * dow 2 becomes 'TU', dow 3 becomes 'WE', and so on.
  */
 function date_repeat_dow2day($dow) {
-  $days_of_week = array_keys(date_repeat_dow_day_options());
+  $days_of_week = array_keys(date_repeat_dow_day_options(FALSE));
   return $days_of_week[$dow];
 }
 
@@ -132,7 +132,7 @@ function date_repeat_dow2day($dow) {
  * for a specific week start day.
  */
 function date_repeat_days_ordered($week_start_day) {
-  $days = array_flip(array_keys(date_repeat_dow_day_options()));
+  $days = array_flip(array_keys(date_repeat_dow_day_options(FALSE)));
   $start_position = $days[$week_start_day];
   $keys = array_flip($days);
   if ($start_position > 0) {

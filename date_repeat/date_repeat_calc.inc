@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.4.2.12 2008/11/04 16:17:58 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.4.2.13 2008/11/21 16:27:55 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -175,7 +175,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
     // require that we interate through the whole time period checking each BYDAY.
 
     // Create helper array to pull day names out of iCal day strings.
-    $day_names = date_repeat_dow_day_options();
+    $day_names = date_repeat_dow_day_options(FALSE);
     $days_of_week = array_keys($day_names);
 
     // Parse out information about the BYDAYs and separate them
