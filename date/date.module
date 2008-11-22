@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.48 2008/11/22 13:52:11 karens Exp $
+// $Id: date.module,v 1.39.2.49 2008/11/22 14:28:43 karens Exp $
 
 /**
  * @file
@@ -662,9 +662,6 @@ function date_handler_fields($view) {
    module_load_include('inc', 'date_api', 'date_api_sql');
    
    $db_info = content_database_info($field);
-   if (empty($compare_tz)) {
-     $compare_tz = date_get_timezone($field);
-   }
    
    // Create a DateAPI SQL handler class for this field type.                    
    $handler = new date_sql_handler();
@@ -678,14 +675,10 @@ function date_handler_fields($view) {
      $handler->db_timezone = date_get_timezone_db($field);
    }
    
-   // If there's no TZ conversion, make sure the handler uses the site TZ.    
-   // Needed in case we are doing comparisons to UTC values.   
-   if ($field['tz_handling'] == 'none') {
-     $handler->local_timezone = date_default_timezone_name();
+   if (empty($compare_tz)) {
+     $compare_tz = date_get_timezone($field);
    }
-   else {
-     $handler->local_timezone = $compare_tz;
-  }
+   $handler->local_timezone = $compare_tz;
 
   // Now that the handler is properly initialized, force the DB 
   // to use UTC so no timezone conversions get added to things like
