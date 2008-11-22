@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.34 2008/09/02 19:53:13 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.35 2008/11/22 13:52:11 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -211,6 +211,43 @@ class date_sql_handler {
     return $field;
   }
   
+  /**
+   * Adjust a field value by time interval.
+   * 
+   * @param $field
+   *   The field to be adjusted.
+   * @param $direction
+   *   Either ADD or SUB.
+   * @param $count
+   *   The number of values to adjust.
+   * @param $granularity
+   *   The granularity of the adjustment, should be singular,
+   *   like SECOND, MINUTE, DAY, HOUR.
+   */
+  function sql_date_math($field, $direction, $count, $granularity) {
+    $granularity = strtoupper($granularity);
+    switch ($this->db_type) {
+      case 'mysql':
+      case 'mysqli':
+        switch ($direction) {
+          case 'ADD':
+            return "DATE_ADD($field, INTERVAL $count $granularity)";
+          case 'SUB':
+            return "DATE_SUB($field, INTERVAL $count $granularity)";
+          }
+      
+      case 'pgsql':
+        $granularity .= 'S';
+        switch ($direction) {
+          case 'ADD':
+            return "($field + INTERVAL '$count $granularity')";
+          case 'SUB':
+            return "($field - INTERVAL '$count $granularity')";
+        }
+     }
+     return $field;
+  }  
+
   /**
    * Select a date value from the database, adjusting the value
    * for the timezone.
