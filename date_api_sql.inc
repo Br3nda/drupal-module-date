@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.35 2008/11/22 13:52:11 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.36 2008/11/28 13:11:03 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -107,7 +107,7 @@ class date_sql_handler {
     static $already_set = FALSE;
     $type = $GLOBALS['db_type'];
     if (!$already_set) {
-      if ($type == 'mysqli' && version_compare(db_version(), '4.1.3', '>=')) {
+      if (($type == 'mysqli' || $type == 'mysql') && version_compare(db_version(), '4.1.3', '>=')) {
         db_query("SET @@session.time_zone = '$offset'");
       }
       elseif ($type == 'pgsql') {
