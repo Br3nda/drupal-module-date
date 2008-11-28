@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.49 2008/11/22 14:28:43 karens Exp $
+// $Id: date.module,v 1.39.2.50 2008/11/28 13:19:20 karens Exp $
 
 /**
  * @file
@@ -220,27 +220,25 @@ function date_formatter_process($field, $item, $node, $formatter = 'default') {
     else {
       // create a date object with a gmt timezone from the database value
       $value = $item[$processed];
+      $timezone = date_get_timezone($field['tz_handling'], $item['timezone']);
+      $timezone_db = date_get_timezone_db($field['tz_handling']);
+      
       if ($field['type'] == DATE_ISO) {
         $value = str_replace(' ', 'T', date_fuzzy_datetime($value));
       }
-      $date = date_make_date($value, 'UTC', $field['type']);
+      $date = date_make_date($value, $timezone_db, $field['type']);
       $dates[$processed] = array();
       $dates[$processed]['db']['object'] = $date;
       $dates[$processed]['db']['datetime'] = date_format($date, DATE_FORMAT_DATETIME);
 
-      // For no timezone handling, set local value to the same as the db value.
-      if (!date_timezone_convert($field, $item[$processed])) {
-          $dates[$processed]['local'] = $dates[$processed]['db'];
-      }
-      else {
-        $timezone = date_get_timezone($field['tz_handling'], $item['timezone']);
+      if ($timezone != $timezone_db) {
         date_timezone_set($date, timezone_open($timezone));
-        $dates[$processed]['local']['object'] = $date;
-        $dates[$processed]['local']['datetime'] = date_format($date, DATE_FORMAT_DATETIME);
-        $dates[$processed]['local']['timezone'] = $timezone;
-        $dates[$processed]['local']['offset'] = date_offset_get($date);
       }
-
+      $dates[$processed]['local']['object'] = $date;
+      $dates[$processed]['local']['datetime'] = date_format($date, DATE_FORMAT_DATETIME);
+      $dates[$processed]['local']['timezone'] = $timezone;
+      $dates[$processed]['local']['offset'] = date_offset_get($date);
+      
       //format the date, special casing the 'interval' format which doesnt need to be processed
       $dates[$processed]['formatted'] = '';
       if (is_object($date)) {
@@ -285,19 +283,6 @@ function date_granularity($field) {
     $field['granularity'] = drupal_map_assoc(array('year', 'month', 'day'));
   }
   return array_values(array_filter($field['granularity']));
-}
-
-/**
- * Helper function to determine if any timezone conversion should be
- * done on this field.
- */
-function date_timezone_convert($field, $item = array()) {
-  if ($field['tz_handling'] == 'none'
-    || !in_array('hour', date_granularity($field))
-    || $field['tz_handling'] == 'date' && empty($item['timezone'])) {
-      return FALSE;
-  }
-  return TRUE;
 }
 
 /**
@@ -576,10 +561,8 @@ function date_prepare_node(&$node) {
             $db_timezone = date_get_timezone_db($field['tz_handling']);
             $min_date = $view->min_date;
             $max_date = $view->max_date;
-            if ($db_timezone != date_default_timezone_name()) {
-              date_timezone_set($min_date, timezone_open($db_timezone));
-              date_timezone_set($max_date, timezone_open($db_timezone));
-            }
+            date_timezone_set($min_date, timezone_open($db_timezone));
+            date_timezone_set($max_date, timezone_open($db_timezone));
             $min_date = date_format($min_date, $format);
             $max_date = date_format($max_date, $format);
             if (empty($item['value2'])) $item['value2'] = $item['value'];

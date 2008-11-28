@@ -1,5 +1,5 @@
 <?php
-// $Id: date_copy.module,v 1.9.2.10 2008/09/26 11:48:45 karens Exp $
+// $Id: date_copy.module,v 1.9.2.11 2008/11/28 13:19:20 karens Exp $
 /**
  * Date Copy
  *
@@ -382,8 +382,8 @@ function date_copy_import_ical_form_submit($form_id, $form_values) {
       $timezone = timezone_name_get(date_timezone_get($start_date));
       $offset = date_offset_get($start_date);
       $offset2 = date_offset_get($end_date);
-      date_timezone_set($start_date, 'UTC');
-      date_timezone_set($end_date, 'UTC');
+      date_timezone_set($start_date, date_get_timezone_db($field['tz_handling']));
+      date_timezone_set($end_date, date_get_timezone_db($field['tz_handling']));
       $start = date_limit_value(date_format($start_date, $format), date_granularity($field),  $field['type']);
       $end = date_limit_value(date_format($end_date, $format), date_granularity($field),  $field['type']);
 

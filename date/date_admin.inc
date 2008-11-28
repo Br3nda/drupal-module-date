@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.27 2008/11/12 14:19:00 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.28 2008/11/28 13:19:20 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -387,7 +387,7 @@ function date_field_settings_form($field) {
   // but allow it to be a variable if needed.
   $form['timezone']['timezone_db'] = array(
     '#type' => 'hidden',
-    '#value' => 'UTC',
+    '#value' => date_get_timezone_db($field['tz_handling']),
     );
   if (module_exists('date_repeat')) {
     $form['repeat_collapsed'] = array(
