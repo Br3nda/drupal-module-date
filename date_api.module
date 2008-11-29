@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.64 2008/11/29 15:56:25 karens Exp $
+// $Id: date_api.module,v 1.44.2.65 2008/11/29 16:21:55 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -642,14 +642,11 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME) {
     $date = 'now';
   }
   if (!empty($timezone) && !empty($date)) {
-    if (!is_object($timezone)) {
-      $timezone = timezone_open($timezone);
-    }
     if ($date == 'now') {
-      return date_create('now', $timezone);
+      return date_create('now', timezone_open($timezone));
     }
     elseif ($datetime = date_convert($date, $type, DATE_DATETIME, $timezone)) {
-      return date_create($datetime, $timezone);
+      return date_create($datetime, timezone_open($timezone));
     }
   }
   return NULL;
