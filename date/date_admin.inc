@@ -1,5 +1,5 @@
 <?php
-//$Id: date_admin.inc,v 1.21.2.28 2008/11/28 13:19:20 karens Exp $
+//$Id: date_admin.inc,v 1.21.2.29 2008/11/29 14:12:55 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -284,6 +284,12 @@ function date_field_settings_validate($element) {
   else {
     form_set_value($element['repeat'], 0);
   }
+  if ($form_values['tz_handling'] == 'none') {
+    form_set_value($element['timezone_db'], '');
+  }
+  else {
+    form_set_value($element['timezone_db'], date_get_timezone_db($form_values['tz_handling']));
+  }
 }
 
 /**
@@ -376,7 +382,7 @@ function date_field_settings_form($field) {
   }
   $description = t('Select the timezone handling method to be used for this date field.');
   $description .= date_data_loss_warning('Time zone handling');
-  $form['timezone']['tz_handling'] = array(
+  $form['tz_handling'] = array(
     '#type' => 'select',
     '#title' => t('Time zone handling'),
     '#default_value' => $tz_handling,
@@ -385,7 +391,7 @@ function date_field_settings_form($field) {
   );
   // Force this value to hidden because we don't want to allow it to be changed right now,
   // but allow it to be a variable if needed.
-  $form['timezone']['timezone_db'] = array(
+  $form['timezone_db'] = array(
     '#type' => 'hidden',
     '#value' => date_get_timezone_db($field['tz_handling']),
     );

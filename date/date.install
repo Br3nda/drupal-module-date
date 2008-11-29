@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.33 2008/11/12 14:19:00 karens Exp $
+// $Id: date.install,v 1.21.2.34 2008/11/29 14:12:55 karens Exp $
 function date_install_clear() {
   cache_clear_all('date_', 'cache', '*');
   if (db_table_exists('cache_views')) {
@@ -531,6 +531,27 @@ function date_update_5209() {
       }
     }    
   }
+  return $ret;    
+}
+
+/**
+ * Empty the stored db for timezones that use timezone 'none'.
+ */
+function date_update_5210() {
+  $ret = array();
+  drupal_load('module', 'content');
+  $fields = content_fields();
+  foreach ($fields as $field) {
+    if (strstr($field['type'], 'date') && !empty($field['tz_handling']) && $field['tz_handling'] == 'none') {
+      $row = db_result(db_query("SELECT global_settings FROM {". content_field_tablename() ."} WHERE field_name='". $field['field_name'] ."'"));
+      $settings = unserialize($row);
+      $settings['timezone_db'] = '';
+      $settings = serialize($settings);
+      db_query("UPDATE {". content_field_tablename() ."} SET global_settings='%s' WHERE field_name='%s'", $settings, $field['field_name']);
+    }    
+  }
+  drupal_set_message(t("The database has been updated to correct the stored timezone for fields using timezone 'none'."));
+  content_clear_type_cache();
   return $ret;    
 }
 
