@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.41 2008/11/29 14:20:33 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.42 2008/11/29 15:56:25 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -240,7 +240,7 @@ function date_local_date($node, $delta, $item, $timezone, $field, $part = 'value
       $value = date_fuzzy_datetime($value);
     }
     else {
-      $value = date_convert($value, $field['type'], DATE_DATETIME);
+      $value = date_convert($value, $field['type'], DATE_DATETIME, $timezone);
     }
     $date = date_make_date($value, $timezone_db);
     date_timezone_set($date, timezone_open($timezone));

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.63 2008/11/19 18:43:47 karens Exp $
+// $Id: date_api.module,v 1.44.2.64 2008/11/29 15:56:25 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -648,15 +648,8 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME) {
     if ($date == 'now') {
       return date_create('now', $timezone);
     }
-    elseif ($datetime = date_convert($date, $type, DATE_DATETIME)) {
-      if ($type == DATE_UNIX && timezone_name_get($timezone) != 'UTC') {
-        $date = date_create($datetime, timezone_open('UTC'));
-        date_timezone_set($date, $timezone);
-        return $date;
-      }
-      else {
-        return date_create($datetime, $timezone);
-      }
+    elseif ($datetime = date_convert($date, $type, DATE_DATETIME, $timezone)) {
+      return date_create($datetime, $timezone);
     }
   }
   return NULL;
@@ -969,10 +962,9 @@ function date_week($date) {
  * Date conversion helper function.
  *
  * A variety of ways to convert dates from one type to another.
- * No timezone conversion is done in this operation!!
- *
- * Example: date_convert('2007-03-15 08:30', DATE_DATETIME, DATE_UNIX);
- *  returns unix value for the supplied date.
+ * No timezone conversion is done in this operation, except
+ * when handling timestamps because create_date() assumes
+ * timestamps hold the UTC value for the time.
  *
  * @param mixed $date
  *   the date to convert
@@ -980,8 +972,11 @@ function date_week($date) {
  *   the type of date to convert from
  * @param string $to_type
  *   the type of date to convert to
+ * @param string $tz
+ *   the timezone of the supplied value, only needed when using timestamps
+ *   for dates not set to UTC.
  */
-function date_convert($date, $from_type, $to_type) {
+function date_convert($date, $from_type, $to_type, $tz = 'UTC') {
   if (empty($date) && !$date === 0) return NULL;
   if (empty($from_type) || empty($to_type) || $from_type == $to_type) return $date;
   switch ($from_type) {
@@ -1003,9 +998,9 @@ function date_convert($date, $from_type, $to_type) {
           $replace = array(' ' => 'T', '-' => '', ':' => '');
           return strtr($datetime, $replace);
         case DATE_OBJECT:    
-          return date_create($datetime, timezone_open('UTC'));
+          return date_create($datetime, timezone_open($tz));
         case DATE_UNIX:
-          $obj = date_create($datetime, timezone_open('UTC'));
+          $obj = date_create($datetime, timezone_open($tz));
           return date_format($obj, 'U');  
       }
       break;
@@ -1017,18 +1012,22 @@ function date_convert($date, $from_type, $to_type) {
     case DATE_ISO:
       if (!preg_match(DATE_REGEX_LOOSE, $date)) return NULL;
       $date = date_fuzzy_datetime($date);
-      $obj = date_create($date, timezone_open('UTC'));
+      $obj = date_create($date, timezone_open($tz));
       break;
     case DATE_ICAL:
       if (!preg_match(DATE_REGEX_LOOSE, $date)) return NULL;
       preg_match(DATE_REGEX_LOOSE, $date, $regs);
       $datetime = date_pad($regs[1], 4) .'-'. date_pad($regs[2]) .'-'. date_pad($regs[3]) .
         'T'. date_pad($regs[5]) .':'. date_pad($regs[6]) .':'. date_pad($regs[7]);
-      $obj = date_create($datetime, timezone_open('UTC'));
+      $obj = date_create($datetime, timezone_open($tz));
       break;
     case DATE_UNIX:
       if (!is_numeric($date)) return NULL;
+      // Special case when creating dates with timestamps.
+      // The date_create() function will assume date is UTC value
+      // and will ignore our timezone.
       $obj = date_create("@$date", timezone_open('UTC'));
+      date_timezone_set($obj, timezone_open($tz));
       break;
   }
   switch ($to_type) {
@@ -1143,7 +1142,7 @@ function date_array($obj) {
  * @return integer
  *   the integer value of the requested date part.
  */
-function date_part_extract($date, $part, $type = DATE_DATETIME) {
+function date_part_extract($date, $part, $type = DATE_DATETIME, $tz = 'UTC') {
   $formats = array('year' => 'Y', 'month' => 'n', 'day' => 'j',
     'hour' => 'G', 'minute' => 'i', 'second' => 's');
   $positions = array('year' => 0, 'month' => 5, 'day' => 8,
@@ -1159,7 +1158,11 @@ function date_part_extract($date, $part, $type = DATE_DATETIME) {
     case DATE_ICAL:
       return (integer) substr($date, $ipositions[$part], $part == 'year' ? 4 : 2);
     case DATE_UNIX:
+      // Special case when creating dates with timestamps.
+      // The date_create() function will assume date is UTC value
+      // and will ignore our timezone.
       $date = date_create("@$date", timezone_open('UTC'));
+      date_timezone_set($date, timezone_open($tz));
       return date_format($date, $formats[$part]);
     case DATE_OBJECT:
       return date_format($date, $formats[$part]);
