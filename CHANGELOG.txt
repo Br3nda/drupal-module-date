@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.219 2008/11/29 14:12:55 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.220 2008/11/29 14:20:33 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #340356 Missed removing date_timezone_convert() in one place.
 - #336255 Fix a few remaining places where timezone=none was not being handled correctly, and add update to clean up incorrect values stored in database.
 - Eliminate date_timezone_convert() which wasn't working correctly to adjust dates without timezones and get rid of hard-coded 'UTC' for database values in favor of consistently using date_get_timezone_db().
 - Date sql handler wasn't properly setting db timezone to UTC for mysql databases.
