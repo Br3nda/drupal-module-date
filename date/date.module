@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.50 2008/11/28 13:19:20 karens Exp $
+// $Id: date.module,v 1.39.2.51 2008/11/30 18:49:13 karens Exp $
 
 /**
  * @file
@@ -655,11 +655,11 @@ function date_handler_fields($view) {
      $handler->db_timezone_field = $db_info['columns']['timezone']['column'];
    }
    else {
-     $handler->db_timezone = date_get_timezone_db($field);
+     $handler->db_timezone = date_get_timezone_db($field['tz_handling']);
    }
    
    if (empty($compare_tz)) {
-     $compare_tz = date_get_timezone($field);
+     $compare_tz = date_get_timezone($field['tz_handling']);
    }
    $handler->local_timezone = $compare_tz;
 
