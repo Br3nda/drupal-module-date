@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.221 2008/11/29 15:56:25 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.222 2008/11/30 12:39:06 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Make sure node edit form uses the right timezone for the database and field type.
 - Fix logic error in date_convert when using timestamp with timezone other than UTC.
 - #340356 Missed removing date_timezone_convert() in one place.
 - #336255 Fix a few remaining places where timezone=none was not being handled correctly, and add update to clean up incorrect values stored in database.
