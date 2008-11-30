@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.43 2008/11/30 12:39:06 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.44 2008/11/30 19:34:27 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -356,6 +356,11 @@ function date_combo_validate($element) {
   $field_name = $element['#parents'][0];
   $delta = $element['#parents'][1];
   $item = $form_values[$field_name][$delta];
+  
+  // If the whole field is empty and that's OK, stop now.
+  if (empty($element['#post'][$field_name]) && !$element['#required']) {
+    return;
+  }  
   
   $field = $element['#field'];
   $delta = $element['#delta'];
