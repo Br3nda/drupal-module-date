@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.49 2008/11/18 16:56:56 karens Exp $
+// $Id: date_views.inc,v 1.26.2.50 2008/11/30 13:59:24 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -753,7 +753,7 @@ function date_views_set_timezone(&$date_handler, $field) {
     case 'date' :
       $date_handler->db_timezone = 'UTC';
       $date_handler->local_timezone_field = $field['timezone_field'];
-      $date_handler->local_offset_field = $field['offset_field'];
+      $date_handler->offset_field = $field['offset_field'];
       break;
     case 'none':
       $date_handler->db_timezone = date_default_timezone_name();
