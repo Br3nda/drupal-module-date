@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.228 2008/11/30 19:34:26 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.229 2008/11/30 19:48:28 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #337075 Change background-color:none to background-color:transparent.
 - #324756 Bypass validation for empty, non-required dates.
 - Fix broken Date API test broken by change in API.
 - #340394 Fix four-digit year format for PostgreSQL.
