@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.5.2.13 2008/11/09 11:58:39 karens Exp $
+// $Id: date_repeat_form.inc,v 1.5.2.14 2008/12/03 14:36:28 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -164,7 +164,7 @@ function _date_repeat_rrule_process($element) {
   $element['exceptions'] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
-    '#collapased' => empty($exceptions) ? TRUE : FALSE,
+    '#collapsed' => empty($exceptions) ? TRUE : FALSE,
     '#title' => t('Except'),
     '#description' => t('Dates to omit from the list of repeating dates.'),
     '#prefix' => '<div class="date-repeat">',
