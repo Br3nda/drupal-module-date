@@ -1,5 +1,5 @@
 <?php
-// $Id: date.install,v 1.21.2.34 2008/11/29 14:12:55 karens Exp $
+// $Id: date.install,v 1.21.2.35 2008/12/03 21:03:18 karens Exp $
 function date_install_clear() {
   cache_clear_all('date_', 'cache', '*');
   if (db_table_exists('cache_views')) {
@@ -543,7 +543,7 @@ function date_update_5210() {
   $fields = content_fields();
   foreach ($fields as $field) {
     if (strstr($field['type'], 'date') && !empty($field['tz_handling']) && $field['tz_handling'] == 'none') {
-      $row = db_result(db_query("SELECT global_settings FROM {". content_field_tablename() ."} WHERE field_name='". $field['field_name'] ."'"));
+      $row = db_result(db_query("SELECT global_settings FROM {node_field} WHERE field_name='". $field['field_name'] ."'"));
       $settings = unserialize($row);
       $settings['timezone_db'] = '';
       $settings = serialize($settings);

@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.232 2008/12/03 20:15:19 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.233 2008/12/03 21:03:18 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Fix use of D6 table name in install file.
 - Add ability to analyze a period to period argument, like P1M--P1Y.
 - Add date_increment_round() to date_content_generate to make sure generated dates match increment settings.
 - #301279 Remove README.txt for Date Popup, it's out of date and I'm moving documentation into the d.o handbook and Advanced Help.
