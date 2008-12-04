@@ -65,6 +65,11 @@ img.calendar_trigger {
 	letter-spacing: 1px;
 	background-color: #eee;
 }
+#calendar_div .calendar_control a, 
+#calendar_div .calendar_links a, 
+#calendar_div .calendar_header a {
+  background-color: #eee;
+}
 .calendar_links label { /* disabled links */
 	padding: 2px 5px;
 	color: #666;
