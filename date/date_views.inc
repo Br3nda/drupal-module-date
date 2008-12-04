@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.51 2008/12/04 11:05:17 karens Exp $
+// $Id: date_views.inc,v 1.26.2.52 2008/12/04 11:39:37 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -275,7 +275,7 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   }
       
   // Filter out 5.1 version values that won't work in 5.2.
-  if (!preg_match(DATE_REGEX_LOOSE, $value)) {
+  if ($filterinfo['type'] == 'DATE' && !preg_match(DATE_REGEX_LOOSE, $value)) {
     $value = '';
   }
   if (empty($value) && empty($filter['options'])) {
