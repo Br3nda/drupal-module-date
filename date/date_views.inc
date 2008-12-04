@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.50 2008/11/30 13:59:24 karens Exp $
+// $Id: date_views.inc,v 1.26.2.51 2008/12/04 11:05:17 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -260,9 +260,14 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   // A submitted date_popup will be an array of separate date and time.
   // A submitted date_text will be an array with a single complete date.
   elseif (is_array($filter['value']) && array_key_exists('date', $filter['value'])) {
-    $value = trim($filter['value']['date'] .' '. $filter['value']['time']);
     $format = !empty($field['widget']['input_format_custom']) ? $field['widget']['input_format_custom'] : $field['widget']['input_format'];
-    $value = date_convert_from_custom($value, date_limit_format($format, date_granularity($field)));
+    $format = date_limit_format($format, date_granularity($field));  
+    // If time is empty, make sure the custom format isn't expecting it.
+    if (empty($filter['value']['time'])) {
+      $format = date_limit_format($format, array('year', 'month', 'day'));  
+    }
+    $value = trim($filter['value']['date'] .' '. $filter['value']['time']);
+    $value = date_convert_from_custom($value, $format);
   }
   // The default value is already in the datetime format.
   else {
