@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.47 2008/11/19 01:42:35 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.48 2008/12/04 11:15:42 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -396,10 +396,13 @@ function date_increment_round(&$date, $increment) {
  *  Validation function for date selector.
  */
 function date_select_validate($element) {
-  // Strip field labels out of the results.
-  foreach ($element['#value'] as $field => $field_value) {
-    if (substr($field_value, 0, 1) == '-') {
-      $element['#value'][$field] = '';
+  
+  if (is_array($element['#value'])) {
+    // Strip field labels out of the results.
+    foreach ($element['#value'] as $field => $field_value) {
+      if (substr($field_value, 0, 1) == '-') {
+        $element['#value'][$field] = '';
+      }
     }
   }
  
