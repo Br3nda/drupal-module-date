@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.44 2008/11/30 19:34:27 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.45 2008/12/05 14:06:17 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -361,7 +361,6 @@ function date_combo_validate($element) {
   if (empty($element['#post'][$field_name]) && !$element['#required']) {
     return;
   }  
-  
   $field = $element['#field'];
   $delta = $element['#delta'];
   $from_field = 'value';
@@ -428,7 +427,12 @@ function date_combo_validate($element) {
       $timezone = !empty($item[$tz_field]) ? $item[$tz_field] : $element['#date_timezone'];
       $timezone_db = date_get_timezone_db($field['tz_handling']);
       $item[$tz_field] = $timezone;
-      $from_date = date_make_date($item[$from_field], $timezone);
+      
+      // Use fuzzy_datetime before conversion to get proper value
+      // when granularity is 'year' or 'year' and 'month' only.
+      // Without this, we'd end up defaulting to 'now'.
+      $from_date = date_fuzzy_datetime($item[$from_field]);
+      $from_date = date_make_date($from_date, $timezone);
       $item[$offset_field] = date_offset_get($from_date);
       $to_date = date_make_date($item[$to_field], $timezone);
       $item[$offset_field2] = date_offset_get($to_date);
@@ -436,7 +440,6 @@ function date_combo_validate($element) {
       date_timezone_set($to_date, timezone_open($timezone_db));
       $item[$from_field] = date_format($from_date, date_type_format($field['type']));
       $item[$to_field] = date_format($to_date, date_type_format($field['type']));
-      
       // TODO get RRULE working.
       //$item['rrule'] = $rrule;
       form_set_value($element, $item);
