@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.24 2008/12/06 12:31:59 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.25 2008/12/06 22:18:27 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -76,7 +76,6 @@
  *   like a VALARM nested inside a VEVENT.
  */
 function date_ical_import($filename) {
-  $items = array();
 
   // Fetch the iCal data. If file is a URL, use drupal_http_request. fopen
   // isn't always configured to allow network connections.
@@ -112,6 +111,8 @@ function date_ical_import($filename) {
  *   An array with all the elements from the ical.
  */
 function date_ical_parse($icaldatafolded = array()) {
+  $items = array();
+
   // Verify this is iCal data
   if (trim($icaldatafolded[0]) != 'BEGIN:VCALENDAR') {
     watchdog('date ical', 'Invalid calendar file: !filename', array('!filename' => $filename));
@@ -223,9 +224,10 @@ function date_ical_parse($icaldatafolded = array()) {
       // Split up the line into nice pieces for PROPERTYNAME,
       // PROPERTYATTRIBUTES, and PROPERTYVALUE
       preg_match('/([^;:]+)(?:;([^:]*))?:(.+)/', $line, $matches);
-      $name = strtoupper(trim($matches[1]));
-      $field = $matches[2];
-      $data = $matches[3];
+
+      $name = !empty($matches[1]) ? strtoupper(trim($matches[1])) : '';
+      $field = !empty($matches[1]) ? $matches[2] : '';
+      $data = !empty($matches[1]) ? $matches[3] : '';
 
       $parse_result = '';
       switch ($name) {
