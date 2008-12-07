@@ -1,10 +1,13 @@
-//$Id: CHANGELOG.txt,v 1.1.6.240 2008/12/06 22:18:27 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.241 2008/12/07 01:41:12 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Add more error trapping to ical parser.
+- Add handling to ical parser for odd upcoming.org location format.
+- #341705 Fix broken iCal DURATION parsing.
 - Add some protection against empty or missing info in ical parser.
 - #343190 Add validity testing to date_api_ical_build_rrule().
 - #307166 Make sure timestamps with missing granularity parts in select widgets get defaulted to empty values and saved correctly.
