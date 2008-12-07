@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.27 2008/12/07 01:41:12 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.28 2008/12/07 12:26:49 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -511,20 +511,27 @@ function date_ical_parse_text($field, $data) {
 
 /**
  * Parse location elements.
+ * 
+ * Catch situations like the upcoming.org feed that uses
+ * LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/104/":111 First Street...
+ * or more normal LOCATION;UID=123:111 First Street...
+ * Upcoming feed would have been improperly broken on the ':' in http://
+ * so we paste the $field and $data back together first.
+ * 
+ * Use non-greedy check for ':' in case there are more of them in the address.
  */
 function date_ical_parse_location($field, $data) {
-  // Catch situations like the upcoming.org feed that uses
-  // LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/104/":111 First Street
-  if (preg_match('/UID="(.+)":(.+)/', $field .':'. $data, $matches)) {
-    $data = $matches[1];  
+  if (preg_match('/UID=[?"](.+)[?"][*?:](.+)/', $field .':'. $data, $matches)) {
+    $location = array();
+    $location['UID'] = $matches[1];
+    $location['DESCRIPTION'] = stripslashes($matches[2]);
+    return $location;  
   }
-  // Strip line breaks within element
-  $data = str_replace(array("\r\n ", "\n ", "\r "), '', $data);
-  // Put in line breaks where encoded
-  $data = str_replace(array("\\n", "\\N"), "\n", $data);
-  // Remove other escaping
-  $data = stripslashes($data);
-  return $data;
+  else {
+    // Remove other escaping
+    $location = stripslashes($data);
+    return $location;
+  }
 }
 
 /**
