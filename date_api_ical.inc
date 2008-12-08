@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.28 2008/12/07 12:26:49 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.29 2008/12/08 11:34:41 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -489,8 +489,8 @@ function date_ical_parse_duration(&$subgroup) {
     'all_day' => isset($subgroup['DTSTART']['all_day']) ? $subgroup['DTSTART']['all_day'] : 0,
     'tz' => $timezone,
     );
-  $items['DURATION'] = date_format($date2, 'U') - date_format($date, 'U');
-  $subgroup['DURATION'] = $items;
+  $duration = date_format($date2, 'U') - date_format($date, 'U');
+  $subgroup['DURATION'] = array('DATA' => $data, 'DURATION' => $duration);
 }
 
 /**
