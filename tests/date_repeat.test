@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.test,v 1.6 2008/01/10 17:10:19 karens Exp $
+// $Id: date_repeat.test,v 1.7 2008/12/13 17:55:34 karens Exp $
 /**
  * Test PHP 4 Timezone Conversion
  */
@@ -11,8 +11,8 @@ class DateRepeat extends DrupalTestCase {
   }
 
   function testDateRepeat() {
-    include_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
-    include_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_calc.inc');
+    require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
+    require_once('./'. drupal_get_path('module', 'date_repeat') .'/date_repeat_calc.inc');
     // Examples adapted from http://www.faqs.org/rfcs/rfc2445.html and
     // http://www.kanzaki.com/docs/ical/rrule.html.
 

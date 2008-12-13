@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.install,v 1.19 2008/12/02 21:03:06 karens Exp $
+// $Id: date_api.install,v 1.20 2008/12/13 17:55:32 karens Exp $
 function date_api_set_variables() {
   /**
    * Set absolute minimum and maximum year for dates on this site.

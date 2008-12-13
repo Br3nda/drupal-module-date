@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.52 2008/12/02 21:03:06 karens Exp $
+//$Id: date_api_elements.inc,v 1.53 2008/12/13 17:55:32 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -197,7 +197,8 @@ function date_select_process($element, $edit, $form_state, $form) {
     if ($field != 'timezone') {
       $element[$field] = array(
         '#type' => 'hidden',
-        '#value' => is_object($date) ? intval(date_format($date, $formats[$field])) : 0);
+        '#value' => 0,
+        );
     }
   }
   if (isset($element['#element_validate'])) {

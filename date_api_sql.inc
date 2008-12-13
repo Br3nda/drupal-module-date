@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.12 2008/12/02 21:03:06 karens Exp $
+// $Id: date_api_sql.inc,v 1.13 2008/12/13 17:55:32 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -793,10 +793,24 @@ class date_sql_handler {
     }
     
     // Build a range from a period-only argument (assumes the min date is now.)
-    if (empty($parts[0]['date']) && !empty($parts[0]['period']) && (empty($parts[1]) || empty($parts[1]['date']))) {
+    if (empty($parts[0]['date']) && !empty($parts[0]['period']) && (empty($parts[1]))) {
       $min_date = date_now();
       $max_date = drupal_clone($min_date);
       foreach ($parts[0]['period'] as $part => $value) {
+        date_modify($max_date, "+$value $part");
+      }
+      date_modify($max_date, '-1 second');
+      return array($min_date, $max_date);
+    }
+    // Build a range from a period to period argument
+    if (empty($parts[0]['date']) && !empty($parts[0]['period']) && !empty($parts[1]['period'])) {
+      $min_date = date_now();
+      $max_date = drupal_clone($min_date);
+      foreach ($parts[0]['period'] as $part => $value) {
+        date_modify($min_date, "+$value $part");
+      }
+      date_modify($min_date, '-1 second');
+      foreach ($parts[1]['period'] as $part => $value) {
         date_modify($max_date, "+$value $part");
       }
       date_modify($max_date, '-1 second');
