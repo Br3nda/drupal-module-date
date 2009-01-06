@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.46 2008/12/06 22:18:27 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.47 2009/01/06 22:49:35 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -58,11 +58,14 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
     }
     // For convenience, we process all possible columns in the element,
     // but now we need to remove columns not used by this field.
+    // This unsets values needed by token handling, can't do it.
+    // TODO remove this or find another way? It may not hurt anything
+    // to leave these values here.
     if (is_array($item)) {
       $keys = array_keys($item);
       foreach ($keys as $column => $value) {
         if (!in_array($column, $columns)) {
-          unset($items[$delta][$column]);
+          //unset($items[$delta][$column]);
         }
       }
     }

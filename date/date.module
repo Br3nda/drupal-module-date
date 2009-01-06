@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.51 2008/11/30 18:49:13 karens Exp $
+// $Id: date.module,v 1.39.2.52 2009/01/06 22:49:35 karens Exp $
 
 /**
  * @file
@@ -339,15 +339,16 @@ function date_form_alter($form_id, &$form) {
  * file and included only when processing forms.
  */
 function date_field($op, &$node, $field, &$items, $teaser, $page) {
+  // Add some information needed to interpret token values.
+  $additions[$field['field_name']] = $items;
+  foreach ($items as $delta => $item) {
+    $timezone = isset($item['timezone']) ? $item['timezone'] : '';
+    $additions[$field['field_name']][$delta]['timezone'] = date_get_timezone($field['tz_handling'], $timezone);
+    $additions[$field['field_name']][$delta]['timezone_db'] = date_get_timezone_db($field['tz_handling']);
+    $additions[$field['field_name']][$delta]['date_type'] = $field['type'];
+  }
   switch ($op) {
     case 'load':
-     $additions[$field['field_name']] = $items;
-     foreach ($items as $delta => $item) {
-        $timezone = $item['timezone'];
-        $additions[$field['field_name']][$delta]['timezone'] = date_get_timezone($field['tz_handling'], $timezone);
-        $additions[$field['field_name']][$delta]['timezone_db'] = date_get_timezone_db($field['tz_handling']);
-        $additions[$field['field_name']][$delta]['date_type'] = $field['type'];
-      }
       return $additions;
       break;
       
@@ -359,6 +360,8 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
     case 'insert':
     case 'update':
       require_once('./'. drupal_get_path('module', 'date') .'/date_elements.inc');
+      $items = $additions[$field['field_name']];
+      $node->$field['field_name'] = $additions;
       return _date_field_update($op, $node, $field, $items, $teaser, $page);
       break;
   }

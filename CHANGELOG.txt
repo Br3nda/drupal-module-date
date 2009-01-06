@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.244 2008/12/14 00:04:44 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.245 2009/01/06 22:49:35 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #313704 Make sure date db timezone does not get removed before token handling.
 - #345862 Fix missing close comment tag in datepicker css.
 - Get rid of DURATION time part details in iCal array, we only need the DATA and DURATION.
 - #282521 Do more work on LOCATION to split out UID and handle odd upcoming.org location identifiers.
