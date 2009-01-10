@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.47 2009/01/06 22:49:35 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.48 2009/01/10 22:56:36 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -13,7 +13,9 @@
  */
 function _date_field_validate($op, &$node, $field, &$items, $teaser, $page) {
   $field_name = $field['field_name'];
-
+  if (empty($items)) {
+    return;
+  }
   // Don't try to validate if there were any errors before this point
   // since the element won't have been munged back into a date.
   if (!form_get_errors()) {
