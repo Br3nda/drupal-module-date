@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.52 2009/01/06 22:49:35 karens Exp $
+// $Id: date.module,v 1.39.2.53 2009/01/10 23:10:32 karens Exp $
 
 /**
  * @file
@@ -645,8 +645,8 @@ function date_handler_fields($view) {
  *  - the timezone used for comparison values in the SQL.             
  */
  function date_field_get_sql_handler($field, $compare_tz = NULL) {
-   module_load_include('inc', 'date_api', 'date_api_sql');
-   
+   require_once './'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc';
+
    $db_info = content_database_info($field);
    
    // Create a DateAPI SQL handler class for this field type.                    
