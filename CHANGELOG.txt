@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.246 2009/01/10 22:56:36 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.247 2009/01/10 23:06:33 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #346752 Add RTL css code.
 - #324290 Don't validate when $items is empty.
 - #313704 Make sure date db timezone does not get removed before token handling.
 - #345862 Fix missing close comment tag in datepicker css.
