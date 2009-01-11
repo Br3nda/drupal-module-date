@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.30 2008/11/17 18:01:31 karens Exp $
+//$Id: date.theme,v 1.2.2.31 2009/01/11 13:47:44 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -309,6 +309,7 @@ function theme_date_views_browser_items($view, $nodes, $type, $teasers, $links) 
 /**
  * Adjust from/to date format to account for 'all day'.
  *
+ * @param array $field, the field definition for this date field.
  * @param string $which, which value to return, 'date1' or 'date2'.
  * @param object $date1, a date/time object for the 'from' date.
  * @param object $date2, a date/time object for the 'to' date.
@@ -317,7 +318,7 @@ function theme_date_views_browser_items($view, $nodes, $type, $teasers, $links) 
  * @param object $view, the view this node comes from, if applicable.
  * @return formatted date.
  */
-function theme_date_all_day($which, $date1, $date2, $format, $node, $view = NULL) {
+function theme_date_all_day($field, $which, $date1, $date2, $format, $node, $view = NULL) {
   if (empty($date1) || !is_object($date1)) {
     return '';
   }
@@ -325,26 +326,34 @@ function theme_date_all_day($which, $date1, $date2, $format, $node, $view = NULL
     $date2 = $date1;
   }
   $granularity = array_pop(date_format_order($format));
+  $increment = $field['widget']['increment'];
+  $max_seconds = array_pop(date_seconds('s', TRUE, $increment));
+  $max_minutes = array_pop(date_minutes('i', TRUE, $increment));
+
   switch ($granularity) {
     case 'second':
-      $max_comp = date_format($date2, 'H:i:s') == '23:59:59';
+      $min_comp = date_format($date1, 'H:i:s') == '00:00:00';
+      $max_comp = date_format($date2, 'H:i:s') == '23:'. $max_minutes .':'. $max_seconds;
       break;
     case 'minute':
-      $max_comp = date_format($date2, 'H:i') == '23:59';
+      $min_comp = date_format($date1, 'H:i') == '00:00';
+      $max_comp = date_format($date2, 'H:i') == '23:'. $max_minutes;
       break;
     case 'hour':
+      $min_comp = date_format($date1, 'H') == '00';
       $max_comp = date_format($date2, 'H') == '23';
       break;
     default:
       $max_comp = FALSE;
   }
+  
   // Time runs from midnight to the maximum time -- call it 'All day'.
-  if (date_format($date1, 'H:i:s') == '00:00:00' && $max_comp) {
+  if (date_has_time($field['granularity']) && $min_comp && $max_comp) {
     $format = date_limit_format($format, array('year', 'month', 'day'));
     return trim(date_format_date($$which, 'custom', $format) .' '. theme('date_all_day_label'));
   }
   // There is no time, use neither 'All day' nor time.
-  elseif (date_format($date1, 'H:i:s') == '00:00:00' && date_format($date2, 'H:i:s') == '00:00:00') {
+  elseif (!date_has_time($field['granularity']) || ($min_comp && date_format($date2, 'H:i:s') == '00:00:00')) {
     $format = date_limit_format($format, array('year', 'month', 'day'));
     return date_format_date($$which, 'custom', $format);
   }
