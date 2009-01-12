@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.31 2009/01/11 13:47:44 karens Exp $
+//$Id: date.theme,v 1.2.2.32 2009/01/12 11:25:35 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -326,6 +326,9 @@ function theme_date_all_day($field, $which, $date1, $date2, $format, $node, $vie
     $date2 = $date1;
   }
   $granularity = array_pop(date_format_order($format));
+  if (empty($field['granularity'])) {
+    $field['granularity'] = date_format_order($format);
+  }
   $increment = $field['widget']['increment'];
   $max_seconds = array_pop(date_seconds('s', TRUE, $increment));
   $max_minutes = array_pop(date_minutes('i', TRUE, $increment));
