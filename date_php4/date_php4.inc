@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.34 2008/11/03 18:10:54 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.35 2009/01/12 11:53:19 karens Exp $
 
 /**
  * @file
@@ -755,7 +755,7 @@ function date_is_dst($timestamp, $timezone = NULL) {
   // Have to use reverse logic in southern hemisphere.
   $southern = array(9, 10, 11, 12, 17, 18, 19, 20);
   if (in_array($region, $southern)) {
-    return !($timestamp >= $dststart && $dstend <= $timestamp);
+    return ($timestamp >= $dststart && $dstend <= $timestamp);
   }
   else {
     return ($dststart <= $timestamp && $timestamp <= $dstend);
