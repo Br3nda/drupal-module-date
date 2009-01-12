@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.251 2009/01/12 11:28:23 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.252 2009/01/12 11:30:09 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Fix logic for collapsing the Date repeat fieldset.
 - Date Popup should handle empty time better.
 - #310633 Rework 'all day' logic to correctly handle increments.
 - #346804 Don't use D6 function in D5 version!
