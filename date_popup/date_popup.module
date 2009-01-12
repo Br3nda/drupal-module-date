@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.40 2008/11/30 15:50:51 karens Exp $
+// $Id: date_popup.module,v 1.27.2.41 2009/01/12 11:28:23 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -304,7 +304,7 @@ function date_popup_validate($element) {
   // If the field is empty and not required, set it to empty and return.
   // If the field is empty and required, set error message and return.
   $error_field = implode('][', $element['#parents']);
-  if (empty($element['#value']['date']) && empty($element['#value']['time'])) {
+  if (empty($element['#value']['date'])) {
     if ($element['#required']) {
       // Set message on both date and time to get them highlighted properly.
       $message = t('%field is required.', array('%field' => $element['#title']));
