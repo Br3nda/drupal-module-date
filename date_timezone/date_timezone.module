@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.8.2.14 2008/10/23 11:12:44 karens Exp $
+// $Id: date_timezone.module,v 1.8.2.15 2009/01/12 11:45:09 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -126,7 +126,7 @@ function date_timezone_update_site($element) {
   
   // We overrode the event module's form handling, give it back
   // the values it expected to find in its submission handler.
-  if (module_exists('event')) {
+  if (module_exists('event') && db_table_exists('event_timezones')) {
     $event_zone = date_event_zonelist_by_name(str_replace('_', ' ', $timezone));
     // The Event module will set its own variable.
     form_set_value($element, $event_zone['timezone'] .'|'. $offset);
@@ -153,7 +153,7 @@ function date_timezone_update_user($element) {
   
   // We overrode the event module's form handling, give it back
   // the values it expected to find in its submission handler.
-  if (module_exists('event')) {
+  if (module_exists('event') && db_table_exists('event_timezones')) {
     $event_zone = date_event_zonelist_by_name(str_replace('_', ' ', $timezone));
     // The Event module will update the user record with the timezone id.
     form_set_value($element['timezone'], $event_zone['timezone'] .'|'. $offset);
@@ -235,7 +235,7 @@ function date_timezone_replacement($old) {
  * Helper function to update Event module timezone information.
  */
 function date_event_zonelist_by_name($name) {
-  if (!module_exists('event')) {
+  if (!module_exists('event') || !db_table_exists('event_timezones')) {
     return array();
   }
   static $zone_names = array();
