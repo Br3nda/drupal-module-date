@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.33 2009/01/12 17:21:47 karens Exp $
+//$Id: date.theme,v 1.2.2.34 2009/01/13 13:49:23 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -125,7 +125,7 @@ function theme_date_display_combination($field, $item, $dates, $node = NULL) {
  */
 function theme_date_format_interval($field, $item, $dates, $node = NULL) {
   // Time to compare dates to
-  $now = date_format(date_make_date('now', date_default_timezone()), DATE_FORMAT_DATETIME);
+  $now = date_format(date_now(), DATE_FORMAT_DATETIME);
   $start = $dates['value']['local']['datetime'];
   $end = $dates['value2']['local']['datetime'];
   

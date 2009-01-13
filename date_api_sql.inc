@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.38 2008/12/03 20:15:19 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.39 2009/01/13 13:49:23 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -123,7 +123,7 @@ class date_sql_handler {
   function get_offset() {
     if (!empty($this->db_timezone) && !empty($this->local_timezone)) {
       if ($this->db_timezone != $this->local_timezone) {
-        $date = date_make_date('now', $this->db_timezone);
+        $date = date_now($this->db_timezone);
         date_timezone_set($date, timezone_open($this->local_timezone));
         return date_offset_get($date);
       }

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_timezone.module,v 1.8.2.15 2009/01/12 11:45:09 karens Exp $
+// $Id: date_timezone.module,v 1.8.2.16 2009/01/13 13:49:24 karens Exp $
 /**
  * @file
  * This module will make the alter the user and site timezone forms to
@@ -120,7 +120,7 @@ function date_timezone_update_site($element) {
   }
   else {
     variable_set('date_default_timezone_name', $timezone);
-    $date = date_make_date('now', $timezone);
+    $date = date_now($timezone);
     $offset = date_offset_get($date);
   }
   
@@ -144,7 +144,7 @@ function date_timezone_update_site($element) {
 function date_timezone_update_user($element) {
   $timezone = $element['timezone_name']['#value'];
   if (!empty($timezone)) {
-    $date = date_make_date('now', $timezone);
+    $date = date_now($timezone);
     $offset = date_offset_get($date);
   }
   else {

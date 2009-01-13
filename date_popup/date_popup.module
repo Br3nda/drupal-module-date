@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.27.2.41 2009/01/12 11:28:23 karens Exp $
+// $Id: date_popup.module,v 1.27.2.42 2009/01/13 13:49:24 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -149,6 +149,7 @@ function date_popup_elements() {
  */
 function date_popup_process($element, $edit = NULL) {
   date_popup_load();
+  $granularity = date_format_order($element['#date_format']);
   require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
 
   if (empty($edit)) {
@@ -161,10 +162,10 @@ function date_popup_process($element, $edit = NULL) {
     }
     $input = $edit['date'] . (!empty($edit['time']) ? ' '. $edit['time'] : '');
     $datetime = date_convert_from_custom($input, $element['#date_format']);
-    $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME);
+    $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
   elseif (!empty($element['#value'])) {
-    $date = date_make_date($element['#value'], $element['#date_timezone']);
+    $date = date_make_date($element['#value'], $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
   date_increment_round($date, $element['#date_increment']);
   $granularity = date_format_order($element['#date_format']);
@@ -366,12 +367,11 @@ function date_popup_input_value($element, $auto_complete = FALSE) {
     $time = date_convert_from_custom(trim(!empty($element['#value']['time']) ? $element['#value']['time'] : ''), $time_format);
     $value = trim(substr($date, 0, 10) .' '. substr($time, 11, 8));
   }
-  if (date_is_valid($value, DATE_DATETIME)) {
-    $date = date_make_date($value, $element['#date_timezone'], DATE_DATETIME);
+  if (date_is_valid($value, DATE_DATETIME, $granularity)) {
+    $date = date_make_date($value, $element['#date_timezone'], DATE_DATETIME, $granularity);
     $value = date_convert($date, DATE_OBJECT, DATE_DATETIME);
     return $value;
   }
-  return NULL;
   return NULL;
 }
 

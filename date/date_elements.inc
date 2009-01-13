@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.48 2009/01/10 22:56:36 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.49 2009/01/13 13:49:23 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -25,14 +25,14 @@ function _date_field_validate($op, &$node, $field, &$items, $teaser, $page) {
         $error_field = $field['field_name'] .']['. $delta .']['. $processed;
         $error_field .= $field['widget']['type'] == 'date_select' ? '][year' : '';
         if ($processed == 'value' && $field['todate']
-          && !date_is_valid($item['value'], $field['type'])
-          && (date_is_valid($item['value2'], $field['type']))) {
+          && !date_is_valid($item['value'], $field['type'], $field['granularity'])
+          && (date_is_valid($item['value2'], $field['type'], $field['granularity']))) {
           form_set_error($error_field, t("A 'From date' date is required for %field %delta", array('%delta' => $field['multiple'] ? intval($delta + 1) : '', '%field' => t($field['widget']['label']))));
         }
         if ($processed == 'value2'
           && $field['todate'] == 'required' && ($field['required']
-          && date_is_valid($item['value'], $field['type'])
-          && !date_is_valid($item['value2'], $field['type']))) {
+          && date_is_valid($item['value'], $field['type'], $field['granularity'])
+          && !date_is_valid($item['value2'], $field['type'], $field['granularity']))) {
           form_set_error($error_field, t("A 'To date' is required for %field %delta", array('%delta' => $field['multiple'] ? intval($delta + 1) : '', '%field' => t($field['widget']['label']))));
         }
       }
@@ -204,7 +204,7 @@ function _date_widget($op, &$node, $field, &$items) {
  */
 function date_local_date($node, $delta, $item, $timezone, $field, $part = 'value') {
   $timezone_db = date_get_timezone_db($field['tz_handling']);
-      
+  $granularity = $field['granularity'];    
   if (!empty($node->nid)) {
     $default_value = '';
     $default_value_code = '';
@@ -227,16 +227,16 @@ function date_local_date($node, $delta, $item, $timezone, $field, $part = 'value
         return NULL;
       }
       else {
-        $date = date_make_date($item['value'], $timezone);
+        $date = date_make_date($item['value'], $timezone, DATE_DATETIME, $granularity);
       }
     }
     // Special case for 'now' when using dates with no timezone,
     // make sure 'now' isn't adjusted to UTC value of 'now'.
     elseif ($field['tz_handling'] == 'none') {
-      $date = date_make_date('now', date_default_timezone_name());
+      $date = date_now();
     }
     else {
-      $date = date_make_date('now', $timezone);
+      $date = date_now($timezone);
     }
   }
   else {
@@ -249,7 +249,7 @@ function date_local_date($node, $delta, $item, $timezone, $field, $part = 'value
       $db_timezone = date_get_timezone_db($field['tz_handling']);
       $value = date_convert($value, $field['type'], DATE_DATETIME, $db_timezone);
     }
-    $date = date_make_date($value, $timezone_db);
+    $date = date_make_date($value, $timezone_db, $field['type'], $field['granularity']);
     date_timezone_set($date, timezone_open($timezone));
   }
   if (is_object($date) && empty($item[$part]) && $default_value == 'strtotime' && !empty($default_value_code)) {

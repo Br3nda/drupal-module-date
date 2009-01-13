@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.65 2008/11/29 16:21:55 karens Exp $
+// $Id: date_api.module,v 1.44.2.66 2009/01/13 13:49:23 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -630,15 +630,25 @@ function date_now($timezone = NULL) {
  *  @param $type
  *    The type of date provided, could be
  *    DATE_ARRAY, DATE_UNIX, DATE_DATETIME, DATE_ISO, or DATE_OBJECT.
+ *  @param $granularity
+ *    The granularity of the date value provided. Set this for partial
+ *    dates so they pass validation and don't get reset to 'now'.
  */
-function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME) {
+function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME, $granularity = array('year', 'month', 'day', 'hour', 'minute')) {
+  
+  // Special handling for partial dates that don't need precision.
+  $max_granularity = array_pop($granularity);
+  if (in_array($max_granularity, array('year', 'month')) || $type == DATE_ISO || $type == DATE_ARRAY) {
+    $date = date_fuzzy_datetime($date);
+  }
+  
   // Make sure some value is set for the date and timezone even if the
   // site timezone is not yet set up to avoid fatal installation
   // errors.
   if (empty($timezone) || !date_timezone_is_valid($timezone)) {
     $timezone = date_default_timezone_name();
   }
-  if (!date_is_valid($date, $type) || empty($date)) {
+  if (!date_is_valid($date, $type, $granularity) || empty($date)) {
     $date = 'now';
   }
   if (!empty($timezone) && !empty($date)) {
@@ -1164,7 +1174,7 @@ function date_part_extract($date, $part, $type = DATE_DATETIME, $tz = 'UTC') {
     case DATE_OBJECT:
       return date_format($date, $formats[$part]);
   }
- }
+}
 
 /**
  *  Functions to test the validity of a date in various formats.
@@ -1173,36 +1183,88 @@ function date_part_extract($date, $part, $type = DATE_DATETIME, $tz = 'UTC') {
  *
  *  @param $type
  *    could be DATE_ARRAY, DATE_UNIX, DATE_DATETIME, DATE_ISO, or DATE_OBJECT
+ *  @param $granularity
+ *    The granularity of the date value provided. Set this for partial
+ *    dates so they pass validation.
  */
-function date_is_valid($date, $type = DATE_DATETIME) {
+function date_is_valid($date, $type = DATE_DATETIME, $granularity = array('year', 'month', 'day', 'hour', 'minute')) {
+  
+  // Check that the value is properly structured.
   if (empty($date)) return FALSE;
   if ($type == DATE_OBJECT && !is_object($date)) return FALSE;
   if (($type == DATE_ISO || $type == DATE_DATETIME) && (!is_string($date) || !preg_match(DATE_REGEX_LOOSE, $date))) return FALSE;
   if ($type == DATE_UNIX and !is_numeric($date)) return FALSE;
   if ($type == DATE_ARRAY and !is_array($date)) return FALSE;
-  
-  // If checkdate works, no need for further tests.
+
   // Make sure integer values are sent to checkdate.
   $year = intval(date_part_extract($date, 'year', $type));
   $month = intval(date_part_extract($date, 'month', $type));
   $day = intval(date_part_extract($date, 'day', $type));
-  if (!checkdate($month, $day, $year)) {
-    // ISO dates and arrays can have empty date parts
-    if ($type == DATE_ISO || $type == DATE_ARRAY) {
-      if (variable_get('date_max_year', 4000) < $year || variable_get('date_min_year', 1) > $year
-        || 12 < $month || 0 > $month || 31 < $day || 0 > $day) {
-        return FALSE;
-      }
+  if (checkdate($month, $day, $year)) {
+    return TRUE;
+  }
+  
+  // If this is an incomplete date (year only or year and month only), 
+  // need special handling, partial dates can have empty date parts.
+  $max_granularity = $granularity;
+  $max_granularity = array_pop($max_granularity);
+  if (!in_array($max_granularity, array('year', 'month'))) {
+    if (in_array('year', $granularity) && !date_valid_year($year)) {
+      return FALSE;
     }
-    // Unix and datetime are expected to have at least a year, month, and day.
-    // This test is needed to test very old dates in PHP 4, where checkdate won't work.
-    // @TODO - this can be removed once everyone is using PHP 5.
-    elseif (variable_get('date_max_year', 4000) < $year || variable_get('date_min_year', 1) > $year
-      || 12 < $month || 1 > $month || 31 < $day || 1 > $day) {
+    elseif (in_array('month', $granularity) && !date_valid_month($month)) {
+      return FALSE;
+    }
+    elseif (in_array('day', $granularity) && !date_valid_day($day, $month, $year)) {
       return FALSE;
     }
   }
+  // ISO dates and arrays can have empty date parts.
+  elseif ($type == DATE_ISO || $type == DATE_ARRAY) {
+    if (!date_valid_year($year)) {
+      return FALSE;
+    }
+    elseif (!empty($month) && !date_valid_month($month)) {
+      return FALSE;
+    }
+    elseif (!empty($day) && !date_valid_day($day, $month, $year)) {
+      return FALSE;
+    }
+  }
+  elseif(!date_valid_year($year) || !date_valid_month($month) || date_valid_day($day, $month, $year)) {
+    // Unix and datetime are expected to have at least a year, month, and day.
+    return FALSE;
+  }
+  
   return TRUE;
+}
+
+function date_valid_year($year) {
+  if (variable_get('date_max_year', 4000) < $year || variable_get('date_min_year', 1) > $year) {
+    return FALSE;
+  }
+  else {
+    return TRUE;
+  }      
+}
+
+function date_valid_month($month) {
+  if (12 < $month || 0 > $month) {
+    return FALSE;
+  }
+  else {
+    return TRUE;
+  }
+}
+
+function date_valid_day($day, $month = NULL, $year = NULL) {
+  $days_in_month = !empty($month) && !empty($year) ? date_days_in_month($year, $month) : 31;
+  if ($days_in_month < $day || 1 > $day) {
+    return FALSE;
+  }
+  else {
+    return TRUE;
+  }
 }
 
 /**
@@ -1251,7 +1313,7 @@ function date_has_time($granularity) {
  *   invalid for that date type).
 */
 function date_limit_value($date, $granularity, $type = DATE_DATETIME) {
-  if (!date_is_valid($date, $type) || !$nongranularity = date_nongranularity($granularity)) {
+  if (!date_is_valid($date, $type, $granularity) || !$nongranularity = date_nongranularity($granularity)) {
    return $date;
   }
   else {

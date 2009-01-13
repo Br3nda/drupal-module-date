@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.50 2009/01/12 17:21:47 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.51 2009/01/13 13:49:23 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -126,6 +126,7 @@ function date_timezone_process($element, $edit = NULL) {
  * but it is a string before submission and an array afterward.
  */
 function date_text_process($element, $edit = NULL) {
+  $granularity = date_format_order($element['#date_format']);
   if (empty($edit)) {
     $edit = date_views_filter_value($element);
   }
@@ -135,10 +136,10 @@ function date_text_process($element, $edit = NULL) {
       $edit = $element['#value'];
     }
     $datetime = date_convert_from_custom($edit['date'], $element['#date_format']);
-    $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME);
+    $date = date_make_date($datetime, $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
   elseif (!empty($element['#value'])) {
-    $date = date_make_date($element['#value'], $element['#date_timezone']);
+    $date = date_make_date($element['#value'], $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
 
   // Don't overwrite values already added to $element['date'] in case
@@ -186,6 +187,7 @@ function date_text_process($element, $edit = NULL) {
  * but it is a string before submission and an array afterward.
  */
 function date_select_process(&$element, $edit = NULL) {
+  $granularity = date_format_order($element['#date_format']);
   if (empty($edit)) {
     $edit = date_views_filter_value($element);
   }
@@ -194,10 +196,10 @@ function date_select_process(&$element, $edit = NULL) {
     if (empty($edit)) {
       $edit = $element['#value'];
     }
-    $date = date_make_date($edit, $element['#date_timezone'], DATE_ARRAY);
+    $date = date_make_date($edit, $element['#date_timezone'], DATE_ARRAY, $granularity);
   }
   elseif (!empty($element['#value'])) {
-    $date = date_make_date($element['#value'], $element['#date_timezone']);
+    $date = date_make_date($element['#value'], $element['#date_timezone'], DATE_DATETIME, $granularity);
   }
 
   $element['#tree'] = TRUE;
@@ -484,7 +486,8 @@ function date_select_validate($element) {
  * Helper function for extracting a date value out of user input.
  */
 function date_select_input_value($element) {
-  if (date_is_valid($element['#value'], DATE_ARRAY)) {
+  $granularity = date_format_order($element['#date_format']);
+  if (date_is_valid($element['#value'], DATE_ARRAY, $granularity)) {
     return date_convert($element['#value'], DATE_ARRAY, DATE_DATETIME);
   }
   return NULL;
@@ -516,21 +519,15 @@ function date_text_validate($element) {
  */
 function date_text_input_value($element) {
   $form_values = $element['#value'];
+  $granularity = date_format_order($element['#date_format']);
   $input = $form_values['date'];
   if (!$element['#required'] && trim($input) == '') return NULL;
   
   $value = date_convert_from_custom($input, $element['#date_format']);
-  
-  // Check for special case when using partial dates, like year only.
-  // We have to create a valid date out of the results to test validity.
-  $granularity = date_format_order($element['#date_format']);
-  $non_granularity = date_nongranularity($granularity);
-  if (array_intersect($non_granularity, array('year', 'month', 'day'))) {
-    $value = date_fuzzy_datetime($value);
-  }
+  $value = date_limit_value($date, $granularity);
   
   // If it creates a valid date, use it.
-  if (date_is_valid($value)) {
+  if (date_is_valid($value, DATE_DATETIME, $granularity)) {
     return $value;
   }
   // TODO come back and try to find a way to use strtotime to guess

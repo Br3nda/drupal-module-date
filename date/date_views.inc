@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.52 2008/12/04 11:39:37 karens Exp $
+// $Id: date_views.inc,v 1.26.2.53 2009/01/13 13:49:23 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -318,8 +318,8 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   // Comparing to an input date.
   elseif ($filterinfo['type'] == 'DATE') {
     if (!empty($value)) {
-      if (date_is_valid($value, DATE_DATETIME)) {
-        $date = date_make_date($value);
+      if (date_is_valid($value, DATE_DATETIME, $field['granularity'])) {
+        $date = date_make_date($value, date_default_timezone_name(), DATE_DATETIME, $field['granularity']);
         if (!empty($adjustment)) {
           date_modify($date, $adjustment);
         }

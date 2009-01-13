@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.54 2009/01/11 13:47:44 karens Exp $
+// $Id: date.module,v 1.39.2.55 2009/01/13 13:49:23 karens Exp $
 
 /**
  * @file
@@ -226,7 +226,7 @@ function date_formatter_process($field, $item, $node, $formatter = 'default') {
       if ($field['type'] == DATE_ISO) {
         $value = str_replace(' ', 'T', date_fuzzy_datetime($value));
       }
-      $date = date_make_date($value, $timezone_db, $field['type']);
+      $date = date_make_date($value, $timezone_db, $field['type'], $field['granularity']);
       $dates[$processed] = array();
       $dates[$processed]['db']['object'] = $date;
       $dates[$processed]['db']['datetime'] = date_format($date, DATE_FORMAT_DATETIME);
