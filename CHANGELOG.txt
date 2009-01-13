@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.255 2009/01/13 13:49:23 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.256 2009/01/13 14:37:23 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #292942 Only load timezone js file in timezone forms.
 - Fix broken handling of some partial (year or month and year) dates and pave the way for fuzzy granularity by adjusting date_is_valid() and date_make_date() to better handle partial dates.
 - #347080 Fix PHP4 southern timezone computation and New Zealand region.
 - #353327 Check for Event 2 timezone table before trying to use it.
