@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.9.2.22 2009/01/13 13:49:23 karens Exp $
+//$Id: date_repeat.inc,v 1.9.2.23 2009/02/10 15:53:13 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -152,7 +152,6 @@ function date_repeat_build_dates($rrule = NULL, $values = NULL, $field, $item) {
     
   // Split the RRULE into RRULE and EXDATE parts.
   $parts = date_repeat_split_rrule($rrule);
-  $rule = explode("\n", $rrule);
   $parsed_exceptions = (array) $parts[1];
   $exceptions = array();
   foreach ($parsed_exceptions as $exception) {
