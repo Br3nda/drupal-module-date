@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.66 2009/01/13 13:49:23 karens Exp $
+// $Id: date_api.module,v 1.44.2.67 2009/02/11 22:40:19 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -640,6 +640,7 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME, $granula
   $max_granularity = array_pop($granularity);
   if (in_array($max_granularity, array('year', 'month')) || $type == DATE_ISO || $type == DATE_ARRAY) {
     $date = date_fuzzy_datetime($date);
+    $type = DATE_DATETIME;
   }
   
   // Make sure some value is set for the date and timezone even if the
