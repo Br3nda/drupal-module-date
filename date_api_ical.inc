@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.30 2009/02/20 11:48:45 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.31 2009/02/20 14:00:53 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -193,7 +193,7 @@ function date_ical_parse($icaldatafolded = array()) {
             // Can't be sure whether DTSTART is before or after DURATION,
             // so parse DURATION at the end.
             if (isset($subgroup['DURATION'])) {
-              date_ical_parse_duration($subgroup);
+              date_ical_parse_duration($subgroup, 'DURATION');
             }
             // Check for all-day events setting the 'all_day' property under
             // the component instead of DTSTART/DTEND subcomponents
@@ -248,7 +248,6 @@ function date_ical_parse($icaldatafolded = array()) {
         case 'DTEND':
         case 'DTSTAMP':
         case 'RDATE':
-        case 'TRIGGER':
         case 'FREEBUSY':
         case 'DUE':
         case 'COMPLETED':
@@ -259,6 +258,16 @@ function date_ical_parse($icaldatafolded = array()) {
           $parse_result = date_ical_parse_exceptions($field, $data);
           break;
 
+        case 'TRIGGER':
+          // A TRIGGER can either be a date or in the form -PT1H.
+          if (!empty($field)) {
+            $parse_result = date_ical_parse_date($field, $data);
+          }
+          else {
+            $parse_result = array('DATA' => $data);
+          }
+          break;
+          
         case 'DURATION':
           // Can't be sure whether DTSTART is before or after DURATION in
           // the VEVENT, so store the data and parse it at the end.
@@ -463,8 +472,8 @@ function date_ical_parse_exceptions($field, $data) {
  *  @param $subgroup
  *   array of other values in the vevent so we can check for DTSTART
  */
-function date_ical_parse_duration(&$subgroup) {
-  $items = $subgroup['DURATION'];
+function date_ical_parse_duration(&$subgroup, $field = 'DURATION') {
+  $items = $subgroup[$field];
   $data  = $items['DATA'];
   preg_match('/^P(\d{1,4}[Y])?(\d{1,2}[M])?(\d{1,2}[W])?(\d{1,2}[D])?([T]{0,1})?(\d{1,2}[H])?(\d{1,2}[M])?(\d{1,2}[S])?/', $data, $duration);
   $items['year'] = isset($duration[1]) ? str_replace('Y', '', $duration[1]) : '';

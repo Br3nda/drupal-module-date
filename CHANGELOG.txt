@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.262 2009/02/20 11:48:45 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.263 2009/02/20 14:00:53 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- iCal TRIGGER can either be a date or a duration.
 - Fix to iCal: alter the end date of all day events to match the to date.
   The ical practice of setting the End date as the next day won't work for our interal use of this value.
 - #347090 Fix southern hemisphere timezone adjustment for PHP4.
