@@ -1,10 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.261 2009/02/12 15:40:51 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.262 2009/02/20 11:48:45 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Fix to iCal: alter the end date of all day events to match the to date.
+  The ical practice of setting the End date as the next day won't work for our interal use of this value.
 - #347090 Fix southern hemisphere timezone adjustment for PHP4.
 - Fix bug that caused date_select to end up as current date.
 - #313369 Repeating date with exceptions created error when exceptions data is appended.

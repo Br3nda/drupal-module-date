@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.29 2008/12/08 11:34:41 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.30 2009/02/20 11:48:45 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -199,12 +199,15 @@ function date_ical_parse($icaldatafolded = array()) {
             // the component instead of DTSTART/DTEND subcomponents
             if ((isset($subgroup['DTSTART']) && !isset($subgroup['DTEND'])) || 
             (isset($subgroup['DTSTART']) && $subgroup['DTSTART']['all_day'])) {
+              // Add a top-level indication for the 'All day' condition.
+              // Leave it in the individual date components, too, so it
+              // is always available even when you are working with only
+              // a portion of the VEVENT array, like in Feed API parsers.
               $subgroup['all_day'] = true;
-              if (!isset($subgroup['DTEND'])) {
-                $subgroup['DTEND'] = $subgroup['DTSTART'];
-              }
-              unset($subgroup['DTSTART']['all_day']);
-              unset($subgroup['DTEND']['all_day']);
+              // Many programs output DTEND for an all day event as the
+              // the following day, reset this to the same day for our
+              // internal use.
+              $subgroup['DTEND'] = $subgroup['DTSTART'];
             }
           // Add this element to the parent as an array under the
           // component name
