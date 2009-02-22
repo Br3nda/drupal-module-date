@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_lib.inc,v 1.3.2.6 2008/10/03 17:17:51 karens Exp $
+// $Id: date_php4_lib.inc,v 1.3.2.7 2009/02/22 14:02:48 karens Exp $
 
 /**
  * Date Library, extended date functions.
@@ -163,20 +163,21 @@ function _date_getdate($timestamp = false, $timezone = false) {
   }
   else {
     // Check yesterday's and tomorrow's offset in case dst happens this day.
-    $today_offset = date_get_gmt_diff_ts($timestamp, $timezone);
-    $yesterday_offset = date_get_gmt_diff_ts($timestamp - 86400, $timezone);
-    $tomorrow_offset = date_get_gmt_diff_ts($timestamp + 86400, $timezone);
-    
-    if ($yesterday_offset != $tomorrow_offset && $yesterday_offset < 0) {
-      $adj = $yesterday_offset;
+    if ($timezone != 'UTC') {
+      $today_offset = date_get_gmt_diff_ts($timestamp, $timezone);
+      $yesterday_offset = date_get_gmt_diff_ts($timestamp - 86400, $timezone);
+      $tomorrow_offset = date_get_gmt_diff_ts($timestamp + 86400, $timezone);
+      if ($yesterday_offset != $tomorrow_offset && $yesterday_offset < 0) {
+        $adj = $yesterday_offset;
+      }
+      elseif ($yesterday_offset != $tomorrow_offset && $tomorrow_offset > 0) {
+        $adj = $tomorrow_offset;
+      }
+      else {
+        $adj = $today_offset;
+      }
+      $timestamp =  $timestamp + $adj;
     }
-    elseif ($yesterday_offset != $tomorrow_offset && $tomorrow_offset > 0) {
-      $adj = $tomorrow_offset;
-    }
-    else {
-      $adj = $today_offset;
-    }
-    $timestamp =  $timestamp + $adj;
 
     for ($a = 1970 ;; $a++) {
       $lastd = $timestamp;
@@ -442,7 +443,6 @@ function _date_mktime($hr, $min, $sec, $mon = false, $day = false, $year = false
     $_day_time = $hr * $_hour_power + $min * $_min_power + $sec;
     $_day_time = $_day_power - $_day_time;
     $ret = -( $_total_date * $_day_power + $_day_time);
-    $ret -= date_get_gmt_diff_ts($ret, $timezone);
     if ($ret < -12220185600) $ret += 10*86400; // if earlier than 5 Oct 1582 - gregorian correction
     else if ($ret < -12219321600) $ret = -12219321600; // if in limbo, reset to 15 Oct 1582.
   }

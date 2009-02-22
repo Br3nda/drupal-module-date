@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.39 2009/02/12 15:40:51 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.40 2009/02/22 14:02:48 karens Exp $
 
 /**
  * @file
@@ -94,11 +94,6 @@ if (!function_exists('date_create')) {
     $date->value = $date_out;
     $date->timestamp = date_datetime2timestamp($date->value, $timezone);
     $date->timezone = $timezone;
-    
-    if (!date_is_valid($date, DATE_OBJECT)) {
-      // Must be a value we can't interpret. Throw an error.
-      return NULL;
-    }
     return $date;
   }
 }
