@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.264 2009/02/22 14:02:48 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.265 2009/02/23 22:16:19 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- Date PHP4: fix inconsistency in offset computation for first two hours of the day dst changes.
 - Date PHP4: eliminate some needless cycles to improve performance.
 - iCal TRIGGER can either be a date or a duration.
 - Fix to iCal: alter the end date of all day events to match the to date.

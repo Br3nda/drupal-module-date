@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.40 2009/02/22 14:02:48 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.41 2009/02/23 22:16:19 karens Exp $
 
 /**
  * @file
@@ -689,31 +689,31 @@ function date_is_dst($timestamp, $timezone = NULL) {
       break;
     case 13: // EU and other European countries
       // start of DST (last Sunday in March 1 am UTC)
-      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC")) + 3600;
+      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC"));
       // end of DST in Europe (last Sunday in October 1 am UTC)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC")) + 3600;
+      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
       break;
     case 14: // Russian Federation
       // start of DST (last Sunday in March 2 am local time)
-      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC")) + 7200;
+      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC"));
       // end of DST (last Sunday in October 2 am local time)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC")) + 7200;
+      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
       break;
     case 15: // Northern America (where applicable)
       // start of DST  (where applicable) (first Sunday in April before 2007,
       // after that second Sunday in March, 2 am local time)
       if ($year < 2007) {
-        $dststart = strtotime("1 week sunday UTC", strtotime("1 april $year UTC")) + 7200;
+        $dststart = strtotime("1 week sunday UTC", strtotime("1 april $year UTC"));
       }
       else {
         $dststart = strtotime("1 week sunday UTC", strtotime("1 march $year UTC")) + 7200;
       }
       // end of DST (where applicable) (last Sunday in October 2 am local time)
       if ($year < 2007) {
-        $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC")) + 7200;
+        $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
       }
       else {
-        $dstend = strtotime("1 week sunday UTC", strtotime("1 november $year UTC")) + 7200;
+        $dstend = strtotime("1 week sunday UTC", strtotime("1 november $year UTC"));
       }
       break;
     case 16: // Cuba
