@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.34 2009/01/13 13:49:23 karens Exp $
+//$Id: date.theme,v 1.2.2.35 2009/02/24 09:36:53 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -319,7 +319,7 @@ function theme_date_views_browser_items($view, $nodes, $type, $teasers, $links) 
  * @return formatted date.
  */
 function theme_date_all_day($field, $which, $date1, $date2, $format, $node, $view = NULL) {
-  if (empty($date1) || !is_object($date1)) {
+  if (empty($date1) || !is_object($date1) || $format == 'format_interval') {
     return '';
   }
   if (empty($date2)) {
