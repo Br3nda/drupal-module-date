@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4_lib.inc,v 1.3.2.8 2009/02/23 22:16:19 karens Exp $
+// $Id: date_php4_lib.inc,v 1.3.2.9 2009/02/24 17:14:22 karens Exp $
 
 /**
  * Date Library, extended date functions.
@@ -255,7 +255,7 @@ function _date_date($format, $timestamp = false, $timezone = false) {
       if ($min < 10) $dates .= ':0'. $min; else $dates .= ':'. $min;
       if ($secs < 10) $dates .= ':0'. $secs; else $dates .= ':'. $secs;
       $gmt = date_get_gmt_diff_ts($timestamp, $timezone);
-      $dates .= sprintf(' %s%04d', ($gmt < 0) ? '+' : '-', abs($gmt) / 36); break;
+      $dates .= sprintf(' %s%04d', ($gmt >= 0) ? '+' : '-', abs($gmt) / 36); break;
     case 'Y': $dates .= date_pad($year, 4); break;
     case 'y': $dates .= substr($year, strlen($year)-2, 2); break;
     // MONTH
