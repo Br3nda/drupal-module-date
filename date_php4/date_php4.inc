@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.41 2009/02/23 22:16:19 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.42 2009/02/24 09:29:48 karens Exp $
 
 /**
  * @file
@@ -706,7 +706,7 @@ function date_is_dst($timestamp, $timezone = NULL) {
         $dststart = strtotime("1 week sunday UTC", strtotime("1 april $year UTC"));
       }
       else {
-        $dststart = strtotime("1 week sunday UTC", strtotime("1 march $year UTC")) + 7200;
+        $dststart = strtotime("1 week sunday UTC", strtotime("1 march $year UTC"));
       }
       // end of DST (where applicable) (last Sunday in October 2 am local time)
       if ($year < 2007) {
