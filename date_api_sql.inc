@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.39 2009/01/13 13:49:23 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.40 2009/02/26 18:47:48 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -765,6 +765,42 @@ class date_sql_handler {
   }
 
   /**
+   * Convert strings like '+1 day' to the ISO equivalent, like 'P1D'.
+   */
+  function arg_replace($arg) {
+    if (!preg_match('/([+|-])\s?([0-9]{1,32})\s?([day(s)?|week(s)?|month(s)?|year(s)?|hour(s)?|minute(s)?|second(s)?]{1,10})/', $arg, $results)) {
+      return str_replace('now', '@', $arg);
+    }
+    $direction = $results[1];
+    $count = $results[2];
+    $item = $results[3];
+      
+    $replace = array(
+      'now' => '@',
+      '+' => 'P',
+      '-' => 'P-',
+      'years' => 'Y',
+      'year' => 'Y',
+      'months' => 'M',
+      'month' => 'M',
+      'weeks' => 'W',
+      'week' => 'W',
+      'days' => 'D',
+      'day' => 'D',
+      'hours' => 'H',
+      'hour' => 'H',
+      'minutes' => 'M',
+      'minute' => 'M',
+      'seconds' => 'S',
+      'second' => 'S',
+      '  ' => '',
+      ' ' => '',
+      );
+    $prefix = in_array($item, array('hours', 'hour', 'minutes', 'minute', 'seconds', 'second')) ? 'T' : '';  
+    return $prefix . strtr($direction, $replace) . $count . strtr($item, $replace);  
+  }
+  
+  /**
    * Use the parsed values from the ISO argument to determine the
    * granularity of this period.
    */
@@ -777,7 +813,7 @@ class date_sql_handler {
     }
     return $granularity;
   }
-  
+
   /**
    * Use the parsed values from the ISO argument to determine the
    * min and max date for this period.
@@ -785,13 +821,7 @@ class date_sql_handler {
   function arg_range($arg) {
     // Parse the argument to get its parts
     $parts = $this->arg_parts($arg);
-   
-    // Intercept invalid info and fall back to the current date.
-    if (empty($parts[0]) || empty($parts[0]['date']) && empty($parts[0]['period'])) {
-      $now = date_now();
-      return array($now, $now);
-    }
-    
+        
     // Build a range from a period-only argument (assumes the min date is now.)
     if (empty($parts[0]['date']) && !empty($parts[0]['period']) && (empty($parts[1]))) {
       $min_date = date_now();
@@ -845,11 +875,14 @@ class date_sql_handler {
     }
     // Build a range from period + end date.
     if (!empty($parts[0]['period'])) {
+      $min_date = date_now();
       foreach ($parts[0]['period'] as $part => $value) {
-        $min_date = drupal_clone($max_date);
-        date_modify($min_date, "-$value $part");
+        date_modify($min_date, "$value $part");
       }
       return array($min_date, $max_date);
     }
-  }
+     // Intercept invalid info and fall back to the current date.
+    $now = date_now();
+    return array($now, $now);
+ }
 }
