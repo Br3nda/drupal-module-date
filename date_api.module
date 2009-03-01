@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.67 2009/02/11 22:40:19 karens Exp $
+// $Id: date_api.module,v 1.44.2.68 2009/03/01 22:35:40 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1343,7 +1343,7 @@ function date_limit_value($date, $granularity, $type = DATE_DATETIME) {
 }
 
 /**
- * Rewrite a format string so it only inludes elements from a
+ * Rewrite a format string so it only includes elements from a
  * specified granularity array.
  *
  * Example:
@@ -1406,7 +1406,15 @@ function date_limit_format($format, $granularity) {
   $format = preg_replace('`^([\-/\.,:])`', '', $format);
   // Remove orpaned punctuation at the end of the string.
   $format = preg_replace('([\-/\.,:]$)', '', $format);
-  return trim($format);
+  // Trim any whitespace from the result.
+  $format = trim($format);
+  
+  // After removing the non-desired parts of the format, test if the only 
+  // things left are escaped, non-date, characters. If so, return nothing.
+  if (!$test = preg_replace('(\\\\\w{1})', '', $format)) {
+    return '';
+  }
+  return $format;
 }
 
 /**

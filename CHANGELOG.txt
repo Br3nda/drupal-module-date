@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.267 2009/02/26 18:47:48 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.268 2009/03/01 22:35:40 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #375864 Make sure date_limit_format() doesn't keep formats that are only escaped strings.
 - Improve interpretation of argument date ranges.
 - Improve handling of translation for Date repeat rules.
 - #375551 The 'All day' formatting should not be applied to format_interval formats.
