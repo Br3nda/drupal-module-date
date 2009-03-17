@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.68 2009/03/01 22:35:40 karens Exp $
+// $Id: date_api.module,v 1.44.2.69 2009/03/17 18:35:56 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -836,9 +836,9 @@ function date_difference($date1_in, $date2_in, $measure = 'seconds', $type = DAT
       case 'seconds':
         return $diff;
       case 'minutes':
-        return $diff * 60;
+        return $diff / 60;
       case 'hours':
-        return $diff * 24 * 60;
+        return $diff / 3600;
       case 'years':
         return $year_diff;
 
