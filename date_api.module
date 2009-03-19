@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.69 2009/03/17 18:35:56 karens Exp $
+// $Id: date_api.module,v 1.44.2.70 2009/03/19 11:12:26 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -635,6 +635,10 @@ function date_now($timezone = NULL) {
  *    dates so they pass validation and don't get reset to 'now'.
  */
 function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME, $granularity = array('year', 'month', 'day', 'hour', 'minute')) {
+  // No value or one that can't be used.
+  if (empty($date) || is_array($date)) {
+    return NULL;
+  }
   
   // Special handling for partial dates that don't need precision.
   $max_granularity = array_pop($granularity);

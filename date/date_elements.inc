@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.49 2009/01/13 13:49:23 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.50 2009/03/19 11:12:26 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -374,15 +374,35 @@ function date_combo_validate($element) {
   $tz_field = 'timezone';
   $offset_field = 'offset';
   $offset_field2 = 'offset2';
-  if (empty($item[$from_field])) {
+  
+  // Check for empty 'From date', which could either be an empty
+  // value or an array of empty values, depending on the widget.
+  $empty = TRUE;
+  if (!empty($item[$from_field])) {
+    if (!is_array($item[$from_field])) {
+      $empty = FALSE;
+    }
+    else {
+      foreach ($item[$from_field] as $key => $value) {
+        if (!empty($value)) {
+          $empty = FALSE;
+          break;
+        }
+      }
+    }
+  }
+  if ($empty) {
     $item[$from_field] = NULL;
     $item[$to_field]   = NULL;
     $item[$tz_field]   = NULL;
     $item[$offset_field] = NULL;
     $item[$offset_field2] = NULL;
     form_set_value($element, $item);
+    if (!$element['#required']) {
+      return;
+    }
   }
-  elseif (!form_get_errors()) {
+  else {
 
     // Check todate input for blank values and substitute in fromdate
     // values where needed, then re-compute the todate with those values.
@@ -414,16 +434,18 @@ function date_combo_validate($element) {
 
       // Call the right function to turn this altered user input into
       // a new value for the todate.
-      $to_date = date_input_value($field, $element[$to_field]);
-      $item[$to_field] = $to_date;
+      $item[$to_field] = $merged_date;
     }
     else {
       $item[$to_field] = $item[$from_field];
     }
-    if ($item[$from_field] > $item[$to_field]) {
+ 
+    $from_date = date_input_value($field, $element[$from_field]);
+    $to_date = date_input_value($field, $element[$to_field]);
+        
+    if ($from_date > $to_date) {     
       $error_field = implode('][', $element['#parents']) .'][value2]['. array_shift(array_keys($merged_date));
       $element[$to_field]['#value'] = $merged_date;
-      $to_date = date_input_value($field, $element[$to_field]);
       form_set_value($element[$to_field], $to_date, $form_state);
       form_set_error(implode('][', $element['#parents']), t('The To date must be greater than the From date.'));
     }
@@ -434,13 +456,9 @@ function date_combo_validate($element) {
       $timezone_db = date_get_timezone_db($field['tz_handling']);
       $item[$tz_field] = $timezone;
       
-      // Use fuzzy_datetime before conversion to get proper value
-      // when granularity is 'year' or 'year' and 'month' only.
-      // Without this, we'd end up defaulting to 'now'.
-      $from_date = date_fuzzy_datetime($item[$from_field]);
       $from_date = date_make_date($from_date, $timezone);
       $item[$offset_field] = date_offset_get($from_date);
-      $to_date = date_make_date($item[$to_field], $timezone);
+      $to_date = date_make_date($to_date, $timezone);
       $item[$offset_field2] = date_offset_get($to_date);
       date_timezone_set($from_date, timezone_open($timezone_db));
       date_timezone_set($to_date, timezone_open($timezone_db));
