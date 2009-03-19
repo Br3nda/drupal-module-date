@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.50 2009/03/19 11:12:26 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.51 2009/03/19 23:57:22 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -443,7 +443,7 @@ function date_combo_validate($element) {
     $from_date = date_input_value($field, $element[$from_field]);
     $to_date = date_input_value($field, $element[$to_field]);
         
-    if ($from_date > $to_date) {     
+    if (!empty($field['todate']) && $from_date > $to_date) {     
       $error_field = implode('][', $element['#parents']) .'][value2]['. array_shift(array_keys($merged_date));
       $element[$to_field]['#value'] = $merged_date;
       form_set_value($element[$to_field], $to_date, $form_state);
