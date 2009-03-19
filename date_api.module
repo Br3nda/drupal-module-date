@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.70 2009/03/19 11:12:26 karens Exp $
+// $Id: date_api.module,v 1.44.2.71 2009/03/19 20:51:36 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -653,7 +653,7 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME, $granula
   if (empty($timezone) || !date_timezone_is_valid($timezone)) {
     $timezone = date_default_timezone_name();
   }
-  if (!date_is_valid($date, $type, $granularity) || empty($date)) {
+  if (!date_is_valid($date, $type, $granularity)) {
     $date = 'now';
   }
   if (!empty($timezone) && !empty($date)) {
