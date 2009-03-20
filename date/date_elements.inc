@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.52 2009/03/20 00:00:03 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.53 2009/03/20 00:28:47 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -353,6 +353,18 @@ function date_combo_process($element, $edit = NULL) {
   return $element;
 }
 
+function date_element_empty($element) {
+  $item = array();
+  $item['value'] = NULL;
+  $item['value2']   = NULL;
+  $item['timezone']   = NULL;
+  $item['offset'] = NULL;
+  $item['offset2'] = NULL;
+  $item['rrule'] = NULL;
+  form_set_value($element, $item);
+  return $item;
+}
+
 /**
  * Validate and update a combo element.
  * Don't try this if there were errors before reaching this point.
@@ -392,17 +404,15 @@ function date_combo_validate($element) {
     }
   }
   if ($empty) {
-    $item[$from_field] = NULL;
-    $item[$to_field]   = NULL;
-    $item[$tz_field]   = NULL;
-    $item[$offset_field] = NULL;
-    $item[$offset_field2] = NULL;
-    form_set_value($element, $item);
+    $item = date_element_empty($element);
     if (!$element['#required']) {
       return;
     }
   }
-  else {
+  // Don't look for further errors if errors are already flagged
+  // because otherwise we'll show errors on the nested elements
+  // more than once.
+  elseif (!form_get_errors()) {
 
     // Check todate input for blank values and substitute in fromdate
     // values where needed, then re-compute the todate with those values.
@@ -448,7 +458,14 @@ function date_combo_validate($element) {
       $to_date = $from_date;
     }
         
-    if (!empty($field['todate']) && $from_date > $to_date) {     
+    // Neither the from date nor the to date should be empty at this point
+    // unless they held values that couldn't be evaluated.
+    if (!$field['required'] && (empty($from_date) || empty($to_date))) {
+      $item = date_element_empty($element);
+      form_set_error(implode('][', $element['#parents']), t('The dates are invalid.'));
+      return;
+    }
+    elseif (!empty($field['todate']) && $from_date > $to_date) {     
       $error_field = implode('][', $element['#parents']) .'][value2]['. array_shift(array_keys($merged_date));
       $element[$to_field]['#value'] = $merged_date;
       form_set_value($element[$to_field], $to_date, $form_state);
