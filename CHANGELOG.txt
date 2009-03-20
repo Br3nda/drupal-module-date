@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.272 2009/03/20 11:41:38 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.273 2009/03/20 12:07:33 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #400992 Add time and datetime tokens.
 - #408176 Fix token handling of empty values.
 - #354989 Make sure year-only date does not regress to YYYY-00-00 00:00:00, which will end up as previous year.
 - #398258 Fix problems handling blank text widget values and general form processing cleanup.

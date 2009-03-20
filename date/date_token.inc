@@ -1,5 +1,5 @@
 <?php
-//$Id: date_token.inc,v 1.1.2.8 2009/03/20 11:41:38 karens Exp $
+//$Id: date_token.inc,v 1.1.2.9 2009/03/20 12:07:33 karens Exp $
 /**
  * @file
  * Token module integration.
@@ -20,10 +20,13 @@ function _date_token_list($type = 'all') {
     $tokens['date']['m']              = t("Date month (one or two digit)");
     $tokens['date']['ww']             = t("Date week (two digit)");
     $tokens['date']['date']           = t("Date date (YYYY-MM-DD)");
+    $tokens['date']['datetime']       = t("Date datetime (YYYY-MM-DDTHH:MM:SS)");
     $tokens['date']['day']            = t("Date day (full word)");
     $tokens['date']['ddd']            = t("Date day (abbreviation)");
     $tokens['date']['dd']             = t("Date day (two digit, zero-padded)");
     $tokens['date']['d']              = t("Date day (one or two digit)");
+    $tokens['date']['time']           = t("Time H:i");
+
 
     $tokens['date']['to-????']        = t("If the field has a to-date defined, the same tokens exist in the form: [to-????], where ???? is the normal token.");
 
@@ -54,10 +57,12 @@ function _date_token_values($type, $object = NULL) {
     $tokens['m']              = !empty($date) ? date_format_date($date, 'custom', 'n') : '';
     $tokens['ww']             = !empty($date) ? date_format_date($date, 'custom', 'W') : '';
     $tokens['date']           = !empty($date) ? date_format_date($date, 'custom', DATE_FORMAT_DATE) : '';
+    $tokens['datetime']       = !empty($date) ? date_format_date($date, 'custom', DATE_FORMAT_ISO) : '';
     $tokens['day']            = !empty($date) ? date_format_date($date, 'custom', 'l') : '';
     $tokens['ddd']            = !empty($date) ? date_format_date($date, 'custom', 'D') : '';
     $tokens['dd']             = !empty($date) ? date_format_date($date, 'custom', 'd') : '';
     $tokens['d']              = !empty($date) ? date_format_date($date, 'custom', 'j') : '';
+    $tokens['time']           = !empty($date) ? date_format_date($date, 'custom', 'H:i') : '';
 
     if (!empty($item['value2'])) {
 
@@ -78,10 +83,13 @@ function _date_token_values($type, $object = NULL) {
       $tokens['to-m']              = !empty($date) ? date_format_date($date, 'custom', 'n') : '';
       $tokens['to-ww']             = !empty($date) ? date_format_date($date, 'custom', 'W') : '';
       $tokens['to-date']           = !empty($date) ? date_format_date($date, 'custom', DATE_FORMAT_DATE) : '';
+      $tokens['to-datetime']       = !empty($date) ? date_format_date($date, 'custom', DATE_FORMAT_ISO) : '';
       $tokens['to-day']            = !empty($date) ? date_format_date($date, 'custom', 'l') : '';
       $tokens['to-ddd']            = !empty($date) ? date_format_date($date, 'custom', 'D') : '';
       $tokens['to-dd']             = !empty($date) ? date_format_date($date, 'custom', 'd') : '';
       $tokens['to-d']              = !empty($date) ? date_format_date($date, 'custom', 'j') : '';
+      $tokens['to-time']           = !empty($date) ? date_format_date($date, 'custom', 'H:i') : '';
+
     }
     return $tokens;
   }
