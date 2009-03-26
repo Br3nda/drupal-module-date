@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.53 2009/03/20 00:28:47 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.54 2009/03/26 11:21:40 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -280,6 +280,10 @@ function _date_elements() {
  * Process an individual date element.
  */
 function date_combo_process($element, $edit = NULL) {
+  if (isset($element['#access']) && empty($element['#access'])) {
+    return;
+  }
+
   $field = $element['#field'];
   $delta = $element['#delta'];
   $from_field = $element['#columns'][0];

@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.275 2009/03/26 10:56:18 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.276 2009/03/26 11:21:40 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #408770 Abort date_combo processing when user has no #access.
 - #388728 Change dash to en dash in date range theme.
 - #414290 Update timezone form_alter to account for difference between Event version 1 and 2.
 - #400992 Add time and datetime tokens.
