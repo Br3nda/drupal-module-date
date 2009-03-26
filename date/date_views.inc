@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.53 2009/01/13 13:49:23 karens Exp $
+// $Id: date_views.inc,v 1.26.2.54 2009/03/26 22:40:21 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -227,7 +227,7 @@ function _date_views_timestamp_filter_handler($op, $filter, $filterinfo, &$query
 function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_type = DATE_ISO) {
   require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
   require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_elements.inc');
-
+  
   // There's no simple way to do this, figure out if this filter has an
   // exposed value, and if so, ignore options like 'now'. Need to do 
   // this so we don't adjust to 'now' when the date is deliberately
@@ -236,9 +236,11 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   // filter.
   $view = $GLOBALS['current_view'];
   foreach ((array) $view->exposed_filter as $delta => $exposed_filter) {
-    if ($exposed_filter['field'] == $filter['field']) {
+    $exposed_delta = trim(str_replace('filter', '', $name));
+    $exposed_field = $view->exposed_filter[$exposed_delta]['field'];
+    if ($filter['field'] == $exposed_field && $delta == $exposed_delta) {
       // This is an exposed filter that has been submitted.
-      if (isset($_GET['filter'. $delta])) {
+      if (isset($_GET['filter'. $exposed_delta])) {
         $filter['options'] = '';
       }
     }
@@ -273,7 +275,7 @@ function _date_views_filter_handler($op, $filter, $filterinfo, &$query, $field_t
   else {
     $value = $filter['value'];
   }
-      
+    
   // Filter out 5.1 version values that won't work in 5.2.
   if ($filterinfo['type'] == 'DATE' && !preg_match(DATE_REGEX_LOOSE, $value)) {
     $value = '';

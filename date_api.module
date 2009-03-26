@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.71 2009/03/19 20:51:36 karens Exp $
+// $Id: date_api.module,v 1.44.2.72 2009/03/26 22:40:20 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -641,7 +641,7 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME, $granula
   }
   
   // Special handling for partial dates that don't need precision.
-  $max_granularity = array_pop($granularity);
+  $max_granularity = array_pop(drupal_map_assoc($granularity));
   if (in_array($max_granularity, array('year', 'month')) || $type == DATE_ISO || $type == DATE_ARRAY) {
     $date = date_fuzzy_datetime($date);
     $type = DATE_DATETIME;
@@ -1582,7 +1582,7 @@ function date_views_filter_value($element) {
       $exposed_delta = trim(str_replace('filter', '', $name));
       $exposed_field = $view->exposed_filter[$exposed_delta]['field'];
       foreach ((array) $view->filter as $delta => $filter) {
-        if ($filter['field'] == $exposed_field) {
+        if ($filter['field'] == $exposed_field && $delta == $exposed_delta) {
           $adjustment = $filter['options'];
           $value = $filter['value'];
           $op = $filter['operator'];
@@ -1605,7 +1605,6 @@ function date_views_filter_value($element) {
       else {
         $now = date_make_date($value);
       }
-      
       switch ($element['#type']) {
         case 'date_select':
           $form_value = date_convert($now, DATE_OBJECT, DATE_ARRAY);
