@@ -1,9 +1,12 @@
-//$Id: CHANGELOG.txt,v 1.1.6.282 2009/03/27 13:07:26 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.283 2009/03/27 13:44:02 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
+
+Version 5.2.6
+===============
 
 - #314959 Make sure non-requested date fields are not displayed.
 - #317105 Update Isreal DST rules.
