@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.52 2009/03/19 20:51:36 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.53 2009/03/27 00:52:31 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -491,7 +491,7 @@ function date_select_input_value($element) {
     // Use fuzzy_datetime here to be sure year-only dates
     // aren't inadvertantly shifted to the wrong year by trying
     // to save '2009-00-00 00:00:00'.
-    return fuzzy_datetime(date_convert($element['#value'], DATE_ARRAY, DATE_DATETIME));
+    return date_fuzzy_datetime(date_convert($element['#value'], DATE_ARRAY, DATE_DATETIME));
   }
   return NULL;
 }
