@@ -1,5 +1,5 @@
 <?php
-// $Id: date_views.inc,v 1.26.2.55 2009/03/27 01:14:34 karens Exp $
+// $Id: date_views.inc,v 1.26.2.56 2009/03/27 10:26:27 karens Exp $
 
 /**
  * Implementation of hook_views_style_plugins()
@@ -423,7 +423,7 @@ function _date_views_argument_filter(&$query, $argtype, $arg, $field_type) {
   }
   else {
     $query->add_where($date_handler->sql_where_date('DATE', $sql_field, ">=", date_format($range[0], DATE_FORMAT_DATETIME)));
-    $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<=", date_format($range[1], DATE_FORMAT_DATETIME)));
+    $query->add_where($date_handler->sql_where_date('DATE', $sql_field, "<", date_format($range[1], DATE_FORMAT_DATETIME)));
   }
 }
 
