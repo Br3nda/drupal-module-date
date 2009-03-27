@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.277 2009/03/26 22:40:20 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.278 2009/03/27 01:14:34 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #380754 Grouped date handler needs 'AND' when it has a $where clause.
 - #310438 Clear up confusion when more than one date filter is used in the same view.
 - #408770 Abort date_combo processing when user has no #access.
 - #388728 Change dash to en dash in date range theme.
