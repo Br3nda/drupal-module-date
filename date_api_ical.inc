@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.31 2009/02/20 14:00:53 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.32 2009/04/28 23:54:29 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -559,7 +559,10 @@ function date_ical_parse_location($field, $data) {
 function date_ical_date($ical_date, $to_tz = FALSE) {
   // If the ical date has no timezone, must assume it is stateless
   // so treat it as a local date.
-  if (empty($ical_date['tz'])) {
+  if (empty($ical_date['datetime'])) {
+    return NULL;
+  }
+  elseif (empty($ical_date['tz'])) {
     $from_tz = date_default_timezone_name();
   }
   else {
@@ -651,7 +654,7 @@ function date_api_ical_build_rrule($form_values) {
     $RRULE .= ';BYMONTHDAY='. $BYMONTHDAY;
   }
   // The UNTIL date is supposed to always be expressed in UTC.
-  if (array_key_exists('UNTIL', $form_values) && array_key_exists('datetime', $form_values['UNTIL'])) {
+  if (array_key_exists('UNTIL', $form_values) && array_key_exists('datetime', $form_values['UNTIL']) && !empty($form_values['UNTIL']['datetime'])) {
     $until = date_ical_date($form_values['UNTIL'], 'UTC');
     $RRULE .= ';UNTIL='. date_format($until, DATE_FORMAT_ICAL) .'Z';
   }

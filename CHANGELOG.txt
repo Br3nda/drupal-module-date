@@ -1,9 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.283 2009/03/27 13:44:02 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.284 2009/04/28 23:54:29 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
+
+- #409476 Make sure empty UNTIL date is not parsed into RRULE.
 
 Version 5.2.6
 ===============
