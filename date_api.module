@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.73 2009/04/29 11:21:26 karens Exp $
+// $Id: date_api.module,v 1.44.2.74 2009/04/29 13:46:54 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1363,11 +1363,18 @@ function date_limit_value($date, $granularity, $type = DATE_DATETIME) {
  *   a format string with all other elements removed
  */
 function date_limit_format($format, $granularity) {
-  // Get rid of dash separating date and time if either is missing.
-  if (!date_has_time($granularity)
-    || sizeof(array_intersect($granularity, array('year', 'month', 'day')) == 0)) {
-    $regex[] = '( -)';
-  }
+  // If punctuation has been escaped, remove the escaping.
+  // Done using strtr because it is easier than getting the
+  // escape character extracted using preg_replace.
+  $replace = array(
+    '\-' => '-',
+    '\:' => ':',
+    "\'" => "'",
+    '\.' => '.',
+    '\,' => ',',
+    );
+  $format = strtr($format, $replace); 
+  
   if (!date_has_time($granularity)) {
       $regex[] = '((?<!\\\\)[a|A])';
   }
@@ -1403,19 +1410,21 @@ function date_limit_format($format, $granularity) {
   $regex[] = '(\(\))';
   $regex[] = '(\[\])';
   $regex[] = '(\|\|)';
-  
+
   // Remove selected values from string.
   $format = trim(preg_replace($regex, array(), $format));
-  // Remove orpaned punctuation at the beginning of the string.
-  $format = preg_replace('`^([\-/\.,:])`', '', $format);
-  // Remove orpaned punctuation at the end of the string.
-  $format = preg_replace('([\-/\.,:]$)', '', $format);
+  // Remove orphaned punctuation at the beginning of the string.
+  $format = preg_replace('`^([\-/\.,:\'])`', '', $format);
+  // Remove orphaned punctuation at the end of the string.
+  $format = preg_replace('([\-/\.,:\']$)', '', $format);
+  $format = preg_replace('(\\$)', '', $format);
+    
   // Trim any whitespace from the result.
   $format = trim($format);
   
   // After removing the non-desired parts of the format, test if the only 
   // things left are escaped, non-date, characters. If so, return nothing.
-  if (!$test = preg_replace('(\\\\\w{1})', '', $format)) {
+  if (!$test = trim(preg_replace('(\\\\\w{1})', '', $format))) {
     return '';
   }
   return $format;
