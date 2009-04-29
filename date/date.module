@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.57 2009/03/27 13:07:27 karens Exp $
+// $Id: date.module,v 1.39.2.58 2009/04/29 11:21:27 karens Exp $
 
 /**
  * @file
@@ -515,7 +515,10 @@ function date_formatter_format($formatter, $field_name) {
       }
       break;
   }
-  return date_limit_format($format, date_granularity($field));
+  // A selected format might include timezone information.
+  $granularity = date_granularity($field);
+  array_push($granularity, 'timezone');
+  return date_limit_format($format, $granularity);
 }
 
 function date_content_generate($node, $field) {

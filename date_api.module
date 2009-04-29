@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.72 2009/03/26 22:40:20 karens Exp $
+// $Id: date_api.module,v 1.44.2.73 2009/04/29 11:21:26 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1394,7 +1394,7 @@ function date_limit_format($format, $granularity) {
         $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[s])';
         break;
       case 'timezone':
-        $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[OZPe])';
+        $regex[] = '([\-/\.,:]?\s?(?<!\\\\)[TOZPe])';
         break;
     
     }
