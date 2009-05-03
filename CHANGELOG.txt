@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.288 2009/05/03 14:52:38 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.289 2009/05/03 15:38:24 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #427830 Postgres can't handle \T.
 - #417032 Fix typo that caused date fields using text widget not to have values saved.
 - #418206 All date elements should be in datetime format when processing elements.
 - #375864 Clean up date_limit_format() to handle more odd formats.

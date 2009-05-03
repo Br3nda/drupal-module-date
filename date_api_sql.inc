@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.40 2009/02/26 18:47:48 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.41 2009/05/03 15:38:25 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -335,6 +335,7 @@ class date_sql_handler {
           'H' => 'HH24',
           'i' => 'MI',
           's' => 'SS',
+          '\T' => '"T"',
           );
         $format = strtr($format, $replace);
         return "TO_CHAR($field, '$format')";
