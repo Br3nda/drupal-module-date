@@ -1,5 +1,5 @@
 <?php
-//$Id: date_elements.inc,v 1.22.2.54 2009/03/26 11:21:40 karens Exp $
+//$Id: date_elements.inc,v 1.22.2.55 2009/05/03 14:41:10 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -249,7 +249,7 @@ function date_local_date($node, $delta, $item, $timezone, $field, $part = 'value
       $db_timezone = date_get_timezone_db($field['tz_handling']);
       $value = date_convert($value, $field['type'], DATE_DATETIME, $db_timezone);
     }
-    $date = date_make_date($value, $timezone_db, $field['type'], $field['granularity']);
+    $date = date_make_date($value, $timezone_db, DATE_DATETIME, $field['granularity']);
     date_timezone_set($date, timezone_open($timezone));
   }
   if (is_object($date) && empty($item[$part]) && $default_value == 'strtotime' && !empty($default_value_code)) {

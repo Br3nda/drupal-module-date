@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.74 2009/04/29 13:46:54 karens Exp $
+// $Id: date_api.module,v 1.44.2.75 2009/05/03 14:41:10 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1375,6 +1375,7 @@ function date_limit_format($format, $granularity) {
     );
   $format = strtr($format, $replace); 
   
+  $regex = array();
   if (!date_has_time($granularity)) {
       $regex[] = '((?<!\\\\)[a|A])';
   }
