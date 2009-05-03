@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.27.2.53 2009/03/27 00:52:31 karens Exp $
+//$Id: date_api_elements.inc,v 1.27.2.54 2009/05/03 14:52:38 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -527,7 +527,7 @@ function date_text_input_value($element) {
   if (!$element['#required'] && trim($input) == '') return NULL;
   
   $value = date_convert_from_custom($input, $element['#date_format']);
-  $value = date_limit_value($date, $granularity);
+  $value = date_limit_value($value, $granularity);
   
   // If it creates a valid date, use it.
   if (date_is_valid($value, DATE_DATETIME, $granularity)) {
