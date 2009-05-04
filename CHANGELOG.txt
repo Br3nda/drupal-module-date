@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.291 2009/05/04 23:02:29 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.292 2009/05/04 23:13:55 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #452420 Revert change of hyphen to dash in date display, dash is handled badly by token and elsewhere.
 - #347080 Using 'first' and 'last' is more reliable than '+1 week' in strtotime().
 - #369020 Fix bug when finding first or last Mon/Tue/Wed/Thu/Fri/Sat/Sun of month.
 - #427830 Postgres can't handle \T.

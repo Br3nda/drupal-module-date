@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.36 2009/03/26 10:56:18 karens Exp $
+//$Id: date.theme,v 1.2.2.37 2009/05/04 23:13:55 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -94,7 +94,7 @@ function theme_date_display_combination($field, $item, $dates, $node = NULL) {
     $time2 = preg_replace('`^([\(\[])`', '', $dates['value2']['formatted_time']);
     $time2 = preg_replace('([\)\]]$)', '', $time2);
     $time = '<span class="date-display-start">'. $time1 .'</span>'.
-      '<span class="date-display-separator"> &#8211; </span>'.
+      '<span class="date-display-separator"> - </span>'.
       '<span class="date-display-end">'. $time2 .'</span>';
     $replaced = str_replace($time1, $time, $date1);
     $output .= '<span class="date-display-single">'. $replaced . $timezone .'</span> ';
@@ -102,7 +102,7 @@ function theme_date_display_combination($field, $item, $dates, $node = NULL) {
   // Different days, display both in their entirety.
   else {
     $output .= '<span class="date-display-start">'. $date1 .'</span>'.
-      '<span class="date-display-separator"> &#8211; </span>'.
+      '<span class="date-display-separator"> - </span>'.
       '<span class="date-display-end">'. $date2 . $timezone . '</span>';
   }
   if (module_exists('date_repeat') && !empty($item['rrule'])) {
