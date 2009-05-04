@@ -1,5 +1,5 @@
 <?php
-// $Id: date_php4.inc,v 1.19.2.44 2009/04/29 11:21:27 karens Exp $
+// $Id: date_php4.inc,v 1.19.2.45 2009/05/04 23:02:29 karens Exp $
 
 /**
  * @file
@@ -613,26 +613,27 @@ function date_is_dst($timestamp, $timezone = NULL) {
   $year = date('Y', $timestamp);
 
   // Information on Daylight Saving time was obtained from http://webexhibits.org/daylightsaving/g.html
+  // Note that 'last sunday' is interpreted as 'the last sunday before...'.
   switch ($region) {
     case 0:
       return 0;
     case 1: // Egypt
       // start of DST (last Friday in April)
-      $dststart = strtotime("-1 week friday UTC", strtotime("1 may $year UTC"));
+      $dststart = strtotime("last friday UTC", strtotime("1 may $year UTC"));
       // end of DST (last Thursday in September)
-      $dstend = strtotime("-1 week thursday UTC", strtotime("1 october $year UTC"));
+      $dstend = strtotime("last thursday UTC", strtotime("1 october $year UTC"));
       break;
     case 2: // Namibia
       // start of DST (first Sunday in September)
-      $dststart = strtotime("1 week sunday UTC", strtotime("1 september $year UTC"));
+      $dststart = strtotime("first sunday UTC", strtotime("1 september $year UTC"));
       // end of DST (first Sunday April)
-      $dstend = strtotime("1 week sunday UTC", strtotime("1 april $year UTC"));
+      $dstend = strtotime("first sunday UTC", strtotime("1 april $year UTC"));
       break;
     case 3: // Former USSR
       // start of DST (last Sunday in March)
-      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC"));
+      $dststart = strtotime("last sunday UTC", strtotime("1 april $year UTC"));
       // end of DST (last Sunday October)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
+      $dstend = strtotime("last sunday UTC", strtotime("1 november $year UTC"));
       break;
     case 4: // Iraq, Syria
       // start of DST (April 1st)
@@ -681,9 +682,9 @@ function date_is_dst($timestamp, $timezone = NULL) {
       break;
     case 6: // Lebanon, Kirgizstan
       // start of DST (Last Sunday in March)
-      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC"));
+      $dststart = strtotime("last sunday UTC", strtotime("1 april $year UTC"));
       // end of DST (Last Sunday in October)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
+      $dstend = strtotime("last sunday UTC", strtotime("1 november $year UTC"));
       break;
     case 7: // Palestine
       // start of DST (First Friday on or after April 15th)
@@ -699,74 +700,74 @@ function date_is_dst($timestamp, $timezone = NULL) {
       break;
     case 9: // South Australia
       // start of DST  (last Sunday in October)
-      $dststart = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
+      $dststart = strtotime("last sunday UTC", strtotime("1 november $year UTC"));
       // end of DST (last Sunday in March)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC"));
+      $dstend = strtotime("last sunday UTC", strtotime("1 april $year UTC"));
       break;
     case 10: // Australia, Tasmania
       // start of DST  (first Sunday in October)
-      $dststart = strtotime("1 week sunday UTC", strtotime("1 october $year UTC"));
+      $dststart = strtotime("first sunday UTC", strtotime("1 october $year UTC"));
       // end of DST (last Sunday in March)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC"));
+      $dstend = strtotime("last sunday UTC", strtotime("1 april $year UTC"));
       break;
     case 11: // New Zealand
       // start of DST  (first Sunday in October)
-      $dststart = strtotime("1 week sunday UTC", strtotime("1 october $year UTC"));
-      // end of DST (third Sunday in March)
-      $dstend = strtotime("3 week sunday UTC", strtotime("1 march $year UTC"));
+      $dststart = strtotime("first sunday UTC", strtotime("1 october $year UTC"));
+      // end of DST (first Sunday in April)
+      $dstend = strtotime("first sunday UTC", strtotime("1 april $year UTC"));
       break;
     case 12: // Tonga
       // start of DST (first Sunday in November)
-      $dststart = strtotime("1 week sunday UTC",  strtotime("1 november $year UTC"));
+      $dststart = strtotime("first sunday UTC",  strtotime("1 november $year UTC"));
       // end of DST (last Sunday in January)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 february $year UTC"));
+      $dstend = strtotime("last sunday UTC", strtotime("1 february $year UTC"));
       break;
     case 13: // EU and other European countries
       // start of DST (last Sunday in March 1 am UTC)
-      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC"));
+      $dststart = strtotime("last sunday UTC", strtotime("1 april $year UTC"));
       // end of DST in Europe (last Sunday in October 1 am UTC)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
+      $dstend = strtotime("last sunday UTC", strtotime("1 november $year UTC"));
       break;
     case 14: // Russian Federation
       // start of DST (last Sunday in March 2 am local time)
-      $dststart = strtotime("-1 week sunday UTC", strtotime("1 april $year UTC"));
+      $dststart = strtotime("last sunday UTC", strtotime("1 april $year UTC"));
       // end of DST (last Sunday in October 2 am local time)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
+      $dstend = strtotime("last sunday UTC", strtotime("1 november $year UTC"));
       break;
     case 15: // Northern America (where applicable)
       // start of DST  (where applicable) (first Sunday in April before 2007,
       // after that second Sunday in March, 2 am local time)
       if ($year < 2007) {
-        $dststart = strtotime("1 week sunday UTC", strtotime("1 april $year UTC"));
+        $dststart = strtotime("first sunday UTC", strtotime("1 april $year UTC"));
       }
       else {
-        $dststart = strtotime("1 week sunday UTC", strtotime("1 march $year UTC"));
+        $dststart = strtotime("second sunday UTC", strtotime("1 march $year UTC"));
       }
       // end of DST (where applicable) (last Sunday in October 2 am local time)
       if ($year < 2007) {
-        $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
+        $dstend = strtotime("last sunday UTC", strtotime("1 november $year UTC"));
       }
       else {
-        $dstend = strtotime("1 week sunday UTC", strtotime("1 november $year UTC"));
+        $dstend = strtotime("first sunday UTC", strtotime("1 november $year UTC"));
       }
       break;
     case 16: // Cuba
       // start of DST  (April 1st)
       $dststart = strtotime("1 april $year UTC");
       // end of DST (last Sunday in October)
-      $dstend = strtotime("-1 week sunday UTC", strtotime("1 november $year UTC"));
+      $dstend = strtotime("last sunday UTC", strtotime("1 november $year UTC"));
       break;
     case 17: // Brazil
       // start of DST  (first Sunday in November)
-      $dststart = strtotime("1 week sunday UTC", strtotime("1 november $year UTC"));
+      $dststart = strtotime("first sunday UTC", strtotime("1 november $year UTC"));
       // end of DST (third Sunday in February)
-      $dstend = strtotime("3 week sunday UTC", strtotime("1 february $year UTC"));
+      $dstend = strtotime("third sunday UTC", strtotime("1 february $year UTC"));
       break;
     case 18: // Chile
       // start of DST  (Second Saturday of October - at midnight)
-      $dststart = strtotime("2 week saturday UTC", strtotime("1 october $year UTC"));
+      $dststart = strtotime("second saturday UTC", strtotime("1 october $year UTC"));
       // end of DST (Second Saturday of March - at midnight)
-      $dstend = strtotime("2 week sunday UTC", strtotime("1 march $year UTC"));
+      $dstend = strtotime("second sunday UTC", strtotime("1 march $year UTC"));
       break;
     case 19: // Falklands
       // start of DST  (First Sunday on or after 8 September)
@@ -776,9 +777,9 @@ function date_is_dst($timestamp, $timezone = NULL) {
       break;
     case 20: // Paraguay
       // start of DST  (first Sunday in September)
-      $dststart = strtotime("1 week sunday UTC", strtotime("1 september $year UTC"));
+      $dststart = strtotime("first sunday UTC", strtotime("1 september $year UTC"));
       // end of DST (first Sunday in April)
-      $dstend = strtotime("1 week sunday UTC", strtotime("1 april $year UTC"));
+      $dstend = strtotime("first sunday UTC", strtotime("1 april $year UTC"));
       break;
   }
   // Have to use reverse logic in southern hemisphere.
