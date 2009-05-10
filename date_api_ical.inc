@@ -1,5 +1,5 @@
 <?php
-/* $Id: date_api_ical.inc,v 1.21.2.32 2009/04/28 23:54:29 karens Exp $ */
+/* $Id: date_api_ical.inc,v 1.21.2.33 2009/05/10 12:44:29 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -587,10 +587,13 @@ function date_ical_date($ical_date, $to_tz = FALSE) {
  */
 function date_ical_escape_text($text) {
   //$text = strip_tags($text);
-  $text = str_replace('"', '\"', $text);
+  // TODO Per #38130 the iCal specs don't want : and " escaped
+  // but there was some reason for adding this in. Need to watch
+  // this and see if anything breaks.
+  //$text = str_replace('"', '\"', $text);
+  //$text = str_replace(":", "\:", $text);
   $text = str_replace("\\", "\\\\", $text);
   $text = str_replace(",", "\,", $text);
-  $text = str_replace(":", "\:", $text);
   $text = str_replace(";", "\;", $text);
   $text = str_replace("\n", "\n ", $text);
   return trim($text);
