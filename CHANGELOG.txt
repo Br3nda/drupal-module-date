@@ -1,10 +1,14 @@
-//$Id: CHANGELOG.txt,v 1.1.6.292 2009/05/04 23:13:55 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.293 2009/05/10 11:32:20 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #401152 Fix broken handling of long month name in input format.
+
+Version 5.2.7
+===============
 - #452420 Revert change of hyphen to dash in date display, dash is handled badly by token and elsewhere.
 - #347080 Using 'first' and 'last' is more reliable than '+1 week' in strtotime().
 - #369020 Fix bug when finding first or last Mon/Tue/Wed/Thu/Fri/Sat/Sun of month.
