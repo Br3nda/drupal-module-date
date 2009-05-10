@@ -1,5 +1,5 @@
 <?php
-//$Id: date.theme,v 1.2.2.38 2009/05/10 12:14:21 karens Exp $
+//$Id: date.theme,v 1.2.2.39 2009/05/10 21:51:56 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -91,13 +91,13 @@ function theme_date_display_combination($field, $item, $dates, $node = NULL) {
     $time1 = preg_replace('([\)\]]$)', '', $time1);
     $time2 = preg_replace('`^([\(\[])`', '', $dates['value2']['formatted_time']);
     $time2 = preg_replace('([\)\]]$)', '', $time2);
-    $time = theme('date_display_double', $time1, $time2);
+    $time = theme('date_display_range', $time1, $time2);
     $replaced = str_replace($time1, $time, $date1);
     $output .= theme('date_display_single', $replaced, $timezone);
   }
   // Different days, display both in their entirety.
   else {
-    $output .= theme('date_display_double', $date1, $date2, $timezone);
+    $output .= theme('date_display_range', $date1, $date2, $timezone);
   }
   
   return $output;
@@ -107,7 +107,7 @@ function theme_date_display_single($date, $timezone = NULL) {
   return '<span class="date-display-single">'. $date . $timezone .'</span>';
 }
 
-function theme_date_display_double($date1, $date2, $timezone = NULL) {
+function theme_date_display_range($date1, $date2, $timezone = NULL) {
   return '<span class="date-display-start">'. $date1 .'</span>'.
       '<span class="date-display-separator"> - </span>' .
       '<span class="date-display-end">'. $date2 . $timezone. '</span>';
