@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.76 2009/05/12 09:59:29 karens Exp $
+// $Id: date_api.module,v 1.44.2.77 2009/05/12 12:50:15 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1297,6 +1297,11 @@ function date_has_time($granularity) {
   return sizeof(array_intersect($granularity, array('hour', 'minute', 'second'))) > 0 ? TRUE : FALSE;
 }
 
+function date_has_date($granularity) {
+  if (!is_array($granularity)) $granularity = array();
+  return sizeof(array_intersect($granularity, array('year', 'month', 'day'))) > 0 ? TRUE : FALSE;
+}
+
 /**
  * Recalculate a date so it only includes elements from a granularity
  * array. Helps prevent errors when unwanted values round up and ensures
@@ -1374,6 +1379,13 @@ function date_limit_format($format, $granularity) {
     '\,' => ',',
     );
   $format = strtr($format, $replace); 
+  
+  // Get the 'T' out of ISO date formats that don't have
+  // both date and time.
+  if (!date_has_time($granularity) || !date_has_date($granularity)) {
+    $format = str_replace('\T', ' ', $format);
+    $format = str_replace('T', ' ', $format);
+  }  
   
   $regex = array();
   if (!date_has_time($granularity)) {
