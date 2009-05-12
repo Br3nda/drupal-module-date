@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.4.2.16 2009/05/04 13:20:18 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.4.2.17 2009/05/12 09:59:29 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -490,8 +490,17 @@ function date_repeat_set_month_day($date_in, $day, $count = 1, $direction = '+',
     if (empty($day)) {
       $day = 'days';
     }
-    date_modify($date, $direction . $count .' '. $day);
     
+    if (empty($day)) {
+      date_modify($date, $direction . $count .' days');
+    }
+    else {
+      // Use the English text for order, like First Sunday
+      // instead of +1 Sunday to overcome PHP5 bug, (see #369020).
+      $order = date_order();
+      date_modify($date, $order[$direction . $count] .' '. $day);
+    }
+        
     // If that takes us outside the current month, don't go there.
     if (date_format($date, 'n') == $current_month) {
       return $date;
@@ -530,7 +539,16 @@ function date_repeat_set_year_day($date_in, $day, $count = 1, $direction = '+', 
     if (empty($day)) {
       $day = 'days';
     }
-    date_modify($date, $direction . $count .' '. $day);
+    
+    if (empty($day)) {
+      date_modify($date, $direction . $count .' days');
+    }
+    else {
+      // Use the English text for order, like First Sunday
+      // instead of +1 Sunday to overcome PHP5 bug, (see #369020).
+      $order = date_order();
+      date_modify($date, $order[$direction . $count] .' '. $day);
+    }
     
     // If that takes us outside the current year, don't go there.
     if (date_format($date, 'Y') == $current_year) {

@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.297 2009/05/10 14:39:00 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.298 2009/05/12 09:59:29 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #369020 Switch '+1 Sunday' to 'First Sunday' to over PHP5 bug.
 - #315443 Make sure 'within' labels don't break when used in text fields.
 - #381370 Remove escaping for colon and double quote per ical spec.
 - #456460 Break out simple themes for date_display_single and date_display_double for easier control by themers of separator and other html.
