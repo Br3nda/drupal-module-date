@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.299 2009/05/12 12:50:15 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.300 2009/06/08 19:17:08 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #473308 Add handling for year-only date stored in timestamp field.
 - Fix date_limit_format() to be sure the 'T' is stripped out of ISO dates with only date or only time.
 - #369020 Switch '+1 Sunday' to 'First Sunday' to over PHP5 bug.
 - #315443 Make sure 'within' labels don't break when used in text fields.

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.44.2.77 2009/05/12 12:50:15 karens Exp $
+// $Id: date_api.module,v 1.44.2.78 2009/06/08 19:17:08 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -640,19 +640,23 @@ function date_make_date($date, $timezone = NULL, $type = DATE_DATETIME, $granula
     return NULL;
   }
   
-  // Special handling for partial dates that don't need precision.
-  $max_granularity = array_pop(drupal_map_assoc($granularity));
-  if (in_array($max_granularity, array('year', 'month')) || $type == DATE_ISO || $type == DATE_ARRAY) {
-    $date = date_fuzzy_datetime($date);
-    $type = DATE_DATETIME;
-  }
-  
   // Make sure some value is set for the date and timezone even if the
   // site timezone is not yet set up to avoid fatal installation
   // errors.
   if (empty($timezone) || !date_timezone_is_valid($timezone)) {
     $timezone = date_default_timezone_name();
   }
+    
+  // Special handling for partial dates that don't need precision.
+  $max_granularity = array_pop($granularity);
+  if (in_array($max_granularity, array('year', 'month')) || $type == DATE_ISO || $type == DATE_ARRAY) {
+    if ($type == DATE_UNIX) {
+      $date = date_convert($date, $type, DATE_DATETIME);
+    }
+    $date = date_fuzzy_datetime($date);
+    $type = DATE_DATETIME;
+  }
+  
   if (!date_is_valid($date, $type, $granularity)) {
     $date = 'now';
   }
