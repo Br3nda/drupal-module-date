@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.58 2009/04/29 11:21:27 karens Exp $
+// $Id: date.module,v 1.39.2.59 2009/06/09 17:20:54 karens Exp $
 
 /**
  * @file
@@ -247,7 +247,13 @@ function date_formatter_process($field, $item, $node, $formatter = 'default') {
       if (is_object($date)) {
         if ($format == 'format_interval') {
           $dates[$processed]['interval'] = date_format_interval($date);
-        } 
+        }
+        elseif ($format == 'U') {
+          $dates[$processed]['formatted'] = date_format_date($date, 'custom', $format);
+          $dates[$processed]['formatted_date'] = date_format_date($date, 'custom', $format);
+          $dates[$processed]['formatted_time'] = '';
+          $dates[$processed]['formatted_timezone'] = '';
+        }
         elseif (!empty($format)) {
           $dates[$processed]['formatted'] = date_format_date($date, 'custom', $format);
           $dates[$processed]['formatted_date'] = date_format_date($date, 'custom', date_limit_format($format, array('year', 'month', 'day')));

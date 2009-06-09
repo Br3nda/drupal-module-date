@@ -1,10 +1,11 @@
-//$Id: CHANGELOG.txt,v 1.1.6.300 2009/06/08 19:17:08 karens Exp $
+//$Id: CHANGELOG.txt,v 1.1.6.301 2009/06/09 17:20:53 karens Exp $
 Date Module 5.2
 =================
 
 Version 5.2-dev
 =================
 
+- #418174 Timestamp format should not be run through date_limit_format().
 - #473308 Add handling for year-only date stored in timestamp field.
 - Fix date_limit_format() to be sure the 'T' is stripped out of ISO dates with only date or only time.
 - #369020 Switch '+1 Sunday' to 'First Sunday' to over PHP5 bug.
