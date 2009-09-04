@@ -1,5 +1,5 @@
 <?php
-// $Id: date_plugin_display_attachment.inc,v 1.2 2008/12/13 17:55:35 karens Exp $
+// $Id: date_plugin_display_attachment.inc,v 1.3 2009/09/04 09:43:13 karens Exp $
 /**
  * The plugin that handles date navigation attachments.
  * 
