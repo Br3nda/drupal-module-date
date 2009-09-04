@@ -1,4 +1,4 @@
-// $Id: date_popup.js,v 1.2 2008/12/13 17:55:33 karens Exp $
+// $Id: date_popup.js,v 1.3 2009/09/04 09:35:08 karens Exp $
 
 /**
  * Attaches the calendar behavior to all required fields
@@ -11,11 +11,6 @@ Drupal.behaviors.date_popup = function (context) {
         // Explicitely filter the methods we accept.
         switch (datePopup.func) {
           case 'datepicker':
-            if (datePopup.settings.fromTo) {
-              // TODO : unsure what the id's for 'From' and 'To' are actually supposed to be
-              // datePopup.settings.minDate = (this.id == 'dTo' ? getDate($('#dFrom').val()) : null);
-              // datePopup.settings.maxDate = (this.id == 'dFrom' ? getDate($('#dTo').val()) : null);
-            }
             $(this)
               .datepicker(datePopup.settings)
               .addClass('date-popup-init')
@@ -23,11 +18,6 @@ Drupal.behaviors.date_popup = function (context) {
             break;
 
           case 'timeEntry':
-            if (datePopup.settings.fromTo) {
-              // TODO : unsure what the id's for 'From' and 'To' are actually supposed to be
-              // datePopup.settings.minTime = (this.id == 'tTo' ? getDate($('#tFrom').val()) : null);
-              // datePopup.settings.maxDate = (this.id == 'tFrom' ? getDate($('#tTo').val()) : null);
-            }
             $(this)
               .timeEntry(datePopup.settings)
               .addClass('date-popup-init')

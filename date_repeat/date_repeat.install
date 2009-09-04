@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.install,v 1.4 2008/12/13 17:55:33 karens Exp $
+// $Id: date_repeat.install,v 1.5 2009/09/04 09:37:48 karens Exp $
 
 /**
  * Implementation of hook_install().
