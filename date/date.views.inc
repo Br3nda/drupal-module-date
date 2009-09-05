@@ -1,6 +1,9 @@
 <?php
-//$Id: date.views.inc,v 1.4 2009/09/04 09:29:21 karens Exp $
-
+//$Id: date.views.inc,v 1.5 2009/09/05 09:26:57 karens Exp $
+/**
+ * @file
+ * Date Views code.
+ */
 /**
  * Implementation of hook_views_handlers().
  */

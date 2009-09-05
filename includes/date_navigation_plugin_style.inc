@@ -1,5 +1,5 @@
 <?php
-// $Id: date_navigation_plugin_style.inc,v 1.3 2009/09/04 09:43:13 karens Exp $
+// $Id: date_navigation_plugin_style.inc,v 1.4 2009/09/05 09:26:58 karens Exp $
 /**
  * Style plugin to create date back/next navigation.
  * 
@@ -37,7 +37,7 @@ class date_navigation_plugin_style extends views_plugin_style {
   }
   
   function query() {
-    require_once('./'. drupal_get_path('module', 'date_api') .'/date_api_sql.inc');
+    require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'date_api') . '/date_api_sql.inc');
         
     // Bring the argument information into the view so our theme can access it.
     $i = 0;    
