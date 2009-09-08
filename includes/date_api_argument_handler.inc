@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_argument_handler.inc,v 1.5 2009/09/08 08:52:20 karens Exp $
+// $Id: date_api_argument_handler.inc,v 1.6 2009/09/08 14:19:26 karens Exp $
 /**
  * Date API argument handler.
  */
@@ -77,7 +77,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     $fields = date_api_fields($this->definition['base']);
     $options = array();
     foreach ($fields['name'] as $name => $field) {
-      $options[$name] = $field['label'];
+      $options[$name] = $instance['label'];
     }
     $form['date_fields'] = array(
       '#title' => t('Date field(s)'),

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_handler_sort.inc,v 1.1 2009/09/04 09:29:21 karens Exp $
+// $Id: date_handler_sort.inc,v 1.2 2009/09/08 14:19:24 karens Exp $
 
 /**
  * @file
@@ -23,8 +23,8 @@ class date_handler_sort extends content_handler_sort {
     parent::options_form($form, $form_state);
 
     // Only add the form gadget if the field is multiple.
-    if ($field['multiple']) {
-      $max_delta = $field['multiple'];
+    if ($field['cardinality']) {
+      $max_delta = $field['cardinality'];
       // 1 means unlimited.
       if ($max_delta == 1) {
         $max_delta = 10;

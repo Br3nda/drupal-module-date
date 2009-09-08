@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.19 2009/09/08 08:52:20 karens Exp $
+// $Id: date_repeat_form.inc,v 1.20 2009/09/08 14:19:26 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -34,7 +34,7 @@
 /**
  * Generate the repeat setting form.
  */
-function _date_repeat_rrule_process($element, $edit, $form_state, $form) {
+function _date_repeat_rrule_process($element, $form_state, $form) {
   require_once(' ./' . drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
   
   if (empty($element['#date_repeat_widget'])) {
