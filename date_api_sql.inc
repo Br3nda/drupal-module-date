@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.15 2009/09/05 09:26:57 karens Exp $
+// $Id: date_api_sql.inc,v 1.16 2009/09/08 08:52:19 karens Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -67,7 +67,7 @@ class date_sql_handler {
     $this->db_type = $GLOBALS['db_type'];
     $this->date_type = $date_type;
     $this->db_timezone = 'UTC';
-    $this->local_timezone = isset($local_timezone) ? $local_timezone : date_default_timezone_name();
+    $this->local_timezone = isset($local_timezone) ? $local_timezone : date_default_timezone();
     if (isset($this->definition['content_field'])) {
       $this->date_handler->date_type = $this->definition['content_field']['type'];
     }
@@ -435,7 +435,7 @@ class date_sql_handler {
       $value = $this->sql_field($value, $adjustment);
     }    
     elseif ($type == 'DATE') {
-      $date = date_make_date($value, date_default_timezone_name(), DATE_DATETIME);
+      $date = date_make_date($value, date_default_timezone(), DATE_DATETIME);
       if (!empty($adjustment)) {
         date_modify($date, $adjustment . ' seconds');
       }
@@ -849,11 +849,11 @@ class date_sql_handler {
     }
     if (!empty($parts[0]['date'])) {
       $value = date_fuzzy_datetime($this->complete_date($parts[0]['date'], 'min'));
-      $min_date = date_make_date($value, date_default_timezone_name(), DATE_ISO);
+      $min_date = date_make_date($value, date_default_timezone(), DATE_ISO);
       // Build a range from a single date-only argument.
       if (empty($parts[1]) || (empty($parts[1]['date']) && empty($parts[1]['period']))) {
         $value = date_fuzzy_datetime($this->complete_date($parts[0]['date'], 'max'));
-        $max_date = date_make_date($value, date_default_timezone_name(), DATE_ISO);
+        $max_date = date_make_date($value, date_default_timezone(), DATE_ISO);
         return array($min_date, $max_date);
       }
       // Build a range from start date + period.
@@ -869,7 +869,7 @@ class date_sql_handler {
     // Build a range from start date and end date.
     if (!empty($parts[1]['date'])) {
       $value = date_fuzzy_datetime($this->complete_date($parts[1]['date'], 'max'));
-      $max_date = date_make_date($value, date_default_timezone_name(), DATE_ISO);
+      $max_date = date_make_date($value, date_default_timezone(), DATE_ISO);
       if (isset($min_date)) {
         return array($min_date, $max_date);
       }

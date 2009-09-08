@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.11 2009/09/05 09:26:57 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.12 2009/09/08 08:52:20 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -35,7 +35,7 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
   require_once(' ./' . drupal_get_path('module', 'date_api') .'/date_api_ical.inc');
   
   if (empty($timezone)) {
-    $timezone = date_default_timezone_name();
+    $timezone = date_default_timezone();
   }
   
   // Make sure the 'EXCEPTIONS' string isn't appended to the rule.

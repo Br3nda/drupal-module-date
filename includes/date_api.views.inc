@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api.views.inc,v 1.4 2009/09/05 09:26:58 karens Exp $
+//$Id: date_api.views.inc,v 1.5 2009/09/08 08:52:20 karens Exp $
 
 /**
  * @file
@@ -191,8 +191,8 @@ function date_views_set_timezone(&$date_handler, &$view, $field) {
       $date_handler->offset_field = $field['offset_field'];
       break;
     case 'none':
-      $date_handler->db_timezone = date_default_timezone_name();
-      $date_handler->local_timezone = date_default_timezone_name();
+      $date_handler->db_timezone = date_default_timezone();
+      $date_handler->local_timezone = date_default_timezone();
       break;
     case 'utc':
       $date_handler->db_timezone = 'UTC';
@@ -200,7 +200,7 @@ function date_views_set_timezone(&$date_handler, &$view, $field) {
       break;
     default :
       $date_handler->db_timezone = 'UTC';
-      $date_handler->local_timezone = date_default_timezone_name();
+      $date_handler->local_timezone = date_default_timezone();
       break;
   }
 }

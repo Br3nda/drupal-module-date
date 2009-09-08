@@ -1,5 +1,5 @@
 <?php
-// $Id: theme.inc,v 1.3 2009/09/05 09:26:58 karens Exp $
+// $Id: theme.inc,v 1.4 2009/09/08 08:52:20 karens Exp $
 /**
  *  Preprocessor to construct back and next navigation from the date argument.
  */
@@ -168,7 +168,7 @@ function theme_date_nav_title($granularity, $view, $link = FALSE, $format = NULL
 function template_preprocess_date_vcalendar(&$vars) {
     
   $vars['current_date'] = date_format(date_now(), DATE_FORMAT_ICAL);
-  $vars['site_timezone'] = date_default_timezone_name();
+  $vars['site_timezone'] = date_default_timezone();
   $vars['calname'] = date_ical_escape_text(!empty($vars['calname']) ? $vars['calname'] : variable_get('site_name', ''));
   
   // Format the event results as iCal expects.

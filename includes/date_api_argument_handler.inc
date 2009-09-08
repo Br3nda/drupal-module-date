@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_argument_handler.inc,v 1.4 2009/09/05 09:26:58 karens Exp $
+// $Id: date_api_argument_handler.inc,v 1.5 2009/09/08 08:52:20 karens Exp $
 /**
  * Date API argument handler.
  */
@@ -233,7 +233,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     foreach ($this->options['date_fields'] as $delta => $name) {
       if (array_key_exists($name, $fields) && $field = $fields[$name]) {
         $date_handler = new date_sql_handler();
-        $date_handler->construct($field['sql_type'], date_default_timezone_name());
+        $date_handler->construct($field['sql_type'], date_default_timezone());
         $date_handler->granularity = $this->options['granularity'];
         date_views_set_timezone($date_handler, $this, $field);
         $this->query_fields[] = array('field' => $field, 'date_handler' => $date_handler);
