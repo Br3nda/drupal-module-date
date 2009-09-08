@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api_elements.inc,v 1.57 2009/09/08 14:19:24 karens Exp $
+//$Id: date_api_elements.inc,v 1.58 2009/09/08 14:59:45 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -131,6 +131,7 @@ function date_timezone_process($element, $form_state, $form) {
 function date_text_process($element, $form_state, $form) {
   $date = NULL;
   $granularity = date_format_order($element['#date_format']);
+  $edit = $form_state['values'];
   
   // We sometimes get $edit without $edit['date'] from
   // Views exposed filters.
@@ -190,6 +191,8 @@ function date_text_process($element, $form_state, $form) {
 function date_select_process($element, $form_state, $form) {
   $date = NULL;
   $granularity = date_format_order($element['#date_format']);
+  $edit = $form_state['values'];
+  
   if (!empty($edit)) {
     $date = date_make_date($edit, $element['#date_timezone'], DATE_ARRAY, $granularity);
   }
