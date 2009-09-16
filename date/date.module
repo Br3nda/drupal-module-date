@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.39.2.59 2009/06/09 17:20:54 karens Exp $
+// $Id: date.module,v 1.39.2.60 2009/09/16 09:49:53 karens Exp $
 
 /**
  * @file
@@ -65,7 +65,7 @@ function date_repeat_fields($type_name) {
 
 function date_repeat_page($nid) {
   $node = node_load($nid);
-  drupal_set_title($node->title);
+  drupal_set_title(check_plain($node->title));
   $node->date_repeat_show = TRUE;
   $field_names = date_repeat_fields($node->type);
   $view = _content_field_view($node, FALSE, TRUE);
