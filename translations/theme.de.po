@@ -1,4 +1,4 @@
-# $Id: theme.de.po,v 1.2 2009/09/04 09:49:22 karens Exp $
+# $Id: theme.de.po,v 1.3 2009/10/26 12:24:12 thomaszahreddin Exp $
 #
 # LANGUAGE translation of Drupal (theme)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
@@ -7,10 +7,9 @@
 #  theme.inc,v 1.1.4.29 2008/12/03 15:44:27 karens
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: \n"
+msgstr "[fuzzy] [fuzzy] [fuzzy] Project-Id-Version: \n"
 "POT-Creation-Date: 2009-03-07 19:12+0100\n"
-"PO-Revision-Date: 2009-03-08 11:34+0100\n"
+"PO-Revision-Date: 2009-03-08 15:46+0100\n"
 "Last-Translator: Alexander Haß\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,9 +20,8 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 
 #: theme/theme.inc:90
-#, fuzzy
 msgid "Week of @date"
-msgstr "Woche von @date"
+msgstr "amerikanische Wochennummer für @date"
 
 #: theme/theme.inc:327
 msgid "Timezone"
