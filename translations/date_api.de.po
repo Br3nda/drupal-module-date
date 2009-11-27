@@ -1,4 +1,4 @@
-# $Id: date_api.de.po,v 1.3 2009/10/26 12:24:12 thomaszahreddin Exp $
+# $Id: date_api.de.po,v 1.4 2009/11/27 02:29:20 thomaszahreddin Exp $
 #
 # LANGUAGE translation of Drupal (root)
 # Copyright YEAR NAME <EMAIL@ADDRESS>
@@ -44,7 +44,7 @@ msgstr "Zeichenkette formatieren"
 # last sentence translation needs work
 #: date_api.admin.inc:66
 msgid "A user-defined date format. See the <a href=\"@url\">PHP manual</a> for available options. This format is currently set to display as <span>%date</span>."
-msgstr "Eine benutzerdefiniertes Datumsformat. Die verfügbaren Optionen gemäß dem <a href=\\\"@url\\\">PHP-Handbuch</a>. Dieses Format ist eingestellt auf<span>%date</span>."
+msgstr "Eine benutzerdefiniertes Datumsformat. Die verfügbaren Optionen gemäß dem <a href=\"@url\">PHP-Handbuch</a>. Dieses Format ist eingestellt auf<span>%date</span>."
 
 #: date_api.admin.inc:72
 msgid "Save configuration"
