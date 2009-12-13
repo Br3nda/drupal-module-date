@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.20 2009/09/08 14:19:26 karens Exp $
+// $Id: date_repeat_form.inc,v 1.21 2009/12/13 19:37:00 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -255,7 +255,7 @@ function theme_date_repeat_current_exceptions($rows = array()) {
       $rows_info[] = array(drupal_render($value['action']), drupal_render($value['display']));
     }
   }
-  return theme('table', array(t('Delete'), t('Current exceptions')), $rows_info);
+  return theme('table', array('header' => array(t('Delete'), t('Current exceptions')), 'rows' => $rows_info));
 }
 
 /**

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_handler_field_multiple.inc,v 1.5 2009/09/05 09:26:57 karens Exp $
+// $Id: date_handler_field_multiple.inc,v 1.6 2009/12/13 19:37:00 karens Exp $
 
 /**
  * @file
@@ -156,7 +156,7 @@ class date_handler_field_multiple extends content_handler_field_multiple {
 
         if (count($rendered) > 1) {
           // TODO: could we use generic field display ?
-          return theme('content_view_multiple_field', $rendered, $field, $values);
+          return theme('field_view_multiple_field', $rendered, $field, $values);
         }
         elseif ($rendered) {
           return $rendered[0];
