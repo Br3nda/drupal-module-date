@@ -1,8 +1,9 @@
-//$Id: CHANGELOG.txt,v 1.7 2009/09/08 09:00:55 karens Exp $
+//$Id: CHANGELOG.txt,v 1.8 2010/01/16 14:33:53 karens Exp $
 Date Module 6.x
 =================
 Version 7.1-dev
 =================
 
+- 
 - Remove Date PHP4, no longer needed because PHP4 is not supported any more. 
 - Remove Date Timezone, now handled by core.
