@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api.views.inc,v 1.6 2009/09/08 14:19:26 karens Exp $
+//$Id: date_api.views.inc,v 1.7 2010/02/28 21:26:42 karens Exp $
 
 /**
  * @file
@@ -55,7 +55,7 @@ function date_api_views_handlers() {
 function date_api_views_plugins() {
   $path = drupal_get_path('module', 'date_api');
   $views_path = drupal_get_path('module', 'views');
-  require_once "./$path/theme/theme.inc";
+  require_once DRUPAL_ROOT . "/$path/theme/theme.inc";
   return array(
     'module' => 'date_api', // This just tells our themes are elsewhere.
     'display' => array(
