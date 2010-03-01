@@ -1,9 +1,12 @@
 <?php
-// $Id: date_api_filter_handler.inc,v 1.6 2009/09/08 14:19:26 karens Exp $
+// $Id: date_api_filter_handler.inc,v 1.7 2010/03/01 00:40:09 karens Exp $
 
 /**
+ * @file
  * A flexible, configurable date filter.
- *
+ */
+
+/**
  * This filter allows you to select a granularity of date parts to filter on,
  * such as year, month, day, etc.
  *
@@ -19,7 +22,8 @@ class date_api_filter_handler extends views_handler_filter_numeric {
   // Add a date handler to the filter.
   function construct() {
     parent::construct();
-    require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'date_api') . '/date_api_sql.inc');
+    module_load_include('inc', 'date_api', 'date_api_sql');
+    
     $this->date_handler = new date_sql_handler();
     $this->date_handler->construct();
     $this->date_handler->granularity = $this->options['granularity'];
@@ -255,7 +259,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
    *   The form date part element for this instance.
    */
   function date_parts_form($form_state, $prefix, $source, $which, $operator_values) {
-    require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'date_api') . '/date_api_elements.inc');
+    module_load_include('inc', 'date_api', 'date_api_elements');
     switch($prefix) {
       case 'min':
         $name = t('From date');

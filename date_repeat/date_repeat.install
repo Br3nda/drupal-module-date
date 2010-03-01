@@ -1,5 +1,10 @@
 <?php
-// $Id: date_repeat.install,v 1.7 2010/02/28 21:26:42 karens Exp $
+// $Id: date_repeat.install,v 1.8 2010/03/01 00:40:09 karens Exp $
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Date Repeat module.
+ */
 
 /**
  * Implementation of hook_install().

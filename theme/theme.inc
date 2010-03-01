@@ -1,5 +1,11 @@
 <?php
-// $Id: theme.inc,v 1.4 2009/09/08 08:52:20 karens Exp $
+// $Id: theme.inc,v 1.5 2010/03/01 00:40:09 karens Exp $
+
+/**
+ * @file
+ * Theme files for Date API.
+ */
+
 /**
  *  Preprocessor to construct back and next navigation from the date argument.
  */

@@ -1,5 +1,10 @@
 <?php
-// $Id: date_api_sql.inc,v 1.17 2010/02/28 21:11:58 karens Exp $
+// $Id: date_api_sql.inc,v 1.18 2010/03/01 00:40:08 karens Exp $
+
+/**
+ * @file
+ * SQL helper for Date API.
+ */
 
 /**
  *  A helper function to do cross-database concatation of date parts

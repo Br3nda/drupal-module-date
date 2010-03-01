@@ -1,5 +1,11 @@
 <?php
-// $Id: date_plugin_display_attachment.inc,v 1.3 2009/09/04 09:43:13 karens Exp $
+// $Id: date_plugin_display_attachment.inc,v 1.4 2010/03/01 00:40:09 karens Exp $
+
+/**
+ * @file
+ * Views display plugin for Date API.
+ */
+
 /**
  * The plugin that handles date navigation attachments.
  * 

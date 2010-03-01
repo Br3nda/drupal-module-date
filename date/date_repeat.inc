@@ -1,5 +1,5 @@
 <?php
-//$Id: date_repeat.inc,v 1.26 2009/09/08 14:19:24 karens Exp $
+// $Id: date_repeat.inc,v 1.27 2010/03/01 00:40:08 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -54,7 +54,7 @@ function _date_repeat_widget(&$element, $field, $instance, $items, $delta) {
  * Lots more work needed here.
  */
 function _date_repeat_widget_validate($element, &$form_state) {
-  require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'date_repeat') . '/date_repeat_form.inc');
+  module_load_include('inc', 'date_repeat', 'date_repeat_form');
   $form_values = $form_state['values'];
   $field_name = $element['#field_name'];
   $fields = content_fields();

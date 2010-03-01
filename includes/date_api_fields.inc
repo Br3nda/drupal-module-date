@@ -1,5 +1,11 @@
 <?php
-// $Id: date_api_fields.inc,v 1.4 2009/09/05 09:26:58 karens Exp $
+// $Id: date_api_fields.inc,v 1.5 2010/03/01 00:40:09 karens Exp $
+
+/**
+ * @file
+ * Helper for identifying Date API fields for views.
+ */
+
 /**
  *  Identify all potential date/timestamp fields.
  *

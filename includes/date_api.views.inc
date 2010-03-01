@@ -1,5 +1,5 @@
 <?php
-//$Id: date_api.views.inc,v 1.7 2010/02/28 21:26:42 karens Exp $
+// $Id: date_api.views.inc,v 1.8 2010/03/01 00:40:09 karens Exp $
 
 /**
  * @file
@@ -53,9 +53,9 @@ function date_api_views_handlers() {
  * Implementation of hook_views_plugins
  */
 function date_api_views_plugins() {
-  $path = drupal_get_path('module', 'date_api');
   $views_path = drupal_get_path('module', 'views');
-  require_once DRUPAL_ROOT . "/$path/theme/theme.inc";
+  module_load_include('inc', 'date_api', 'theme/theme');
+  
   return array(
     'module' => 'date_api', // This just tells our themes are elsewhere.
     'display' => array(
@@ -157,7 +157,8 @@ function date_api_views_data() {
 function date_api_fields($base = 'node', $reset = FALSE) {
   static $fields = array();
   $empty = array('name' => array(), 'alias' => array());
-  require_once(DRUPAL_ROOT . '/' . drupal_get_path('module', 'date_api') . '/includes/date_api_fields.inc');
+  module_load_include('inc', 'date_api', 'date_api_fields');
+  
   if (empty($fields[$base]) || $reset) {
     $cid = 'date_api_fields_' . $base;
     if (!$reset && $cached = cache_get($cid, 'cache_views')) {
