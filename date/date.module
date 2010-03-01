@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.70 2010/03/01 15:49:11 karens Exp $
+// $Id: date.module,v 1.71 2010/03/01 15:53:44 karens Exp $
 
 /**
  * @file
@@ -86,7 +86,7 @@ function date_repeat_page($node) {
   return $output;
 }
 
-function date_is_repeat_field($field) {
+function date_is_repeat_field($field, $instance) {
   $repeat_widgets = array(
     'date_select_repeat',
     'date_text_repeat',
