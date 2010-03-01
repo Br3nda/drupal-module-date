@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.53 2010/03/01 00:40:08 karens Exp $
+// $Id: date_elements.inc,v 1.54 2010/03/01 01:33:02 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -172,7 +172,7 @@ function _date_field_widget(&$form, &$form_state, $field, $instance, $langcode, 
     $element['rrule']['#weight'] = $instance['widget']['weight'] + .4;
   }
   return $element;
-}  	 
+} 
 
 /**
  * Create local date object.

@@ -1,4 +1,5 @@
 <?php
+// $Id: date_content_generate.inc,v 1.7 2010/03/01 01:33:02 karens Exp $
 /**
  * @file
  * Date Devel Generate code.

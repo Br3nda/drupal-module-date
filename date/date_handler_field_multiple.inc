@@ -1,5 +1,5 @@
 <?php
-// $Id: date_handler_field_multiple.inc,v 1.6 2009/12/13 19:37:00 karens Exp $
+// $Id: date_handler_field_multiple.inc,v 1.7 2010/03/01 01:33:02 karens Exp $
 
 /**
  * @file
@@ -131,6 +131,7 @@ class date_handler_field_multiple extends content_handler_field_multiple {
       
       // Some formatters need to behave differently depending on the build_mode
       // (for instance: preview), so we provide one.
+      // TODO This has changed in D7.
       $node->build_mode = NODE_BUILD_NORMAL;
 
       // Render items.

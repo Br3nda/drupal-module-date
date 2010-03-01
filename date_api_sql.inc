@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.18 2010/03/01 00:40:08 karens Exp $
+// $Id: date_api_sql.inc,v 1.19 2010/03/01 01:33:02 karens Exp $
 
 /**
  * @file
@@ -483,7 +483,7 @@ class date_sql_handler {
     else {
       $field = $this->sql_field($field, 0);
     }
-    return $this->sql_extract($part, $field) ." $operator $value";
+    return $this->sql_extract($part, $field) . " $operator $value";
   }
   
   /**
@@ -508,7 +508,7 @@ class date_sql_handler {
     else {
       $field = $this->sql_field($field, 0);
     }
-    return $this->sql_format($format, $field) ." $operator '$value'";
+    return $this->sql_format($format, $field) . " $operator '$value'";
   }
 
   /**
@@ -642,7 +642,7 @@ class date_sql_handler {
       return FALSE;
     }
     $value = intval($value);
-    if ($value <= 0) return false;
+    if ($value <= 0) return FALSE;
     switch ($type) {
       case 'year':
         if ($value < DATE_MIN_YEAR) return FALSE;

@@ -1,9 +1,11 @@
-// $Id: date_popup.js,v 1.3 2009/09/04 09:35:08 karens Exp $
+// $Id: date_popup.js,v 1.4 2010/03/01 01:33:02 karens Exp $
 
 /**
  * Attaches the calendar behavior to all required fields
  */
-Drupal.behaviors.date_popup = function (context) {
+(function ($) {
+Drupal.behaviors.date_popup = {
+  attach: function (context) {
   for (var id in Drupal.settings.datePopup) {
     $('#'+ id).bind('focus', Drupal.settings.datePopup[id], function(e) {
       if (!$(this).hasClass('date-popup-init')) {
@@ -27,4 +29,6 @@ Drupal.behaviors.date_popup = function (context) {
       }
     });
   }
+  }
 };
+})(jQuery);

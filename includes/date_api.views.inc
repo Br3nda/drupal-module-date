@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.views.inc,v 1.8 2010/03/01 00:40:09 karens Exp $
+// $Id: date_api.views.inc,v 1.9 2010/03/01 01:33:02 karens Exp $
 
 /**
  * @file
@@ -140,7 +140,7 @@ function date_api_views_data() {
     $data[$base_table]['date_filter'] = array(
       'group' => t('Date'),
       'title' => t('Date (!base_table)', array('!base_table' => $base_table)),
-      'help' => t('Filter any Views !base_table date field. ', array('!base_table' => $base_table)),
+      'help' => t('Filter any Views !base_table date field.', array('!base_table' => $base_table)),
       'filter' => array(
         'handler' => 'date_api_filter_handler',
         'empty name field' => t('Undated'),
