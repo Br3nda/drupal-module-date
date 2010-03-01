@@ -1,5 +1,5 @@
 <?php
-// $Id: date_admin.inc,v 1.50 2010/03/01 16:42:32 karens Exp $
+// $Id: date_admin.inc,v 1.51 2010/03/01 18:16:03 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -224,31 +224,6 @@ function date_field_widget_settings_form_validate(&$form, &$form_state) {
   }
   if ($widget['type'] == 'date_select' && !preg_match('@\-[0-9]*:[\+|\-][0-9]*@', $widget['settings']['year_range'])) {
     form_set_error('instance][widget][settings][year_range', t('Years back and forward must be in the format -9:+9.'));
-  }
-}
-
-/**
- * Display the text/select options for date parts in a table
- * for easier readability.
- */
-function theme_date_text_parts($variables) {
-  $element = $variables['element'];
-  $names = date_granularity_names();
-  $rows = array();
-  foreach ($names as $key => $part) {
-    if ($element[$key]['#type'] == 'hidden') {
-      $rows[] = drupal_render($element[$key]);
-    }
-    else {
-      $rows[] = array($names[$key], drupal_render($element[$key][0]), drupal_render($element[$key][1]));
-    }
-  }
-  if ($element['year']['#type'] == 'hidden') {
-    return implode($rows) . drupal_render_children($element);
-  }
-  else {
-    $header = array(t('Input Type'), t('Select list'), t('Text field'));
-    return theme('table', array('header' => $header, 'rows' => $rows)) . drupal_render_children($element);
   }
 }
 
