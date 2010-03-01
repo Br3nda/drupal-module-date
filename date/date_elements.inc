@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.54 2010/03/01 01:33:02 karens Exp $
+// $Id: date_elements.inc,v 1.55 2010/03/01 04:41:56 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -112,6 +112,7 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
  */
 function _date_field_widget(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
   $element = $base;
+  
   // Be sure users that haven't run the update yet don't get
   // a badly broken value.
   if (!empty($field['repeat']) && !strstr($instance['widget']['type'], '_repeat')) {

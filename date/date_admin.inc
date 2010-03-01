@@ -1,13 +1,11 @@
 <?php
-// $Id: date_admin.inc,v 1.47 2010/03/01 00:40:08 karens Exp $
+// $Id: date_admin.inc,v 1.48 2010/03/01 04:41:56 karens Exp $
 /**
  * @file
  * Date administration code.
  * Moved to separate file since there is a lot of code here that is not needed often.
  */
 function _date_field_instance_settings_form($field, $instance) {
-  dsm($field);
-  dsm($instance);
   $widget = $instance['widget'];
   $settings = $instance['settings'];
   
