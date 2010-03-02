@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.75 2010/03/02 12:34:47 karens Exp $
+// $Id: date.module,v 1.76 2010/03/02 13:05:44 karens Exp $
 
 /**
  * @file
@@ -563,9 +563,9 @@ function date_field($op, &$node, $field, &$items, $teaser, $page) {
  * This code and all the processes it uses are in a separate file,
  * included only when processing forms.
  */
-function date_field_widget(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
+function date_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
   module_load_include('inc', 'date', 'date_elements');
-  return _date_field_widget($form, $form_state, $field, $instance, $langcode, $items, $delta, $base);
+  return _date_field_widget_form($form, $form_state, $field, $instance, $langcode, $items, $delta, $base);
 }
 
 /**

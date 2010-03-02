@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.56 2010/03/01 18:16:03 karens Exp $
+// $Id: date_elements.inc,v 1.57 2010/03/02 13:05:44 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -110,7 +110,7 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
  *   the local timezone, are converted back to their UTC values and stored.
  *
  */
-function _date_field_widget(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
+function _date_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
   $element = $base;
   
   // Be sure users that haven't run the update yet don't get
