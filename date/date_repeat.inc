@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.inc,v 1.27 2010/03/01 00:40:08 karens Exp $
+// $Id: date_repeat.inc,v 1.28 2010/03/02 13:15:41 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -57,7 +57,7 @@ function _date_repeat_widget_validate($element, &$form_state) {
   module_load_include('inc', 'date_repeat', 'date_repeat_form');
   $form_values = $form_state['values'];
   $field_name = $element['#field_name'];
-  $fields = content_fields();
+  $fields = field_info_fields();
   $field = $fields[$field_name];
   $item = $form_values[$field_name];
   $values = date_repeat_merge($element['#post'][$field_name]['rrule'], $element['rrule']);

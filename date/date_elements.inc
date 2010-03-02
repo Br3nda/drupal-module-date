@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.57 2010/03/02 13:05:44 karens Exp $
+// $Id: date_elements.inc,v 1.58 2010/03/02 13:15:41 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -553,7 +553,7 @@ function date_combo_validate($element, &$form_state) {
 function date_widget_validate($element, &$form_state) {
   $form_values = $form_state['values'];
   $field_name = $element['#field_name'];
-  $fields = content_fields();
+  $fields = field_info_fields();
   $field = $form_state['#field_info'][$element['#field_name']];
   if (module_exists('date_repeat') && array_key_exists('rrule', $form_values[$field_name])) {
     module_load_include('inc', 'date', 'date_repeat');
