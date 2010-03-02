@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.76 2010/03/02 12:35:31 karens Exp $
+// $Id: date_api.module,v 1.77 2010/03/02 14:08:21 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1956,4 +1956,15 @@ function date_range_string($years) {
  */
 function date_api_date_api_tables() {
   return array('node', 'comment', 'users');
+}
+
+/**
+ * Temporary helper to re-create equivalent 
+ * of content_database_info.
+ */
+function date_api_database_info($field) {
+  $data = $field['storage']['details']['sql'][FIELD_LOAD_CURRENT];
+  $db_info = array('columns' => $data);
+  $db_info['table'] = key(array_shift($data));
+  return $db_info;
 }

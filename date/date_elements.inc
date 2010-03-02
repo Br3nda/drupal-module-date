@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.58 2010/03/02 13:15:41 karens Exp $
+// $Id: date_elements.inc,v 1.59 2010/03/02 14:08:21 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -55,7 +55,7 @@ function _date_field_update($op, &$node, $field, &$items, $teaser, $page) {
   }
   $format = $field['type'] == DATE_ISO ? DATE_FORMAT_ISO : DATE_FORMAT_UNIX;
   $timezone = date_get_timezone($field['settings']['tz_handling'], array_key_exists('timezone', $items[0]) ? $items[0]['timezone'] : '');
-  $db_info = content_database_info($field);
+  $db_info = date_api_database_info($field);
   $columns = array_keys($db_info['columns']);
 
   $values = $items;

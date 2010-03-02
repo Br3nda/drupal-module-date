@@ -1,5 +1,5 @@
 <?php
-// $Id: date_handler_field_multiple.inc,v 1.7 2010/03/01 01:33:02 karens Exp $
+// $Id: date_handler_field_multiple.inc,v 1.8 2010/03/02 14:08:21 karens Exp $
 
 /**
  * @file
@@ -48,7 +48,7 @@ class date_handler_field_multiple extends content_handler_field_multiple {
       return parent::pre_render($values);
     }
     $field = $this->content_field;
-    $db_info = content_database_info($field);
+    $db_info = date_api_database_info($field);
     $options = $this->options;
     $this->view->date_info->date_handler_fields = date_handler_fields($this->view);
 

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_fields.inc,v 1.5 2010/03/01 00:40:09 karens Exp $
+// $Id: date_api_fields.inc,v 1.6 2010/03/02 14:08:21 karens Exp $
 
 /**
  * @file
@@ -82,7 +82,7 @@ function _date_api_fields($base = 'node') {
       // Handling for content field dates
       if (isset($handler->content_field['tz_handling'])) {
         $tz_handling = $handler->content_field['tz_handling'];
-        $db_info = content_database_info($handler->content_field);
+        $db_info = date_api_database_info($handler->content_field);
         if ($tz_handling == 'date') {
           $offset_field = $table_name . ' . ' . $db_info['columns']['offset']['column'];
         }
@@ -113,7 +113,7 @@ function _date_api_fields($base = 'node') {
           case 'date':
           case 'datetime':
           case 'datestamp':
-            $db_info = content_database_info($handler->content_field);
+            $db_info = date_api_database_info($handler->content_field);
             $fromto = array(
               $table_name . '_' . $db_info['columns']['value']['column'],
               $table_name . '_' . (!empty($handler->content_field['todate']) ? $db_info['columns']['value2']['column'] : $db_info['columns']['value']['column']),
