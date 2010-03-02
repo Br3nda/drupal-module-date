@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.78 2010/03/02 14:08:21 karens Exp $
+// $Id: date.module,v 1.79 2010/03/02 21:28:55 karens Exp $
 
 /**
  * @file
@@ -101,7 +101,7 @@ function date_is_repeat_field($field, $instance) {
 }
 
 /**
- * Implement hook_content_is_empty().
+ * Implement hook_field_is_empty().
  */
 function date_field_is_empty($item, $field) {
   if (empty($item['value'])) {

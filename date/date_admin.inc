@@ -1,5 +1,5 @@
 <?php
-// $Id: date_admin.inc,v 1.52 2010/03/02 13:15:41 karens Exp $
+// $Id: date_admin.inc,v 1.53 2010/03/02 21:28:55 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -456,8 +456,8 @@ function date_field_default_values($field_type, $widget_type, $tz_handling, $ove
   $widget_values['date_popup_repeat']['type'] = 'date_popup_repeat';
   
   // Get the basic field array with content module default values.
-  $field = content_field_default_values($field_type);
-  $instance = content_instance_default_values($field_type);
+  $field = field_info_field_settings($field_type);
+  $instance = field_info_instance_settings($field_type);
   
   // Update it with default values for this date field and widget type.
   foreach ($field_values[$field_type] as $key => $value) {
