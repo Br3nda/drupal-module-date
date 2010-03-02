@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.59 2010/03/02 14:08:21 karens Exp $
+// $Id: date_elements.inc,v 1.60 2010/03/02 20:08:13 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -267,11 +267,11 @@ function date_combo_process($element, &$form_state, $form) {
   if (isset($element['#access']) && empty($element['#access'])) {
     return;
   }
-
   $field_name = $element['#field_name'];
   $delta = $element['#delta'];
-  $field = $form['#fields'][$field_name]['field'];
-  $instance = $form['#fields'][$field_name]['instance'];
+  $entity_type = $element['#entity_type'];
+  $field = field_info_field($element['#field_name']);
+  $instance = field_info_instance($entity_type, $element['#field_name'], $element['#bundle']);
    
   $columns = $element['#columns'];
   if (isset($columns['rrule'])) {
