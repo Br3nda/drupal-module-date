@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.61 2010/03/02 21:28:55 karens Exp $
+// $Id: date_elements.inc,v 1.62 2010/03/03 12:21:36 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -271,8 +271,8 @@ function date_combo_process($element, &$form_state, $form) {
   $delta = $element['#delta'];
   $bundle = $element['#bundle'];
   $entity_type = $element['#object_type'];
-  $field = field_info_field($element['#field_name']);
-  $instance = field_info_instance($entity_type, $field_name, $bundle);
+  $field = $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
+  $instance = $form_state['field'][$element['#field_name']][$element['#language']]['instance'];
    
   $columns = $element['#columns'];
   if (isset($columns['rrule'])) {
@@ -407,7 +407,7 @@ function date_combo_validate($element, &$form_state) {
   $item = isset($form_values[$field_name]['rrule']) ? $form_values[$field_name] : $form_values[$field_name][$delta];
   $posted = isset($form_values[$field_name]['rrule']) ? $element['#post'][$field_name] : $element['#post'][$field_name][$delta];
     
-  $field = $form_state['#field_info'][$element['#field_name']];
+  $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
   $from_field = 'value';
   $to_field = 'value2';
   $tz_field = 'timezone';
@@ -556,8 +556,7 @@ function date_combo_validate($element, &$form_state) {
 function date_widget_validate($element, &$form_state) {
   $form_values = $form_state['values'];
   $field_name = $element['#field_name'];
-  $fields = field_info_fields();
-  $field = $form_state['#field_info'][$element['#field_name']];
+  $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
   if (module_exists('date_repeat') && array_key_exists('rrule', $form_values[$field_name])) {
     module_load_include('inc', 'date', 'date_repeat');
     return _date_repeat_widget_validate($element, $form_state);

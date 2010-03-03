@@ -1,5 +1,5 @@
 <?php
-// $Id: date_tools.module,v 1.8 2010/03/02 21:28:55 karens Exp $
+// $Id: date_tools.module,v 1.9 2010/03/03 12:21:37 karens Exp $
 
 /**
  * Implementation of hook_help().
@@ -23,7 +23,7 @@ function date_tools_help($section, $arg) {
   }
 }
 
-function date_tools_perm() {
+function date_tools_permission() {
   return array('administer date tools');
 }
 
