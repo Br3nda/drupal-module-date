@@ -1,5 +1,5 @@
 <?php
-// $Id: date.views.inc,v 1.6 2010/03/01 00:40:08 karens Exp $
+// $Id: date.views.inc,v 1.7 2010/03/05 13:05:49 karens Exp $
 /**
  * @file
  * Date Views code.
@@ -15,7 +15,7 @@ function date_views_handlers() {
     // A date-specific handler for grouping multiple values.
     'handlers' => array(
       'date_handler_field_multiple' => array(
-        'parent' => 'content_handler_field_multiple',
+        'parent' => 'views_handler_field_field',
       ),
      ),
    );
