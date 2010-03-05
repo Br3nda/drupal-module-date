@@ -1,4 +1,4 @@
-; $Id: date.info,v 1.5 2009/09/08 08:52:19 karens Exp $
+; $Id: date.info,v 1.6 2010/03/05 12:24:00 karens Exp $
 name = Date
 description = Defines CCK date/time fields and widgets.
 dependencies[] = date_api
@@ -9,10 +9,8 @@ files[] = date_admin.inc
 files[] = date_content_generate.inc
 files[] = date_elements.inc
 files[] = date_handler_field_multiple.inc
-files[] = date_handler_sort.inc
 files[] = date_repeat.inc
 files[] = date_token.inc
-files[] = date_views.inc
 files[] = date.install
 files[] = date.module
 files[] = date.theme
