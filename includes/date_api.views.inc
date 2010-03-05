@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.views.inc,v 1.9 2010/03/01 01:33:02 karens Exp $
+// $Id: date_api.views.inc,v 1.10 2010/03/05 14:38:28 karens Exp $
 
 /**
  * @file
@@ -53,6 +53,7 @@ function date_api_views_handlers() {
  * Implementation of hook_views_plugins
  */
 function date_api_views_plugins() {
+  $path = drupal_get_path('module', 'date_api') .'/includes';
   $views_path = drupal_get_path('module', 'views');
   module_load_include('inc', 'date_api', 'theme/theme');
   
