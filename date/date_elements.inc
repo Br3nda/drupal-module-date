@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.69 2010/03/06 12:07:31 karens Exp $
+// $Id: date_elements.inc,v 1.70 2010/03/06 13:49:26 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -394,16 +394,18 @@ function date_combo_validate($element, &$form_state) {
   $langcode = $element['#language'];
   
   // If the whole field is empty and that's OK, stop now.
-  if (empty($element['#post'][$field_name]) && !$element['#required']) {
+  if (empty($form_state['input'][$field_name]) && !$element['#required']) {
     return;
   }
   
   // Repeating dates have a different form structure, so get the
   // right item values.
   $item = isset($form_values[$field_name]['rrule']) ? $form_values[$field_name] : $form_values[$field_name][$langcode][$delta];
-  $posted = isset($form_values[$field_name]['rrule']) ? $element['#post'][$field_name] : $element['#post'][$field_name][$langcode][$delta];
+  $posted = isset($form_values[$field_name]['rrule']) ? $form_state['input'][$field_name] : $form_state['input'][$field_name][$langcode][$delta];
     
   $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
+  $instance = $form_state['field'][$element['#field_name']][$element['#language']]['instance'];
+    
   $from_field = 'value';
   $to_field = 'value2';
   $tz_field = 'timezone';
