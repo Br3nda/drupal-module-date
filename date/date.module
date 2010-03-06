@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.83 2010/03/05 15:12:45 karens Exp $
+// $Id: date.module,v 1.84 2010/03/06 12:07:31 karens Exp $
 
 /**
  * @file
@@ -183,7 +183,7 @@ function date_field_widget_info() {
       'label_position' => 'above',
      ),
     'behaviors' => array(
-      'multiple values' => FIELD_BEHAVIOR_CUSTOM,
+      'multiple values' => FIELD_BEHAVIOR_DEFAULT,
       'default value' => FIELD_BEHAVIOR_CUSTOM,
     ),
   );
