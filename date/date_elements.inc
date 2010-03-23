@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.71 2010/03/23 21:01:08 karens Exp $
+// $Id: date_elements.inc,v 1.72 2010/03/23 21:12:49 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -249,9 +249,9 @@ function _date_element_info() {
     '#input' => TRUE,
     '#delta' => 0,
     '#columns' => array('value', 'value2', 'timezone', 'offset', 'offset2'),
-    '#process' => array('date_combo_process'),
+    '#process' => array('date_combo_element_process'),
     '#element_validate' => array('date_combo_validate'),
-    '#theme_wrappers' => array('date_combo_element_process'),
+    '#theme_wrappers' => array('date_combo'),
     );
   return $type;
 }
