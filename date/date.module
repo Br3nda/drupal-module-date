@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.85 2010/03/23 14:19:45 karens Exp $
+// $Id: date.module,v 1.86 2010/03/23 21:01:08 karens Exp $
 
 /**
  * @file
@@ -711,6 +711,7 @@ function date_field_schema($field) {
 function date_formatter_format($formatter, $field_name) {
   $field = field_info_field($field_name);
   $default = variable_get('date_format_medium',  'D, m/d/Y - H:i');
+  
   switch ($formatter) {
     case 'format_interval':
       return 'format_interval';
