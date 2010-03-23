@@ -1,5 +1,5 @@
 <?php
-// $Id: date_admin.inc,v 1.55 2010/03/05 11:22:31 karens Exp $
+// $Id: date_admin.inc,v 1.56 2010/03/23 03:07:40 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -281,7 +281,7 @@ function _date_field_settings_form($field, $instance, $has_data) {
 
   $description = t("Display a matching second date field as a 'To date' . If marked 'Optional' field will be presented but not required. If marked 'Required' the 'To date' will be required if the 'From date' is required or filled in.");
   $form['todate'] = array(
-    '#type' => 'radios', 
+    '#type' => 'select', 
     '#title' => t('To Date'),
     '#options' => array('' => t('Never'), 'optional' => t('Optional'), 'required' => t('Required')),
     '#description' => $description,
