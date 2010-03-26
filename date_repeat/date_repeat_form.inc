@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.25 2010/03/26 10:43:49 karens Exp $
+// $Id: date_repeat_form.inc,v 1.26 2010/03/26 13:14:15 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -229,10 +229,12 @@ function date_repeat_merge($form_values, $element) {
  */
 function date_repeat_rrule_validate($element, &$form_state) {
   module_load_include('inc', 'date_api', 'date_api_ical');
-  
+
   $form_values = $form_state['values'];
-  $field_name = $element['#parents'][0];
-  $item = $form_values[$field_name]['rrule'];
+  $item = $form_values;
+  foreach ($element['#parents'] as $key) {
+    $item = $item[$key];
+  }
   $item = date_repeat_merge($item, $element);
   $rrule = date_api_ical_build_rrule($item);
   form_set_value($element, $rrule, $form_state);
