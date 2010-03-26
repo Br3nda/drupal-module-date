@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.inc,v 1.32 2010/03/26 19:19:41 karens Exp $
+// $Id: date_repeat.inc,v 1.33 2010/03/26 19:23:00 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -67,7 +67,6 @@ function _date_repeat_widget_validate($element, &$form_state) {
     $input = $input[$key];
   }
   $values = date_repeat_merge($input['rrule'], $element['rrule']);
-  dsm($values);
   
   // If no start date was set, clean up the form and return.
   // If no repeats are set, clean up the form and return.
