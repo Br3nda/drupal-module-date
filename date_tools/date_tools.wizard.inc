@@ -1,5 +1,5 @@
 <?php
-// $Id: date_tools.wizard.inc,v 1.2 2010/03/08 23:40:43 karens Exp $
+// $Id: date_tools.wizard.inc,v 1.3 2010/03/26 19:19:41 karens Exp $
 
 function date_tools_wizard_form() {
   
@@ -188,7 +188,7 @@ function date_tools_wizard_build($form_values) {
     'granularity' => $granularity,
     'tz_handling' => $tz_handling,
     'repeat' => $repeat,
-    'multiple' => $repeat,
+    'cardinality' => $repeat ? FIELD_CARDINALITY_UNLIMITED : 0,
     );
 
   $field_settings['widget']['label'] = $label;

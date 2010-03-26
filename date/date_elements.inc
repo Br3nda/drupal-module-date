@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.73 2010/03/26 10:43:49 karens Exp $
+// $Id: date_elements.inc,v 1.74 2010/03/26 19:19:41 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -13,7 +13,8 @@
  */
 function _date_field_validate($entity_type, $entity, $field, $instance, $langcode, &$items) {
   $field_name = $field['field_name'];
-
+  dsm($items);
+  dsm($field);
   // Don't try to validate if there were any errors before this point
   // since the element won't have been munged back into a date.
   if (!form_get_errors()) {
@@ -558,7 +559,7 @@ function date_widget_validate($element, &$form_state) {
   $form_values = $form_state['values'];
   $field_name = $element['#field_name'];
   $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
-  if (module_exists('date_repeat') && array_key_exists('rrule', $form_values[$field_name])) {
+  if (module_exists('date_repeat') && $field['settings']['repeat']) {
     module_load_include('inc', 'date', 'date_repeat');
     return _date_repeat_widget_validate($element, $form_state);
   }

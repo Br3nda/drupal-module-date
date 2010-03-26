@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.88 2010/03/26 13:14:15 karens Exp $
+// $Id: date.module,v 1.89 2010/03/26 19:19:41 karens Exp $
 
 /**
  * @file
@@ -625,7 +625,7 @@ function date_form_alter(&$form, &$form_state, $form_id) {
     $instance = $form['instance'];
     // If adding a repeat, override the Content module's handling of the multiple values option.
     if (module_exists('date_repeat') && date_is_repeat_field($field, $instance)) {
-      $form['field']['cardinality'] = array('#type' => 'hidden', '#value' => 1);
+      $form['field']['cardinality'] = array('#type' => 'hidden', '#value' => FIELD_CARDINALITY_UNLIMITED);
     }
   }
 }
