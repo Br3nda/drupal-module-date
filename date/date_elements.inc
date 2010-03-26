@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.72 2010/03/23 21:12:49 karens Exp $
+// $Id: date_elements.inc,v 1.73 2010/03/26 10:43:49 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -144,6 +144,7 @@ function _date_field_widget_form(&$form, &$form_state, $field, $instance, $langc
     $date = date_local_date($form, $form_state, $delta, $items[$delta], $timezone, $field, $instance, $processed);
     $items[$delta][$processed] = is_object($date) ? date_format($date, DATE_FORMAT_DATETIME) : '';
   }
+  
   $element += array(
     '#type' => 'date_combo',
     '#theme_wrappers' => array('date_combo'),
@@ -165,7 +166,7 @@ function _date_field_widget_form(&$form, &$form_state, $field, $instance, $langc
   // Add a date repeat form element, if needed.
   if (module_exists('date_repeat') && $field['settings']['repeat'] == 1) {
     module_load_include('inc', 'date', 'date_repeat');    
-    _date_repeat_widget($element, $field, $items, $delta);
+    _date_repeat_widget($element, $field, $instance, $items, $delta);
     $element['rrule']['#weight'] = $instance['widget']['weight'] + .4;
   }
   
