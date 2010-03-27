@@ -1,5 +1,5 @@
 <?php
-// $Id: date.theme,v 1.22 2010/03/26 10:43:49 karens Exp $
+// $Id: date.theme,v 1.23 2010/03/27 12:19:17 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -268,7 +268,7 @@ function theme_date_all_day_label() {
 function theme_date_combo($vars) {
   $element = $vars['element'];
   $field = field_info_field($element['#field_name']);
-  $instance = field_info_instance($element['#object_type'], $element['#field_name'], $element['#bundle']);
+  $instance = field_info_instance($element['#entity_type'], $element['#field_name'], $element['#bundle']);
   if (!$field['settings']['todate']) {
     return $element['#children'];
   }

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.75 2010/03/26 19:23:00 karens Exp $
+// $Id: date_elements.inc,v 1.76 2010/03/27 12:19:17 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -267,7 +267,7 @@ function date_combo_element_process($element, &$form_state, $form) {
   $field_name = $element['#field_name'];
   $delta = $element['#delta'];
   $bundle = $element['#bundle'];
-  $entity_type = $element['#object_type'];
+  $entity_type = $element['#entity_type'];
   $field = $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
   $instance = $form_state['field'][$element['#field_name']][$element['#language']]['instance'];
    
