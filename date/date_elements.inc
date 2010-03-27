@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.76 2010/03/27 12:19:17 karens Exp $
+// $Id: date_elements.inc,v 1.77 2010/03/27 13:19:33 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -403,9 +403,9 @@ function date_combo_validate($element, &$form_state) {
   
   // Repeating dates have a different form structure, so get the
   // right item values.
-  $item = isset($form_values[$field_name]['rrule']) ? $form_values[$field_name] : $form_values[$field_name][$langcode][$delta];
-  $posted = isset($form_values[$field_name]['rrule']) ? $form_state['input'][$field_name] : $form_state['input'][$field_name][$langcode][$delta];
-    
+  $item = isset($form_values[$field_name][$langcode]['rrule']) ? $form_values[$field_name][$langcode] : $form_values[$field_name][$langcode][$delta];
+  $posted = isset($form_values[$field_name][$langcode]['rrule']) ? $form_state['input'][$field_name][$langcode] : $form_state['input'][$field_name][$langcode][$delta];
+  
   $field = $form_state['field'][$element['#field_name']][$element['#language']]['field'];
   $instance = $form_state['field'][$element['#field_name']][$element['#language']]['instance'];
     
