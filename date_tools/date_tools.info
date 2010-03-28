@@ -1,4 +1,4 @@
-; $Id: date_tools.info,v 1.4 2009/09/08 08:52:20 karens Exp $
+; $Id: date_tools.info,v 1.5 2010/03/28 11:48:48 karens Exp $
 name = Date Tools
 description = Tools to import and auto-create dates and calendars.
 dependencies[] = date
@@ -6,4 +6,3 @@ package = Date/Time
 core = 7.x
 php = 5.2
 files[] = date_tools.module
-files[] = date_field.php
