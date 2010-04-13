@@ -1,5 +1,5 @@
 <?php
-// $Id: date_tools.wizard.inc,v 1.6 2010/03/29 00:42:11 karens Exp $
+// $Id: date_tools.wizard.inc,v 1.7 2010/04/13 19:35:33 karens Exp $
 
 function date_tools_wizard_form() {
   
@@ -448,6 +448,6 @@ function date_tools_wizard_add_block($block) {
   }
   else {
     $block->bid = $bid;
-    drupal_write_record('blocks', $block, array($block->bid));
+    drupal_write_record('blocks', $block, array('bid'));
   }
 }
