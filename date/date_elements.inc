@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.77 2010/03/27 13:19:33 karens Exp $
+// $Id: date_elements.inc,v 1.78 2010/07/29 11:27:40 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -289,7 +289,7 @@ function date_combo_element_process($element, &$form_state, $form) {
 
   $element[$from_field] = array(
     '#field'         => $field,
-    '#title'         => (!$field['cardinality'] || $field['settings']['repeat']) ? t($instance['label']) : '',
+    '#title'         => t($instance['label']),
     '#weight'        => $instance['widget']['weight'],
     '#required'      => ($instance['required'] && $delta == 0) ? 1 : 0,
     '#default_value' => isset($element['#value'][$from_field]) ? $element['#value'][$from_field] : '',
