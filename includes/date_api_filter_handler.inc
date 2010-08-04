@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_filter_handler.inc,v 1.11 2010/08/04 11:01:16 karens Exp $
+// $Id: date_api_filter_handler.inc,v 1.12 2010/08/04 11:03:05 karens Exp $
 
 /**
  * @file
@@ -132,6 +132,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
       '#default_value' => $this->options['date_fields'],
       '#multiple' => FALSE,
       '#description' => t('Select date field(s) to filter with this argument.'),
+      '#required' => TRUE,
     );
     $form['date_method'] = array(
       '#title' => t('Method'),
