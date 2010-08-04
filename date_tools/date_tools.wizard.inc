@@ -1,5 +1,5 @@
 <?php
-// $Id: date_tools.wizard.inc,v 1.8 2010/07/29 11:15:28 karens Exp $
+// $Id: date_tools.wizard.inc,v 1.9 2010/08/04 11:30:47 karens Exp $
 
 function date_tools_wizard_form() {
   
@@ -373,7 +373,7 @@ function date_tools_wizard_create_blocks($bundle) {
  * Add a block.
  */
 function date_tools_wizard_add_block($block) {
-  $bid = db_result(db_query("SELECT bid FROM {blocks} WHERE module='%s' AND delta='%s' AND theme='%s'", $block->module, $block->delta, $block->theme));
+  $bid = db_query("SELECT bid FROM {blocks} WHERE module='%s' AND delta='%s' AND theme='%s'", $block->module, $block->delta, $block->theme)->fetchField();
   if (empty($bid)) {
     $block->bid = NULL;
     drupal_write_record('blocks', $block);
