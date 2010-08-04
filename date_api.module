@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.83 2010/07/29 09:42:34 karens Exp $
+// $Id: date_api.module,v 1.84 2010/08/04 10:22:00 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -58,6 +58,25 @@ function date_type_format($type) {
       return DATE_FORMAT_DATETIME;
     case DATE_ICAL:
       return DATE_FORMAT_ICAL;
+  }
+}
+
+/**
+ * Create a 'datetime' field type.
+ */
+function date_api_schema_alter(&$schema) {
+  foreach ($schema as &$table) {
+    foreach ($table['fields'] as &$field) {
+      if ($field['type'] == 'datetime') {
+        $field += array('mysql_type' => 'DATETIME', 'pgsql_type' => 'timestamp without time zone');
+      }
+      elseif ($field['type'] == 'date') {
+        $field += array('mysql_type' => 'DATE', 'pgsql_type' => 'date');
+      }
+      elseif ($field['type'] == 'time') {
+        $field += array('mysql_type' => 'TIME', 'pgsql_type' => 'time without time zone');
+      }
+    }
   }
 }
 

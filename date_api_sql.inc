@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.21 2010/03/29 00:42:11 karens Exp $
+// $Id: date_api_sql.inc,v 1.22 2010/08/04 10:22:00 karens Exp $
 
 /**
  * @file
@@ -97,13 +97,13 @@ class date_sql_handler {
       switch ($this->db_type) {
         case 'mysql':
         case 'mysqli':
-          $test = db_result(db_query("SELECT CONVERT_TZ('2008-02-15 12:00:00', 'UTC', 'US/Central')"));
+          $test = db_query("SELECT CONVERT_TZ('2008-02-15 12:00:00', 'UTC', 'US/Central')")->fetchField();
           if ($test == '2008-02-15 06:00:00') {
             $has_support = TRUE;
           }
           break;
         case 'pgsql':
-          $test = db_result(db_query("'2008-02-15 12:00:00 UTC' AT TIME ZONE 'US/Central'"));
+          $test = db_query("'2008-02-15 12:00:00 UTC' AT TIME ZONE 'US/Central'")->fetchField();
           if ($test == '2008-02-15 06:00:00') {
             $has_support = TRUE;
           }
