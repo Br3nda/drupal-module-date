@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_filter_handler.inc,v 1.10 2010/08/04 10:56:44 karens Exp $
+// $Id: date_api_filter_handler.inc,v 1.11 2010/08/04 11:01:16 karens Exp $
 
 /**
  * @file
@@ -123,7 +123,7 @@ class date_api_filter_handler extends views_handler_filter_numeric {
     $fields = date_api_fields($this->definition['base']);
     $options = array();
     foreach ($fields['name'] as $name => $field) {
-      $options[$name] = $instance['label'];
+      $options[$name] = $field['label'];
     }
     $form['date_fields'] = array(
       '#title' => t('Date field(s)'),
