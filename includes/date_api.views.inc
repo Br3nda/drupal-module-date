@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.views.inc,v 1.12 2010/03/29 00:42:11 karens Exp $
+// $Id: date_api.views.inc,v 1.13 2010/08/04 10:56:44 karens Exp $
 
 /**
  * @file
@@ -185,8 +185,7 @@ function date_api_fields($base = 'node', $reset = FALSE) {
  * value to compare to the local value.
  */
 function date_views_set_timezone(&$date_handler, &$view, $field) {
-  $tz_handling  = $field['settings']['tz_handling'];
-  switch ($tz_handling) {
+  switch ($field['tz_handling']) {
     case 'date' :
       $date_handler->db_timezone = 'UTC';
       $date_handler->local_timezone_field = $field['timezone_field'];
