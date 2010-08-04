@@ -1,11 +1,11 @@
 <?php
-// $Id: date_api_sql.inc,v 1.22 2010/08/04 10:22:00 karens Exp $
+// $Id: date_api_sql.inc,v 1.23 2010/08/04 22:45:23 karens Exp $
 
 /**
  * @file
  * SQL helper for Date API.
  */
-
+  
 /**
  *  A helper function to do cross-database concatation of date parts
  *
@@ -13,8 +13,7 @@
  *  @return - correct sql string for database type
  */
 function date_sql_concat($array) {
-  global $db_type;
-  switch ($db_type) {
+  switch (date_db_type()) {
     case ('mysql'):
     case ('mysqli'):
       return "CONCAT(" . implode(",", $array) . ")";
@@ -30,8 +29,7 @@ function date_sql_concat($array) {
  * @return SQL statement to return the first non-NULL value in the list.
  */
 function date_sql_coalesce($array) {
-  global $db_type;
-  switch ($db_type) {
+  switch (date_db_type()) {
     case ('mysql'):
     case ('mysqli'):
     case ('pgsql'):
@@ -82,7 +80,6 @@ class date_sql_handler {
   }
 
   function get_db_type() {
-    global $db_type;
     return $GLOBALS['databases']['default']['default']['driver'];
   }
   
