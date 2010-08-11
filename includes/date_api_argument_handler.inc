@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_argument_handler.inc,v 1.9 2010/03/29 00:42:11 karens Exp $
+// $Id: date_api_argument_handler.inc,v 1.10 2010/08/11 22:39:46 karens Exp $
 
 /**
  * @file
@@ -360,7 +360,7 @@ class date_api_argument_handler extends views_handler_argument_date {
         }
         $sql = str_replace('***table***', $field['table_name'], "($from AND $to)");
         if ($sql) {
-          $this->query->add_where('date', $sql);
+          $this->query->add_where('date', $sql, array(), 'formula');
         }
       }
     }
