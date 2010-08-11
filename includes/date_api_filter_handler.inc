@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_filter_handler.inc,v 1.14 2010/08/04 22:45:23 karens Exp $
+// $Id: date_api_filter_handler.inc,v 1.15 2010/08/11 22:36:49 karens Exp $
 
 /**
  * @file
@@ -443,9 +443,8 @@ class date_api_filter_handler extends views_handler_filter_numeric {
         if (!empty($sql)) {
           // Use set_where_group() with the selected date_method 
           // of 'AND' or 'OR' to combine the field WHERE clauses.
-          //$this->query->set_where_group($this->options['date_method'], 'date');
-          //$this->query->add_where('date', $sql);
-          dsm($sql);
+          $this->query->set_where_group($this->options['date_method'], 'date');
+          $this->query->add_where('date', $sql, array(), 'formula');
         }
       }
     }
