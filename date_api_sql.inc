@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.23 2010/08/04 22:45:23 karens Exp $
+// $Id: date_api_sql.inc,v 1.24 2010/08/12 00:27:03 karens Exp $
 
 /**
  * @file
@@ -181,7 +181,7 @@ class date_sql_handler {
             $field = "FROM_UNIXTIME($field)";
             break;
           case DATE_ISO:
-            $field = "STR_TO_DATE($field, '%Y-%m-%%dT%T')";
+            $field = "STR_TO_DATE($field, '%Y-%m-%dT%T')";
             break;
           case DATE_DATETIME:
             break;
@@ -325,10 +325,10 @@ class date_sql_handler {
         $replace = array(
           'Y' => '%Y', 'y' => '%y',
           'm' => '%m', 'n' => '%c',
-          'd' => '%%d', 'j' => '%e',
+          'd' => '%d', 'j' => '%e',
           'H' => '%H',
           'i' => '%i',
-          's' => '%%s',
+          's' => '%s',
           '\WW' => 'W%U',
           );
         $format = strtr($format, $replace);
