@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_argument_handler.inc,v 1.11 2010/08/12 17:27:29 karens Exp $
+// $Id: date_api_argument_handler.inc,v 1.12 2010/08/12 22:32:34 karens Exp $
 
 /**
  * @file
@@ -33,6 +33,8 @@ class date_api_argument_handler extends views_handler_argument_date {
     $date_handler->granularity = $this->options['granularity'];
     $this->format = $date_handler->views_formats($date_handler->granularity, 'display');
     $this->sql_format = $date_handler->views_formats($date_handler->granularity, 'sql');
+    
+    if (empty($this->view->date_info)) $this->view->date_info = new stdClass();
     
     // Set the view range, do this only if not already set in case there are multiple date arguments.
     if (empty($this->view->date_info->min_allowed_year)) {
