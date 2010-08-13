@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_ical.inc,v 1.46 2010/08/13 15:12:45 karens Exp $ */
+// $Id: date_api_ical.inc,v 1.47 2010/08/13 15:17:06 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -592,10 +592,10 @@ function date_ical_escape_text($text) {
   // this and see if anything breaks.
   //$text = str_replace('"', '\"', $text);
   //$text = str_replace(":", "\:", $text);
-  $text = str_replace("\\", "\\\\", $text);
+  $text = preg_replace("/\\\b/","\\\\", $text);
   $text = str_replace(",", "\,", $text);
   $text = str_replace(";", "\;", $text);
-  $text = str_replace("\n", "\n ", $text);
+  $text = str_replace("\n", "\r\n ", $text);
   return trim($text);
 }
 
