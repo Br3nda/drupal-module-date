@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.61 2010/08/13 13:29:06 karens Exp $
+// $Id: date_popup.module,v 1.62 2010/08/13 13:57:25 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -268,7 +268,7 @@ function date_popup_process_date(&$element, $edit = NULL, $date = NULL) {
     $sub_element['#value'] = $sub_element['#default_value'];
   }
   // TODO, figure out exactly when we want this description. In many places it is not desired.
-  $sub_element['#description'] = ' ' . t('Format: @date', array('@date' => date_format_date(date($date_format, REQUEST_TIME)), 'custom', $date_format));
+  $sub_element['#description'] = ' '. t('Format: @date', array('@date' => date_format_date(date_now(), 'custom', $date_format)));
   return $sub_element;
 }
 
