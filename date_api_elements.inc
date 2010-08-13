@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_elements.inc,v 1.69 2010/08/13 13:57:25 karens Exp $
+// $Id: date_api_elements.inc,v 1.70 2010/08/13 15:46:19 karens Exp $
 /**
  * @file
  * Date API elements themes and validation.
@@ -607,7 +607,9 @@ function date_convert_from_custom($date, $format) {
   $regex2 = preg_replace($patterns, $repl2, $format_regexp, 1);
   $regex2 = str_replace('A', '(AM|PM)', $regex2);
   $regex2 = str_replace('a', '(am|pm)', $regex2);
-  preg_match('`^' . $regex2 . '$`', $date, $values);
+  // Change proposed by http://drupal.org/node/802046, see if anything breaks.
+  //preg_match('`^'. $regex2 .'$`', $date, $values);
+  preg_match('/'.$regex2.'/u', $date, $values);  
   array_shift($values);
   
   // if we did not find all the values for the patterns in the format, abort
