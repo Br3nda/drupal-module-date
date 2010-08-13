@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.94 2010/08/13 11:23:35 karens Exp $
+// $Id: date_api.module,v 1.95 2010/08/13 11:33:18 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -42,7 +42,7 @@ define('DATE_REGEX_ICAL_DATETIME', '/(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})
  * Implement hook_init().
  */
 function date_api_init() {
-  date_default_timezone_set(date_default_timezone_name());
+  date_default_timezone_set(date_default_timezone());
   drupal_add_css(drupal_get_path('module', 'date_api') . '/date.css', array('weight' => CSS_THEME));
 }
 
