@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_ical.inc,v 1.45 2010/04/13 19:55:42 karens Exp $ */
+// $Id: date_api_ical.inc,v 1.46 2010/08/13 15:12:45 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -421,7 +421,7 @@ function date_ical_parse_date($field, $data) {
  *   PROPERTIES include FREQ, INTERVAL, COUNT, BYDAY, BYMONTH, BYYEAR, UNTIL
  */
 function date_ical_parse_rrule($field, $data) {
-  $data = str_replace('RRULE:', '', $data);
+  $data = preg_replace("/RRULE.*:/", '', $data);
   $items = array('DATA' => $data);
   $rrule = explode(';', $data);
   foreach ($rrule as $key => $value) {
