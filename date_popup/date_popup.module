@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.60 2010/08/13 12:32:51 karens Exp $
+// $Id: date_popup.module,v 1.61 2010/08/13 13:29:06 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -475,6 +475,8 @@ function timepicker_format_replacements() {
     'G' => 'H',
     'g' => 'h',
     'a' => 'A',
+    ' a' => 'A',
+    ' A' => 'A',   
     );
 }
 
