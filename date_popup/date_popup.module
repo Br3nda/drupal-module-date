@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.59 2010/08/12 22:10:50 karens Exp $
+// $Id: date_popup.module,v 1.60 2010/08/13 12:32:51 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -43,7 +43,7 @@ function date_popup_library() {
     'website' => 'http://plugins.jquery.com/project/timeEntry',
     'version' => '1.4.7',
     'js' => array(
-      $path . '/jquery.timeentry.min.js' => array(),
+      $path . '/jquery.timeentry.pack.js' => array(),
     ),
     'css' => array(
       $path . '/themes/timeentry.css' => array('preprocess' => FALSE),
