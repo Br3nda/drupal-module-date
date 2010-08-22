@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.views.inc,v 1.17 2010/08/22 01:14:51 karens Exp $
+// $Id: date_api.views.inc,v 1.18 2010/08/22 18:12:55 karens Exp $
 
 /**
  * @file
@@ -40,20 +40,6 @@ function date_api_views_plugins() {
   return array(
     'module' => 'date_api', // This just tells our themes are elsewhere.
     'display' => array(
-      // Parents are not really displays, just needed so the files can
-      // be included.
-      'parent' => array(
-        'no ui' => TRUE,
-        'handler' => 'views_plugin_display',
-        'path' => "$views_path/plugins",
-        'parent' => '',
-      ),
-      'attachment' => array(
-        'no ui' => TRUE,
-        'handler' => 'views_plugin_display_attachment',
-        'path' => "$views_path/plugins",
-        'parent' => 'parent',
-      ),
       // Display plugin for date navigation.
       'date_nav' => array(
         'title' => t('Date browser'),
