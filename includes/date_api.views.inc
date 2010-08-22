@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.views.inc,v 1.16 2010/08/12 17:27:29 karens Exp $
+// $Id: date_api.views.inc,v 1.17 2010/08/22 01:14:51 karens Exp $
 
 /**
  * @file
@@ -114,8 +114,7 @@ function date_api_views_data() {
       'argument' => array(
         'handler' => 'date_api_argument_handler',
         'empty field name' => t('Undated'),
-        'base' => $base_table,
-        'many to one' => TRUE,
+        'skip base' => $base_table,
       ),
     );  
     // The flexible date filter.
@@ -126,8 +125,7 @@ function date_api_views_data() {
       'filter' => array(
         'handler' => 'date_api_filter_handler',
         'empty field name' => t('Undated'),
-        'base' => $base_table,
-        'many to one' => TRUE,
+        'skip base' => $base_table,
       ),
     ); 
   }

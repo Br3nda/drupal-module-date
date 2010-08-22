@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.views_default.inc,v 1.4 2010/03/01 00:40:09 karens Exp $
+// $Id: date_api.views_default.inc,v 1.5 2010/08/22 01:14:51 karens Exp $
 
 /**
  * @file
@@ -18,7 +18,7 @@ $view->tag = 'Date';
 $view->view_php = '';
 $view->base_table = 'node';
 $view->is_cacheable = FALSE;
-$view->api_version = 2;
+$view->api_version = 3;
 $view->disabled = TRUE; /* Edit this to true to make a default view disabled initially */
 $handler = $view->new_display('default', 'Defaults', 'default');
 $handler->override_option('arguments', array(

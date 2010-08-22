@@ -1,9 +1,13 @@
 <?php
-// $Id: date_api_sql.inc,v 1.25 2010/08/12 18:36:31 karens Exp $
+// $Id: date_api_sql.inc,v 1.26 2010/08/22 01:14:51 karens Exp $
 
 /**
  * @file
  * SQL helper for Date API.
+ *
+ * @TODO
+ * Add experimental support for sqllite (http://www.sqlite.org/lang_datefunc.html) and
+ * Oracle (http://psoug.org/reference/date_func.html and http://psoug.org/reference/datatypes.html) date/time functions.
  */
   
 /**
