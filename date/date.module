@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.96 2010/08/24 11:43:21 karens Exp $
+// $Id: date.module,v 1.97 2010/08/24 11:44:35 karens Exp $
 
 /**
  * @file
@@ -1056,7 +1056,7 @@ function date_entity_metadata_struct_getter($item, array $options, $name, $type)
 function date_field_views_data_alter(&$result, $field, $module) {
 
   // TODO, see if we really want to do this.
-  return
+  return;
   
   if (in_array($field['type'], array(DATE_ISO, DATE_DATETIME, DATE_UNIX))) {
     $columns = array('value', 'value2');
