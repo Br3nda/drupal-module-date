@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.102 2010/08/22 12:22:06 karens Exp $
+// $Id: date_api.module,v 1.103 2010/08/24 11:43:21 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1704,7 +1704,9 @@ function date_api_views_fetch_fields($base, $type) {
     return array();
   }
   module_load_include('inc', 'views', 'includes/admin');
+  
   return views_fetch_fields($base, $type);
+   
 }
 
 /**
