@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.103 2010/08/24 11:43:21 karens Exp $
+// $Id: date_api.module,v 1.104 2010/08/27 10:58:03 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -2068,4 +2068,15 @@ function date_api_form_system_settings_validate(&$form, &$form_state) {
   if ($form_values['date_api_use_iso8601'] && $form_values['date_first_day'] != 1) {
     form_set_error('date_first_day', t('When using ISO-8601 week numbers, the first day of the week must be set to Monday.'));
   }
+}
+
+function date_format_type_options() {
+  $options = array();
+  $format_types = system_get_date_types();
+  if (!empty($format_types)) {
+    foreach ($format_types as $type => $type_info) {
+      $options[$type] = $type_info['title'];
+    }
+  }
+  return $options;
 }
