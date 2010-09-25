@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_sql.inc,v 1.4.2.41 2009/05/03 15:38:25 karens Exp $
+// $Id: date_api_sql.inc,v 1.4.2.42 2010/09/25 15:33:22 arlinsandbulte Exp $
 
 /**
  *  A helper function to do cross-database concatation of date parts
@@ -174,7 +174,7 @@ class date_sql_handler {
             $field = "$field::ABSTIME";
             break;
           case DATE_ISO:
-            $field = "TO_DATE($field, 'FMYYYY-FMMM-FMDDTFMHH:FMMI:FMSS')";
+            $field = "TO_DATE($field, 'YYYY-MM-DDTHH:MI:SS')";
             break;
           case DATE_DATETIME:
             break;
