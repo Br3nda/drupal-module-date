@@ -1,5 +1,5 @@
 <?php
-// $Id: date.field.inc,v 1.3 2010/08/27 13:16:45 karens Exp $
+// $Id: date.field.inc,v 1.4 2010/10/02 14:53:36 karens Exp $
 /**
  * @file
  * Field hooks to implement a date field.
@@ -281,14 +281,6 @@ function date_field_load($entity_type, $entities, $field, $instances, $langcode,
       }
     }
   }
-}
-
-/**
- * Implements hook_field_schema().
- */
-function date_field_schema($field) {
-  module_load_include('inc', 'date', 'date_admin');
-  return _date_field_schema($field);
 }
 
 /**
