@@ -1,20 +1,14 @@
 <?php
-// $Id: date.module,v 1.99 2010/08/27 13:16:45 karens Exp $
+// $Id: date.module,v 1.100 2010/10/02 11:15:52 karens Exp $
 
 /**
  * @file
  * Defines date/time field types for the Content Construction Kit (CCK).
  */
  
-
-/**
- * Implements hook_init().
- */
-function date_init() {
-  module_load_include('theme', 'date', 'date');
-  module_load_include('inc', 'date', '/date.field');
-  module_load_include('inc', 'date', '/date_elements');
-}
+module_load_include('theme', 'date', 'date');
+module_load_include('inc', 'date', '/date.field');
+module_load_include('inc', 'date', '/date_elements');
 
 /**
  * Implements hook_menu().
