@@ -1,5 +1,5 @@
 <?php
-// $Id: date_tools.change_type.inc,v 1.3 2010/08/04 11:30:47 karens Exp $
+// $Id: date_tools.change_type.inc,v 1.4 2010/10/02 11:39:08 karens Exp $
 
 /**
  * A form to change the type of date used in date fields.
@@ -8,6 +8,7 @@ function date_tools_change_type_form() {
   $form = array();
   // This is broken, still needs to be adjusted
   // for the D6->D7 changes.
+  drupal_set_message(t('This operation does not yet work for the Drupal 7 version.'), 'error');
   return $form;
   $fields = content_fields();
   $date_options = array();

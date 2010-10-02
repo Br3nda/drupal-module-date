@@ -1,5 +1,5 @@
 <?php
-// $Id: date_tools.module,v 1.17 2010/10/02 11:31:58 karens Exp $
+// $Id: date_tools.module,v 1.18 2010/10/02 11:39:08 karens Exp $
 
 /**
  * Implementation of hook_help().
@@ -73,7 +73,7 @@ function date_tools_menu() {
     'type' => MENU_CALLBACK,
   );
   $items['admin/structure/date/change'] = array(
-    'title'    => 'Change',
+    'title'    => 'Change type',
     'access arguments'   => array('administer date tools'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('date_tools_change_type_form'),
