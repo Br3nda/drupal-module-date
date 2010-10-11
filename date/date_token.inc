@@ -1,5 +1,5 @@
 <?php
-// $Id: date_token.inc,v 1.7 2010/09/08 02:41:09 arlinsandbulte Exp $
+// $Id: date_token.inc,v 1.8 2010/10/11 20:07:56 karens Exp $
 /**
  * @file
  * Token module integration.
@@ -41,7 +41,7 @@ function date_token_values($type, $object = NULL) {
     $item_type = isset($item['date_type']) ? $item['date_type'] : (is_numeric($item['value']) ? DATE_UNIX : DATE_ISO);
     $timezone = !empty($item['timezone']) ? $item['timezone'] : date_default_timezone();
     $timezone_db = !empty($item['timezone_db']) ? $item['timezone_db'] : 'UTC';
-    $date = date_make_date($item['value'], $timezone_db, $item_type);
+    $date = new DateObject($item['value'], $timezone_db, date_type_format($item_type));
     if (!empty($date) && $timezone_db != $timezone) {
       date_timezone_set($date, timezone_open($timezone));
     }
@@ -68,7 +68,7 @@ function date_token_values($type, $object = NULL) {
     if (!empty($item['value2'])) {
 
       $item['value2'] = trim($item['value2']);
-      $date = date_make_date($item['value2'], $timezone_db, $item_type);
+      $date = new DateObject($item['value2'], $timezone_db, date_type_format($item_type));
       if ($timezone_db != $timezone) {
         date_timezone_set($date, timezone_open($timezone));
       }
