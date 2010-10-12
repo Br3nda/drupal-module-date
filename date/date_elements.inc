@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.82 2010/10/11 20:07:56 karens Exp $
+// $Id: date_elements.inc,v 1.83 2010/10/12 11:57:03 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -102,7 +102,7 @@ function _date_field_widget_form(&$form, &$form_state, $field, $instance, $langc
     _date_repeat_widget($element, $field, $instance, $items, $delta);
     $element['rrule']['#weight'] = $instance['widget']['weight'] + .4;
   }
-  
+
   return $element;
 } 
 
@@ -285,7 +285,7 @@ function date_combo_element_process($element, &$form_state, $form) {
   // Make sure field info will be available to the validator which
   // does not get the values in $form.
   $form_state['#field_info'][$field['field_name']] = $field;
-  
+
   return $element;
 }
 
