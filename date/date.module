@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.102 2010/10/12 13:34:42 karens Exp $
+// $Id: date.module,v 1.103 2010/10/18 16:47:20 karens Exp $
 
 /**
  * @file
@@ -241,6 +241,7 @@ function date_element_info() {
     '#columns' => array('value', 'value2', 'timezone', 'offset', 'offset2'),
     '#process' => array('date_combo_element_process'),
     '#element_validate' => array('date_combo_validate'),
+    '#value_callback' => 'date_combo_value_callback',
     '#theme_wrappers' => array('date_combo'),
     );
   return $type;
