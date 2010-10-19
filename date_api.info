@@ -1,4 +1,4 @@
-; $Id: date_api.info,v 1.9 2010/10/10 12:51:33 karens Exp $
+; $Id: date_api.info,v 1.10 2010/10/19 13:21:41 karens Exp $
 name = Date API
 description = A Date API that can be used by other modules.
 package = Date/Time
@@ -25,3 +25,6 @@ files[] = theme/date-valarm.tpl.php
 files[] = theme/date-vcalendar.tpl.php
 files[] = theme/date-vevent.tpl.php
 files[] = theme/date-views-filter-form.tpl.php
+files[] = tests/date_api.test
+files[] = tests/date.test
+files[] = tests/date_repeat.test

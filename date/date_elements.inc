@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.85 2010/10/18 16:47:20 karens Exp $
+// $Id: date_elements.inc,v 1.86 2010/10/19 13:21:41 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -171,7 +171,7 @@ function date_local_date($form, $form_state, $delta, $item, $timezone, $field, $
     }
     */
     
-    $date = new DateObject($value, date_get_timezone_db($field['settings']['tz_handling']), date_type_format($field['type']));
+    $date = new DateObject($value, date_get_timezone_db($field['settings']['tz_handling']));
     $date->limitGranularity($field['settings']['granularity']);
     if (empty($date)) {
       return NULL;
