@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.110 2010/10/20 14:50:43 karens Exp $
+// $Id: date_api.module,v 1.111 2010/10/21 11:27:26 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -90,7 +90,7 @@ class DateObject extends DateTime {
    *   $format is recommended in order to use negative or large years, which php's parser fails on.
    */
   public function __construct($time = 'now', $tz = NULL, $format = NULL) {
-    
+      
     // Allow string timezones
     if (!empty($tz) && !is_object($tz)) {
       $tz = new DateTimeZone($tz);
