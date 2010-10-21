@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.86 2010/10/19 13:21:41 karens Exp $
+// $Id: date_elements.inc,v 1.87 2010/10/21 16:04:19 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -319,8 +319,6 @@ function date_element_empty($element, &$form_state) {
  * Don't try this if there were errors before reaching this point.
  */
 function date_combo_validate($element, &$form_state) {
-  // @TODO
-  // The validation is not working now.
   
   $form_values = $form_state['values'];
   $field_name = $element['#field_name'];

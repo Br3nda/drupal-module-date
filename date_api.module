@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.111 2010/10/21 11:27:26 karens Exp $
+// $Id: date_api.module,v 1.112 2010/10/21 16:04:19 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -159,7 +159,6 @@ class DateObject extends DateTime {
       parent::__construct($time, $tz ? $tz : new DateTimeZone("UTC"));
       $this->setGranularityFromTime($time, $tz);
     }
-
     if ($this->getTimezone() && !preg_match('/[a-zA-Z]/', $this->getTimezone()->getName())) {
       // This tz was given as just an offset, which causes problems
       $this->setTimezone(new DateTimeZone("UTC"));
