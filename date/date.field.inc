@@ -1,5 +1,5 @@
 <?php
-// $Id: date.field.inc,v 1.6 2010/10/22 12:35:20 karens Exp $
+// $Id: date.field.inc,v 1.7 2010/10/22 21:59:03 karens Exp $
 /**
  * @file
  * Field hooks to implement a date field.
@@ -149,6 +149,11 @@ function date_field_formatter_view($entity_type, $entity, $field, $instance, $la
  * Implements hook_field_is_empty().
  */
 function date_field_is_empty($item, $field) {
+  // Sometimes a $item is a date object.
+  // Coming from repeating dates. Why?? 
+  if (!is_array($item)) {
+    return FALSE;
+  }
   if (empty($item['value'])) {
     return TRUE;
   }
