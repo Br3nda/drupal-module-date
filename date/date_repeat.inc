@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.inc,v 1.35 2010/10/11 20:07:56 karens Exp $
+// $Id: date_repeat.inc,v 1.36 2010/10/22 15:23:08 karens Exp $
 /**
  * @file
  * Implementation of Date Repeat API calculations for the CCK Date field.
@@ -155,7 +155,7 @@ function date_repeat_build_dates($rrule = NULL, $rrule_values = NULL, $field, $i
   else {
     $end = $start;
   }
-  $duration = date_difference($start, $end);
+  $duration = $start->difference($end);
   $start_datetime = date_format($start, DATE_FORMAT_DATETIME);
     
   if (!empty($rrule_values['UNTIL']['datetime'])) {

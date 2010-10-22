@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat.module,v 1.37 2010/08/12 19:40:20 karens Exp $
+// $Id: date_repeat.module,v 1.38 2010/10/22 15:23:08 karens Exp $
 /**
  * @file
  *
@@ -22,9 +22,19 @@ function date_repeat_element_info() {
     '#input' => TRUE,
     '#process' => array('date_repeat_rrule_process'),
     '#element_validate' => array('date_repeat_rrule_validate'),
+    '#value_callback' => 'date_repeat_value_callback',
     '#theme_wrappers' => array('date_repeat_rrule'),
   );
   return $type;
+}
+
+/**
+ * A value callback for the date_repeat_rrule element.
+ */
+function date_repeat_value_callback($element, $input = FALSE, &$form_state) {
+  if (!$input) {
+    return array();
+  }
 }
 
 function date_repeat_theme() {
