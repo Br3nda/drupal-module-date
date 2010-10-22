@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.88 2010/10/22 12:35:20 karens Exp $
+// $Id: date_elements.inc,v 1.89 2010/10/22 14:13:33 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -108,7 +108,6 @@ function _date_field_widget_form(&$form, &$form_state, $field, $instance, $langc
 
 function date_combo_value_callback($element, $input = FALSE, &$form_state) {
   if (!$input) {
-    echo 'callback';
     return array();
   }
 }
