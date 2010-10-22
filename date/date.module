@@ -1,5 +1,5 @@
 <?php
-// $Id: date.module,v 1.104 2010/10/19 13:21:41 karens Exp $
+// $Id: date.module,v 1.105 2010/10/22 12:35:20 karens Exp $
 
 /**
  * @file
@@ -419,8 +419,8 @@ function date_form_alter(&$form, &$form_state, $form_id) {
 /**
  * Implements hook_field_widget_error().
  */
-function date_field_widget_error($element, $error) {
-  form_error($element['value'], $error['message']);
+function date_field_widget_error($element, $error, $form, &$form_state) {
+  form_error($element[$error['error']], $error['message']);
 }
 
 /**

@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.87 2010/10/21 16:04:19 karens Exp $
+// $Id: date_elements.inc,v 1.88 2010/10/22 12:35:20 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -368,6 +368,24 @@ function date_combo_validate($element, &$form_state) {
       }
     }
   }
+  
+  // A 'To' date without a 'From' date is a validation error.
+  if ($empty && !empty($item[$to_field])) {
+    if (!is_array($item[$to_field])) {
+      form_set_error($error_field, t("A 'From date' date is required if a 'To date' is supplied for field %field #%delta.", array('%delta' => $field['cardinality'] ? intval($delta + 1) : '', '%field' => t($instance['label']))));
+      $empty = FALSE;
+    }
+    else {
+      foreach ($item[$to_field] as $key => $value) {
+        if (!empty($value)) {
+          form_set_error($error_field, t("A 'From date' date is required if a 'To date' is supplied for field %field #%delta.", array('%delta' => $field['cardinality'] ? intval($delta + 1) : '', '%field' => t($instance['label']))));
+          $empty = FALSE;
+          break;
+        }
+      }
+    }
+  }
+  
   if ($empty) {
     $item = date_element_empty($element, $form_state);
     if (!$element['#required']) {
