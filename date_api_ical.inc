@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_ical.inc,v 1.51 2010/10/22 21:30:10 karens Exp $ */
+// $Id: date_api_ical.inc,v 1.52 2010/10/25 11:55:38 karens Exp $ */
 /**
  * @file
  * Parse iCal data.
@@ -383,7 +383,9 @@ function date_ical_parse_date($field, $data) {
       $datetime = date_pad($regs[1]) . '-' . date_pad($regs[2]) . '-' . date_pad($regs[3]); // Date
       if (isset($regs[4])) {
         $has_time = TRUE;
-        $datetime .= ' ' . date_pad($regs[5]) . ':' . date_pad($regs[6]) . ':' . date_pad($regs[7]); // Time
+        $datetime .= ' ' . (!empty($regs[5]) ? date_pad($regs[5]) : '00') .
+         ':' . (!empty($regs[6]) ? date_pad($regs[6]) : '00') .
+         ':' . (!empty($regs[7]) ? date_pad($regs[7]) : '00'); // Time
       }
     }  
   }
