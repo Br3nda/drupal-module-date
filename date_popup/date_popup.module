@@ -1,5 +1,5 @@
 <?php
-// $Id: date_popup.module,v 1.72 2010/10/25 11:55:38 karens Exp $
+// $Id: date_popup.module,v 1.73 2010/10/25 19:55:41 karens Exp $
 /**
  * @file
  * A module to enable jquery calendar and time entry popups.
@@ -89,7 +89,6 @@ function date_popup_js_settings_id($id, $func, $settings) {
   // Make sure popup date selector grid is in correct year.
   if (!empty($settings['yearRange'])) {
     $parts = explode(':', $settings['yearRange']);
-    $settings += array('defaultDate' => (string) $parts[0] . 'y');
   }
 
   if (!$js_added) {
