@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api.module,v 1.116 2010/10/26 11:54:36 karens Exp $
+// $Id: date_api.module,v 1.117 2010/10/26 12:05:44 karens Exp $
 /**
  * @file
  * This module will make the date API available to other modules.
@@ -1700,7 +1700,7 @@ function date_api_views_fetch_fields($base, $type) {
  */
 function date_order_translated() {
   return array(
-    '+1' => t'First', array(), array('context' => 'date_order')),
+    '+1' => t('First', array(), array('context' => 'date_order')),
     '+2' => t('Second', array(), array('context' => 'date_order')),
     '+3' => t('Third', array(), array('context' => 'date_order')),
     '+4' => t('Fourth', array(), array('context' => 'date_order')),
