@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_calc.inc,v 1.17 2010/10/11 20:07:56 karens Exp $
+// $Id: date_repeat_calc.inc,v 1.18 2010/10/26 10:10:33 karens Exp $
 /**
  * @file
  * Code to compute the dates that match an iCal RRULE.
@@ -14,7 +14,7 @@
  * so the calculation code is not called more often than necessary.
  *
  * Currently implemented:
- * INTERVAL, UNTIL, COUNT, EXDATE, BYDAY, BYMONTHDAY, BYMONTH,
+ * INTERVAL, UNTIL, COUNT, EXDATE, RDATE, BYDAY, BYMONTHDAY, BYMONTH,
  * YEARLY, MONTHLY, WEEKLY, DAILY
  *
  * Currently not implemented:
@@ -31,7 +31,7 @@
  *
  * Compute dates that match the requested rule, within a specified date range.
  */
-function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
+function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone, $additions) {
   module_load_include('inc', 'date_api', 'date_api_ical');
   
   if (empty($timezone)) {
@@ -341,6 +341,12 @@ function _date_repeat_calc($rrule, $start, $end, $exceptions, $timezone) {
       }
     }
   }
+  
+  // add additional dates
+  foreach($additions as $addition) {
+    $days[] = date_format($addition, DATE_FORMAT_DATETIME);
+  }
+  
   sort($days);
   return $days;
 }
