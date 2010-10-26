@@ -1,5 +1,5 @@
 <?php
-// $Id: date.field.inc,v 1.7 2010/10/22 21:59:03 karens Exp $
+// $Id: date.field.inc,v 1.8 2010/10/26 12:54:20 karens Exp $
 /**
  * @file
  * Field hooks to implement a date field.
@@ -25,7 +25,9 @@ function date_field_formatter_info() {
     'format_interval' => array(
       'label' => t('As Time Ago'),
       'field types' => array('date', 'datestamp', 'datetime'),
-      'settings' => array(),
+      'settings' => array(
+        'interval' => 2,
+      ),
     ),
   );
 
@@ -123,7 +125,7 @@ function date_field_formatter_view($entity_type, $entity, $field, $instance, $la
           $vars['delta'] = $delta;
           $vars['item'] = $item;
           $vars['dates'] = date_formatter_process($formatter, $entity_type, $entity, $field, $instance, $langcode, $item, $display);
-          $element[$delta] = array('#markup' => theme('date_format_interval', $vars));
+          $element[$delta] = array('#markup' => theme('date_display_interval', $vars));
         }
       }
       break;

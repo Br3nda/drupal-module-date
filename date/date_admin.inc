@@ -1,5 +1,5 @@
 <?php
-// $Id: date_admin.inc,v 1.63 2010/10/22 15:23:08 karens Exp $
+// $Id: date_admin.inc,v 1.64 2010/10/26 12:54:20 karens Exp $
 /**
  * @file
  * Date administration code.
@@ -89,10 +89,19 @@ function date_default_formatter_settings_form($field, $instance, $view_mode, $fo
 
 /**
  * Settings for the interval formatter.
- * @TODO Add settings here later.
  */
 function date_interval_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
   $form = array();
+  $form['interval'] = array(
+    '#title' => t('Interval'),
+    '#description' => t("How many time units should be shown in the 'time ago' string."),
+    '#type' => 'select',
+    '#options' => drupal_map_assoc(range(1, 6)),
+    '#default_value' => $settings['interval'],
+    '#weight' => 0,
+  );
   return $form;
 } 
  
@@ -141,7 +150,11 @@ function date_default_formatter_settings_summary($field, $instance, $view_mode) 
  */
 function date_interval_formatter_settings_summary($field, $instance, $view_mode) {  
   $summary = array();
-  return implode('<br />', $summary);
+  $display = $instance['display'][$view_mode];
+  $settings = $display['settings'];
+  $formatter = $display['type'];
+  return t('Display time ago, showing @interval units.', array('@interval' => $settings['interval']));
+
 }
  
 function _date_field_instance_settings_form($field, $instance) {
