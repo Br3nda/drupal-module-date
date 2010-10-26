@@ -1,5 +1,5 @@
 <?php
-// $Id: date.theme,v 1.25 2010/08/13 12:44:45 karens Exp $
+// $Id: date.theme,v 1.26 2010/10/26 11:54:36 karens Exp $
 /**
  * @file
  * Theme functions.
@@ -266,7 +266,7 @@ function theme_date_all_day($vars) {
  * Theme the way an 'all day' label will look.
  */
 function theme_date_all_day_label() {
-  return '(' . date_t('All day', 'datetime') .')';
+  return '(' . t('All day', array(), array('context' => 'datetime')) .')';
 }
 
 /**

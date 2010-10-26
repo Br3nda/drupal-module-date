@@ -1,5 +1,5 @@
 <?php
-// $Id: date-navigation.tpl.php,v 1.2 2009/09/04 09:42:58 karens Exp $
+// $Id: date-navigation.tpl.php,v 1.3 2010/10/26 11:54:36 karens Exp $
 /**
  * @file
  * Template to display date navigation links.
@@ -35,7 +35,7 @@
 <div class="date-nav clear-block">
   <div class="date-prev">
     <?php if (!empty($prev_url)) : ?>
-      <span class="next"> <?php print l('« ' . ($block ? '' : date_t('Prev', 'date_nav')), $prev_url, $prev_options); ?></span>
+      <span class="next"> <?php print l('« ' . ($block ? '' : t('Prev', array(), array('context' => 'date_nav'))), $prev_url, $prev_options); ?></span>
     <?php endif; ?>
   &nbsp;</div>
   <div class="date-heading">
@@ -43,7 +43,7 @@
   </div>
   <div class="date-next">&nbsp;
     <?php if (!empty($next_url)) : ?>
-      <span class="next"> <?php print l(($block ? '' : date_t('Next', 'date_nav')) . ' »', $next_url, $next_options); ?></span>
+      <span class="next"> <?php print l(($block ? '' : t('Next', array(), array('context' => 'date_nav'))) . ' »', $next_url, $next_options); ?></span>
     <?php endif; ?>  
   </div>
 </div>

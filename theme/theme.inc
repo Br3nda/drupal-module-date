@@ -1,5 +1,5 @@
 <?php
-// $Id: theme.inc,v 1.11 2010/08/22 01:14:51 karens Exp $
+// $Id: theme.inc,v 1.12 2010/10/26 11:54:36 karens Exp $
 
 /**
  * @file
@@ -358,30 +358,30 @@ function theme_date_part_minsec_prefix($vars) {
 function theme_date_part_label_year($vars) {
   $part_type = $vars['part_type'];
   $element = $vars['element'];
-  return date_t('Year', 'datetime');
+  return t('Year', array(), array('context' => 'datetime'));
 }
 function theme_date_part_label_month($vars) {
   $part_type = $vars['part_type'];
   $element = $vars['element'];
-  return date_t('Month', 'datetime');
+  return t('Month', array(), array('context' => 'datetime'));
 }
 function theme_date_part_label_day($vars) {
   $part_type = $vars['part_type'];
   $element = $vars['element'];
-  return date_t('Day', 'datetime');
+  return t('Day', array(), array('context' => 'datetime'));
 }
 function theme_date_part_label_hour($vars) {
-  return date_t('Hour', 'datetime');
+  return t('Hour', array(), array('context' => 'datetime'));
 }
 function theme_date_part_label_minute($vars) {
   $part_type = $vars['part_type'];
   $element = $vars['element'];
-  return date_t('Minute', 'datetime');
+  return t('Minute', array(), array('context' => 'datetime'));
 }
 function theme_date_part_label_second($vars) {
   $part_type = $vars['part_type'];
   $element = $vars['element'];
-  return date_t('Second', 'datetime');
+  return t('Second', array(), array('context' => 'datetime'));
 }
 function theme_date_part_label_ampm($vars) {
   $part_type = $vars['part_type'];

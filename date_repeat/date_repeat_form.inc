@@ -1,5 +1,5 @@
 <?php
-// $Id: date_repeat_form.inc,v 1.34 2010/10/26 10:10:33 karens Exp $
+// $Id: date_repeat_form.inc,v 1.35 2010/10/26 11:54:36 karens Exp $
 /**
  * @file
  * Code to add a date repeat selection form to a date field and create
@@ -120,7 +120,7 @@ function _date_repeat_rrule_process($element, $form_state, $form) {
 
   $element['advanced']['BYMONTH'] = array(
     '#type' => 'select',
-    '#title' => date_t('Month', 'datetime'),
+    '#title' => t('Month', array(), array('context' => 'datetime')),
     '#default_value' => !empty($rrule['BYMONTH']) ? $rrule['BYMONTH'] : '',
     '#options' => array('' => t('-- Any')) + date_month_names(TRUE),
     '#multiple' => TRUE,

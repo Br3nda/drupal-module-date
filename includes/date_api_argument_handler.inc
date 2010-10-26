@@ -1,5 +1,5 @@
 <?php
-// $Id: date_api_argument_handler.inc,v 1.15 2010/08/24 11:43:21 karens Exp $
+// $Id: date_api_argument_handler.inc,v 1.16 2010/10/26 11:54:36 karens Exp $
 
 /**
  * @file
@@ -69,7 +69,7 @@ class date_api_argument_handler extends views_handler_argument_date {
     parent::options_form($form, $form_state);
     $options = $this->date_handler->date_parts();
     unset($options['second'], $options['minute']);
-    $options += array('week' => date_t('Week', 'datetime'));
+    $options += array('week' => t('Week', array(), array('context' => 'datetime')));
     $form['granularity'] = array(
       '#title' => t('Granularity'),
       '#type' => 'radios',
