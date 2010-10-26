@@ -1,5 +1,5 @@
 <?php
-// $Id: date_navigation_plugin_style.inc,v 1.5 2010/03/01 00:40:09 karens Exp $
+// $Id: date_navigation_plugin_style.inc,v 1.6 2010/10/26 15:06:28 karens Exp $
 
 /**
  * @file
@@ -29,8 +29,9 @@ class date_navigation_plugin_style extends views_plugin_style {
         if ($count > 0) {
           $errors[] = t('The %style cannot use more than one Date: Date argument.', array('%style' => $this->definition['title']));          
         }
+        // @TODO This is broken in D7, there is no such value.
         elseif ($argument['default_argument_type'] != 'date') {
-          $errors[] = t('The %style requires the Date: Date argument be set to default to the current date.', array('%style' => $this->definition['title']));      
+          //$errors[] = t('The %style requires the Date: Date argument be set to default to the current date.', array('%style' => $this->definition['title']));      
         }
         $count++;
         $found = TRUE;
