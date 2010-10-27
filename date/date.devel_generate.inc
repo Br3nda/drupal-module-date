@@ -1,5 +1,5 @@
 <?php
-// $Id: date_content_generate.inc,v 1.9 2010/10/11 20:07:56 karens Exp $
+// $Id: date.devel_generate.inc,v 1.1 2010/10/27 20:34:57 karens Exp $
 /**
  * @file
  * Date Devel Generate code.
@@ -9,9 +9,7 @@
  *
  * Included only when needed.
  */
-function _date_content_generate($node, $field, $instance) {
-  include_once(' ./' . drupal_get_path('module', 'date_api') . '/date_api_elements.inc');
-  
+function date_devel_generate($node, $field, $instance, $bundle) {
   $node_field = array();
   if (isset($instance['widget']['settings']['year_range'])) {
     $split = explode(':', $instance['widget']['settings']['year_range']);
