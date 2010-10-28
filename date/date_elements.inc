@@ -1,5 +1,5 @@
 <?php
-// $Id: date_elements.inc,v 1.89 2010/10/22 14:13:33 karens Exp $
+// $Id: date_elements.inc,v 1.90 2010/10/28 10:08:42 karens Exp $
 /**
  * @file
  * Date forms and form themes and validation.
@@ -45,7 +45,7 @@
  *   the local timezone, are converted back to their UTC values and stored.
  *
  */
-function _date_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
+function date_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
   $element = $base;
 
   module_load_include('inc', 'date_api', 'date_api_elements');  

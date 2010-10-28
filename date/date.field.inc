@@ -1,5 +1,5 @@
 <?php
-// $Id: date.field.inc,v 1.8 2010/10/26 12:54:20 karens Exp $
+// $Id: date.field.inc,v 1.9 2010/10/28 10:08:42 karens Exp $
 /**
  * @file
  * Field hooks to implement a date field.
@@ -382,17 +382,6 @@ function date_field_update($entity_type, $entity, $field, $instance, $langcode, 
     }
   }
   $entity->$field['field_name'][$langcode] = $items;
-}
-
-/**
- * Implements hook_widget().
- *
- * This code and all the processes it uses are in a separate file,
- * included only when processing forms.
- */
-function date_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $base) {
-  module_load_include('inc', 'date', 'date_elements');
-  return _date_field_widget_form($form, $form_state, $field, $instance, $langcode, $items, $delta, $base);
 }
 
 /**
